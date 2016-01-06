@@ -78,9 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume(){
+        super.onResume();
         radiobuttonCreator(this);
         checkboxCreator();
 
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
     }
 
     private boolean isBAPMServiceRunning() {

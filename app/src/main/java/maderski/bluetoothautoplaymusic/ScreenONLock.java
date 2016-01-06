@@ -17,7 +17,7 @@ public class ScreenONLock {
 
         int screenBrightness;
 
-        if(isDark()){
+        if(isDark(7, 7)){
             screenBrightness = PowerManager.SCREEN_DIM_WAKE_LOCK;
         }else{
             screenBrightness = PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
@@ -45,7 +45,7 @@ public class ScreenONLock {
         }
     }
 
-    private static boolean isDark(){
+    private static boolean isDark(int darkEveningHour, int lightMorningHour){
         Boolean dark;
         int hour;
         int AMPM;
@@ -55,7 +55,7 @@ public class ScreenONLock {
         hour = c.get(Calendar.HOUR);
         Log.i("Time: ", Integer.toString(hour) + " " + Integer.toString(AMPM));
 
-        if (hour >= 7 && AMPM == 1 || hour <=7 && AMPM == 0){
+        if (hour >= darkEveningHour && AMPM == 1 || hour <=lightMorningHour && AMPM == 0){
 
             dark = true;
         }else

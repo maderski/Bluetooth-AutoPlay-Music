@@ -35,11 +35,13 @@ public class CalendarAndTimeInfo {
         minute = c.get(Calendar.MINUTE);
         AMPM = c.get(Calendar.AM_PM);
 
-
     }
+
 
     public boolean isDark(){
         Boolean dark = false;
+
+
 
         return dark;
     }
