@@ -40,9 +40,6 @@ public class VariousLists {
             }
         }
 
-        //Generate fake list for testing
-        installedMediaPlayers = generateTestList("MediaPlayer", 10);
-
         return installedMediaPlayers;
     }
 
@@ -54,9 +51,6 @@ public class VariousLists {
         List<String> btDevices = new ArrayList<String>();
         for(BluetoothDevice bt : pairedDevices)
             btDevices.add(bt.getName());
-
-        //Generate fake list for testing
-        btDevices = generateTestList("btdevice", 10);
 
         return btDevices;
     }
