@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CalendarAndTimeInfo GSS = new CalendarAndTimeInfo();
-        GSS.getTimeZone();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -110,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
         i.setAction(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_HOME);
         context.startActivity(i);
+    }
+
+    private void launchGoogleMaps(Context context){
+        LaunchApp.launch(context, "com.google.android.apps.maps");
     }
 
     private void listMusicplayersAndBTDevices(Context context){

@@ -39,6 +39,10 @@ public class VariousLists {
                 }
             }
         }
+
+        //Generate fake list for testing
+        installedMediaPlayers = generateTestList("MediaPlayer", 10);
+
         return installedMediaPlayers;
     }
 
@@ -51,6 +55,9 @@ public class VariousLists {
         for(BluetoothDevice bt : pairedDevices)
             btDevices.add(bt.getName());
 
+        //Generate fake list for testing
+        btDevices = generateTestList("btdevice", 10);
+
         return btDevices;
     }
 
@@ -62,8 +69,17 @@ public class VariousLists {
         for(ApplicationInfo pkg:appInfo){
             Log.i(TAG, "Installed Pkg: " + pkg.packageName);
         }
+    }
 
-
+    private static List<String> generateTestList(String name, int number){
+        List<String> test = new ArrayList<String>();
+        int i = 0;
+        while(i < number){
+            name = name + Integer.toString(i);
+            test.add(name);
+            i++;
+        }
+        return test;
     }
 
 }
