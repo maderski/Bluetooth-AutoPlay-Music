@@ -21,7 +21,9 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -96,6 +98,34 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    public void mapsToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            Log.i(TAG, "MapButton is ON");
+        }else{
+            Log.i(TAG, "MapButton is OFF");
+        }
+
+    }
+
+    public void keepONToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            Log.i(TAG, "Keep Screen ON Button is ON");
+        }else{
+            Log.i(TAG, "Keep Screen ON Button is OFF");
+        }
+    }
+
+    public void priorityToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            Log.i(TAG, "Priority Button is ON");
+        }else{
+            Log.i(TAG, "Priority Button is OFF");
+        }
+    }
+
     private void unlockTurnOnScreen(Context context){
 
         Window window = ((Activity) context).getWindow();
@@ -123,17 +153,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkboxCreator(){
+    private void checkboxCreator() {
 
         CheckBox checkBox;
+        TextView textView;
 
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
 
-        for(String BTDevice : VariousLists.listOfBluetoothDevices()){
-            checkBox = new CheckBox(this);
-            checkBox.setText(BTDevice);
-            BTDeviceCkBoxLL.addView(checkBox);
+        if (VariousLists.listOfBluetoothDevices().contains("No Bluetooth Device found")){
+            textView = new TextView(this);
+            textView.setText("No Bluetooth Device found");
+            BTDeviceCkBoxLL.addView(textView);
+        }else{
+            for (String BTDevice : VariousLists.listOfBluetoothDevices()) {
+                checkBox = new CheckBox(this);
+                checkBox.setText(BTDevice);
+                BTDeviceCkBoxLL.addView(checkBox);
+            }
         }
 
     }

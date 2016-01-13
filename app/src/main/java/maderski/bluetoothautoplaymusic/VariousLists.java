@@ -45,12 +45,17 @@ public class VariousLists {
 
     //List of bluetooth devices on the phone
     public static List<String> listOfBluetoothDevices(){
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-
         List<String> btDevices = new ArrayList<String>();
-        for(BluetoothDevice bt : pairedDevices)
-            btDevices.add(bt.getName());
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if(mBluetoothAdapter != null) {
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+
+            for(BluetoothDevice bt : pairedDevices)
+                btDevices.add(bt.getName());
+        }else{
+            btDevices.add(0, "No Bluetooth Device found");
+        }
 
         return btDevices;
     }

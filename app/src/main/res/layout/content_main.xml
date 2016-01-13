@@ -49,8 +49,10 @@
                         <ToggleButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="New ToggleButton"
-                            android:id="@+id/toggleButton" />
+                            android:text="ToggleButton"
+                            android:id="@+id/MapsToggleButton"
+                            android:checked="false"
+                            android:onClick="mapsToggleButton" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -69,8 +71,10 @@
                         <ToggleButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="New ToggleButton"
-                            android:id="@+id/toggleButton2" />
+                            android:text="ToggleButton"
+                            android:id="@+id/KeepONToggleButton2"
+                            android:checked="false"
+                            android:onClick="keepONToggleButton" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -89,13 +93,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="New ToggleButton"
-                            android:id="@+id/toggleButton3" />
+                            android:id="@+id/PriorityToggleButton"
+                            android:checked="false"
+                            android:onClick="priorityToggleButton" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Put phone in Prioity Mode"
+                            android:text="Put phone in Priority Mode"
                             android:id="@+id/textView6" />
                     </LinearLayout>
 
