@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (VariousLists.listOfBluetoothDevices().contains("No Bluetooth Device found")){
             textView = new TextView(this);
-            textView.setText("No Bluetooth Device found");
+            textView.setText(R.string.no_BT_found);
             BTDeviceCkBoxLL.addView(textView);
         }else{
             for (String BTDevice : VariousLists.listOfBluetoothDevices()) {

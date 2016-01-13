@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Bluetooth Autoplay Music</string>
     <string name="action_settings">About</string>
+    <string name="no_BT_found">No Bluetooth Device found</string>
 </resources>
