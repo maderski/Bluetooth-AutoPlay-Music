@@ -126,6 +126,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void volumeMAXToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            Log.i(TAG, "Max Volume Button is ON");
+        }else{
+            Log.i(TAG, "Max Volume Button is OFF");
+        }
+    }
+
     private void unlockTurnOnScreen(Context context){
 
         Window window = ((Activity) context).getWindow();

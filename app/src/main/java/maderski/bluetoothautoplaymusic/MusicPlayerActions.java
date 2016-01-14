@@ -25,5 +25,6 @@ public class MusicPlayerActions {
     public static void pauseMusic(){
         mp.pause();
     }
+
 }
 

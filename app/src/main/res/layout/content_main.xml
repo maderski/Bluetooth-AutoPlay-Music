@@ -105,6 +105,28 @@
                             android:id="@+id/textView6" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ToggleButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New ToggleButton"
+                            android:id="@+id/VolumeMAXToggleButton"
+                            android:checked="false"
+                            android:onClick="volumeMAXToggleButton" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Set Media Volume to MAX"
+                            android:id="@+id/textView7" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
