@@ -127,6 +127,28 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ToggleButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New ToggleButton"
+                            android:id="@+id/LaunchMusicPlayerToggleButton"
+                            android:checked="false"
+                            android:onClick="launchMusicPlayerToggleButton" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Launch Music Player"
+                            android:id="@+id/textView8" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

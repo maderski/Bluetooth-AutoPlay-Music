@@ -135,6 +135,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void launchMusicPlayerToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            Log.i(TAG, "Launch Music Player Button is ON");
+        }else{
+            Log.i(TAG, "Launch Music Player Button is OFF");
+        }
+    }
+
+
     private void unlockTurnOnScreen(Context context){
 
         Window window = ((Activity) context).getWindow();
