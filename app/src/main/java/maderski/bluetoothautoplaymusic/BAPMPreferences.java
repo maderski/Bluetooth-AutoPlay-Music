@@ -17,6 +17,8 @@ public class BAPMPreferences {
     public static final String PRIORITY_MODE_KEY = "priorityMode";
     public static final String MAX_VOLUME_KEY = "maxVolume";
     public static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
+    public static final String BTDEVICE_TOAST_MSG_KEY = "BTDeviceToastMsg";
+    public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
 
     private static SharedPreferences.Editor editor(Context context){
 
@@ -35,6 +37,7 @@ public class BAPMPreferences {
 
     public static void setLaunchGoogleMaps(Context context, boolean enabled){
         editor(context).putBoolean(LAUNCH_MAPS_KEY, enabled);
+        commit(context);
     }
 
     public static boolean getLaunchGoogleMaps(Context context){
@@ -43,6 +46,7 @@ public class BAPMPreferences {
 
     public static void setKeepScreenON(Context context, boolean enabled){
         editor(context).putBoolean(KEEP_SCREEN_ON_KEY, enabled);
+        commit(context);
     }
 
     public static boolean getKeepScreenON(Context context) {
@@ -51,6 +55,7 @@ public class BAPMPreferences {
 
     public static void setPriorityMode(Context context, boolean enabled){
         editor(context).putBoolean(PRIORITY_MODE_KEY, enabled);
+        commit(context);
     }
 
     public static boolean getPriorityMode(Context context){
@@ -59,6 +64,7 @@ public class BAPMPreferences {
 
     public static void setMaxVolume(Context context, boolean enabled){
         editor(context).putBoolean(MAX_VOLUME_KEY, enabled);
+        commit(context);
     }
 
     public static boolean getMaxVolume(Context context){
@@ -67,13 +73,32 @@ public class BAPMPreferences {
 
     public static void setLaunchMusicPlayer(Context context, boolean enabled){
         editor(context).putBoolean(LAUNCH_MUSIC_PLAYER_KEY, enabled);
+        commit(context);
     }
 
     public static boolean getLaunchMusicPlayer(Context context){
         return reader(context).getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false);
     }
 
-    public static void commit(Context context){
+    public static void setBTDeviceToastMsg(Context context, boolean enabled){
+        editor(context).putBoolean(BTDEVICE_TOAST_MSG_KEY, enabled);
+        commit(context);
+    }
+
+    public static boolean getBTDeviceToastMsg(Context context){
+        return reader(context).getBoolean(BTDEVICE_TOAST_MSG_KEY, false);
+    }
+
+    public static void setSelectedMusicPlayer(Context context, String musicPlayer){
+        editor(context).putString(SELECTED_MUSIC_PLAYER_KEY, musicPlayer);
+        commit(context);
+    }
+
+    public static String getSelectedMusicPlayer(Context context){
+        return reader(context).getString(SELECTED_MUSIC_PLAYER_KEY, null);
+    }
+
+    private static void commit(Context context){
         editor(context).commit();
         _editor = null;
     }

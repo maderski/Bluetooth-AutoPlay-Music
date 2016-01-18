@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        radiobuttonCreator(this);
-        checkboxCreator();
+        setupUIElements(this);
 
     }
 
@@ -97,53 +96,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
-    public void mapsToggleButton(View view){
-        boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            Log.i(TAG, "MapButton is ON");
-        }else{
-            Log.i(TAG, "MapButton is OFF");
-        }
-
-    }
-
-    public void keepONToggleButton(View view){
-        boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            Log.i(TAG, "Keep Screen ON Button is ON");
-        }else{
-            Log.i(TAG, "Keep Screen ON Button is OFF");
-        }
-    }
-
-    public void priorityToggleButton(View view){
-        boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            Log.i(TAG, "Priority Button is ON");
-        }else{
-            Log.i(TAG, "Priority Button is OFF");
-        }
-    }
-
-    public void volumeMAXToggleButton(View view){
-        boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            Log.i(TAG, "Max Volume Button is ON");
-        }else{
-            Log.i(TAG, "Max Volume Button is OFF");
-        }
-    }
-
-    public void launchMusicPlayerToggleButton(View view){
-        boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            Log.i(TAG, "Launch Music Player Button is ON");
-        }else{
-            Log.i(TAG, "Launch Music Player Button is OFF");
-        }
-    }
-
 
     private void unlockTurnOnScreen(Context context){
 
@@ -170,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
         for(String btDevice:VariousLists.listOfBluetoothDevices()){
             Log.i("BTDevice ", btDevice);
         }
+    }
+
+    private void setupUIElements(Context context){
+        setToggleButtons(context);
+        radiobuttonCreator(context);
+        checkboxCreator();
     }
 
     private void checkboxCreator() {
@@ -218,6 +176,88 @@ public class MainActivity extends AppCompatActivity {
             rdoButton.setText(mediaPlayer);
             rdoBTDevices.addView(rdoButton);
 
+        }
+    }
+
+    private void setToggleButtons(Context context){
+        Boolean btnState;
+        ToggleButton toggleButton;
+
+        btnState = BAPMPreferences.getLaunchGoogleMaps(context);
+        toggleButton = (ToggleButton)findViewById(R.id.MapsToggleButton);
+        toggleButton.setChecked(btnState);
+
+        btnState = BAPMPreferences.getKeepScreenON(context);
+        toggleButton = (ToggleButton)findViewById(R.id.KeepONToggleButton);
+        toggleButton.setChecked(btnState);
+
+        btnState = BAPMPreferences.getPriorityMode(context);
+        toggleButton = (ToggleButton)findViewById(R.id.PriorityToggleButton);
+        toggleButton.setChecked(btnState);
+
+        btnState = BAPMPreferences.getMaxVolume(context);
+        toggleButton = (ToggleButton)findViewById(R.id.VolumeMAXToggleButton);
+        toggleButton.setChecked(btnState);
+
+        btnState = BAPMPreferences.getLaunchMusicPlayer(context);
+        toggleButton = (ToggleButton)findViewById(R.id.LaunchMusicPlayerToggleButton);
+        toggleButton.setChecked(btnState);
+
+    }
+
+    public void mapsToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            BAPMPreferences.setLaunchGoogleMaps(this, true);
+            Log.i(TAG, "MapButton is ON");
+        }else{
+            BAPMPreferences.setLaunchGoogleMaps(this, false);
+            Log.i(TAG, "MapButton is OFF");
+        }
+
+    }
+
+    public void keepONToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            BAPMPreferences.setKeepScreenON(this, true);
+            Log.i(TAG, "Keep Screen ON Button is ON");
+        }else{
+            BAPMPreferences.setKeepScreenON(this, false);
+            Log.i(TAG, "Keep Screen ON Button is OFF");
+        }
+    }
+
+    public void priorityToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            BAPMPreferences.setPriorityMode(this, true);
+            Log.i(TAG, "Priority Button is ON");
+        }else{
+            BAPMPreferences.setPriorityMode(this, false);
+            Log.i(TAG, "Priority Button is OFF");
+        }
+    }
+
+    public void volumeMAXToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            BAPMPreferences.setMaxVolume(this, true);
+            Log.i(TAG, "Max Volume Button is ON");
+        }else{
+            BAPMPreferences.setMaxVolume(this, false);
+            Log.i(TAG, "Max Volume Button is OFF");
+        }
+    }
+
+    public void launchMusicPlayerToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            BAPMPreferences.setLaunchMusicPlayer(this, true);
+            Log.i(TAG, "Launch Music Player Button is ON");
+        }else{
+            BAPMPreferences.setLaunchMusicPlayer(this, false);
+            Log.i(TAG, "Launch Music Player Button is OFF");
         }
     }
 
