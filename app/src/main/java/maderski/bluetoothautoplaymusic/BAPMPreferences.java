@@ -3,6 +3,9 @@ package maderski.bluetoothautoplaymusic;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Jason on 1/5/16.
  */
@@ -20,6 +23,7 @@ public class BAPMPreferences {
     public static final String BTDEVICE_TOAST_MSG_KEY = "BTDeviceToastMsg";
     public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
+    public static final String BTDEVICES_KEY = "BTDevices";
 
     private static SharedPreferences.Editor editor(Context context){
 
@@ -106,6 +110,25 @@ public class BAPMPreferences {
 
     public static Boolean getUnlockScreen(Context context){
         return reader(context).getBoolean(UNLOCK_SCREEN_KEY, false);
+    }
+
+    public static void setBTDevices(Context context, String BTDevice, Boolean enabled){
+        Set<String> BTDevices = new HashSet<String>();
+
+        if(enabled) {
+            BTDevices.add(BTDevice);
+        }
+        else{
+            if(BTDevices.contains(BTDevice))
+                BTDevices.remove(BTDevice);
+        }
+
+        editor(context).putStringSet(BTDEVICES_KEY, BTDevices);
+        commit(context);
+    }
+
+    public static Set<String> getBTDevices(Context context){
+        return reader(context).getStringSet(BTDEVICES_KEY, null);
     }
 
     private static void commit(Context context){

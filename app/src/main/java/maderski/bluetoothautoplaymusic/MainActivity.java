@@ -149,6 +149,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void checkboxListener(){
+        final Context context = this;
+
+
+    }
+
     private void radiobuttonCreator(Context context){
 
         RadioButton rdoButton;
