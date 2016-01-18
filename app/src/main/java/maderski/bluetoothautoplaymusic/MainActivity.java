@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -125,9 +126,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUIElements(Context context){
-        setToggleButtons(context);
         radiobuttonCreator(context);
         checkboxCreator();
+        setButtonPreferences(context);
+        radioButtonListener();
     }
 
     private void checkboxCreator() {
@@ -159,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
         String mediaPlayer = "No Name";
         PackageManager pm = getPackageManager();
 
-        RadioGroup rdoBTDevices = (RadioGroup) findViewById(R.id.rdoBTDevices);
-        rdoBTDevices.removeAllViews();
+        RadioGroup rdoMPGroup = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
+        rdoMPGroup.removeAllViews();
 
         for(String packageName : VariousLists.listOfInstalledMediaPlayers(context)){
 
@@ -174,12 +176,28 @@ public class MainActivity extends AppCompatActivity {
 
             rdoButton = new RadioButton(this);
             rdoButton.setText(mediaPlayer);
-            rdoBTDevices.addView(rdoButton);
+            rdoMPGroup.addView(rdoButton);
 
         }
     }
 
-    private void setToggleButtons(Context context){
+    private void radioButtonListener(){
+        final Context context = this;
+        RadioGroup group = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i){
+                View radioButton = radioGroup.findViewById(i);
+                int index = radioGroup.indexOfChild(radioButton);
+                BAPMPreferences.setSelectedMusicPlayer(context, index);
+                Log.i(TAG, Integer.toString(index));
+                Log.i(TAG, Integer.toString(BAPMPreferences.getSelectedMusicPlayer(context)));
+                Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
+            }
+        });
+    }
+
+    private void setButtonPreferences(Context context){
         Boolean btnState;
         ToggleButton toggleButton;
 
@@ -203,6 +221,14 @@ public class MainActivity extends AppCompatActivity {
         toggleButton = (ToggleButton)findViewById(R.id.LaunchMusicPlayerToggleButton);
         toggleButton.setChecked(btnState);
 
+        btnState = BAPMPreferences.getUnlockScreen(context);
+        toggleButton = (ToggleButton)findViewById(R.id.UnlockToggleButton);
+        toggleButton.setChecked(btnState);
+
+        RadioGroup rdoGroup = (RadioGroup)findViewById(R.id.rdoMusicPlayers);
+        int index = BAPMPreferences.getSelectedMusicPlayer(context);
+        RadioButton radioButton = (RadioButton)rdoGroup.getChildAt(index);
+        radioButton.setChecked(true);
     }
 
     public void mapsToggleButton(View view){
@@ -258,6 +284,17 @@ public class MainActivity extends AppCompatActivity {
         }else{
             BAPMPreferences.setLaunchMusicPlayer(this, false);
             Log.i(TAG, "Launch Music Player Button is OFF");
+        }
+    }
+
+    public void unlockScreenToggleButton(View view){
+        boolean on = ((ToggleButton) view).isChecked();
+        if(on){
+            BAPMPreferences.setUnlockScreen(this, true);
+            Log.i(TAG, "Unlock Screen Button is ON");
+        }else{
+            BAPMPreferences.setUnlockScreen(this, false);
+            Log.i(TAG, "Unlock Screen Button is OFF");
         }
     }
 

@@ -19,6 +19,7 @@ public class BAPMPreferences {
     public static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
     public static final String BTDEVICE_TOAST_MSG_KEY = "BTDeviceToastMsg";
     public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
+    public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
 
     private static SharedPreferences.Editor editor(Context context){
 
@@ -89,13 +90,22 @@ public class BAPMPreferences {
         return reader(context).getBoolean(BTDEVICE_TOAST_MSG_KEY, false);
     }
 
-    public static void setSelectedMusicPlayer(Context context, String musicPlayer){
-        editor(context).putString(SELECTED_MUSIC_PLAYER_KEY, musicPlayer);
+    public static void setSelectedMusicPlayer(Context context, int index){
+        editor(context).putInt(SELECTED_MUSIC_PLAYER_KEY, index);
         commit(context);
     }
 
-    public static String getSelectedMusicPlayer(Context context){
-        return reader(context).getString(SELECTED_MUSIC_PLAYER_KEY, null);
+    public static int getSelectedMusicPlayer(Context context){
+        return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
+    }
+
+    public static void setUnlockScreen(Context context, Boolean enabled){
+        editor(context).putBoolean(UNLOCK_SCREEN_KEY, enabled);
+        commit(context);
+    }
+
+    public static Boolean getUnlockScreen(Context context){
+        return reader(context).getBoolean(UNLOCK_SCREEN_KEY, false);
     }
 
     private static void commit(Context context){

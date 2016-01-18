@@ -148,6 +148,28 @@
                             android:id="@+id/textView8" />
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ToggleButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New ToggleButton"
+                            android:id="@+id/UnlockToggleButton"
+                            android:checked="false"
+                            android:onClick="unlockScreenToggleButton" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="Unlock Screen"
+                            android:id="@+id/textView9" />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -157,7 +179,8 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/MusicPlayers">
+                android:id="@+id/MusicPlayers"
+                android:gravity="center_horizontal">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -174,12 +197,10 @@
                     android:layout_gravity="center_horizontal" />
 
                 <RadioGroup
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:id="@+id/rdoBTDevices"
-                    android:gravity="center_horizontal">
+                    android:id="@+id/rdoMusicPlayers">
 
                     <RadioButton
                         android:layout_width="wrap_content"
