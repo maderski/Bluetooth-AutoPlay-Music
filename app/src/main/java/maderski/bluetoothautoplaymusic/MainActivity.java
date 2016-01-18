@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         setupUIElements(this);
-
     }
 
     @Override
@@ -109,10 +108,6 @@ public class MainActivity extends AppCompatActivity {
         i.setAction(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_HOME);
         context.startActivity(i);
-    }
-
-    private void launchGoogleMaps(Context context){
-        LaunchApp.launch(context, "com.google.android.apps.maps");
     }
 
     private void listMusicplayersAndBTDevices(Context context){
