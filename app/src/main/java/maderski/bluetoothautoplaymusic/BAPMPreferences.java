@@ -26,8 +26,6 @@ public class BAPMPreferences {
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
 
-    //private static Set<String> BTDevices = new HashSet<String>();
-
     private static SharedPreferences.Editor editor(Context context){
 
         if(_editor == null){
@@ -119,23 +117,6 @@ public class BAPMPreferences {
         editor(context).putStringSet(BTDEVICES_KEY, _stringSet);
         commit(context);
     }
-
-    /*public static void setBTDevices(String BTDevice, Boolean enabled){
-
-        if(enabled) {
-            BTDevices.add(BTDevice);
-        }
-        else{
-            if(BTDevices.contains(BTDevice))
-                BTDevices.remove(BTDevice);
-        }
-    }
-
-    public static void commmitBTDevices(Context context){
-
-        editor(context).putStringSet(BTDEVICES_KEY, BTDevices);
-        commit(context);
-    }*/
 
     public static Set<String> getBTDevices(Context context){
         return reader(context).getStringSet(BTDEVICES_KEY, null);

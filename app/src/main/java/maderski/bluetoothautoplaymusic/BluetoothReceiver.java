@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Jason on 1/5/16.
  */
 public class BluetoothReceiver extends BroadcastReceiver {
     public final static String TAG = "BluetoothReceiver";
-    private String BTDevice = "SB517";
 
     public void onReceive(Context context, Intent intent)
     {
@@ -20,15 +22,18 @@ public class BluetoothReceiver extends BroadcastReceiver {
         //Toast.makeText(context, "Bluetooth Intent Received", Toast.LENGTH_SHORT).show();
 
         final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
         String action = intent.getAction();
+        String btDevice = device.getName();
+        Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
 
         if (BluetoothDevice.ACTION_ACL_CONNECTED.equalsIgnoreCase(action))
         {
-            String btDevice = device.getName();
+
             Log.d(TAG, "Connected to " + btDevice);
             Toast.makeText(context, "Connected to: " + btDevice, Toast.LENGTH_SHORT).show();
 
-            if(btDevice.equals(BTDevice)) {
+            if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
 
 
@@ -40,11 +45,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equalsIgnoreCase(action))
         {
-            String btDevice = device.getName();
             Log.d(TAG, "Disconnected from " + btDevice);
             Toast.makeText(context, "Disconnected from: " + btDevice, Toast.LENGTH_SHORT).show();
 
-            if(btDevice.equals(BTDevice)) {
+            if(BTDeviceList.contains(BTDeviceList)) {
                 Log.i(btDevice, " found");
 
             }
