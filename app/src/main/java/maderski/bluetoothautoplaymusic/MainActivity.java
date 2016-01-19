@@ -26,9 +26,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getName();
+    private Set<String> saveBTDevices = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +83,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        listSetString();
         setupUIElements(this);
+    }
+
+    @Override
+    protected  void onPause(){
+        super.onPause();
+        BAPMPreferences.setBTDevices(this, saveBTDevices);
     }
 
     @Override
@@ -143,16 +154,44 @@ public class MainActivity extends AppCompatActivity {
             for (String BTDevice : VariousLists.listOfBluetoothDevices()) {
                 checkBox = new CheckBox(this);
                 checkBox.setText(BTDevice);
+                if(BAPMPreferences.getBTDevices(this) != null)
+                    checkBox.setChecked(BAPMPreferences.getBTDevices(this).contains(BTDevice));
+                checkboxListener(checkBox, BTDevice);
                 BTDeviceCkBoxLL.addView(checkBox);
             }
         }
 
     }
 
-    private void checkboxListener(){
-        final Context context = this;
+    private void listSetString(){
+        for(String item : BAPMPreferences.getBTDevices(this)){
+            Log.i(TAG, item);
+            Log.i(TAG, Integer.toString(BAPMPreferences.getBTDevices(this).size()));
+        }
+    }
 
+    private void checkboxListener(CheckBox checkBox, String BTDevice){
+        final Context ctx = this;
+        final CheckBox cb = checkBox;
+        final String BTD = BTDevice;
 
+        //final Set<String> BTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(this));
+        saveBTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(this));
+
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cb.isChecked()) {
+                    saveBTDevices.add(BTD);
+                    //BAPMPreferences.setBTDevices(BTD, true);
+                    Log.i(TAG, "TRUE" + " " + BTD);
+                } else {
+                    saveBTDevices.remove(BTD);
+                    //BAPMPreferences.setBTDevices(BTD, false);
+                    Log.i(TAG, "FALSE" + " " + BTD);
+                }
+            }
+        });
     }
 
     private void radiobuttonCreator(Context context){

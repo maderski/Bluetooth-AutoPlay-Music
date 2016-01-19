@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +25,8 @@ public class BAPMPreferences {
     public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
+
+    //private static Set<String> BTDevices = new HashSet<String>();
 
     private static SharedPreferences.Editor editor(Context context){
 
@@ -112,8 +115,12 @@ public class BAPMPreferences {
         return reader(context).getBoolean(UNLOCK_SCREEN_KEY, false);
     }
 
-    public static void setBTDevices(Context context, String BTDevice, Boolean enabled){
-        Set<String> BTDevices = new HashSet<String>();
+    public static void setBTDevices(Context context, Set<String> _stringSet){
+        editor(context).putStringSet(BTDEVICES_KEY, _stringSet);
+        commit(context);
+    }
+
+    /*public static void setBTDevices(String BTDevice, Boolean enabled){
 
         if(enabled) {
             BTDevices.add(BTDevice);
@@ -122,10 +129,13 @@ public class BAPMPreferences {
             if(BTDevices.contains(BTDevice))
                 BTDevices.remove(BTDevice);
         }
+    }
+
+    public static void commmitBTDevices(Context context){
 
         editor(context).putStringSet(BTDEVICES_KEY, BTDevices);
         commit(context);
-    }
+    }*/
 
     public static Set<String> getBTDevices(Context context){
         return reader(context).getStringSet(BTDEVICES_KEY, null);
