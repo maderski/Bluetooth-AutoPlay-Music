@@ -26,22 +26,22 @@ public class LaunchApp {
         context.startActivity(LaunchIntent);
     }
 
-    public static void launchGoogleMaps(Context context){
+    public static void launchMaps(Context context){
         boolean isEnabled = BAPMPreferences.getLaunchGoogleMaps(context);
+        String mapAppName = BAPMPreferences.getMapsChoice(context);
 
-        if(isEnabled)
-            launch(context, "com.google.android.apps.maps");
-        else
-            Log.i(TAG, "Google Maps Launch is OFF");
-    }
+        if (isEnabled) {
+            if(mapAppName.equals("Waze")){
+                if(checkPkgOnPhone(context, "com.waze")){
+                    launch(context, "com.waze");
+                }
+            }else{
+                launch(context, "com.google.android.apps.maps");
+            }
+        }else{
+            Log.i(TAG, "Maps Launch is OFF");
+        }
 
-    public static void launchWaze(Context context){
-        boolean isEnabled = BAPMPreferences.getLaunchGoogleMaps(context);
-
-        if(isEnabled && checkPkgOnPhone(context, "com.waze"))
-            launch(context, "com.waze");
-        else
-            Log.i(TAG, "Google Maps Launch is OFF");
     }
 
     public static void launchSelectedMusicPlayer(Context context){
@@ -49,8 +49,10 @@ public class LaunchApp {
         int index = BAPMPreferences.getSelectedMusicPlayer(context);
         String packageName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
-        if(isEnabled)
+        if(isEnabled) {
             launch(context, packageName);
+            PlayMusic.start(context);
+        }
         else
             Log.i(TAG, "Launch Music Player is OFF");
     }

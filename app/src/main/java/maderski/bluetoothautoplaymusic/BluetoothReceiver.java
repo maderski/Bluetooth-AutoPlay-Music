@@ -16,6 +16,9 @@ import java.util.Set;
 public class BluetoothReceiver extends BroadcastReceiver {
     public final static String TAG = "BluetoothReceiver";
 
+    private ScreenONLock screenONLock = new ScreenONLock();
+    private RingerControl ringerControl = new RingerControl();
+
     public void onReceive(Context context, Intent intent)
     {
         Log.d(TAG, "Bluetooth Intent Received");
@@ -36,10 +39,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
 
+                BTConnectPhoneDoStuff(context);
 
-                Intent i = new Intent(context, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
             }
         }
 
@@ -51,8 +52,56 @@ public class BluetoothReceiver extends BroadcastReceiver {
             if(BTDeviceList.contains(BTDeviceList)) {
                 Log.i(btDevice, " found");
 
+                BTDisconnectPhoneDoStuff(context);
             }
         }
+    }
+
+    private void BTConnectPhoneDoStuff(Context context){
+        boolean screenON = BAPMPreferences.getKeepScreenON(context);
+        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
+        boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
+
+        if(screenON){
+            screenONLock.enableWakeLock(context);
+        }
+
+        if(priorityMode){
+            ringerControl.soundsOFF(context);
+        }
+
+        if(volumeMAX){
+            ringerControl.volumeMAX(context);
+        }
+
+        if(unlockScreen){
+            launchMainActivity(context);
+        }
+
+        LaunchApp.launchSelectedMusicPlayer(context);
+
+        LaunchApp.launchMaps(context);
+    }
+
+    private void BTDisconnectPhoneDoStuff(Context context){
+        boolean screenON = BAPMPreferences.getKeepScreenON(context);
+        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+
+        if(screenON){
+            screenONLock.releaseWakeLock();
+        }
+
+        if(priorityMode){
+            ringerControl.soundsON();
+        }
+
+    }
+
+    private void launchMainActivity(Context context){
+        Intent i = new Intent(context, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
     }
 
 }

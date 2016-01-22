@@ -25,6 +25,7 @@ public class BAPMPreferences {
     public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
+    public static final String MAPS_CHOICE_KEY = "MapsChoice";
 
     private static SharedPreferences.Editor editor(Context context){
 
@@ -120,6 +121,15 @@ public class BAPMPreferences {
 
     public static Set<String> getBTDevices(Context context){
         return reader(context).getStringSet(BTDEVICES_KEY, null);
+    }
+
+    public static void setMapsChoice(Context context, String SelectedMapsApp){
+        editor(context).putString(MAPS_CHOICE_KEY, SelectedMapsApp);
+        commit(context);
+    }
+
+    public static String getMapsChoice(Context context){
+        return reader(context).getString(MAPS_CHOICE_KEY, "Maps");
     }
 
     private static void commit(Context context){

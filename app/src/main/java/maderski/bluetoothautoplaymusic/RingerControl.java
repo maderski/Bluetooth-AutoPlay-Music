@@ -11,12 +11,10 @@ public class RingerControl {
     private String TAG = RingerControl.class.getName();
     private AudioManager am;
 
-    //initialize AudioManager
-    public RingerControl(Context context){
+
+    //turns phone sounds OFF & initialize AudioManager
+    public void soundsOFF(Context context){
         am = (AudioManager)context.getSystemService(context.AUDIO_SERVICE);
-    }
-    //turns phone sounds OFF
-    public void soundsOFF(){
         am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         Log.i(TAG, "RingerControl: " + "Silent");
     }
@@ -26,7 +24,9 @@ public class RingerControl {
         Log.i(TAG, "RingerControl: " + "Normal");
     }
 
-    public void volumeMAX(){
+    //Set Mediavolume to MAX & initialize AudioManager
+    public void volumeMAX(Context context){
+        am = (AudioManager)context.getSystemService(context.AUDIO_SERVICE);
         am.setStreamVolume(AudioManager.STREAM_MUSIC, 100, 0);
         Log.i(TAG, "Max Media Volume Set");
     }
