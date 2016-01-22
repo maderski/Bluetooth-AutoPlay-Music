@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -36,6 +35,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
             Log.d(TAG, "Connected to " + btDevice);
             Toast.makeText(context, "Connected to: " + btDevice, Toast.LENGTH_SHORT).show();
 
+            if(BluetoothDevice.EXTRA_BOND_STATE.equals(BluetoothDevice.BOND_BONDED))
+            {
+                Log.i(TAG, "Bonded");
+            }
+
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
 
@@ -49,12 +53,13 @@ public class BluetoothReceiver extends BroadcastReceiver {
             Log.d(TAG, "Disconnected from " + btDevice);
             Toast.makeText(context, "Disconnected from: " + btDevice, Toast.LENGTH_SHORT).show();
 
-            if(BTDeviceList.contains(BTDeviceList)) {
+            if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
 
                 BTDisconnectPhoneDoStuff(context);
             }
         }
+
     }
 
     private void BTConnectPhoneDoStuff(Context context){
@@ -89,11 +94,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
 
         if(screenON){
-            screenONLock.releaseWakeLock();
+            screenONLock.releaseWakeLock(context);
         }
 
         if(priorityMode){
-            ringerControl.soundsON();
+            ringerControl.soundsON(context);
         }
 
     }

@@ -19,7 +19,8 @@ public class RingerControl {
         Log.i(TAG, "RingerControl: " + "Silent");
     }
     //turns phone sounds ON
-    public void soundsON(){
+    public void soundsON(Context context){
+        am = (AudioManager)context.getSystemService(context.AUDIO_SERVICE);
         am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         Log.i(TAG, "RingerControl: " + "Normal");
     }

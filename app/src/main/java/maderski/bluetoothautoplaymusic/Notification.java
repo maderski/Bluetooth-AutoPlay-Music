@@ -9,8 +9,8 @@ import android.util.Log;
  * Created by Jason on 12/8/15.
  */
 public class Notification {
-    private static final String title = "Play Music On Connect";
-    private static final String message = "Wakelock: ENABLED and Phone SILENCED";
+    private static final String title = "Bluetooth connect and do stuff";
+    private static final String message = "Screen will stay ON";
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
 

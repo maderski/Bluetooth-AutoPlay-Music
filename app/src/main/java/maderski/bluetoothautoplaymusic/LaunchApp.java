@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.CountDownTimer;
 import android.util.Log;
 
 import java.util.List;
@@ -50,8 +51,7 @@ public class LaunchApp {
         String packageName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
         if(isEnabled) {
-            launch(context, packageName);
-            PlayMusic.start(context);
+            delayForMusicPlayerLaunch(context, 6, packageName);
         }
         else
             Log.i(TAG, "Launch Music Player is OFF");
@@ -64,6 +64,25 @@ public class LaunchApp {
             return true;
         else
             return false;
+    }
+
+    private static void delayForMusicPlayerLaunch(Context context, int seconds, String packageName){
+        final Context ctx = context;
+        final String pkgName = packageName;
+        seconds = seconds * 1000;
+        new CountDownTimer(seconds,
+                9999) // onTick time, not used
+        {
+            public void onTick(long millisUntilFinished) {
+                // Not used
+            }
+
+            public void onFinish() {
+                launch(ctx, pkgName);
+                PlayMusic.start(ctx);
+                Log.i("MP Launch Delay: ", "Finished");
+            }
+        }.start();
     }
 
 }

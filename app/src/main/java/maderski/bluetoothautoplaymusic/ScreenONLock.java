@@ -28,13 +28,15 @@ public class ScreenONLock {
                 screenBrightness, VariableStore.stayOnTAG);
         try{
             VariableStore.wakeLock.acquire();
+            Log.i("WakeLock ", "enabled");
         }catch (Exception e){
             Log.e("WakeLock Error: ", e.getMessage());
         }
 
+        Notification.BAPMMessage(context);
     }
 
-    public void releaseWakeLock(){
+    public void releaseWakeLock(Context context){
         if (VariableStore.wakeLock != null && VariableStore.wakeLock.isHeld()) {
             try {
                 VariableStore.wakeLock.release();
@@ -43,6 +45,8 @@ public class ScreenONLock {
                 Log.e("WakeLock: ", "error " + e.getMessage());
             }
         }
+
+        Notification.removeBAPMMessage(context);
     }
 
     private static boolean isDark(int darkEveningHour, int lightMorningHour){

@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        unlockTurnOnScreen(this);
         listSetString();
         setupUIElements(this);
     }
@@ -112,7 +113,9 @@ public class MainActivity extends AppCompatActivity {
     private void unlockTurnOnScreen(Context context){
 
         Window window = ((Activity) context).getWindow();
+        //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        //window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
     private void sendAppToBackground(Context context){
