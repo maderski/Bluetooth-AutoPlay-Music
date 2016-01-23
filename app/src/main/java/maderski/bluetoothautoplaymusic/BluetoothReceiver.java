@@ -26,19 +26,14 @@ public class BluetoothReceiver extends BroadcastReceiver {
         final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
         String action = intent.getAction();
-        String btDevice = device.getName();
         Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
 
         if (BluetoothDevice.ACTION_ACL_CONNECTED.equalsIgnoreCase(action))
         {
+            String btDevice = device.getName();
 
             Log.d(TAG, "Connected to " + btDevice);
             Toast.makeText(context, "Connected to: " + btDevice, Toast.LENGTH_SHORT).show();
-
-            if(BluetoothDevice.EXTRA_BOND_STATE.equals(BluetoothDevice.BOND_BONDED))
-            {
-                Log.i(TAG, "Bonded");
-            }
 
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
@@ -50,6 +45,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equalsIgnoreCase(action))
         {
+            String btDevice = device.getName();
+            
             Log.d(TAG, "Disconnected from " + btDevice);
             Toast.makeText(context, "Disconnected from: " + btDevice, Toast.LENGTH_SHORT).show();
 
