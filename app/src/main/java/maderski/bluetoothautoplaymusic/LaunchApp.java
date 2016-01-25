@@ -82,7 +82,7 @@ public class LaunchApp {
             public void onFinish() {
                 launch(ctx, pkgName);
                 PlayMusic.start(ctx);
-                launchMaps(ctx);
+                delayLaunchMaps(ctx, 2);
                 Log.i("Launch Delay: ", "Finished");
             }
         }.start();
