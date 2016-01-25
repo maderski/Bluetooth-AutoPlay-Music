@@ -64,6 +64,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
+        boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
         if(screenON){
             screenONLock.enableWakeLock(context);
@@ -83,7 +84,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         LaunchApp.launchSelectedMusicPlayer(context);
 
-        LaunchApp.launchMaps(context);
+        if(!launchMusicPlayer){
+            LaunchApp.delayLaunchMaps(context, 2);
+        }
+
     }
 
     private void BTDisconnectPhoneDoStuff(Context context){

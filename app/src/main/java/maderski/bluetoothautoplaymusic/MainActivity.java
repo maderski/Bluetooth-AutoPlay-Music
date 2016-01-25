@@ -84,9 +84,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        unlockTurnOnScreen(this);
-        listSetString();
         setupUIElements(this);
+
+        if(BAPMPreferences.getUnlockScreen(this)){
+            dismissKeyGuard(this);
+        }
     }
 
     @Override
@@ -110,12 +112,24 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void unlockTurnOnScreen(Context context){
+    private void dismissKeyGuard(Context context){
 
-        Window window = ((Activity) context).getWindow();
-        //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        //window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        if (!BAPMPreferences.getKeepScreenON(context)){
+            ScreenONLock screenONLock = new ScreenONLock();
+            screenONLock.enableWakeLock(context);
+            Window window = ((Activity) context).getWindow();
+            //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+            //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            screenONLock.releaseWakeLock(context);
+        }else{
+            Window window = ((Activity) context).getWindow();
+            //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+            //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     private void sendAppToBackground(Context context){
@@ -279,7 +293,10 @@ public class MainActivity extends AppCompatActivity {
         boolean on = ((ToggleButton) view).isChecked();
         if(on){
             BAPMPreferences.setLaunchGoogleMaps(this, true);
+            BAPMPreferences.setUnlockScreen(this, true);
+            setButtonPreferences(this);
             Log.i(TAG, "MapButton is ON");
+            Log.i(TAG, "Dismiss Keyguard is ON");
         }else{
             BAPMPreferences.setLaunchGoogleMaps(this, false);
             Log.i(TAG, "MapButton is OFF");
@@ -335,10 +352,10 @@ public class MainActivity extends AppCompatActivity {
         boolean on = ((ToggleButton) view).isChecked();
         if(on){
             BAPMPreferences.setUnlockScreen(this, true);
-            Log.i(TAG, "Unlock Screen Button is ON");
+            Log.i(TAG, "Dismiss KeyGuard Button is ON");
         }else{
             BAPMPreferences.setUnlockScreen(this, false);
-            Log.i(TAG, "Unlock Screen Button is OFF");
+            Log.i(TAG, "Dismiss KeyGuard Button is OFF");
         }
     }
 

@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -29,15 +30,16 @@ public class LaunchApp {
 
     public static void launchMaps(Context context){
         boolean isEnabled = BAPMPreferences.getLaunchGoogleMaps(context);
-        String mapAppName = BAPMPreferences.getMapsChoice(context);
+        //String mapAppName = BAPMPreferences.getMapsChoice(context);
+        String mapAppName = "com.google.android.apps.maps";
 
         if (isEnabled) {
-            if(mapAppName.equals("Waze")){
+            if(mapAppName.equals("com.waze")){
                 if(checkPkgOnPhone(context, "com.waze")){
-                    launch(context, "com.waze");
+                    launch(context, mapAppName);
                 }
             }else{
-                launch(context, "com.google.android.apps.maps");
+                launch(context, mapAppName);
             }
         }else{
             Log.i(TAG, "Maps Launch is OFF");
@@ -51,7 +53,7 @@ public class LaunchApp {
         String packageName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
         if(isEnabled) {
-            delayForMusicPlayerLaunch(context, 6, packageName);
+            delayMusicAppLaunch(context, 5, packageName);
         }
         else
             Log.i(TAG, "Launch Music Player is OFF");
@@ -66,7 +68,7 @@ public class LaunchApp {
             return false;
     }
 
-    private static void delayForMusicPlayerLaunch(Context context, int seconds, String packageName){
+    private static void delayMusicAppLaunch(Context context, int seconds, String packageName){
         final Context ctx = context;
         final String pkgName = packageName;
         seconds = seconds * 1000;
@@ -80,10 +82,27 @@ public class LaunchApp {
             public void onFinish() {
                 launch(ctx, pkgName);
                 PlayMusic.start(ctx);
-                Log.i("MP Launch Delay: ", "Finished");
+                launchMaps(ctx);
+                Log.i("Launch Delay: ", "Finished");
             }
         }.start();
     }
 
+    public static void delayLaunchMaps(Context context, int seconds){
+        final Context ctx = context;
+        seconds = seconds * 1000;
+        new CountDownTimer(seconds,
+                9999) // onTick time, not used
+        {
+            public void onTick(long millisUntilFinished) {
+                // Not used
+            }
+
+            public void onFinish() {
+                launchMaps(ctx);
+                Log.i("Launch Delay: ", "Finished");
+            }
+        }.start();
+    }
 }
 

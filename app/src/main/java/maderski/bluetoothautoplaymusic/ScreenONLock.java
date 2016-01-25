@@ -1,8 +1,11 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.PowerManager;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import java.util.Calendar;
 
