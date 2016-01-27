@@ -15,8 +15,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,9 +29,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <receiver
-            android:name=".BluetoothReceiver">
+        <receiver android:name=".BluetoothReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
@@ -39,6 +37,9 @@
         </receiver>
 
         <service android:name=".BAPMService" />
+
+        <activity android:name=".launchmapactivity.LaunchMapActivity"></activity>
+        <activity android:name=".LaunchMapActivity"></activity>
     </application>
 
 </manifest>

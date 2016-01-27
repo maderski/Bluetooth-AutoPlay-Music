@@ -129,7 +129,7 @@ public class BAPMPreferences {
     }
 
     public static String getMapsChoice(Context context){
-        return reader(context).getString(MAPS_CHOICE_KEY, "Maps");
+        return reader(context).getString(MAPS_CHOICE_KEY, "com.google.android.apps.maps");
     }
 
     private static void commit(Context context){

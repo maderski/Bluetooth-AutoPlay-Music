@@ -22,7 +22,7 @@ public class LaunchApp {
 
     //Launches App that was inputted into method
     public static void launch(Context context, String pkg){
-        Log.i("Music pLayer intent: ", pkg + " started");
+        Log.i("Package intent: ", pkg + " started");
         Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(LaunchIntent);
@@ -30,8 +30,7 @@ public class LaunchApp {
 
     public static void launchMaps(Context context){
         boolean isEnabled = BAPMPreferences.getLaunchGoogleMaps(context);
-        //String mapAppName = BAPMPreferences.getMapsChoice(context);
-        String mapAppName = "com.google.android.apps.maps";
+        String mapAppName = BAPMPreferences.getMapsChoice(context);
 
         if (isEnabled) {
             if(mapAppName.equals("com.waze")){

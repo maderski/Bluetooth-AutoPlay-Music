@@ -35,8 +35,6 @@ public class ScreenONLock {
         }catch (Exception e){
             Log.e("WakeLock Error: ", e.getMessage());
         }
-
-        Notification.BAPMMessage(context);
     }
 
     public void releaseWakeLock(Context context){
@@ -48,8 +46,6 @@ public class ScreenONLock {
                 Log.e("WakeLock: ", "error " + e.getMessage());
             }
         }
-
-        Notification.removeBAPMMessage(context);
     }
 
     private static boolean isDark(int darkEveningHour, int lightMorningHour){

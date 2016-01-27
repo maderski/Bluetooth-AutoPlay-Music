@@ -1,7 +1,9 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -10,18 +12,26 @@ import android.util.Log;
  */
 public class Notification {
     private static final String title = "Bluetooth connect and do stuff";
-    private static final String message = "Screen will stay ON";
+    private static final String message = "Bluetooth device connected";
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
 
     public static void BAPMMessage(Context context){
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
+                new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(false);
+                .setAutoCancel(false)
+                //.setContentIntent(contentIntent)
+                .addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent)
+                .addAction(android.R.drawable.ic_menu_edit, "Options", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
     }
 

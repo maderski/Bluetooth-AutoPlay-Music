@@ -66,6 +66,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
+        Notification.BAPMMessage(context);
+
         if(screenON){
             screenONLock.enableWakeLock(context);
         }
@@ -93,6 +95,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private void BTDisconnectPhoneDoStuff(Context context){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+
+        Notification.removeBAPMMessage(context);
 
         if(screenON){
             screenONLock.releaseWakeLock(context);
