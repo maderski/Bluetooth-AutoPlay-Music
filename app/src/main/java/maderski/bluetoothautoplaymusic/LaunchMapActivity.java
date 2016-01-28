@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class LaunchMapActivity extends AppCompatActivity {
+
+    final static String TAG = LaunchMapActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,13 +16,8 @@ public class LaunchMapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launch_map);
 
         String mapAppName = BAPMPreferences.getMapsChoice(this);
-        if(mapAppName.equals("com.waze")){
-            if(LaunchApp.checkPkgOnPhone(this, "com.waze")){
-                launchMapApp(mapAppName);
-            }
-        }else{
-            launchMapApp(mapAppName);
-        }
+        Log.i(TAG, mapAppName);
+        launchMapApp(mapAppName);
         this.finish();
     }
 

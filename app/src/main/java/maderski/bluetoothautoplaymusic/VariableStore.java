@@ -11,4 +11,6 @@ public class VariableStore {
     public static PowerManager.WakeLock wakeLock;
     public static String stayOnTAG = "Stay ON";
 
+    //Variable to Store Name of Launch Map App to display in toast message
+    public static String toastMapApp;
 }

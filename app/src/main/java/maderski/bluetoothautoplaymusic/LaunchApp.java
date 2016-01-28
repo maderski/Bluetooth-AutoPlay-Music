@@ -33,13 +33,7 @@ public class LaunchApp {
         String mapAppName = BAPMPreferences.getMapsChoice(context);
 
         if (isEnabled) {
-            if(mapAppName.equals("com.waze")){
-                if(checkPkgOnPhone(context, "com.waze")){
-                    launch(context, mapAppName);
-                }
-            }else{
-                launch(context, mapAppName);
-            }
+            launch(context, mapAppName);
         }else{
             Log.i(TAG, "Maps Launch is OFF");
         }
@@ -59,12 +53,16 @@ public class LaunchApp {
     }
 
     public static boolean checkPkgOnPhone(Context context, String pkg){
-        final PackageManager pm = context.getPackageManager();
-        List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        if(appInfo.contains(pkg))
-            return true;
-        else
-            return false;
+        List<ApplicationInfo> packages;
+        PackageManager pm;
+
+        pm = context.getPackageManager();
+        packages = pm.getInstalledApplications(0);
+        for (ApplicationInfo packageInfo : packages) {
+            if(packageInfo.packageName.equals(pkg))
+                return true;
+        }
+        return false;
     }
 
     private static void delayMusicAppLaunch(Context context, int seconds, String packageName){

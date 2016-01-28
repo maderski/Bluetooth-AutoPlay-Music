@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -40,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Context context = this;
+
+        if(!LaunchApp.checkPkgOnPhone(this, "com.waze")){
+            Log.i(TAG, "Checked");
+            BAPMPreferences.setMapsChoice(this, "com.google.android.apps.maps");
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,8 +55,49 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                final String mapApp = BAPMPreferences.getMapsChoice(context);
+                String mapAppName = "None";
+                boolean wazeFound;
+
+                if (LaunchApp.checkPkgOnPhone(context, "com.waze")) {
+                    Log.i(TAG, "FOUND");
+                    wazeFound = true;
+                } else {
+                    Log.i(TAG, "NOT FOUND");
+                    wazeFound = false;
+                }
+
+                try {
+                    ApplicationInfo appInfo = getPackageManager().getApplicationInfo(mapApp, 0);
+                    mapAppName = getPackageManager().getApplicationLabel(appInfo).toString();
+                    if(mapAppName.equalsIgnoreCase("MAPS")){
+                        mapAppName = "WAZE";
+                    }else{
+                        mapAppName = "GOOGLE MAPS";
+                    }
+                    VariableStore.toastMapApp = mapAppName;
+                }catch(Exception e){
+                    Log.e(TAG, e.getMessage());
+                }
+
+                if(wazeFound) {
+                    Snackbar.make(view, "Change Launch Maps to", Snackbar.LENGTH_LONG)
+                            .setActionTextColor(getResources().getColor(R.color.colorAccent))
+                            .setAction(mapAppName, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (mapApp.equals("com.waze"))
+                                        BAPMPreferences.setMapsChoice(context, "com.google.android.apps.maps");
+                                    else
+                                        BAPMPreferences.setMapsChoice(context, "com.waze");
+                                    Toast.makeText(context, "Changed to " + VariableStore.toastMapApp, Toast.LENGTH_LONG).show();
+                                    Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
+                                }
+                            }).show();
+                }else{
+                    Snackbar.make(view, "Supports Launching of WAZE when installed", Snackbar.LENGTH_LONG)
+                            .setAction("None", null).show();
+                }
             }
         });
     }

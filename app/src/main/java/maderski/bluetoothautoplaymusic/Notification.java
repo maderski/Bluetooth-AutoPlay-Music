@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -11,7 +12,7 @@ import android.util.Log;
  * Created by Jason on 12/8/15.
  */
 public class Notification {
-    private static final String title = "Bluetooth connect and do stuff";
+    //private static final String title = "Bluetooth Connect and Do Stuff";
     private static final String message = "Bluetooth device connected";
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
@@ -25,7 +26,7 @@ public class Notification {
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle(title)
+                .setContentTitle(context.getResources().getString(R.string.app_name))
                 .setContentText(message)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(false)
