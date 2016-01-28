@@ -297,9 +297,9 @@ public class MainActivity extends AppCompatActivity {
                 View radioButton = radioGroup.findViewById(i);
                 int index = radioGroup.indexOfChild(radioButton);
                 BAPMPreferences.setSelectedMusicPlayer(context, index);
-                Log.i(TAG, Integer.toString(index));
-                Log.i(TAG, Integer.toString(BAPMPreferences.getSelectedMusicPlayer(context)));
-                Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
+                //Log.i(TAG, Integer.toString(index));
+                //Log.i(TAG, Integer.toString(BAPMPreferences.getSelectedMusicPlayer(context)));
+                //Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
             }
         });
     }
