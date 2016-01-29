@@ -30,8 +30,9 @@ public class PlayMusic {
         context.sendOrderedBroadcast(upIntent, null);
     }
 
-    public static void play(Context context){
+    public static void play(Context context, String pkg){
         Intent intent = new Intent("com.android.music.musicservicecommand");
+        intent.setPackage(pkg);
         intent.putExtra("command", "play");
         context.sendBroadcast(intent);
     }
@@ -51,12 +52,12 @@ public class PlayMusic {
     public static void play_music(Context context, String pkg){
         Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
         i.setComponent(new ComponentName(pkg, pkg + ".internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
+        i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
 
         i = new Intent(Intent.ACTION_MEDIA_BUTTON);
         i.setComponent(new ComponentName(pkg, pkg + ".internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+        i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
     }
 
