@@ -13,7 +13,7 @@ import android.util.Log;
  */
 public class Notification {
     //private static final String title = "Bluetooth Connect and Do Stuff";
-    private static final String message = "Bluetooth device connected";
+    private static final String message = "Device " + VariableStore.btDevice + " connected";
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
 

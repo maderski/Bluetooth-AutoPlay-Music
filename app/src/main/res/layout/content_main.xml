@@ -36,7 +36,7 @@
                     android:textSize="24dp"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
-                    android:textColor="#FF2F33A4"
+                    android:textColor="@color/colorPrimary"
                     android:typeface="monospace" />
 
                 <ImageView
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:src="@android:drawable/divider_horizontal_bright"
-                    android:background="#f81d69"
+                    android:background="@color/colorAccent"
                     android:paddingLeft="150dp"
                     android:paddingRight="150dp" />
 
@@ -70,7 +70,9 @@
                             android:text="ToggleButton"
                             android:id="@+id/MapsToggleButton"
                             android:checked="false"
-                            android:onClick="mapsToggleButton" />
+                            android:onClick="mapsToggleButton"
+                            android:background="@drawable/togglebtn"
+                            android:textColor="@color/white" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -94,7 +96,9 @@
                             android:text="ToggleButton"
                             android:id="@+id/KeepONToggleButton"
                             android:checked="false"
-                            android:onClick="keepONToggleButton" />
+                            android:onClick="keepONToggleButton"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/togglebtn" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -117,7 +121,9 @@
                             android:text="New ToggleButton"
                             android:id="@+id/PriorityToggleButton"
                             android:checked="false"
-                            android:onClick="priorityToggleButton" />
+                            android:onClick="priorityToggleButton"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/togglebtn" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -140,7 +146,9 @@
                             android:text="New ToggleButton"
                             android:id="@+id/VolumeMAXToggleButton"
                             android:checked="false"
-                            android:onClick="volumeMAXToggleButton" />
+                            android:onClick="volumeMAXToggleButton"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/togglebtn" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -164,7 +172,9 @@
                             android:text="New ToggleButton"
                             android:id="@+id/LaunchMusicPlayerToggleButton"
                             android:checked="false"
-                            android:onClick="launchMusicPlayerToggleButton" />
+                            android:onClick="launchMusicPlayerToggleButton"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/togglebtn" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -187,7 +197,9 @@
                             android:text="New ToggleButton"
                             android:id="@+id/UnlockToggleButton"
                             android:checked="false"
-                            android:onClick="unlockScreenToggleButton" />
+                            android:onClick="unlockScreenToggleButton"
+                            android:textColor="#ffffff"
+                            android:background="@drawable/togglebtn" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -219,7 +231,7 @@
                     android:id="@+id/textView2"
                     android:layout_gravity="center_horizontal"
                     android:textSize="24dp"
-                    android:textColor="#FF2F33A4"
+                    android:textColor="@color/colorPrimary"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:typeface="monospace" />
@@ -230,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:src="@android:drawable/divider_horizontal_bright"
-                    android:background="#f81d69"
+                    android:background="@color/colorAccent"
                     android:paddingLeft="150dp"
                     android:paddingRight="150dp" />
 
@@ -284,7 +296,7 @@
                     android:id="@+id/textView"
                     android:layout_gravity="center_horizontal"
                     android:textSize="24dp"
-                    android:textColor="#FF2F33A4"
+                    android:textColor="@color/colorPrimary"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:typeface="monospace" />
@@ -295,7 +307,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:src="@android:drawable/divider_horizontal_bright"
-                    android:background="#f81d69"
+                    android:background="@color/colorAccent"
                     android:paddingLeft="150dp"
                     android:paddingRight="150dp" />
 

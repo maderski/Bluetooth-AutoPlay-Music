@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.List;
@@ -78,7 +81,9 @@ public class LaunchApp {
 
             public void onFinish() {
                 launch(ctx, pkgName);
-                PlayMusic.start(ctx);
+                //PlayMusic.play(ctx);
+                //PlayMusic.start(ctx);
+                PlayMusic.play_music(ctx, pkgName);
                 delayLaunchMaps(ctx, 2);
                 Log.i("Launch Delay: ", "Finished");
             }

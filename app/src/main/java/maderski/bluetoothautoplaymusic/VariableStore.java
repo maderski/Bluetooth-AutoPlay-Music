@@ -13,4 +13,7 @@ public class VariableStore {
 
     //Variable to Store Name of Launch Map App to display in toast message
     public static String toastMapApp;
+
+    //Variable to show BT device on Notification
+    public static String btDevice = "None";
 }

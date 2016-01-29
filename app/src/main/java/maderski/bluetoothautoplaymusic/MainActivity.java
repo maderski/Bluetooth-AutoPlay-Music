@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(wazeFound) {
-                    Snackbar.make(view, "Change Launch Maps to", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "Change Maps Launch to", Snackbar.LENGTH_LONG)
                             .setActionTextColor(getResources().getColor(R.color.colorAccent))
                             .setAction(mapAppName, new View.OnClickListener() {
                                 @Override
@@ -92,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
                                         BAPMPreferences.setMapsChoice(context, "com.waze");
                                     Toast.makeText(context, "Changed to " + VariableStore.toastMapApp, Toast.LENGTH_LONG).show();
                                     Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
+                                    setMapsButtonText(context);
                                 }
                             }).show();
                 }else{
-                    Snackbar.make(view, "Supports Launching of WAZE when installed", Snackbar.LENGTH_LONG)
-                            .setAction("None", null).show();
+                    Snackbar.make(view, "Supports Launching of WAZE when installed", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -127,7 +128,22 @@ public class MainActivity extends AppCompatActivity {
 
     //Launches the AboutActivity when about is selected
     private void aboutSelected(){
-        Toast.makeText(this, "Put about stuff here", Toast.LENGTH_SHORT).show();
+        final View view = findViewById(R.id.toolbar);
+
+        Snackbar.make(view, "Created by: Jason Maderski" + "\n" + "Version: " + showVersion(), Snackbar.LENGTH_LONG).show();
+    }
+
+    private String showVersion(){
+        String version = "none";
+
+        try {
+            PackageInfo pkgInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pkgInfo.versionName;
+        }catch(Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+
+        return version;
     }
 
     @Override
@@ -137,6 +153,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(BAPMPreferences.getUnlockScreen(this)){
             dismissKeyGuard(this);
+        }
+
+        if (!LaunchApp.checkPkgOnPhone(this, "com.waze")){
+            BAPMPreferences.setMapsChoice(this, "com.google.android.apps.maps");
         }
     }
 
@@ -203,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
         checkboxCreator();
         setButtonPreferences(context);
         radioButtonListener();
+        setMapsButtonText(context);
     }
 
     private void checkboxCreator() {
@@ -291,9 +312,9 @@ public class MainActivity extends AppCompatActivity {
     private void radioButtonListener(){
         final Context context = this;
         RadioGroup group = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
-        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i){
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 View radioButton = radioGroup.findViewById(i);
                 int index = radioGroup.indexOfChild(radioButton);
                 BAPMPreferences.setSelectedMusicPlayer(context, index);
@@ -302,6 +323,23 @@ public class MainActivity extends AppCompatActivity {
                 //Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
             }
         });
+    }
+
+    private void setMapsButtonText(Context context){
+        String mapAppName = "None";
+        String mapChoice = BAPMPreferences.getMapsChoice(context);
+        PackageManager packageManager = getPackageManager();
+        try {
+            ApplicationInfo appInfo = packageManager.getApplicationInfo(mapChoice, 0);
+            mapAppName = packageManager.getApplicationLabel(appInfo).toString();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+
+        TextView textView = (TextView)findViewById(R.id.textView4);
+        textView.setText("Launch " + mapAppName);
+
+
     }
 
     private void setButtonPreferences(Context context){

@@ -37,7 +37,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
-
+                VariableStore.btDevice = btDevice;
                 BTConnectPhoneDoStuff(context);
 
             }
