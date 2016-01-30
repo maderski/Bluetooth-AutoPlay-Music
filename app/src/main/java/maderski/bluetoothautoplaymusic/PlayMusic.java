@@ -1,10 +1,16 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetHost;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
+import android.media.session.MediaSessionManager;
+import android.os.Build;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.MediaController;
 
@@ -16,7 +22,7 @@ public class PlayMusic {
 
     private static String sTAG = PlayMusic.class.getName();
 
-    //Need to test but should cause music player to start playing
+
     public static void start(Context context){
 
         Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
@@ -60,6 +66,17 @@ public class PlayMusic {
         i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
     }
+
+    public static void test(Context context, PendingIntent pi, String pkg){
+        //MediaSessionManager msm = (MediaSessionManager) context.getSystemService(Context.MEDIA_SESSION_SERVICE);
+
+        if(Build.VERSION.SDK_INT > 21) {
+            MediaSession ms = new MediaSession(context, pkg);
+            ms.setMediaButtonReceiver(pi);
+        }
+    }
+
+
 
 }
 

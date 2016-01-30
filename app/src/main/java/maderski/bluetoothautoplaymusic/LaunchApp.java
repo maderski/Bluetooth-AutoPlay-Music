@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -7,8 +8,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import java.util.List;

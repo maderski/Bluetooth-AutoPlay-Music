@@ -105,7 +105,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if(priorityMode){
             ringerControl.soundsON(context);
         }
-
     }
 
     private void launchMainActivity(Context context){

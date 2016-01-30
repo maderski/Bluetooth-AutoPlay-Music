@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        if(!LaunchApp.checkPkgOnPhone(this, "com.waze")){
+        if(!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)){
             Log.i(TAG, "Checked");
-            BAPMPreferences.setMapsChoice(this, "com.google.android.apps.maps");
+            BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 String mapAppName = "None";
                 boolean wazeFound;
 
-                if (LaunchApp.checkPkgOnPhone(context, "com.waze")) {
+                if (LaunchApp.checkPkgOnPhone(context, ConstantStore.WAZE)) {
                     Log.i(TAG, "FOUND");
                     wazeFound = true;
                 } else {
@@ -87,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
                             .setAction(mapAppName, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (mapApp.equals("com.waze"))
-                                        BAPMPreferences.setMapsChoice(context, "com.google.android.apps.maps");
+                                    if (mapApp.equals(ConstantStore.WAZE))
+                                        BAPMPreferences.setMapsChoice(context, ConstantStore.MAPS);
                                     else
-                                        BAPMPreferences.setMapsChoice(context, "com.waze");
+                                        BAPMPreferences.setMapsChoice(context, ConstantStore.WAZE);
                                     Toast.makeText(context, "Changed to " + VariableStore.toastMapApp, Toast.LENGTH_LONG).show();
                                     Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
                                     setMapsButtonText(context);
@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
             dismissKeyGuard(this);
         }
 
-        if (!LaunchApp.checkPkgOnPhone(this, "com.waze")){
-            BAPMPreferences.setMapsChoice(this, "com.google.android.apps.maps");
+        if (!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)){
+            BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
         }
     }
 
