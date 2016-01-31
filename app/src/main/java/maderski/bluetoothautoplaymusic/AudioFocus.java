@@ -22,10 +22,13 @@ public class AudioFocus {
             //Play music
             if(pkg.equalsIgnoreCase(ConstantStore.GOOGLEPLAYMUSIC)){
                 PlayMusic.play_googlePlayMusic(context);
+                Log.i(TAG, "Playing Google Play Music");
             }else if(pkg.equalsIgnoreCase(ConstantStore.SPOTIFY)){
                 PlayMusic.play_spotify(context);
+                Log.i(TAG, "Playing Spotify");
             }else if(pkg.equalsIgnoreCase(ConstantStore.PANDORA)){
-                Log.i(TAG, "Play Pandora, but I got to figure this one out");
+                PlayMusic.play_pandora(context);
+                Log.i(TAG, "Playing Pandora");
             }
         }
     }

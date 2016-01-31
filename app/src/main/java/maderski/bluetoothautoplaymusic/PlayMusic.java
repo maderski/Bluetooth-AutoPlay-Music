@@ -20,11 +20,9 @@ import android.widget.MediaController;
  */
 public class PlayMusic {
 
+    private static String TAG = PlayMusic.class.getName();
 
-    private static String sTAG = PlayMusic.class.getName();
-
-
-    public static void start(Context context){
+    public static void playButton(Context context){
 
         Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
@@ -35,6 +33,14 @@ public class PlayMusic {
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
         upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
         context.sendOrderedBroadcast(upIntent, null);
+    }
+
+    public static void play_pandora(Context context){
+        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        VariableStore.am.dispatchMediaKeyEvent(downEvent);
+
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        VariableStore.am.dispatchMediaKeyEvent(upEvent);
     }
 
     public static void play_googlePlayMusic(Context context){
