@@ -11,33 +11,28 @@ public class AudioFocus {
 
     private static final String TAG = AudioFocus.class.getName();
 
-    private static AudioFocusListen afl = new AudioFocusListen();
-
     public static void requestAudioFocus(Context context, String pkg){
+        AudioFocusListen afl = new AudioFocusListen();
         VariableStore.listener = afl.getAudioFocusChangeListener();
         VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         int result = VariableStore.am.requestAudioFocus(VariableStore.listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 
         if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+            Log.i(TAG, "Audiofocus Request Granted");
             //Play music
-            if(pkg.equalsIgnoreCase(ConstantStore.GOOGLEPLAYMUSIC)){
-                PlayMusic.play_googlePlayMusic(context);
-                Log.i(TAG, "Playing Google Play Music");
-            }else if(pkg.equalsIgnoreCase(ConstantStore.SPOTIFY)){
-                PlayMusic.play_spotify(context);
-                Log.i(TAG, "Playing Spotify");
-            }else if(pkg.equalsIgnoreCase(ConstantStore.PANDORA)){
-                PlayMusic.play_pandora(context);
-                Log.i(TAG, "Playing Pandora");
-            }
-        }
+            PlayMusic.play(context);
+        }else
+            Log.i(TAG, Integer.toString(result));
     }
 
     public static void abandonAudioFocus(){
-        VariableStore.am.abandonAudioFocus(VariableStore.listener);
+        int requestGranted = AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+        int abandonFocus = VariableStore.am.abandonAudioFocus(VariableStore.listener);
+        if(requestGranted == abandonFocus){
+            Log.i(TAG, "Audiofocus Abandoned");
+        }
     }
     /*
-
 
     public boolean requestFocus(Context context, AudioManager.OnAudioFocusChangeListener listener){
         VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);

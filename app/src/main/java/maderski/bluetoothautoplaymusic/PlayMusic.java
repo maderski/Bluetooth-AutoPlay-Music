@@ -35,6 +35,14 @@ public class PlayMusic {
         context.sendOrderedBroadcast(upIntent, null);
     }
 
+    public static void play(Context context){
+        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        VariableStore.am.dispatchMediaKeyEvent(downEvent);
+
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        VariableStore.am.dispatchMediaKeyEvent(upEvent);
+    }
+
     public static void play_pandora(Context context){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
         VariableStore.am.dispatchMediaKeyEvent(downEvent);
