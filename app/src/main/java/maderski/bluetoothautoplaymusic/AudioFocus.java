@@ -20,7 +20,17 @@ public class AudioFocus {
         if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
             Log.i(TAG, "Audiofocus Request Granted");
             //Play music
-            PlayMusic.play(context);
+            PlayMusic.play();
+            if(!VariableStore.am.isMusicActive()){
+                switch (pkg){
+                    case ConstantStore.SPOTIFY:
+                        PlayMusic.play_spotify(context);
+                        break;
+                    case ConstantStore.GOOGLEPLAYMUSIC:
+                        PlayMusic.play_googlePlayMusic(context);
+                        break;
+                }
+            }
         }else
             Log.i(TAG, Integer.toString(result));
     }

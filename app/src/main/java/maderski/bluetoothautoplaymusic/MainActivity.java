@@ -71,17 +71,17 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     ApplicationInfo appInfo = getPackageManager().getApplicationInfo(mapApp, 0);
                     mapAppName = getPackageManager().getApplicationLabel(appInfo).toString();
-                    if(mapAppName.equalsIgnoreCase("MAPS")){
+                    if (mapAppName.equalsIgnoreCase("MAPS")) {
                         mapAppName = "WAZE";
-                    }else{
+                    } else {
                         mapAppName = "GOOGLE MAPS";
                     }
                     VariableStore.toastMapApp = mapAppName;
-                }catch(Exception e){
+                } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
 
-                if(wazeFound) {
+                if (wazeFound) {
                     Snackbar.make(view, "Change Maps Launch to", Snackbar.LENGTH_LONG)
                             .setActionTextColor(getResources().getColor(R.color.colorAccent))
                             .setAction(mapAppName, new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                     setMapsButtonText(context);
                                 }
                             }).show();
-                }else{
+                } else {
                     Snackbar.make(view, "Supports Launching of WAZE when installed", Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -370,10 +370,14 @@ public class MainActivity extends AppCompatActivity {
         toggleButton = (ToggleButton)findViewById(R.id.UnlockToggleButton);
         toggleButton.setChecked(btnState);
 
-        RadioGroup rdoGroup = (RadioGroup)findViewById(R.id.rdoMusicPlayers);
-        int index = BAPMPreferences.getSelectedMusicPlayer(context);
-        RadioButton radioButton = (RadioButton)rdoGroup.getChildAt(index);
-        radioButton.setChecked(true);
+        try {
+            RadioGroup rdoGroup = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
+            int index = BAPMPreferences.getSelectedMusicPlayer(context);
+            RadioButton radioButton = (RadioButton) rdoGroup.getChildAt(index);
+            radioButton.setChecked(true);
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public void mapsToggleButton(View view){

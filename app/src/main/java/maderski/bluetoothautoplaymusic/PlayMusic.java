@@ -35,15 +35,7 @@ public class PlayMusic {
         context.sendOrderedBroadcast(upIntent, null);
     }
 
-    public static void play(Context context){
-        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
-        VariableStore.am.dispatchMediaKeyEvent(downEvent);
-
-        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
-        VariableStore.am.dispatchMediaKeyEvent(upEvent);
-    }
-
-    public static void play_pandora(Context context){
+    public static void play(){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
         VariableStore.am.dispatchMediaKeyEvent(downEvent);
 
@@ -69,28 +61,5 @@ public class PlayMusic {
         i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
     }
-
-    public static void play_music(Context context, String pkg){
-        Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName(pkg, pkg + ".internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
-        context.sendOrderedBroadcast(i, null);
-
-        i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName(pkg, pkg + ".internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-        context.sendOrderedBroadcast(i, null);
-    }
-
-    public static void test(Context context, PendingIntent pi, String pkg){
-        //MediaSessionManager msm = (MediaSessionManager) context.getSystemService(Context.MEDIA_SESSION_SERVICE);
-
-        if(Build.VERSION.SDK_INT > 21) {
-            MediaSession ms = new MediaSession(context, pkg);
-            ms.setMediaButtonReceiver(pi);
-        }
-    }
-
-
 }
 

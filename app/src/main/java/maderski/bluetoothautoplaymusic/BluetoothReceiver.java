@@ -87,8 +87,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
 
         //af.requestFocus(context, afl.getAudioFocusChangeListener());
-
-        LaunchApp.launchSelectedMusicPlayer(context);
+        try {
+            LaunchApp.launchSelectedMusicPlayer(context);
+        }catch(Exception e){
+            Log.e(TAG, e.getMessage());
+        }
 
         if(!launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
