@@ -84,9 +84,7 @@ public class LaunchApp {
 
             public void onFinish() {
                 launch(ctx, pkgName);
-                PlayMusic.play(ctx, pkgName);
-                //PlayMusic.start(ctx);
-                //PlayMusic.play_music(ctx, pkgName);
+                AudioFocus.requestAudioFocus(ctx,pkgName);
                 delayLaunchMaps(ctx, 2);
                 Log.i("Launch Delay: ", "Finished");
             }

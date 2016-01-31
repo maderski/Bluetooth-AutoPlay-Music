@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.media.AudioManager;
 import android.os.PowerManager;
 
 /**
@@ -16,4 +17,9 @@ public class VariableStore {
 
     //Variable to show BT device on Notification
     public static String btDevice = "None";
+
+    //Variable for AudioFocus
+    public static AudioManager am;
+    public static AudioManager.OnAudioFocusChangeListener listener;
+    public static boolean inAudioFocus;
 }

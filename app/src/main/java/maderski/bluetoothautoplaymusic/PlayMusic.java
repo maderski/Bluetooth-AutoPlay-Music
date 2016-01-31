@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.os.Build;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.MediaController;
@@ -36,14 +37,14 @@ public class PlayMusic {
         context.sendOrderedBroadcast(upIntent, null);
     }
 
-    public static void play(Context context, String pkg){
+    public static void play_googlePlayMusic(Context context){
         Intent intent = new Intent("com.android.music.musicservicecommand");
-        intent.setPackage(pkg);
+        intent.setPackage(ConstantStore.GOOGLEPLAYMUSIC);
         intent.putExtra("command", "play");
         context.sendBroadcast(intent);
     }
 
-    public static void spotify_play(Context context){
+    public static void play_spotify(Context context){
         Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
         i.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.internal.receiver.MediaButtonReceiver"));
         i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
@@ -75,7 +76,6 @@ public class PlayMusic {
             ms.setMediaButtonReceiver(pi);
         }
     }
-
 
 
 }

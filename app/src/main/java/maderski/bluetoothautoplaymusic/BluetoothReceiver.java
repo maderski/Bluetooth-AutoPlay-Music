@@ -17,6 +17,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     private ScreenONLock screenONLock = new ScreenONLock();
     private RingerControl ringerControl = new RingerControl();
+    //private AudioFocus af = new AudioFocus();
+    //private AudioFocusListen afl = new AudioFocusListen();
 
     public void onReceive(Context context, Intent intent)
     {
@@ -84,6 +86,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
             launchMainActivity(context);
         }
 
+        //af.requestFocus(context, afl.getAudioFocusChangeListener());
+
         LaunchApp.launchSelectedMusicPlayer(context);
 
         if(!launchMusicPlayer){
@@ -105,6 +109,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if(priorityMode){
             ringerControl.soundsON(context);
         }
+
+        //af.abandonFocus(afl.getAudioFocusChangeListener());
+        AudioFocus.abandonAudioFocus();
     }
 
     private void launchMainActivity(Context context){
