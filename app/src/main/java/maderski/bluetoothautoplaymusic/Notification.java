@@ -5,8 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.renderscript.RenderScript;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import java.util.PriorityQueue;
 
 /**
  * Created by Jason on 12/8/15.
@@ -31,6 +34,7 @@ public class Notification {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(false)
                 //.setContentIntent(contentIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent)
                 .addAction(android.R.drawable.ic_menu_edit, "Options", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
