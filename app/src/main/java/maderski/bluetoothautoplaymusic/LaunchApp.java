@@ -84,7 +84,15 @@ public class LaunchApp {
 
             public void onFinish() {
                 launch(ctx, pkgName);
-                AudioFocus.requestAudioFocus(ctx,pkgName);
+                AudioFocus.requestAudioFocus(ctx, pkgName);
+                int i = 0;
+                while(!VariableStore.am.isMusicActive()){
+                    Log.i(TAG, "Music not active " + Integer.toString(i));
+                    i++;
+                    if(i>10000)
+                        break;
+                }
+                Log.i(TAG, "Music active");
                 delayLaunchMaps(ctx, 2);
                 Log.i("Launch Delay: ", "Finished");
             }
@@ -106,6 +114,7 @@ public class LaunchApp {
                 Log.i("Launch Delay: ", "Finished");
             }
         }.start();
+        Log.i(TAG, "delayLaunchmaps started");
     }
 }
 
