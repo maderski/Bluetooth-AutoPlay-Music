@@ -53,9 +53,8 @@ public class LaunchApp {
 
         if(isEnabled) {
             AudioFocus.getCurrentAudioFocus(context);
-            //launch(context, packageName);
             delayMusicLaunch(context, 3, packageName);
-            delayLaunchMaps(context, 2);
+
         }
         else
             Log.i(TAG, "Launch Music Player is OFF");
@@ -97,6 +96,7 @@ public class LaunchApp {
                     default:
                         PlayMusic.play();
                 }
+                delayLaunchMaps(ctx, 2);
             }
         }.start();
     }
