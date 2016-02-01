@@ -11,7 +11,7 @@ public class AudioFocus {
 
     private static final String TAG = AudioFocus.class.getName();
 
-    public static void requestAudioFocus(Context context, String pkg){
+    public static void requestAudioFocus(Context context){
         AudioFocusListen afl = new AudioFocusListen();
         VariableStore.listener = afl.getAudioFocusChangeListener();
         VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -21,18 +21,7 @@ public class AudioFocus {
             Log.i(TAG, "Audiofocus Request Granted");
             //Play music
             PlayMusic.play();
-            if(!VariableStore.am.isMusicActive()){
-                switch (pkg){
-                    case ConstantStore.SPOTIFY:
-                        PlayMusic.play_spotify(context);
-                        break;
-                    case ConstantStore.GOOGLEPLAYMUSIC:
-                        PlayMusic.play_googlePlayMusic(context);
-                        break;
-                }
-            }
-        }else
-            Log.i(TAG, Integer.toString(result));
+        }
     }
 
     public static void abandonAudioFocus(){
@@ -48,24 +37,4 @@ public class AudioFocus {
         VariableStore.listener = afl.getAudioFocusChangeListener();
         VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
-    /*
-
-    public boolean requestFocus(Context context, AudioManager.OnAudioFocusChangeListener listener){
-        VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        int requestGranted = AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-        int requestFocus = VariableStore.am.requestAudioFocus(listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        boolean result = requestGranted == requestFocus;
-        Log.i(TAG, "Request Focus: " + result);
-        return result;
-    }
-
-    public boolean abandonFocus(AudioManager.OnAudioFocusChangeListener listener){
-        int requestGranted = AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-        int abandonFocus = VariableStore.am.abandonAudioFocus(listener);
-        boolean result = requestGranted == abandonFocus;
-        Log.i(TAG, "Abandon Focus: " + result);
-        return  result;
-    }
-    */
-
 }

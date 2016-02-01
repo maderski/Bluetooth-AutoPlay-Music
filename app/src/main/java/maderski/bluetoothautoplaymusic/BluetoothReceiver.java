@@ -45,7 +45,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             String btDevice = device.getName();
 
             Log.d(TAG, "Connected to " + btDevice);
-            Toast.makeText(context, "Connected to: " + btDevice, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Connected to: " + btDevice, Toast.LENGTH_SHORT).show();
 
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
@@ -58,7 +58,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             String btDevice = device.getName();
             
             Log.d(TAG, "Disconnected from " + btDevice);
-            Toast.makeText(context, "Disconnected from: " + btDevice, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Disconnected from: " + btDevice, Toast.LENGTH_SHORT).show();
 
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
