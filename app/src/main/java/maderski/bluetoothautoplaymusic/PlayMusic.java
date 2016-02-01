@@ -2,9 +2,11 @@ package maderski.bluetoothautoplaymusic;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetHost;
+import android.bluetooth.BluetoothA2dp;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
@@ -40,6 +42,14 @@ public class PlayMusic {
         VariableStore.am.dispatchMediaKeyEvent(downEvent);
 
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        VariableStore.am.dispatchMediaKeyEvent(upEvent);
+    }
+
+    public static void pause(){
+        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
+        VariableStore.am.dispatchMediaKeyEvent(downEvent);
+
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
         VariableStore.am.dispatchMediaKeyEvent(upEvent);
     }
 

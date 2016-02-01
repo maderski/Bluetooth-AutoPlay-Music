@@ -42,6 +42,12 @@ public class AudioFocus {
             Log.i(TAG, "Audiofocus Abandoned");
         }
     }
+
+    public static void getCurrentAudioFocus(Context context){
+        AudioFocusListen afl = new AudioFocusListen();
+        VariableStore.listener = afl.getAudioFocusChangeListener();
+        VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+    }
     /*
 
     public boolean requestFocus(Context context, AudioManager.OnAudioFocusChangeListener listener){

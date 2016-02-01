@@ -1,34 +1,44 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.bluetooth.BluetoothA2dp;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.ParcelUuid;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by Jason on 1/5/16.
  */
 public class BluetoothReceiver extends BroadcastReceiver {
     public final static String TAG = "BluetoothReceiver";
-
     private ScreenONLock screenONLock = new ScreenONLock();
     private RingerControl ringerControl = new RingerControl();
-    //private AudioFocus af = new AudioFocus();
-    //private AudioFocusListen afl = new AudioFocusListen();
 
     public void onReceive(Context context, Intent intent)
     {
         Log.d(TAG, "Bluetooth Intent Received");
         //Toast.makeText(context, "Bluetooth Intent Received", Toast.LENGTH_SHORT).show();
 
-        final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
 
         String action = intent.getAction();
-        Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
+
+        if(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equalsIgnoreCase(action)){
+            if(isBTAudioIsReady(intent))
+                BTConnectPhoneDoStuff(context);
+        }
 
         if (BluetoothDevice.ACTION_ACL_CONNECTED.equalsIgnoreCase(action))
         {
@@ -40,8 +50,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
                 VariableStore.btDevice = btDevice;
-                BTConnectPhoneDoStuff(context);
-
             }
         }
 
@@ -59,6 +67,17 @@ public class BluetoothReceiver extends BroadcastReceiver {
             }
         }
 
+    }
+
+    private boolean isBTAudioIsReady(Intent intent){
+        boolean ready = false;
+        int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
+        if(state == BluetoothA2dp.STATE_CONNECTED) {
+            Log.e(TAG, "CONNECTED!!! :D");
+            ready = true;
+        }
+
+        return ready;
     }
 
     private void BTConnectPhoneDoStuff(Context context){
@@ -86,7 +105,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
             launchMainActivity(context);
         }
 
-        //af.requestFocus(context, afl.getAudioFocusChangeListener());
         try {
             LaunchApp.launchSelectedMusicPlayer(context);
         }catch(Exception e){
@@ -113,8 +131,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
             ringerControl.soundsON(context);
         }
 
-        //af.abandonFocus(afl.getAudioFocusChangeListener());
+        PlayMusic.pause();
         AudioFocus.abandonAudioFocus();
+
     }
 
     private void launchMainActivity(Context context){

@@ -52,7 +52,10 @@ public class LaunchApp {
         String packageName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
         if(isEnabled) {
-            delayMusicAppLaunch(context, 5, packageName);
+            AudioFocus.getCurrentAudioFocus(context);
+            //launch(context, packageName);
+            delayMusicLaunch(context, 3, packageName);
+            delayLaunchMaps(context, 2);
         }
         else
             Log.i(TAG, "Launch Music Player is OFF");
@@ -71,7 +74,7 @@ public class LaunchApp {
         return false;
     }
 
-    private static void delayMusicAppLaunch(Context context, int seconds, String packageName){
+    private static void delayMusicLaunch(Context context, int seconds, String packageName){
         final Context ctx = context;
         final String pkgName = packageName;
         seconds = seconds * 1000;
@@ -84,17 +87,16 @@ public class LaunchApp {
 
             public void onFinish() {
                 launch(ctx, pkgName);
-                AudioFocus.requestAudioFocus(ctx, pkgName);
-                int i = 0;
-                while(!VariableStore.am.isMusicActive()){
-                    Log.i(TAG, "Music not active " + Integer.toString(i));
-                    i++;
-                    if(i>10000)
+                switch (pkgName){
+                    case ConstantStore.SPOTIFY:
+                        PlayMusic.play_spotify(ctx);
                         break;
+                    case ConstantStore.GOOGLEPLAYMUSIC:
+                        PlayMusic.play_googlePlayMusic(ctx);
+                        break;
+                    default:
+                        PlayMusic.play();
                 }
-                Log.i(TAG, "Music active");
-                delayLaunchMaps(ctx, 2);
-                Log.i("Launch Delay: ", "Finished");
             }
         }.start();
     }
