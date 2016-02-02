@@ -53,7 +53,7 @@ public class LaunchApp {
 
         if(isEnabled) {
             AudioFocus.getCurrentAudioFocus(context);
-            delayMusicLaunch(context, 3, packageName);
+            delayMusicLaunch(context, 2, packageName);
 
         }
         else
@@ -97,6 +97,7 @@ public class LaunchApp {
                         PlayMusic.play();
                 }
                 delayLaunchMaps(ctx, 2);
+                musicStillNotActive(3);
             }
         }.start();
     }
@@ -117,6 +118,25 @@ public class LaunchApp {
             }
         }.start();
         Log.i(TAG, "delayLaunchmaps started");
+    }
+
+    private static void musicStillNotActive(int seconds){
+        seconds = seconds * 1000;
+        new CountDownTimer(seconds,
+                9999) // onTick time, not used
+        {
+            public void onTick(long millisUntilFinished) {
+                // Not used
+            }
+
+            public void onFinish() {
+                if(!VariableStore.am.isMusicActive()){
+                    PlayMusic.play();
+                    Log.i(TAG, "Pressed Play again");
+                }else
+                    Log.i(TAG, "Music is Active");
+            }
+        }.start();
     }
 }
 
