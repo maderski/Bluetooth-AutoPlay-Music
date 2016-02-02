@@ -2,13 +2,13 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by Jason on 1/5/16.
+ *
+ * Save and read program settings using this class
  */
 public class BAPMPreferences {
 
@@ -27,6 +27,7 @@ public class BAPMPreferences {
     public static final String BTDEVICES_KEY = "BTDevices";
     public static final String MAPS_CHOICE_KEY = "MapsChoice";
 
+    //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
 
         if(_editor == null){
@@ -37,6 +38,7 @@ public class BAPMPreferences {
         return _editor;
     }
 
+    //Reads SharedPreferences value
     private static SharedPreferences reader(Context context){
 
         return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_MULTI_PROCESS);
@@ -132,6 +134,7 @@ public class BAPMPreferences {
         return reader(context).getString(MAPS_CHOICE_KEY, "com.google.android.apps.maps");
     }
 
+    //Commits write to SharedPreferences
     private static void commit(Context context){
         editor(context).commit();
         _editor = null;

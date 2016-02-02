@@ -1,11 +1,8 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.PowerManager;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 
 import java.util.Calendar;
 
@@ -16,6 +13,7 @@ public class ScreenONLock {
 
     private String TAG = ScreenONLock.class.getName();
 
+    //Enable WakeLock
     public void enableWakeLock(Context context){
 
         int screenBrightness;
@@ -37,6 +35,7 @@ public class ScreenONLock {
         }
     }
 
+    //Disable and release WakeLock
     public void releaseWakeLock(Context context){
         if (VariableStore.wakeLock != null && VariableStore.wakeLock.isHeld()) {
             try {
@@ -48,6 +47,7 @@ public class ScreenONLock {
         }
     }
 
+    //Return true if Dark
     private static boolean isDark(int darkEveningHour, int lightMorningHour){
         Boolean dark;
         int hour;

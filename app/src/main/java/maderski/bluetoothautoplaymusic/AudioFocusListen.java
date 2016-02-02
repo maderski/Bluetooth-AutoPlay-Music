@@ -1,10 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.app.Service;
-import android.content.Intent;
 import android.media.AudioManager;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
@@ -14,6 +10,7 @@ public class AudioFocusListen{
 
     private static final String TAG = AudioFocusListen.class.getName();
 
+    //AudioFocus Listener, provides audioFocus feedback
     private AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
@@ -43,10 +40,12 @@ public class AudioFocusListen{
         }
     };
 
+    //Not used
     public void setAudioFocusChangeListener(AudioManager.OnAudioFocusChangeListener audioFocusChangeListener) {
         this.audioFocusChangeListener = audioFocusChangeListener;
     }
 
+    //Get AudioFocus Change Listener
     public AudioManager.OnAudioFocusChangeListener getAudioFocusChangeListener() {
         return audioFocusChangeListener;
     }

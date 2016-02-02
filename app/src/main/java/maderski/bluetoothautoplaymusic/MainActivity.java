@@ -2,15 +2,12 @@ package maderski.bluetoothautoplaymusic;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.KeyguardManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -44,14 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        if(!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)){
-            Log.i(TAG, "Checked");
-            BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //When Floating Action Button is clicked show snackbar with MAPS/WAZE selection
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Display about when the three dots is clicked on
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -133,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(view, "Created by: Jason Maderski" + "\n" + "Version: " + showVersion(), Snackbar.LENGTH_LONG).show();
     }
 
+    //Show Version of the BAPM App
     private String showVersion(){
         String version = "none";
 
@@ -155,11 +150,10 @@ public class MainActivity extends AppCompatActivity {
             dismissKeyGuard(this);
         }
 
-        if (!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)){
-            BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
-        }
+        checkIfWazeRemoved(this);
     }
 
+    //Save the BTDevices when program is paused
     @Override
     protected  void onPause(){
         super.onPause();
@@ -171,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    //Not used, check if BAPMService is Running
     private boolean isBAPMServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -181,6 +176,20 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    //Checks if WAZE was removed and if WAZE was set to the MapsChoice and if so, set MapsChoice in
+    //SharedPrefs to MAPS
+    private void checkIfWazeRemoved(Context context){
+        String mapAppChoice = BAPMPreferences.getMapsChoice(context);
+        if(mapAppChoice.equalsIgnoreCase(ConstantStore.WAZE)) {
+            if (!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)) {
+                Log.i(TAG, "Checked");
+                BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
+            }else
+                Log.i(TAG, "WAZE is installed");
+        }
+    }
+
+    //Dismiss the KeyGuard
     private void dismissKeyGuard(Context context){
 
         if (!BAPMPreferences.getKeepScreenON(context)){
@@ -201,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Not used
     private void sendAppToBackground(Context context){
         Intent i = new Intent();
         i.setAction(Intent.ACTION_MAIN);
@@ -208,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         context.startActivity(i);
     }
 
+    //Used for testing, Lists Music players and BT devices in logcat
     private void listMusicplayersAndBTDevices(Context context){
         for(String pkg:VariousLists.listOfInstalledMediaPlayers(context)){
             Log.i("Pkg ", pkg);
@@ -218,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Setup the UI
     private void setupUIElements(Context context){
         radiobuttonCreator(context);
         checkboxCreator();
@@ -226,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         setMapsButtonText(context);
     }
 
+    //Create Checkboxes
     private void checkboxCreator() {
 
         CheckBox checkBox;
@@ -251,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Used for testing to list BTDevices in logcat
     private void listSetString(){
         for(String item : BAPMPreferences.getBTDevices(this)){
             Log.i(TAG, item);
@@ -258,12 +272,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Get Selected Checkboxes
     private void checkboxListener(CheckBox checkBox, String BTDevice){
-        final Context ctx = this;
         final CheckBox cb = checkBox;
         final String BTD = BTDevice;
 
-        //final Set<String> BTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(this));
         saveBTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(this));
 
         cb.setOnClickListener(new View.OnClickListener() {
@@ -271,17 +284,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (cb.isChecked()) {
                     saveBTDevices.add(BTD);
-                    //BAPMPreferences.setBTDevices(BTD, true);
                     Log.i(TAG, "TRUE" + " " + BTD);
                 } else {
                     saveBTDevices.remove(BTD);
-                    //BAPMPreferences.setBTDevices(BTD, false);
                     Log.i(TAG, "FALSE" + " " + BTD);
                 }
             }
         });
     }
 
+    //Get list of installed Mediaplayers and create Radiobuttons
     private void radiobuttonCreator(Context context){
 
         RadioButton rdoButton;
@@ -309,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Get Selected Radiobutton
     private void radioButtonListener(){
         final Context context = this;
         RadioGroup group = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
@@ -325,23 +338,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
     private void setMapsButtonText(Context context){
-        String mapAppName = "None";
         String mapChoice = BAPMPreferences.getMapsChoice(context);
         PackageManager packageManager = getPackageManager();
         try {
             ApplicationInfo appInfo = packageManager.getApplicationInfo(mapChoice, 0);
-            mapAppName = packageManager.getApplicationLabel(appInfo).toString();
+            mapChoice = packageManager.getApplicationLabel(appInfo).toString();
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
+            mapChoice = "Maps";
         }
 
         TextView textView = (TextView)findViewById(R.id.textView4);
-        textView.setText("Launch " + mapAppName);
+        textView.setText("Launch " + mapChoice);
 
 
     }
 
+    //Set the button and radiobutton states
     private void setButtonPreferences(Context context){
         Boolean btnState;
         ToggleButton toggleButton;
@@ -379,6 +394,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, e.getMessage());
         }
     }
+
+    //***Toggle button actions are below, basically set SharedPref value for specified button***
 
     public void mapsToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();

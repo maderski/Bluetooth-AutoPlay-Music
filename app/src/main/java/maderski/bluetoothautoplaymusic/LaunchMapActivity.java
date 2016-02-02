@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ public class LaunchMapActivity extends AppCompatActivity {
 
     final static String TAG = LaunchMapActivity.class.getName();
 
+    //Get Map App and then run launchMapApp and close activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +21,7 @@ public class LaunchMapActivity extends AppCompatActivity {
         this.finish();
     }
 
+    //Launch Maps or Waze
     private void launchMapApp(String mapAppName){
         Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(mapAppName);
         startActivity(LaunchIntent);

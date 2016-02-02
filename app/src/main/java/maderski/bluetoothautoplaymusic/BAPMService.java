@@ -10,6 +10,7 @@ import android.util.Log;
  */
 public class BAPMService extends Service {
 
+    //Start the Bluetooth receiver as a service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("BAPMService: ", "started");

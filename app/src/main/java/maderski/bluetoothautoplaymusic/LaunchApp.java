@@ -1,17 +1,10 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.CountDownTimer;
-import android.provider.MediaStore;
-import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import java.util.List;
@@ -34,6 +27,7 @@ public class LaunchApp {
         context.startActivity(LaunchIntent);
     }
 
+    //Launches Maps or Waze
     public static void launchMaps(Context context){
         boolean isEnabled = BAPMPreferences.getLaunchGoogleMaps(context);
         String mapAppName = BAPMPreferences.getMapsChoice(context);
@@ -46,6 +40,7 @@ public class LaunchApp {
 
     }
 
+    //Launches Selected Music Player
     public static void launchSelectedMusicPlayer(Context context){
         boolean isEnabled = BAPMPreferences.getLaunchMusicPlayer(context);
         int index = BAPMPreferences.getSelectedMusicPlayer(context);
@@ -60,6 +55,7 @@ public class LaunchApp {
             Log.i(TAG, "Launch Music Player is OFF");
     }
 
+    //Returns true if Package is on phone
     public static boolean checkPkgOnPhone(Context context, String pkg){
         List<ApplicationInfo> packages;
         PackageManager pm;
@@ -73,6 +69,7 @@ public class LaunchApp {
         return false;
     }
 
+    //Create a delay before the Music App is launched
     private static void delayMusicLaunch(Context context, int seconds, String packageName){
         final Context ctx = context;
         final String pkgName = packageName;
@@ -102,6 +99,7 @@ public class LaunchApp {
         }.start();
     }
 
+    //Create a delay before Maps or Waze is launched
     public static void delayLaunchMaps(Context context, int seconds){
         final Context ctx = context;
         seconds = seconds * 1000;
@@ -120,6 +118,7 @@ public class LaunchApp {
         Log.i(TAG, "delayLaunchmaps started");
     }
 
+    //After inputed amount of time, check to see if music is playing, if not try a keyEvent play
     private static void musicStillNotActive(int seconds){
         seconds = seconds * 1000;
         new CountDownTimer(seconds,

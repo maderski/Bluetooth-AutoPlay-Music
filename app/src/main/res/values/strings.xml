@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth Connect and Do Stuff</string>
+    <string name="app_name">On Bluetooth Audio Connect</string>
     <string name="action_settings">About</string>
     <string name="no_BT_found">No Bluetooth Device found</string>
 </resources>

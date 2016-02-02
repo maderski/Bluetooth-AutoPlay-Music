@@ -1,30 +1,24 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.bluetooth.BluetoothA2dp;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHeadset;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.ParcelUuid;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by Jason on 1/5/16.
  */
 public class BluetoothReceiver extends BroadcastReceiver {
+
     public final static String TAG = "BluetoothReceiver";
     private ScreenONLock screenONLock = new ScreenONLock();
     private RingerControl ringerControl = new RingerControl();
 
+    //On receive of Broadcast
     public void onReceive(Context context, Intent intent)
     {
         Log.d(TAG, "Bluetooth Intent Received");
@@ -33,13 +27,16 @@ public class BluetoothReceiver extends BroadcastReceiver {
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
 
+        //Get action that was broadcasted
         String action = intent.getAction();
 
+        //Run if BTAudio is ready
         if(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equalsIgnoreCase(action)){
             if(isBTAudioIsReady(intent))
                 BTConnectPhoneDoStuff(context);
         }
 
+        //Run on inital bluetooth connection
         if (BluetoothDevice.ACTION_ACL_CONNECTED.equalsIgnoreCase(action))
         {
             String btDevice = device.getName();
@@ -53,6 +50,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             }
         }
 
+        //Run on Bluetooth disconnect
         if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equalsIgnoreCase(action))
         {
             String btDevice = device.getName();
@@ -69,6 +67,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     }
 
+    //Return true if Bluetooth Audio is ready
     private boolean isBTAudioIsReady(Intent intent){
         boolean ready = false;
         int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
@@ -80,6 +79,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         return ready;
     }
 
+    //Creates notification and if set turns screen ON, puts the phone in priority mode,
+    //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
+    //Player and Launches Maps
     private void BTConnectPhoneDoStuff(Context context){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
@@ -117,9 +119,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     }
 
+    //Removes notification and if set releases wakelock, puts the ringer back to normal,
+    //pauses the music and abandons AudioFocus
     private void BTDisconnectPhoneDoStuff(Context context){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+        boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
         Notification.removeBAPMMessage(context);
 
@@ -131,11 +136,13 @@ public class BluetoothReceiver extends BroadcastReceiver {
             ringerControl.soundsON(context);
         }
 
-        PlayMusic.pause();
-        AudioFocus.abandonAudioFocus();
-
+        if(launchMusicPlayer) {
+            PlayMusic.pause();
+            AudioFocus.abandonAudioFocus();
+        }
     }
 
+    //Launch MainActivity, used for unlocking the screen
     private void launchMainActivity(Context context){
         Intent i = new Intent(context, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
