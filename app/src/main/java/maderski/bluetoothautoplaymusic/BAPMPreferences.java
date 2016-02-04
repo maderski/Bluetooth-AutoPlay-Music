@@ -26,6 +26,8 @@ public class BAPMPreferences {
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
     public static final String MAPS_CHOICE_KEY = "MapsChoice";
+    public static final String SUNRISE_KEY = "Sunrise";
+    public static final String SUNSET_KEY = "Sunset";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -132,6 +134,20 @@ public class BAPMPreferences {
 
     public static String getMapsChoice(Context context){
         return reader(context).getString(MAPS_CHOICE_KEY, "com.google.android.apps.maps");
+    }
+
+    public static void setSunriseSunset(Context context, int sunrise, int sunset){
+        editor(context).putInt(SUNRISE_KEY, sunrise);
+        editor(context).putInt(SUNSET_KEY, sunset);
+        commit(context);
+    }
+
+    public static int getSunrise(Context context){
+        return reader(context).getInt(SUNRISE_KEY, 7);
+    }
+
+    public static int getSunset(Context context){
+        return reader(context).getInt(SUNSET_KEY, 7);
     }
 
     //Commits write to SharedPreferences
