@@ -21,7 +21,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent)
     {
-        Log.d(TAG, "Bluetooth Intent Received");
         //Toast.makeText(context, "Bluetooth Intent Received", Toast.LENGTH_SHORT).show();
 
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -29,6 +28,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         //Get action that was broadcasted
         String action = intent.getAction();
+        Log.d(TAG, "Bluetooth Intent Received: " + action);
 
         //Run if BTAudio is ready
         if(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equalsIgnoreCase(action)){
