@@ -12,6 +12,10 @@ public class VariableStore {
     public static PowerManager.WakeLock wakeLock;
     public static String stayOnTAG = "Stay ON";
 
+    //For Ringer Control
+    public static RingerControl ringerControl;
+    public static int currentRingerSet;
+
     //Variable to Store Name of Launch Map App to display in toast message
     public static String toastMapApp;
 
@@ -22,5 +26,4 @@ public class VariableStore {
     public static AudioManager am;
     public static AudioManager.OnAudioFocusChangeListener listener;
     public static boolean inAudioFocus;
-
 }

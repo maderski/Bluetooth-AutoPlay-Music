@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.util.Log;
 
 import java.util.Set;
@@ -16,7 +17,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     public final static String TAG = "BluetoothReceiver";
     private ScreenONLock screenONLock = new ScreenONLock();
-    private RingerControl ringerControl = new RingerControl();
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent)
@@ -89,6 +89,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
+        VariableStore.ringerControl = new RingerControl(context);
         Notification.BAPMMessage(context);
 
         if(screenON){
@@ -96,11 +97,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
 
         if(priorityMode){
-            ringerControl.soundsOFF(context);
+            VariableStore.currentRingerSet = VariableStore.ringerControl.ringerSetting();
+            VariableStore.ringerControl.soundsOFF();
         }
 
         if(volumeMAX){
-            ringerControl.volumeMAX(context);
+            VariableStore.ringerControl.volumeMAX();
         }
 
         if(unlockScreen){
@@ -133,7 +135,21 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
 
         if(priorityMode){
-            ringerControl.soundsON(context);
+            try {
+                switch(VariableStore.currentRingerSet){
+                    case AudioManager.RINGER_MODE_SILENT:
+                        Log.i(TAG, "Phone is on Silent");
+                        break;
+                    case AudioManager.RINGER_MODE_VIBRATE:
+                        VariableStore.ringerControl.vibrateOnly();
+                        break;
+                    case AudioManager.RINGER_MODE_NORMAL:
+                        VariableStore.ringerControl.soundsON();
+                        break;
+                }
+            }catch(Exception e){
+                Log.e(TAG, e.getMessage());
+            }
         }
 
         if(launchMusicPlayer) {
