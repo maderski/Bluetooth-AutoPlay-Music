@@ -32,7 +32,7 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getName();
-    private Set<String> saveBTDevices = new HashSet<>();
+    private Set<String> saveBTDevices = new HashSet<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final Context context = this;
+
+        if(BAPMPreferences.getFirstInstallKey(this))
+            runOnFirstInstall();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -208,6 +211,12 @@ public class MainActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
             //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+    }
+
+    private void runOnFirstInstall(){
+        saveBTDevices = new HashSet<>(VariousLists.listOfBluetoothDevices());
+        BAPMPreferences.setBTDevices(this, saveBTDevices);
+        BAPMPreferences.setFirstInstall(this, false);
     }
 
     //Not used

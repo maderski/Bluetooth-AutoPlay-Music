@@ -26,6 +26,7 @@ public class BAPMPreferences {
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
     public static final String MAPS_CHOICE_KEY = "MapsChoice";
+    public static final String FIRST_INSTALL_KEY = "FirstInstall";
     public static final String SUNRISE_KEY = "Sunrise";
     public static final String SUNSET_KEY = "Sunset";
 
@@ -134,6 +135,15 @@ public class BAPMPreferences {
 
     public static String getMapsChoice(Context context){
         return reader(context).getString(MAPS_CHOICE_KEY, "com.google.android.apps.maps");
+    }
+
+    public static void setFirstInstall(Context context, boolean isFirstInstall){
+        editor(context).putBoolean(FIRST_INSTALL_KEY, isFirstInstall);
+        commit(context);
+    }
+
+    public static boolean getFirstInstallKey(Context context){
+        return reader(context).getBoolean(FIRST_INSTALL_KEY, true);
     }
 
     public static void setSunriseSunset(Context context, int sunrise, int sunset){
