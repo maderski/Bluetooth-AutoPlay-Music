@@ -22,4 +22,5 @@ public class VariableStore {
     public static AudioManager am;
     public static AudioManager.OnAudioFocusChangeListener listener;
     public static boolean inAudioFocus;
+
 }

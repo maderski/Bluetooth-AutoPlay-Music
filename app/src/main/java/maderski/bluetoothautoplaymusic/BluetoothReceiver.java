@@ -137,8 +137,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
 
         if(launchMusicPlayer) {
-            PlayMusic.pause();
-            AudioFocus.abandonAudioFocus();
+            try {
+                PlayMusic.pause();
+                AudioFocus.abandonAudioFocus();
+            }catch(Exception e){
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 

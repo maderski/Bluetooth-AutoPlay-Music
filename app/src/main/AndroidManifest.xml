@@ -39,7 +39,7 @@
 
         <service android:name=".BAPMService" />
 
-        <activity android:name=".LaunchMapActivity"></activity>
+        <activity android:name=".LaunchMapActivity" />
     </application>
 
 </manifest>
