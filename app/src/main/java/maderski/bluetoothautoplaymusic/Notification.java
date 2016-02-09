@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 
@@ -20,7 +21,7 @@ public class Notification {
 
     //Create notification message for BAPM
     public static void BAPMMessage(Context context){
-        int color = context.getColor(R.color.colorAccent);
+        int color = ContextCompat.getColor(context, R.color.colorAccent);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);

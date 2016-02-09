@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(BAPMPreferences.getFirstInstallKey(this))
             runOnFirstInstall();
+
+        SunriseSunset ss = new SunriseSunset(this);
+        ss.getSunrise(context);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -256,7 +260,8 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
 
-        if (VariousLists.listOfBluetoothDevices().contains("No Bluetooth Device found")){
+        if (VariousLists.listOfBluetoothDevices().contains("No Bluetooth Device found") ||
+                VariousLists.listOfBluetoothDevices().isEmpty()){
             textView = new TextView(this);
             textView.setText(R.string.no_BT_found);
             BTDeviceCkBoxLL.addView(textView);
@@ -326,7 +331,6 @@ public class MainActivity extends AppCompatActivity {
             rdoButton = new RadioButton(this);
             rdoButton.setText(mediaPlayer);
             rdoMPGroup.addView(rdoButton);
-
         }
     }
 
