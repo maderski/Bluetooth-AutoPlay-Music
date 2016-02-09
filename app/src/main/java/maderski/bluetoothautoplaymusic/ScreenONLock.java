@@ -11,14 +11,14 @@ import java.util.Calendar;
  */
 public class ScreenONLock {
 
-    private String TAG = ScreenONLock.class.getName();
+    private final static String TAG = ScreenONLock.class.getName();
 
     //Enable WakeLock
     public void enableWakeLock(Context context){
 
         int screenBrightness;
 
-        if(isDark(7, 7)){
+        if(isDark(context)){
             screenBrightness = PowerManager.SCREEN_DIM_WAKE_LOCK;
         }else{
             screenBrightness = PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
@@ -48,22 +48,25 @@ public class ScreenONLock {
     }
 
     //Return true if Dark
-    private static boolean isDark(int darkEveningHour, int lightMorningHour){
+    private static boolean isDark(Context context){
         Boolean dark;
-        int hour;
-        int AMPM;
-
         Calendar c = Calendar.getInstance();
-        AMPM = c.get(Calendar.AM_PM);
-        hour = c.get(Calendar.HOUR);
-        Log.i("Time: ", Integer.toString(hour) + " " + Integer.toString(AMPM));
+        SunriseSunset ss = new SunriseSunset(context);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int currentTime = (hour * 100) + minute;
+        int sunriseTime = ss.getSunrise();
+        int sunsetTime = ss.getSunset();
 
-        if (hour >= darkEveningHour && AMPM == 1 || hour <=lightMorningHour && AMPM == 0){
+        Log.i(TAG, "Current: " + Integer.toString(currentTime) +
+                " SR: " + Integer.toString(sunriseTime) +
+                " SS: " + Integer.toString(sunsetTime));
 
+        if (currentTime >= sunsetTime || currentTime <= sunriseTime){
             dark = true;
         }else
             dark = false;
-
+        Log.i(TAG, "dark: " + Boolean.toString(dark));
         return dark;
     }
 

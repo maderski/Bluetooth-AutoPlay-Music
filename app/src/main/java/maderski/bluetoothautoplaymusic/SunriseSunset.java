@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
@@ -21,44 +22,43 @@ public class SunriseSunset {
 
     private final static String TAG = SunriseSunset.class.getName();
 
+    private String sunriseTime;
+    private String sunsetTime;
+
+    //Get Sunrise and Sunset Times as Strings
     public SunriseSunset(Context context){
-
+        Calendar today = Calendar.getInstance();
+        CurrentLocation currentLocation = new CurrentLocation(context);
+        Location location = new Location(currentLocation.getLatitude(), currentLocation.getLongitude());
+        SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, getTimeZone());
+        Log.i(TAG, "Lat " + currentLocation.getLatitude() + " Long " + currentLocation.getLongitude());
+        sunriseTime = calculator.getCivilSunriseForDate(today);
+        sunsetTime = calculator.getCivilSunsetForDate(today);
+        Log.i(TAG, "sunrise: " + sunriseTime + " sunset: " + sunsetTime);
     }
 
-    //Get today's date
-    private String getDate(){
-        String dm;
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-
-        c = Calendar.getInstance();
-        c.set(year, month, day);
-        dm = df.format(c.getTime());
-        return dm;
-    }
-
-    private String getTimeZoneID(){
-        Calendar c = Calendar.getInstance();
-        return c.getTimeZone().getDisplayName();
-
-    }
-
+    //Get Timezone
     private TimeZone getTimeZone(){
         Calendar c = Calendar.getInstance();
         return c.getTimeZone();
     }
 
-    public void getSunrise(Context context){
-        CurrentLocation currentLocation = new CurrentLocation(context);
-        Location location = new Location(currentLocation.getLatitude(), currentLocation.getLongitude());
-        SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, getTimeZone());
-        Calendar today = Calendar.getInstance();
-        String sunriseTime = calculator.getCivilSunriseForDate(today);
-        String sunsetTime = calculator.getCivilSunsetForDate(today);
-        Log.i(TAG, "sunrise: " + sunriseTime + " sunset: " + sunsetTime);
+    //Return Sunrise time as a single integer number
+    public int getSunrise(){
+        return getTime(sunriseTime);
+    }
+
+    //Return Sunrise time as a single integer number
+    public int getSunset(){
+        return getTime(sunsetTime);
+    }
+
+    //Convert Time String into a single integer number
+    private int getTime(String inputTime){
+        String time = inputTime;
+        String[] split = time.split(":");
+        int outputTime = (Integer.parseInt(split[0]) * 100) + Integer.parseInt(split[1]);
+        Log.i(TAG, Integer.toString(outputTime));
+        return outputTime;
     }
 }

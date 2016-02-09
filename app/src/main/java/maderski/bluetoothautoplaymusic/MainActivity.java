@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
         if(BAPMPreferences.getFirstInstallKey(this))
             runOnFirstInstall();
 
-        SunriseSunset ss = new SunriseSunset(this);
-        ss.getSunrise(context);
+        checkLocationPermission();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -216,10 +218,14 @@ public class MainActivity extends AppCompatActivity {
             //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
-
+    //On initial install so saveBTdevices is not null
     private void runOnFirstInstall(){
+        Set<String> firstRun = new HashSet<>();
         saveBTDevices = new HashSet<>(VariousLists.listOfBluetoothDevices());
-        BAPMPreferences.setBTDevices(this, saveBTDevices);
+
+        //firstRun.add(saveBTDevices.iterator().next());
+
+        BAPMPreferences.setBTDevices(this, firstRun);
         BAPMPreferences.setFirstInstall(this, false);
     }
 
@@ -351,6 +357,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void checkLocationPermission() {
+        PackageManager packageManager = getPackageManager();
+        int hasPermission = packageManager.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+                getPackageName());
+        //Check if Permission is granted
+        if(hasPermission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PackageManager.PERMISSION_GRANTED);
+        }
+    }
+
     //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
     private void setMapsButtonText(Context context){
         String mapChoice = BAPMPreferences.getMapsChoice(context);
@@ -422,7 +441,6 @@ public class MainActivity extends AppCompatActivity {
             BAPMPreferences.setLaunchGoogleMaps(this, false);
             Log.i(TAG, "MapButton is OFF");
         }
-
     }
 
     public void keepONToggleButton(View view){
