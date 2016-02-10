@@ -15,13 +15,13 @@ import android.util.Log;
  */
 public class Notification {
 
-    private static final String message = "Device " + VariableStore.btDevice + " connected";
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
 
     //Create notification message for BAPM
-    public static void BAPMMessage(Context context){
+    public static void BAPMMessage(Context context, String btDevice){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
+        String message = "Device " + btDevice + " connected";
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);

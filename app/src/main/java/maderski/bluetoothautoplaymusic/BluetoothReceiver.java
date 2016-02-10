@@ -32,8 +32,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         //Run if BTAudio is ready
         if(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equalsIgnoreCase(action)){
+            String btDevice = device.getName();
             if(isBTAudioIsReady(intent))
-                BTConnectPhoneDoStuff(context);
+                BTConnectPhoneDoStuff(context, btDevice);
         }
 
         //Run on inital bluetooth connection
@@ -46,7 +47,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             if(BTDeviceList.contains(btDevice)) {
                 Log.i(btDevice, " found");
-                VariableStore.btDevice = btDevice;
             }
         }
 
@@ -82,7 +82,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    private void BTConnectPhoneDoStuff(Context context){
+    private void BTConnectPhoneDoStuff(Context context, String btDevice){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
@@ -90,7 +90,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
         VariableStore.ringerControl = new RingerControl(context);
-        Notification.BAPMMessage(context);
+        Notification.BAPMMessage(context, btDevice);
 
         if(screenON){
             screenONLock.enableWakeLock(context);
