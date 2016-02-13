@@ -23,8 +23,8 @@ public class Notification {
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String message = "Device " + btDevice + " connected";
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+        //        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -38,8 +38,8 @@ public class Notification {
                 //.setContentIntent(expandIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent)
-                .addAction(android.R.drawable.ic_menu_edit, "Options", contentIntent);
+                .addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
+                //.addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
     }
 

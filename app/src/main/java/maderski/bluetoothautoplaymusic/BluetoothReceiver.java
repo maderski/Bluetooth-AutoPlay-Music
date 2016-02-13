@@ -89,6 +89,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
+        VariableStore.isBTConnected = true;
         VariableStore.ringerControl = new RingerControl(context);
         Notification.BAPMMessage(context, btDevice);
 
@@ -128,6 +129,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
+        VariableStore.isBTConnected = false;
         Notification.removeBAPMMessage(context);
 
         if(screenON){

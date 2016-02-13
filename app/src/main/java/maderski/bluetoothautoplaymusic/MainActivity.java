@@ -302,12 +302,17 @@ public class MainActivity extends AppCompatActivity {
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cb.isChecked()) {
-                    saveBTDevices.add(BTD);
-                    Log.i(TAG, "TRUE" + " " + BTD);
-                } else {
-                    saveBTDevices.remove(BTD);
-                    Log.i(TAG, "FALSE" + " " + BTD);
+                if(!VariableStore.isBTConnected) {
+                    if (cb.isChecked()) {
+                        saveBTDevices.add(BTD);
+                        Log.i(TAG, "TRUE" + " " + BTD);
+                    } else {
+                        saveBTDevices.remove(BTD);
+                        Log.i(TAG, "FALSE" + " " + BTD);
+                    }
+                }else{
+                    cb.toggle();
+                    Snackbar.make(v, "Checkboxes are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -431,70 +436,100 @@ public class MainActivity extends AppCompatActivity {
 
     public void mapsToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            BAPMPreferences.setLaunchGoogleMaps(this, true);
-            BAPMPreferences.setUnlockScreen(this, true);
-            setButtonPreferences(this);
-            Log.i(TAG, "MapButton is ON");
-            Log.i(TAG, "Dismiss Keyguard is ON");
-        }else{
-            BAPMPreferences.setLaunchGoogleMaps(this, false);
-            Log.i(TAG, "MapButton is OFF");
+        if(!VariableStore.isBTConnected) {
+            if (on) {
+                BAPMPreferences.setLaunchGoogleMaps(this, true);
+                BAPMPreferences.setUnlockScreen(this, true);
+                setButtonPreferences(this);
+                Log.i(TAG, "MapButton is ON");
+                Log.i(TAG, "Dismiss Keyguard is ON");
+            } else {
+                BAPMPreferences.setLaunchGoogleMaps(this, false);
+                Log.i(TAG, "MapButton is OFF");
+            }
+        }else {
+            ((ToggleButton) view).toggle();
+            Snackbar.make(view, "Buttons are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
         }
     }
 
     public void keepONToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            BAPMPreferences.setKeepScreenON(this, true);
-            Log.i(TAG, "Keep Screen ON Button is ON");
-        }else{
-            BAPMPreferences.setKeepScreenON(this, false);
-            Log.i(TAG, "Keep Screen ON Button is OFF");
+        if(!VariableStore.isBTConnected) {
+            if (on) {
+                BAPMPreferences.setKeepScreenON(this, true);
+                Log.i(TAG, "Keep Screen ON Button is ON");
+            } else {
+                BAPMPreferences.setKeepScreenON(this, false);
+                Log.i(TAG, "Keep Screen ON Button is OFF");
+            }
+        }else {
+            ((ToggleButton) view).toggle();
+            Snackbar.make(view, "Buttons are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
         }
     }
 
     public void priorityToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            BAPMPreferences.setPriorityMode(this, true);
-            Log.i(TAG, "Priority Button is ON");
-        }else{
-            BAPMPreferences.setPriorityMode(this, false);
-            Log.i(TAG, "Priority Button is OFF");
+        if(!VariableStore.isBTConnected) {
+            if (on) {
+                BAPMPreferences.setPriorityMode(this, true);
+                Log.i(TAG, "Priority Button is ON");
+            } else {
+                BAPMPreferences.setPriorityMode(this, false);
+                Log.i(TAG, "Priority Button is OFF");
+            }
+        }else {
+            ((ToggleButton) view).toggle();
+            Snackbar.make(view, "Buttons are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
         }
     }
 
     public void volumeMAXToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            BAPMPreferences.setMaxVolume(this, true);
-            Log.i(TAG, "Max Volume Button is ON");
-        }else{
-            BAPMPreferences.setMaxVolume(this, false);
-            Log.i(TAG, "Max Volume Button is OFF");
+        if(!VariableStore.isBTConnected) {
+            if (on) {
+                BAPMPreferences.setMaxVolume(this, true);
+                Log.i(TAG, "Max Volume Button is ON");
+            } else {
+                BAPMPreferences.setMaxVolume(this, false);
+                Log.i(TAG, "Max Volume Button is OFF");
+            }
+        }else {
+            ((ToggleButton) view).toggle();
+            Snackbar.make(view, "Buttons are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
         }
     }
 
     public void launchMusicPlayerToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            BAPMPreferences.setLaunchMusicPlayer(this, true);
-            Log.i(TAG, "Launch Music Player Button is ON");
-        }else{
-            BAPMPreferences.setLaunchMusicPlayer(this, false);
-            Log.i(TAG, "Launch Music Player Button is OFF");
+        if(!VariableStore.isBTConnected) {
+            if (on) {
+                BAPMPreferences.setLaunchMusicPlayer(this, true);
+                Log.i(TAG, "Launch Music Player Button is ON");
+            } else {
+                BAPMPreferences.setLaunchMusicPlayer(this, false);
+                Log.i(TAG, "Launch Music Player Button is OFF");
+            }
+        }else {
+            ((ToggleButton) view).toggle();
+            Snackbar.make(view, "Buttons are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
         }
     }
 
     public void unlockScreenToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(on){
-            BAPMPreferences.setUnlockScreen(this, true);
-            Log.i(TAG, "Dismiss KeyGuard Button is ON");
-        }else{
-            BAPMPreferences.setUnlockScreen(this, false);
-            Log.i(TAG, "Dismiss KeyGuard Button is OFF");
+        if(!VariableStore.isBTConnected) {
+            if (on) {
+                BAPMPreferences.setUnlockScreen(this, true);
+                Log.i(TAG, "Dismiss KeyGuard Button is ON");
+            } else {
+                BAPMPreferences.setUnlockScreen(this, false);
+                Log.i(TAG, "Dismiss KeyGuard Button is OFF");
+            }
+        }else {
+            ((ToggleButton) view).toggle();
+            Snackbar.make(view, "Buttons are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
         }
     }
 

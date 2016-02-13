@@ -23,4 +23,7 @@ public class VariableStore {
     public static AudioManager am;
     public static AudioManager.OnAudioFocusChangeListener listener;
     public static boolean inAudioFocus;
+
+    //Variable for Bluetooth connection status
+    public static boolean isBTConnected = false;
 }
