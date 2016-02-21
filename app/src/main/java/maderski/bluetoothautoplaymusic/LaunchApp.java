@@ -97,7 +97,8 @@ public class LaunchApp {
                     }
                 }
                 delayLaunchMaps(ctx, 2);
-                musicStillNotActive(3);
+                if(playMusic)
+                    musicStillNotActive(3);
             }
         }.start();
     }

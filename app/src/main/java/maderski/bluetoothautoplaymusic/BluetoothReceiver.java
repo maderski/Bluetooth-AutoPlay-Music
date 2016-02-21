@@ -33,8 +33,19 @@ public class BluetoothReceiver extends BroadcastReceiver {
         //Run if BTAudio is ready
         if(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equalsIgnoreCase(action)){
             String btDevice = device.getName();
-            if(isBTAudioIsReady(intent))
-                BTConnectPhoneDoStuff(context, btDevice);
+            boolean powerRequired = BAPMPreferences.getPowerConnected(context);
+
+            if(powerRequired){
+                if(Power.isPluggedIn(context)){
+                    if(isBTAudioIsReady(intent))
+                        BTConnectPhoneDoStuff(context, btDevice);
+                }else{
+                    Log.i(TAG, "Power is required and NOT FOUND");
+                }
+            }else{
+                if(isBTAudioIsReady(intent))
+                    BTConnectPhoneDoStuff(context, btDevice);
+            }
         }
 
         //Run on inital bluetooth connection
