@@ -30,16 +30,32 @@ public class SettingsActivity extends AppCompatActivity {
         btnState = BAPMPreferences.getAutoPlayMusic(context);
         setting_switch = (Switch) findViewById(R.id.auto_play);
         setting_switch.setChecked(btnState);
+
+        btnState = BAPMPreferences.getPowerConnected(context);
+        setting_switch = (Switch) findViewById(R.id.power_connected);
+        setting_switch.setChecked(btnState);
+
     }
 
     public void autoPlaySwitch(View view){
         boolean on = ((Switch) view).isChecked();
         if (on) {
             BAPMPreferences.setAutoplayMusic(this, true);
-            Log.i(TAG, "AutoPlayButton is ON");
+            Log.i(TAG, "AutoPlaySwitch is ON");
         } else {
             BAPMPreferences.setAutoplayMusic(this, false);
-            Log.i(TAG, "AutoPlayButton is OFF");
+            Log.i(TAG, "AutoPlaySwitch is OFF");
+        }
+    }
+
+    public void powerConnectedSwitch(View view){
+        boolean on = ((Switch) view).isChecked();
+        if(on){
+            BAPMPreferences.setPowerConnected(this, true);
+            Log.i(TAG, "PowerConnected Switch is ON");
+        }else{
+            BAPMPreferences.setPowerConnected(this, false);
+            Log.i(TAG, "PowerConnected Switch is OFF");
         }
     }
 }

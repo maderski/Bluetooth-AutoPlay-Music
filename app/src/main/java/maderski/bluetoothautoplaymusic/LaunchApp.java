@@ -73,6 +73,7 @@ public class LaunchApp {
     private static void delayMusicLaunch(Context context, int seconds, String packageName){
         final Context ctx = context;
         final String pkgName = packageName;
+        final boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
         seconds = seconds * 1000;
         new CountDownTimer(seconds,
                 9999) // onTick time, not used
@@ -83,15 +84,17 @@ public class LaunchApp {
 
             public void onFinish() {
                 launch(ctx, pkgName);
-                switch (pkgName){
-                    case ConstantStore.SPOTIFY:
-                        PlayMusic.play_spotify(ctx);
-                        break;
-                    case ConstantStore.GOOGLEPLAYMUSIC:
-                        PlayMusic.play_googlePlayMusic(ctx);
-                        break;
-                    default:
-                        PlayMusic.play();
+                if(playMusic) {
+                    switch (pkgName) {
+                        case ConstantStore.SPOTIFY:
+                            PlayMusic.play_spotify(ctx);
+                            break;
+                        case ConstantStore.GOOGLEPLAYMUSIC:
+                            PlayMusic.play_googlePlayMusic(ctx);
+                            break;
+                        default:
+                            PlayMusic.play();
+                    }
                 }
                 delayLaunchMaps(ctx, 2);
                 musicStillNotActive(3);

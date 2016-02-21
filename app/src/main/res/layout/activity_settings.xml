@@ -6,7 +6,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="maderski.bluetoothautoplaymusic.SettingsActivity"
     android:orientation="vertical">
 
@@ -47,19 +46,23 @@
             android:text="PLAY music when player is launched"
             android:id="@+id/auto_play"
             android:checked="false"
-            android:switchPadding="60dp"
+            android:switchPadding="100dp"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:onClick="autoPlaySwitch" />
+            android:onClick="autoPlaySwitch"
+            android:textSize="16dp" />
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ONLY launch when power is connected to phone"
+            android:text="POWER has to be connected to phone"
             android:id="@+id/power_connected"
             android:checked="false"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp" />
+            android:paddingBottom="10dp"
+            android:onClick="powerConnectedSwitch"
+            android:textSize="16dp"
+            android:switchPadding="100dp" />
     </LinearLayout>
 
 </LinearLayout>
