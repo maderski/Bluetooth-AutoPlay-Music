@@ -121,8 +121,11 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.about_menu) {
             aboutSelected();
+            return true;
+        }else if(id == R.id.settings_menu){
+            settingsSelected();
             return true;
         }
 
@@ -134,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
         final View view = findViewById(R.id.toolbar);
 
         Snackbar.make(view, "Created by: Jason Maderski" + "\n" + "Version: " + showVersion(), Snackbar.LENGTH_LONG).show();
+    }
+
+    private void settingsSelected(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     //Show Version of the BAPM App

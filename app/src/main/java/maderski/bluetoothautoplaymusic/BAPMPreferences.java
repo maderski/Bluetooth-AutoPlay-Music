@@ -27,6 +27,8 @@ public class BAPMPreferences {
     public static final String BTDEVICES_KEY = "BTDevices";
     public static final String MAPS_CHOICE_KEY = "MapsChoice";
     public static final String FIRST_INSTALL_KEY = "FirstInstall";
+    public static final String AUTOPLAY_MUSIC_KEY = "AutoPlayMusic";
+    public static final String POWER_CONNECTED_KEY = "PowerConnected";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -142,6 +144,24 @@ public class BAPMPreferences {
 
     public static boolean getFirstInstallKey(Context context){
         return reader(context).getBoolean(FIRST_INSTALL_KEY, true);
+    }
+
+    public static void setAutoplayMusic(Context context, boolean enabled){
+        editor(context).putBoolean(AUTOPLAY_MUSIC_KEY, enabled);
+        commit(context);
+    }
+
+    public static boolean getAutoPlayMusic(Context context){
+        return reader(context).getBoolean(AUTOPLAY_MUSIC_KEY, true);
+    }
+
+    public static void setPowerConnected(Context context, boolean enabled){
+        editor(context).putBoolean(POWER_CONNECTED_KEY, enabled);
+        commit(context);
+    }
+
+    public static boolean getPowerConnected(Context context){
+        return reader(context).getBoolean(POWER_CONNECTED_KEY, false);
     }
 
     //Commits write to SharedPreferences

@@ -41,6 +41,7 @@
         <service android:name=".BAPMService" />
 
         <activity android:name=".LaunchMapActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
