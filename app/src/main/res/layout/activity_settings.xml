@@ -41,28 +41,44 @@
         android:paddingTop="10dp">
 
         <Switch
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PLAY music when player is launched"
+            android:text="PLAY music"
             android:id="@+id/auto_play"
             android:checked="false"
             android:switchPadding="100dp"
-            android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:onClick="autoPlaySwitch"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
 
-        <Switch
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="POWER has to be connected to phone"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="When music player is launched play music"
+            android:id="@+id/textView10"
+            android:textSize="12dp" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="POWER required"
             android:id="@+id/power_connected"
             android:checked="false"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
             android:onClick="powerConnectedSwitch"
             android:textSize="16dp"
-            android:switchPadding="100dp" />
+            android:switchPadding="100dp"
+            android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Will NOT launch unless phone is charging"
+            android:id="@+id/textView11"
+            android:textSize="12dp" />
     </LinearLayout>
 
 </LinearLayout>
