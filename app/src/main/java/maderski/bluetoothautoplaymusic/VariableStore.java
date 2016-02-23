@@ -26,4 +26,10 @@ public class VariableStore {
 
     //Variable for Bluetooth connection status
     public static boolean isBTConnected = false;
+
+    //Variable to store Bluetooth device
+    public static String btDevice;
+
+    //Variable has run or not BluetoothDoStuff
+    public static boolean ranBluetoothDoStuff = false;
 }
