@@ -22,7 +22,8 @@ public class BluetoothActions {
         if(state == BluetoothA2dp.STATE_CONNECTED) {
             Log.e(TAG, "CONNECTED!!! :D");
             ready = true;
-        }
+        }else
+            Log.i(TAG, "BTAudioIsReady: " + Boolean.toString(ready));
 
         return ready;
     }
@@ -77,8 +78,6 @@ public class BluetoothActions {
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
-        VariableStore.ranBluetoothDoStuff = false;
-        VariableStore.isBTConnected = false;
         Notification.removeBAPMMessage(context);
 
         if(screenON){
@@ -111,6 +110,9 @@ public class BluetoothActions {
                 Log.e(TAG, e.getMessage());
             }
         }
+
+        VariableStore.ranBluetoothDoStuff = false;
+        VariableStore.isBTConnected = false;
     }
 
     //Launch MainActivity, used for unlocking the screen
