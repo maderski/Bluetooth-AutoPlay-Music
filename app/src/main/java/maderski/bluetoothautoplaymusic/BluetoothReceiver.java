@@ -16,9 +16,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     public final static String TAG = "BluetoothReceiver";
 
+    private static boolean IsAUserSelectedBTDevice = false;
+
     //On receive of Broadcast
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
         //Toast.makeText(context, "Bluetooth Intent Received", Toast.LENGTH_SHORT).show();
 
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -28,50 +29,43 @@ public class BluetoothReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         Log.d(TAG, "Bluetooth Intent Received: " + action);
 
-        //Run if BTAudio is ready
-        if(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED.equalsIgnoreCase(action) && BAPMPreferences.getBTDevices(context).contains(VariableStore.btDevice)){
-            boolean powerRequired = BAPMPreferences.getPowerConnected(context);
+        switch (action) {
+            case BluetoothDevice.ACTION_ACL_CONNECTED:
+                VariableStore.btDevice = device.getName();
+                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(VariableStore.btDevice);
 
-            if(powerRequired){
-                if(BluetoothActions.isBTAudioIsReady(intent))
-                    VariableStore.isBTConnected = true;
-
-                if(Power.isPluggedIn(context)){
-                    if(BluetoothActions.isBTAudioIsReady(intent))
-                        BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
-                }else{
-                    Log.i(TAG, "Power is required and NOT FOUND");
+                for(String cd : BAPMPreferences.getBTDevices(context)){
+                    Log.i(TAG, "User selected device: " + cd);
                 }
-            }else{
-                if(BluetoothActions.isBTAudioIsReady(intent))
+                Log.i(TAG, "Connected device: " + VariableStore.btDevice);
+                Log.i(TAG, "isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
+
+                break;
+
+            case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+                if (IsAUserSelectedBTDevice && VariableStore.ranBTConnectPhoneDoStuff) {
+                    VariableStore.isBTConnected = false;
+                    BluetoothActions.BTDisconnectPhoneDoStuff(context);
+                }
+                break;
+
+            case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
+                if(IsAUserSelectedBTDevice) {
+                    VariableStore.isBTConnected = BluetoothActions.isBTAudioIsReady(intent);
+                }
+
+                boolean powerRequired = BAPMPreferences.getPowerConnected(context);
+
+                if (powerRequired && IsAUserSelectedBTDevice) {
+                    if (Power.isPluggedIn(context) && VariableStore.isBTConnected) {
+                        BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
+                    }
+                } else if (IsAUserSelectedBTDevice && VariableStore.isBTConnected) {
+                    VariableStore.isBTConnected = true;
                     BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
-            }
+                }
+
+                break;
         }
-
-        //Run on inital bluetooth connection
-        if (BluetoothDevice.ACTION_ACL_CONNECTED.equalsIgnoreCase(action))
-        {
-            VariableStore.btDevice = device.getName();
-
-            Log.d(TAG, "Connected to " + VariableStore.btDevice);
-            //Toast.makeText(context, "Connected to: " + btDevice, Toast.LENGTH_SHORT).show();
-        }
-
-        //Run on Bluetooth disconnect
-        if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equalsIgnoreCase(action) && BAPMPreferences.getBTDevices(context).contains(VariableStore.btDevice)) {
-            Log.d(TAG, "Disconnected from " + VariableStore.btDevice);
-            //Toast.makeText(context, "Disconnected from: " + btDevice, Toast.LENGTH_SHORT).show();
-
-            VariableStore.isBTConnected = false;
-
-            if(VariableStore.ranBluetoothDoStuff) {
-                BluetoothActions.BTDisconnectPhoneDoStuff(context);
-                Log.i(TAG, "ranBluetoothDoStuff: " + Boolean.toString(VariableStore.ranBluetoothDoStuff));
-            }
-            else
-                Log.i(TAG, "ranBluetoothDoStuff: " + Boolean.toString(VariableStore.ranBluetoothDoStuff));
-        }
-
     }
-
 }

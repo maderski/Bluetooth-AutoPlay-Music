@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     //Dismiss the KeyGuard
     private void dismissKeyGuard(Context context){
 
-        if (!BAPMPreferences.getKeepScreenON(context)){
+        if (!BAPMPreferences.getKeepScreenON(context) && VariableStore.isBTConnected){
             ScreenONLock screenONLock = new ScreenONLock();
             screenONLock.enableWakeLock(context);
             Window window = ((Activity) context).getWindow();

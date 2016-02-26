@@ -19,6 +19,8 @@ import java.util.Set;
 public class VariousLists {
     private static String TAG = VariousLists.class.getName();
 
+    public static List<String> ConnectedBTDevices = new ArrayList<>();
+
     //List of Mediaplayers that is installed on the phone
     public static List<String> listOfInstalledMediaPlayers(Context context){
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
@@ -81,5 +83,4 @@ public class VariousLists {
         }
         return test;
     }
-
 }

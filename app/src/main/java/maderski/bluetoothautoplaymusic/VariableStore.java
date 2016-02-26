@@ -30,6 +30,6 @@ public class VariableStore {
     //Variable to store Bluetooth device
     public static String btDevice;
 
-    //Variable has run or not BluetoothDoStuff
-    public static boolean ranBluetoothDoStuff = false;
+    //Variable has BTConnectPhoneDoStuff ran
+    public static boolean ranBTConnectPhoneDoStuff = false;
 }

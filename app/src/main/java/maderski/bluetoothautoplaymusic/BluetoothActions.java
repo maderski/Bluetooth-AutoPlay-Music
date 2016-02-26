@@ -4,7 +4,12 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.util.ArraySet;
 import android.util.Log;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Jason on 2/22/16.
@@ -28,6 +33,20 @@ public class BluetoothActions {
         return ready;
     }
 
+    //Returns true if a connected device on the connected device list is on the BAPMPreferences.
+    //getBTDevices List that is set by the user in the UI
+    public static boolean isDeviceOnBAPMList(Context context){
+        Set<String> userBTDeviceList = BAPMPreferences.getBTDevices(context);
+        List<String> connectedBTDeviceList = VariousLists.ConnectedBTDevices;
+
+        if(VariousLists.ConnectedBTDevices != null){
+            return !Collections.disjoint(userBTDeviceList, connectedBTDeviceList);
+        }else{
+            Log.i(TAG, "ConnectedBTDevices List = null");
+        }
+        return false;
+    }
+
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
@@ -38,7 +57,6 @@ public class BluetoothActions {
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
 
-        VariableStore.ranBluetoothDoStuff = true;
         VariableStore.ringerControl = new RingerControl(context);
         Notification.BAPMMessage(context, btDevice);
 
@@ -68,6 +86,7 @@ public class BluetoothActions {
         if(!launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
         }
+        VariableStore.ranBTConnectPhoneDoStuff = true;
 
     }
 
@@ -111,8 +130,7 @@ public class BluetoothActions {
             }
         }
 
-        VariableStore.ranBluetoothDoStuff = false;
-        VariableStore.isBTConnected = false;
+        VariableStore.ranBTConnectPhoneDoStuff = false;
     }
 
     //Launch MainActivity, used for unlocking the screen
