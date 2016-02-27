@@ -35,18 +35,27 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                VariableStore.btDevice = device.getName();
-                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(VariableStore.btDevice);
+                String connectedBTDevice = device.getName();
+                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(connectedBTDevice);
+                if(IsAUserSelectedBTDevice)
+                    VariableStore.btDevice = connectedBTDevice;
+                else
+                    VariableStore.btDevice = "Device NOT on List";
 
                 for(String cd : BAPMPreferences.getBTDevices(context)){
                     Log.i(TAG, "User selected device: " + cd);
                 }
                 Log.i(TAG, "Connected device: " + VariableStore.btDevice);
-                Log.i(TAG, "isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
-
+                Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
                 break;
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+                String disconnectedDevice = device.getName();
+                Log.i(TAG, "Device disonnected: " + disconnectedDevice);
+
+                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(disconnectedDevice);
+                Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
+
                 if (IsAUserSelectedBTDevice && VariableStore.ranBTConnectPhoneDoStuff) {
                     VariableStore.isBTConnected = false;
                     BluetoothActions.BTDisconnectPhoneDoStuff(context);
@@ -54,6 +63,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 break;
 
             case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
+                String changeDevice = device.getName();
+                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(changeDevice);
+                Log.i(TAG, "OnStateChanged: isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
                 if(IsAUserSelectedBTDevice) {
                     VariableStore.isBTConnected = BluetoothActions.isBTAudioIsReady(intent);
                 }
@@ -65,7 +77,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
                         BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
                     }
                 } else if (IsAUserSelectedBTDevice && VariableStore.isBTConnected) {
-                    VariableStore.isBTConnected = true;
                     BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
                 }
 
