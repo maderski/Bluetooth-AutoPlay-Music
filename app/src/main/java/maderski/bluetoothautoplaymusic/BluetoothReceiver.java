@@ -29,6 +29,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         Log.d(TAG, "Bluetooth Intent Received: " + action);
 
+        if(intent != null)
+            if(intent.getAction() != null)
+                action = intent.getAction();
+
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
                 VariableStore.btDevice = device.getName();
