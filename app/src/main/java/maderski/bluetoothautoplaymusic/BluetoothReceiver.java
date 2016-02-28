@@ -26,7 +26,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
 
         //Get action that was broadcasted
-        String action = intent.getAction();
+        String action = "None";
         Log.d(TAG, "Bluetooth Intent Received: " + action);
 
         if(intent != null)
