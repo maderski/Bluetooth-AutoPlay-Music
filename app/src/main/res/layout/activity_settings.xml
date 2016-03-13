@@ -79,6 +79,26 @@
             android:text="Will NOT launch unless phone is charging"
             android:id="@+id/textView11"
             android:textSize="12dp" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Go HOME"
+            android:id="@+id/send_to_background"
+            android:checked="false"
+            android:paddingTop="20dp"
+            android:onClick="sendToBackgroundSwitch"
+            android:textSize="16dp"
+            android:switchPadding="100dp"
+            android:paddingBottom="2dp" />
+
+        <TextView
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Go to homescreen on device disconnect"
+            android:id="@+id/textView12"
+            android:textSize="12dp" />
     </LinearLayout>
 
 </LinearLayout>

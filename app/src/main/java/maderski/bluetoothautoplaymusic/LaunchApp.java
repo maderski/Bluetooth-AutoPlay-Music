@@ -47,7 +47,7 @@ public class LaunchApp {
         String packageName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
         if(isEnabled) {
-            AudioFocus.getCurrentAudioFocus(context);
+            //AudioFocus.getCurrentAudioFocus(context);
             delayMusicLaunch(context, 2, packageName);
 
         }

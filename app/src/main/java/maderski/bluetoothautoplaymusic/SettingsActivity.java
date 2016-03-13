@@ -35,6 +35,10 @@ public class SettingsActivity extends AppCompatActivity {
         setting_switch = (Switch) findViewById(R.id.power_connected);
         setting_switch.setChecked(btnState);
 
+        btnState = BAPMPreferences.getSendToBackground(context);
+        setting_switch = (Switch) findViewById(R.id.send_to_background);
+        setting_switch.setChecked(btnState);
+
     }
 
     public void autoPlaySwitch(View view){
@@ -56,6 +60,17 @@ public class SettingsActivity extends AppCompatActivity {
         }else{
             BAPMPreferences.setPowerConnected(this, false);
             Log.i(TAG, "PowerConnected Switch is OFF");
+        }
+    }
+
+    public void sendToBackgroundSwitch(View view){
+        boolean on = ((Switch) view).isChecked();
+        if(on){
+            BAPMPreferences.setSendToBackground(this, true);
+            Log.i(TAG, "SendToBackground Switch is ON");
+        }else{
+            BAPMPreferences.setSendToBackground(this, false);
+            Log.i(TAG, "SendToBackground Switch is OFF");
         }
     }
 }

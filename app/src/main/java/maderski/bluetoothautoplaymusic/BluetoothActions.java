@@ -96,6 +96,7 @@ public class BluetoothActions {
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
+        boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
 
         Notification.removeBAPMMessage(context);
 
@@ -130,6 +131,10 @@ public class BluetoothActions {
             }
         }
 
+        if(sendToBackground) {
+            sendEverythingToBackground(context);
+        }
+
         VariableStore.ranBTConnectPhoneDoStuff = false;
     }
 
@@ -137,6 +142,13 @@ public class BluetoothActions {
     private static void launchMainActivity(Context context){
         Intent i = new Intent(context, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    private static void sendEverythingToBackground(Context context){
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
 }
