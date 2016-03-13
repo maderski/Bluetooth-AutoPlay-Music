@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -36,7 +37,7 @@ public class ScreenONLock {
     }
 
     //Disable and release WakeLock
-    public void releaseWakeLock(Context context){
+    public void releaseWakeLock(){
         if (VariableStore.wakeLock != null && VariableStore.wakeLock.isHeld()) {
             try {
                 VariableStore.wakeLock.release();

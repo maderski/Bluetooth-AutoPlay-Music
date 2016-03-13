@@ -101,7 +101,7 @@ public class BluetoothActions {
         Notification.removeBAPMMessage(context);
 
         if(screenON){
-            screenONLock.releaseWakeLock(context);
+            screenONLock.releaseWakeLock();
         }
 
         if(priorityMode){

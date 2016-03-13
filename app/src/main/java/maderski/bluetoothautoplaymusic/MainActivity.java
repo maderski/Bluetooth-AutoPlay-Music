@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected  void onPause(){
         super.onPause();
-        BAPMPreferences.setBTDevices(this, saveBTDevices);
+        //BAPMPreferences.setBTDevices(this, saveBTDevices);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
             //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            screenONLock.releaseWakeLock(context);
+            screenONLock.releaseWakeLock();
         }else{
             Window window = ((Activity) context).getWindow();
             //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                 checkBox.setText(BTDevice);
                 if(BAPMPreferences.getBTDevices(this) != null)
                     checkBox.setChecked(BAPMPreferences.getBTDevices(this).contains(BTDevice));
-                checkboxListener(checkBox, BTDevice);
+                checkboxListener(this, checkBox, BTDevice);
                 BTDeviceCkBoxLL.addView(checkBox);
             }
         }
@@ -301,9 +301,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Get Selected Checkboxes
-    private void checkboxListener(CheckBox checkBox, String BTDevice){
+    private void checkboxListener(Context context, CheckBox checkBox, String BTDevice){
         final CheckBox cb = checkBox;
         final String BTD = BTDevice;
+        final Context ctx = context;
 
         saveBTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(this));
 
@@ -314,9 +315,13 @@ public class MainActivity extends AppCompatActivity {
                     if (cb.isChecked()) {
                         saveBTDevices.add(BTD);
                         Log.i(TAG, "TRUE" + " " + BTD);
+                        BAPMPreferences.setBTDevices(ctx, saveBTDevices);
+                        Log.i(TAG, "SAVED");
                     } else {
                         saveBTDevices.remove(BTD);
                         Log.i(TAG, "FALSE" + " " + BTD);
+                        BAPMPreferences.setBTDevices(ctx, saveBTDevices);
+                        Log.i(TAG, "SAVED");
                     }
                 }else{
                     cb.toggle();
