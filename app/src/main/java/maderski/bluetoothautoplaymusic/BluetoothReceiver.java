@@ -60,9 +60,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(disconnectedDevice);
                 Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
 
-                if (IsAUserSelectedBTDevice && VariableStore.ranBTConnectPhoneDoStuff) {
+                if (IsAUserSelectedBTDevice) {
                     VariableStore.isBTConnected = false;
-                    BluetoothActions.BTDisconnectPhoneDoStuff(context);
+                    if(VariableStore.ranBTConnectPhoneDoStuff){
+                        BluetoothActions.BTDisconnectPhoneDoStuff(context);
+                    }
                 }
                 break;
         }
