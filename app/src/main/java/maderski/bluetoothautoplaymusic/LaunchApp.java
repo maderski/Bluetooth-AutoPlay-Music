@@ -29,30 +29,8 @@ public class LaunchApp {
 
     //Launches Maps or Waze
     public static void launchMaps(Context context){
-        boolean isEnabled = BAPMPreferences.getLaunchGoogleMaps(context);
         String mapAppName = BAPMPreferences.getMapsChoice(context);
-
-        if (isEnabled) {
-            launch(context, mapAppName);
-        }else{
-            Log.i(TAG, "Maps Launch is OFF");
-        }
-
-    }
-
-    //Launches Selected Music Player
-    public static void launchSelectedMusicPlayer(Context context){
-        boolean isEnabled = BAPMPreferences.getLaunchMusicPlayer(context);
-        int index = BAPMPreferences.getSelectedMusicPlayer(context);
-        String packageName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
-
-        if(isEnabled) {
-            //AudioFocus.getCurrentAudioFocus(context);
-            delayMusicLaunch(context, 2, packageName);
-
-        }
-        else
-            Log.i(TAG, "Launch Music Player is OFF");
+        launch(context, mapAppName);
     }
 
     //Returns true if Package is on phone
@@ -69,11 +47,14 @@ public class LaunchApp {
         return false;
     }
 
-    //Create a delay before the Music App is launched
-    private static void delayMusicLaunch(Context context, int seconds, String packageName){
+    //Create a delay before the Music App is launched and if enable launch maps
+    public static void musicPlayerLaunch(Context context, int seconds, boolean _mapsEnabled){
+        int index = BAPMPreferences.getSelectedMusicPlayer(context);
+
         final Context ctx = context;
-        final String pkgName = packageName;
+        final String pkgName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
         final boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+        final boolean mapsEnabled = _mapsEnabled;
         seconds = seconds * 1000;
         new CountDownTimer(seconds,
                 9999) // onTick time, not used
@@ -96,7 +77,9 @@ public class LaunchApp {
                             PlayMusic.play();
                     }
                 }
-                delayLaunchMaps(ctx, 2);
+                if(mapsEnabled)
+                    delayLaunchMaps(ctx, 2);
+
                 if(playMusic)
                     musicStillNotActive(3);
             }

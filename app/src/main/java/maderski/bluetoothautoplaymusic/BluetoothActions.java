@@ -56,6 +56,7 @@ public class BluetoothActions {
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
+        boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
 
         VariableStore.ringerControl = new RingerControl(context);
         Notification.BAPMMessage(context, btDevice);
@@ -77,15 +78,20 @@ public class BluetoothActions {
             launchMainActivity(context);
         }
 
-        try {
-            LaunchApp.launchSelectedMusicPlayer(context);
-        }catch(Exception e){
-            Log.e(TAG, e.getMessage());
+        if(launchMusicPlayer) {
+            try {
+                LaunchApp.musicPlayerLaunch(context, 2, launchMaps);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }else{
+            Log.i(TAG, "Launch Music Player is OFF");
         }
 
-        if(!launchMusicPlayer){
+        if(launchMaps && !launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
         }
+
         VariableStore.ranBTConnectPhoneDoStuff = true;
 
     }
