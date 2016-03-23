@@ -57,6 +57,7 @@ public class BluetoothActions {
         boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
+        boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
 
         VariableStore.ringerControl = new RingerControl(context);
         Notification.BAPMMessage(context, btDevice);
@@ -86,6 +87,10 @@ public class BluetoothActions {
             }
         }else{
             Log.i(TAG, "Launch Music Player is OFF");
+        }
+
+        if(playMusic){
+            PlayMusic.auto_Play(context);
         }
 
         if(launchMaps && !launchMusicPlayer){

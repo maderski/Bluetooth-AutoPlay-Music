@@ -65,23 +65,9 @@ public class LaunchApp {
 
             public void onFinish() {
                 launch(ctx, pkgName);
-                if(playMusic) {
-                    switch (pkgName) {
-                        case ConstantStore.SPOTIFY:
-                            PlayMusic.play_spotify(ctx);
-                            break;
-                        case ConstantStore.GOOGLEPLAYMUSIC:
-                            PlayMusic.play_googlePlayMusic(ctx);
-                            break;
-                        default:
-                            PlayMusic.play();
-                    }
-                }
+
                 if(mapsEnabled)
                     delayLaunchMaps(ctx, 2);
-
-                if(playMusic)
-                    musicStillNotActive(3);
             }
         }.start();
     }
@@ -103,26 +89,6 @@ public class LaunchApp {
             }
         }.start();
         Log.i(TAG, "delayLaunchmaps started");
-    }
-
-    //After inputed amount of time, check to see if music is playing, if not try a keyEvent play
-    private static void musicStillNotActive(int seconds){
-        seconds = seconds * 1000;
-        new CountDownTimer(seconds,
-                9999) // onTick time, not used
-        {
-            public void onTick(long millisUntilFinished) {
-                // Not used
-            }
-
-            public void onFinish() {
-                if(!VariableStore.am.isMusicActive()){
-                    PlayMusic.play();
-                    Log.i(TAG, "Pressed Play again");
-                }else
-                    Log.i(TAG, "Music is Active");
-            }
-        }.start();
     }
 }
 
