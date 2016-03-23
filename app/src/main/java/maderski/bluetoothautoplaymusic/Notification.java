@@ -21,7 +21,13 @@ public class Notification {
     //Create notification message for BAPM
     public static void BAPMMessage(Context context, String btDevice){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
-        String message = "Device " + btDevice + " connected";
+        String mapAppName = "GOOGLE MAPS";
+        if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(ConstantStore.WAZE)){
+            mapAppName = "WAZE";
+        }
+
+        String title = "Device " + btDevice + " connected";
+        String message = "Click to launch " + mapAppName;
 
         //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
         //        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -31,14 +37,14 @@ public class Notification {
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle(context.getResources().getString(R.string.app_name))
+                .setContentTitle(title)//context.getResources().getString(R.string.app_name))
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_notif_icon)
                 .setAutoCancel(false)
-                //.setContentIntent(expandIntent)
+                .setContentIntent(mapIntent)
                 .setColor(color)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+                //.addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
                 //.addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
     }
