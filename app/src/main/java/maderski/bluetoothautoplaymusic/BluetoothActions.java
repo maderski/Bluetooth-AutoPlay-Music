@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.CountDownTimer;
 import android.util.ArraySet;
 import android.util.Log;
 
@@ -19,7 +20,7 @@ public class BluetoothActions {
     final static String TAG = BluetoothActions.class.getName();
 
     private static ScreenONLock screenONLock = new ScreenONLock();
-    private static int originalMediaVolume;
+    private static RingerControl ringerControl = new RingerControl();
     private static int currentRingerSet;
 
     //Return true if Bluetooth Audio is ready
@@ -61,21 +62,19 @@ public class BluetoothActions {
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
 
-        VariableStore.ringerControl = new RingerControl(context);
         Notification.BAPMMessage(context, btDevice);
 
         if(screenON){
             screenONLock.enableWakeLock(context);
         }
 
-        if(priorityMode){
-            currentRingerSet = VariableStore.ringerControl.ringerSetting();
-            VariableStore.ringerControl.soundsOFF();
+        if(volumeMAX){
+            ringerControl.volumeMAX();
         }
 
-        if(volumeMAX){
-            originalMediaVolume = VariableStore.ringerControl.getOriginalVolume();
-            VariableStore.ringerControl.volumeMAX();
+        if(priorityMode){
+            currentRingerSet = ringerControl.ringerSetting();
+            ringerControl.soundsOFF();
         }
 
         if(unlockScreen){
@@ -126,10 +125,10 @@ public class BluetoothActions {
                         Log.i(TAG, "Phone is on Silent");
                         break;
                     case AudioManager.RINGER_MODE_VIBRATE:
-                        VariableStore.ringerControl.vibrateOnly();
+                        ringerControl.vibrateOnly();
                         break;
                     case AudioManager.RINGER_MODE_NORMAL:
-                        VariableStore.ringerControl.soundsON();
+                        ringerControl.soundsON();
                         break;
                 }
             }catch(Exception e){
@@ -142,7 +141,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            VariableStore.ringerControl.setVolume(originalMediaVolume);
+            ringerControl.setOriginalVolume();
         }
 
         if(sendToBackground) {

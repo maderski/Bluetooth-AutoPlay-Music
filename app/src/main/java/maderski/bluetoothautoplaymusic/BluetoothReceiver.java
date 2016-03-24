@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
 
@@ -87,6 +88,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         final Context ctx = context;
 
         AudioFocus.getCurrentAudioFocus(context);
+
+        VariableStore.originalMediaVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VariableStore.originalMediaVolume));
 
         new CountDownTimer(30000,
                 1000) // onTick time, not used

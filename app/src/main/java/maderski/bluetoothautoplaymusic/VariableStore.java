@@ -13,8 +13,7 @@ public class VariableStore {
     public static String stayOnTAG = "Stay ON";
 
     //For Ringer Control
-    public static RingerControl ringerControl;
-    //public static int currentRingerSet;
+    public static int originalMediaVolume;
 
     //Variable to Store Name of Launch Map App to display in toast message
     public static String toastMapApp;
