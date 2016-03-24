@@ -14,7 +14,7 @@ public class VariableStore {
 
     //For Ringer Control
     public static RingerControl ringerControl;
-    public static int currentRingerSet;
+    //public static int currentRingerSet;
 
     //Variable to Store Name of Launch Map App to display in toast message
     public static String toastMapApp;

@@ -19,6 +19,8 @@ public class BluetoothActions {
     final static String TAG = BluetoothActions.class.getName();
 
     private static ScreenONLock screenONLock = new ScreenONLock();
+    private static int originalMediaVolume;
+    private static int currentRingerSet;
 
     //Return true if Bluetooth Audio is ready
     public static boolean isBTAudioIsReady(Intent intent){
@@ -67,11 +69,12 @@ public class BluetoothActions {
         }
 
         if(priorityMode){
-            VariableStore.currentRingerSet = VariableStore.ringerControl.ringerSetting();
+            currentRingerSet = VariableStore.ringerControl.ringerSetting();
             VariableStore.ringerControl.soundsOFF();
         }
 
         if(volumeMAX){
+            originalMediaVolume = VariableStore.ringerControl.getOriginalVolume();
             VariableStore.ringerControl.volumeMAX();
         }
 
@@ -108,6 +111,7 @@ public class BluetoothActions {
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
+        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
 
         Notification.removeBAPMMessage(context);
 
@@ -117,7 +121,7 @@ public class BluetoothActions {
 
         if(priorityMode){
             try {
-                switch(VariableStore.currentRingerSet){
+                switch(currentRingerSet){
                     case AudioManager.RINGER_MODE_SILENT:
                         Log.i(TAG, "Phone is on Silent");
                         break;
@@ -134,16 +138,21 @@ public class BluetoothActions {
         }
 
         if(launchMusicPlayer) {
-            try {
-                PlayMusic.pause();
-                AudioFocus.abandonAudioFocus();
-            }catch(Exception e){
-                Log.e(TAG, e.getMessage());
-            }
+            PlayMusic.pause();
+        }
+
+        if(volumeMAX){
+            VariableStore.ringerControl.setVolume(originalMediaVolume);
         }
 
         if(sendToBackground) {
             sendEverythingToBackground(context);
+        }
+
+        try {
+            AudioFocus.abandonAudioFocus();
+        }catch(Exception e){
+            Log.e(TAG, e.getMessage());
         }
 
         VariableStore.ranBTConnectPhoneDoStuff = false;

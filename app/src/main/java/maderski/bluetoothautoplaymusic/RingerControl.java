@@ -32,6 +32,19 @@ public class RingerControl {
         Log.i(TAG, "Max Media Volume Set");
     }
 
+    //Get original media volume
+    public int getOriginalVolume(){
+        int originalVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        Log.i(TAG, "Original Media Volume is: " + Integer.toString(originalVolume));
+        return originalVolume;
+    }
+
+    //Set media volume
+    public void setVolume(int volume){
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+        Log.i(TAG, "Media Volume is set to: " + Integer.toString(volume));
+    }
+
     public void vibrateOnly(){
         am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
     }
