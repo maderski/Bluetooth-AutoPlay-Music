@@ -33,9 +33,9 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
             Log.i(TAG, "Power Connected");
             //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
             boolean powerRequired = BAPMPreferences.getPowerConnected(context);
-            boolean deviceJustConnected = BAPMPreferences.getBTDevices(context).contains(VariableStore.btDevice);
+            //boolean deviceJustConnected = BAPMPreferences.getBTDevices(context).contains(VariableStore.btDevice);
 
-            if(powerRequired && !VariableStore.ranBTConnectPhoneDoStuff && deviceJustConnected && VariableStore.isBTConnected){
+            if(powerRequired && !VariableStore.ranBTConnectPhoneDoStuff && VariableStore.isBTConnected){
                 //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
                 BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
             }
