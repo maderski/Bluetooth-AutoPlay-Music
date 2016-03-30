@@ -93,6 +93,9 @@ public class PlayMusic {
                 if(VariableStore.am.isMusicActive()){
                     Log.i(TAG, "3 sec Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
                     cancel();
+                }else if(!VariableStore.isBTConnected){
+                    Log.i(TAG, "Bluetooth is not connected");
+                    cancel();
                 }else{
                     Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
                 }
