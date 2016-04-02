@@ -24,28 +24,22 @@ public class RingerControl {
     //Set Mediavolume to MAX
     public void volumeMAX(){
         int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-
-        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-        Log.i(TAG, "Max Media Volume Set " + Integer.toString(maxVolume));
-        //if volume did not get set to MAX than increase it to MAX
-        increaseVolumeToMAX();
-    }
-
-    //Set media volume
-    public void setOriginalVolume(){
-        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, VariableStore.originalMediaVolume, 0);
-        Log.i(TAG, "Media Volume is set to: " + Integer.toString(VariableStore.originalMediaVolume));
-    }
-
-    private void increaseVolumeToMAX(){
-        int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int currentVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        Log.i(TAG, "Max Media Volume is: " + Integer.toString(maxVolume));
 
         while(maxVolume > currentVolume){
             VariableStore.am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
             currentVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
             Log.i(TAG, "Media Volume increased:" + Integer.toString(currentVolume));
         }
+
+    }
+
+    //Set media volume
+    public void setOriginalVolume(){
+        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, VariableStore.originalMediaVolume, 0);
+        Log.i(TAG, "Media Volume is set to: " + Integer.toString(VariableStore.originalMediaVolume));
     }
 
     public void vibrateOnly(){
