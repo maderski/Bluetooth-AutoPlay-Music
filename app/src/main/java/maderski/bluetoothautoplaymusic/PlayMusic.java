@@ -64,7 +64,7 @@ public class PlayMusic {
 
         i = new Intent(Intent.ACTION_MEDIA_BUTTON);
         i.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+        i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
     }
 
@@ -94,9 +94,6 @@ public class PlayMusic {
                 if(VariableStore.am.isMusicActive()){
                     Log.i(TAG, "3 sec Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
                     cancel();
-                }else if(!VariableStore.isBTConnected){
-                    Log.i(TAG, "Bluetooth is not connected");
-                    cancel();
                 }else{
                     Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
                 }
@@ -123,6 +120,10 @@ public class PlayMusic {
                                 play();
                                 Log.i(TAG, "Pressed Play again");
                             }else if(VariableStore.am.isMusicActive()){
+                                cancel();
+                            }else if(!VariableStore.isBTConnected){
+                                Log.i(TAG, "Bluetooth is not connected");
+                                pause();
                                 cancel();
                             }
                         }
