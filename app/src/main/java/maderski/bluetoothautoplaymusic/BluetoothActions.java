@@ -68,13 +68,13 @@ public class BluetoothActions {
             screenONLock.enableWakeLock(context);
         }
 
-        if(volumeMAX){
-            ringerControl.volumeMAX();
-        }
-
         if(priorityMode){
             currentRingerSet = ringerControl.ringerSetting();
             ringerControl.soundsOFF();
+        }
+
+        if(volumeMAX){
+            ringerControl.volumeMAX();
         }
 
         if(unlockScreen){

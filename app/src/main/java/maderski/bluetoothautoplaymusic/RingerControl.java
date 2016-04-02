@@ -24,16 +24,8 @@ public class RingerControl {
     //Set Mediavolume to MAX
     public void volumeMAX(){
         int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int currentVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
-
         Log.i(TAG, "Max Media Volume is: " + Integer.toString(maxVolume));
-
-        while(maxVolume > currentVolume){
-            VariableStore.am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
-            currentVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
-            Log.i(TAG, "Media Volume increased:" + Integer.toString(currentVolume));
-        }
-
+        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
     }
 
     //Set media volume
