@@ -97,15 +97,6 @@ public class PlayMusic {
                 }else{
                     Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
                 }
-                //In case volume doesn't go to max
-                if(BAPMPreferences.getMaxVolume(ctx)){
-                    if(VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
-                            VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                        int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-                        Log.i(TAG, "Set To MAX");
-                    }
-                }
             }
 
             public void onFinish() {

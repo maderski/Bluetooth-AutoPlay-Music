@@ -74,7 +74,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            ringerControl.volumeMAX();
+            VolumeControl.volumeMAX();
         }
 
         if(unlockScreen){
@@ -97,6 +97,10 @@ public class BluetoothActions {
 
         if(launchMaps && !launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
+        }
+
+        if(volumeMAX){
+            VolumeControl.checkSetMAXVol(5);
         }
 
         VariableStore.ranBTConnectPhoneDoStuff = true;
@@ -141,7 +145,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            ringerControl.setOriginalVolume();
+            VolumeControl.setOriginalVolume();
         }
 
         if(sendToBackground) {
