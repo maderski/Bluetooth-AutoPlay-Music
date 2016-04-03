@@ -31,4 +31,7 @@ public class VariableStore {
 
     //Variable has BTConnectPhoneDoStuff ran
     public static boolean ranBTConnectPhoneDoStuff = false;
+
+    //Variable is notification present
+    public static boolean isNotificationPresent = false;
 }

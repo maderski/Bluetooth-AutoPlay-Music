@@ -103,6 +103,10 @@ public class BluetoothActions {
             VolumeControl.checkSetMAXVol(5);
         }
 
+        if(playMusic){
+            PlayMusic.checkIfPlaying();
+        }
+
         VariableStore.ranBTConnectPhoneDoStuff = true;
 
     }

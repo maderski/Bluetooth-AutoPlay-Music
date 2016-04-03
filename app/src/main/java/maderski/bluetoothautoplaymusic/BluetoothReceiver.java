@@ -63,7 +63,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 if (IsAUserSelectedBTDevice) {
                     VariableStore.isBTConnected = false;
-                    if(VariableStore.ranBTConnectPhoneDoStuff){
+                    if(VariableStore.ranBTConnectPhoneDoStuff || VariableStore.isNotificationPresent){
                         BluetoothActions.BTDisconnectPhoneDoStuff(context);
                     }
                 }

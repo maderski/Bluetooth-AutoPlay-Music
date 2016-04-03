@@ -85,9 +85,10 @@ public class PlayMusic {
             default:
                 PlayMusic.play();
         }
-
         Log.i(TAG, "Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
+    }
 
+    public static void checkIfPlaying(){
         new CountDownTimer(3000, 1000)
         {
             public void onTick(long millisUntilFinished) {
@@ -126,8 +127,6 @@ public class PlayMusic {
                 }
             }
         }.start();
-
-
     }
 }
 

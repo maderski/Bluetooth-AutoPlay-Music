@@ -47,6 +47,7 @@ public class Notification {
                 //.addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
                 //.addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
+        VariableStore.isNotificationPresent = true;
     }
 
     //Remove notification that was created by BAPM
@@ -55,6 +56,7 @@ public class Notification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             nManager.cancel(nTAG, nID);
+            VariableStore.isNotificationPresent = false;
         }catch(Exception e){
             Log.e(nTAG, e.getMessage());
         }
