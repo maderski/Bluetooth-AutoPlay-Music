@@ -77,9 +77,11 @@ public class PlayMusic {
 
         switch (pkgName) {
             case ConstantStore.SPOTIFY:
+                pause();
                 play_spotify(context);
                 break;
             case ConstantStore.GOOGLEPLAYMUSIC:
+                pause();
                 play_googlePlayMusic(context);
                 break;
             default:
