@@ -55,6 +55,13 @@ public class PlayMusic {
         context.sendBroadcast(intent);
     }
 
+    public static void pause_googlePlayMusic(Context context){
+        Intent intent = new Intent("com.android.music.musicservicecommand");
+        intent.setPackage(ConstantStore.GOOGLEPLAYMUSIC);
+        intent.putExtra("command", "pause");
+        context.sendBroadcast(intent);
+    }
+
     //Play Spotify
     public static void play_spotify(Context context){
         Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
@@ -70,18 +77,15 @@ public class PlayMusic {
 
     //Autoplay music if enabled
     public static void auto_Play(final Context context){
-        final Context ctx = context;
-
         int index = BAPMPreferences.getSelectedMusicPlayer(context);
         String pkgName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
         switch (pkgName) {
             case ConstantStore.SPOTIFY:
-                pause();
                 play_spotify(context);
                 break;
             case ConstantStore.GOOGLEPLAYMUSIC:
-                pause();
+                pause_googlePlayMusic(context);
                 play_googlePlayMusic(context);
                 break;
             default:
