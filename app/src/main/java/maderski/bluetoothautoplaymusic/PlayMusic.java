@@ -92,10 +92,10 @@ public class PlayMusic {
                 break;
             case ConstantStore.GOOGLEPLAYMUSIC:
                 play_UsingServiceCommand(context);
-                //play_googlePlayMusic(context);
                 break;
             default:
                 play();
+                break;
         }
         Log.i(TAG, "Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
     }
