@@ -80,6 +80,10 @@ public class BluetoothActions {
         if(unlockScreen){
             launchMainActivity(context);
         }
+        
+        if(playMusic){
+            PlayMusic.auto_Play(context);
+        }
 
         if(launchMusicPlayer) {
             try {
@@ -91,10 +95,6 @@ public class BluetoothActions {
             Log.i(TAG, "Launch Music Player is OFF");
         }
 
-        if(playMusic){
-            PlayMusic.auto_Play(context);
-        }
-
         if(launchMaps && !launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
         }
@@ -104,7 +104,7 @@ public class BluetoothActions {
         }
 
         if(playMusic){
-            PlayMusic.checkIfPlaying();
+            PlayMusic.checkIfPlaying(context);
         }
 
         VariableStore.ranBTConnectPhoneDoStuff = true;

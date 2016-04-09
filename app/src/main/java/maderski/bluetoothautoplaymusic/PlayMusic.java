@@ -47,6 +47,12 @@ public class PlayMusic {
         VariableStore.am.dispatchMediaKeyEvent(upEvent);
     }
 
+    public static void play_UsingServiceCommand(Context context){
+        Intent intent = new Intent("com.android.music.musicservicecommand");
+        intent.putExtra("command", "play");
+        context.sendBroadcast(intent);
+    }
+
     //Play Google Play Music
     public static void play_googlePlayMusic(Context context){
         Intent intent = new Intent("com.android.music.musicservicecommand");
@@ -85,16 +91,16 @@ public class PlayMusic {
                 play_spotify(context);
                 break;
             case ConstantStore.GOOGLEPLAYMUSIC:
-                pause_googlePlayMusic(context);
-                play_googlePlayMusic(context);
+                play_UsingServiceCommand(context);
+                //play_googlePlayMusic(context);
                 break;
             default:
-                PlayMusic.play();
+                play();
         }
         Log.i(TAG, "Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
     }
 
-    public static void checkIfPlaying(){
+    public static void checkIfPlaying(final Context context){
         new CountDownTimer(3000, 1000)
         {
             public void onTick(long millisUntilFinished) {
@@ -111,12 +117,21 @@ public class PlayMusic {
                 if(!VariableStore.am.isMusicActive()) {
                     new CountDownTimer(10000, 1000)
                     {
+                        Boolean useServiceCommand = false;
+
                         public void onTick(long millisUntilFinished) {
                             Log.i(TAG, "On Tick: Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
                             if (!VariableStore.am.isMusicActive()) {
-                                pause();
-                                play();
-                                Log.i(TAG, "Pressed Play again");
+                                if(!useServiceCommand){
+                                    pause();
+                                    play();
+                                    Log.i(TAG, "Pressed Play again");
+                                    useServiceCommand = true;
+                                }else if(useServiceCommand){
+                                    play_UsingServiceCommand(context);
+                                    Log.i(TAG, "Pressed Play again using service command");
+                                    useServiceCommand = false;
+                                }
                             }else if(VariableStore.am.isMusicActive()){
                                 cancel();
                             }else if(!VariableStore.isBTConnected){
