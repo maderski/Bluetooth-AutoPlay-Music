@@ -73,16 +73,8 @@ public class BluetoothActions {
             ringerControl.soundsOFF();
         }
 
-        if(volumeMAX){
-            VolumeControl.volumeMAX();
-        }
-
         if(unlockScreen){
             launchMainActivity(context);
-        }
-        
-        if(playMusic){
-            PlayMusic.auto_Play(context);
         }
 
         if(launchMusicPlayer) {
@@ -95,12 +87,16 @@ public class BluetoothActions {
             Log.i(TAG, "Launch Music Player is OFF");
         }
 
+        if(playMusic){
+            PlayMusic.auto_Play(context);
+        }
+
         if(launchMaps && !launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
         }
 
         if(volumeMAX){
-            VolumeControl.checkSetMAXVol(5);
+            VolumeControl.checkSetMAXVol(15, 5);
         }
 
         if(playMusic){

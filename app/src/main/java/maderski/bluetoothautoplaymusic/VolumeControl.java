@@ -24,25 +24,39 @@ public class VolumeControl {
         Log.i(TAG, "Media Volume is set to: " + Integer.toString(VariableStore.originalMediaVolume));
     }
 
-    public static void checkSetMAXVol(int seconds){
+    public static void checkSetMAXVol(int seconds, int seconds_interval){
         int _seconds = seconds * 1000;
-        new CountDownTimer(_seconds, 1000)
+        int _interval = seconds_interval * 1000;
+        new CountDownTimer(_seconds, _interval)
         {
+            boolean runme = false;
             public void onTick(long millisUntilFinished) {
-                if(VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
-                        VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                    int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                    VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-                    Log.i(TAG, "Set Volume To MAX");
-                }else if(VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
-                        VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)){
-                    cancel();
-                    Log.i(TAG, "Volume is at MAX!");
+                if(runme) {
+                    if (VariableStore.isBTConnected || VariableStore.isNotificationPresent) {
+                        if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
+                                VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                            int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                            VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+                            Log.i(TAG, "Set Volume To MAX");
+                        } else if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
+                                VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                            Log.i(TAG, "Volume is at MAX!");
+                        }
+                    }
                 }
+                runme = true;
             }
 
             public void onFinish() {
-                Log.i(TAG, "Unable to to set Volume to MAX :(");
+                if(VariableStore.isBTConnected || VariableStore.isNotificationPresent) {
+                    if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
+                            VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                        Log.i(TAG, "Volume is at MAX!");
+                    } else {
+                        Log.i(TAG, "Unable to to set Volume to MAX :(");
+                    }
+                }
+                runme = false;
             }
         }.start();
 

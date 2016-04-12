@@ -96,7 +96,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 1000) // onTick time, not used
         {
             public void onTick(long millisUntilFinished) {
-                Log.i(TAG, "On Tick A2dp Ready: " + Boolean.toString(VariableStore.am.isBluetoothA2dpOn()));
+                Log.i(TAG, "A2dp Ready: " + Boolean.toString(VariableStore.am.isBluetoothA2dpOn()));
                 if(VariableStore.am.isBluetoothA2dpOn()){
                     VariableStore.isBTConnected = true;
                     cancel();
