@@ -96,7 +96,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            VolumeControl.checkSetMAXVol(15, 5);
+            VolumeControl.checkSetMAXVol(12, 4);
         }
 
         if(playMusic){
