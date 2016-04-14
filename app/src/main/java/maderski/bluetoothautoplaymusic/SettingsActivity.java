@@ -23,6 +23,12 @@ public class SettingsActivity extends AppCompatActivity {
         setButtonPreferences(this);
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        finish();
+    }
+
     private void setButtonPreferences(Context context) {
         Boolean btnState;
         Switch setting_switch;
