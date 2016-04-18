@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">On Bluetooth Audio Connect</string>
+    <string name="app_name">Bluetooth Autoplay Music</string>
     <string name="about_menu">About</string>
     <string name="no_BT_found">No Bluetooth Device found</string>
     <string name="settings_menu">Options</string>

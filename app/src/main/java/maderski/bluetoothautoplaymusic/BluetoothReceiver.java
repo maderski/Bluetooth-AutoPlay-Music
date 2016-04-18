@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -84,14 +83,19 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     }
 
-    private void waitingForBTA2dpOn(Context context) {
-        final Context ctx = context;
+    private void waitingForBTA2dpOn(final Context context) {
 
         AudioFocus.getCurrentAudioFocus(context);
 
+        //Try to releaseWakeLock() in case for some reason it was not released on disconnect
+        ScreenONLock screenONLock = new ScreenONLock();
+        screenONLock.releaseWakeLock();
+
+        //Get original MediaVolume
         VariableStore.originalMediaVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
         Log.i(TAG, "Original Media Volume is: " + Integer.toString(VariableStore.originalMediaVolume));
 
+        //Start 10sec countdown checking for A2dp connection every second
         new CountDownTimer(30000,
                 1000) // onTick time, not used
         {
@@ -100,7 +104,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 if(VariableStore.am.isBluetoothA2dpOn()){
                     VariableStore.isBTConnected = true;
                     cancel();
-                    checksBeforeLaunch(ctx);
+                    checksBeforeLaunch(context);
                 }
             }
 

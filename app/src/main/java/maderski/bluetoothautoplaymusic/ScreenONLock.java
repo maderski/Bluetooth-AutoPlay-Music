@@ -45,6 +45,8 @@ public class ScreenONLock {
             } catch (Exception e) {
                 Log.e("WakeLock: ", "error " + e.getMessage());
             }
+        }else{
+            Log.i("Wakelock: ", "Not Held");
         }
     }
 

@@ -4,8 +4,6 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.CountDownTimer;
-import android.util.ArraySet;
 import android.util.Log;
 
 import java.util.Collections;
