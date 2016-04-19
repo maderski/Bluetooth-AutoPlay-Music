@@ -281,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
             for (String BTDevice : VariousLists.listOfBluetoothDevices()) {
                 checkBox = new CheckBox(this);
                 checkBox.setText(BTDevice);
+                checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
                 if(BAPMPreferences.getBTDevices(this) != null)
                     checkBox.setChecked(BAPMPreferences.getBTDevices(this).contains(BTDevice));
                 checkboxListener(this, checkBox, BTDevice);
@@ -352,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
 
             rdoButton = new RadioButton(this);
             rdoButton.setText(mediaPlayer);
+            rdoButton.setTextColor(getResources().getColor(R.color.colorPrimary));
             rdoMPGroup.addView(rdoButton);
         }
     }

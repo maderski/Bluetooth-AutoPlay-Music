@@ -50,7 +50,8 @@
             android:paddingTop="10dp"
             android:onClick="autoPlaySwitch"
             android:textSize="16dp"
-            android:paddingBottom="2dp" />
+            android:paddingBottom="2dp"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,7 +71,8 @@
             android:onClick="powerConnectedSwitch"
             android:textSize="16dp"
             android:switchPadding="100dp"
-            android:paddingBottom="2dp" />
+            android:paddingBottom="2dp"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="264dp"
@@ -90,7 +92,8 @@
             android:onClick="sendToBackgroundSwitch"
             android:textSize="16dp"
             android:switchPadding="100dp"
-            android:paddingBottom="2dp" />
+            android:paddingBottom="2dp"
+            android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="264dp"
