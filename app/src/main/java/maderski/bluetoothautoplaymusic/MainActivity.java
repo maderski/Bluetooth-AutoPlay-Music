@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -256,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Setup the UI
     private void setupUIElements(Context context){
+        setFonts();
         radiobuttonCreator(context);
         checkboxCreator();
         setButtonPreferences(context);
@@ -282,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 checkBox = new CheckBox(this);
                 checkBox.setText(BTDevice);
                 checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
+                checkBox.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/TitilliumText400wt.otf"));
                 if(BAPMPreferences.getBTDevices(this) != null)
                     checkBox.setChecked(BAPMPreferences.getBTDevices(this).contains(BTDevice));
                 checkboxListener(this, checkBox, BTDevice);
@@ -354,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
             rdoButton = new RadioButton(this);
             rdoButton.setText(mediaPlayer);
             rdoButton.setTextColor(getResources().getColor(R.color.colorPrimary));
+            rdoButton.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/TitilliumText400wt.otf"));
             rdoMPGroup.addView(rdoButton);
         }
     }
@@ -534,6 +538,39 @@ public class MainActivity extends AppCompatActivity {
             BAPMPreferences.setUnlockScreen(this, false);
             Log.i(TAG, "Dismiss KeyGuard Button is OFF");
         }
+    }
+
+    private void setFonts(){
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/TitilliumText400wt.otf");
+        Typeface typeface_bold = Typeface.createFromAsset(getAssets(), "fonts/TitilliumText600wt.otf");
+
+        TextView textView = (TextView)findViewById(R.id.textView);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.textView2);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView) findViewById(R.id.textView3);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.textView4);
+        textView.setTypeface(typeface);
+
+        textView = (TextView)findViewById(R.id.textView5);
+        textView.setTypeface(typeface);
+
+        textView = (TextView) findViewById(R.id.textView6);
+        textView.setTypeface(typeface);
+
+        textView = (TextView)findViewById(R.id.textView7);
+        textView.setTypeface(typeface);
+
+        textView = (TextView)findViewById(R.id.textView8);
+        textView.setTypeface(typeface);
+
+        textView = (TextView)findViewById(R.id.textView9);
+        textView.setTypeface(typeface);
+
     }
 
 }

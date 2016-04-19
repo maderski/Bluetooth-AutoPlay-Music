@@ -1,11 +1,13 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -20,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        setFonts();
         setButtonPreferences(this);
     }
 
@@ -78,5 +81,21 @@ public class SettingsActivity extends AppCompatActivity {
             BAPMPreferences.setSendToBackground(this, false);
             Log.i(TAG, "SendToBackground Switch is OFF");
         }
+    }
+
+    private void setFonts(){
+        Typeface typeface_bold = Typeface.createFromAsset(getAssets(), "fonts/TitilliumText600wt.otf");
+
+        TextView textView = (TextView)findViewById(R.id.settingsText);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.auto_play);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.power_connected);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.send_to_background);
+        textView.setTypeface(typeface_bold);
     }
 }
