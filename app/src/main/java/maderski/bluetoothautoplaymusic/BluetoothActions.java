@@ -51,7 +51,7 @@ public class BluetoothActions {
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    public static void BTConnectPhoneDoStuff(Context context, String btDevice){
+    public static void BTConnectPhoneDoStuff(Context context){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
@@ -60,7 +60,7 @@ public class BluetoothActions {
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
 
-        Notification.BAPMMessage(context, btDevice);
+        Notification.BAPMMessage(context);
 
         if(screenON){
             screenONLock.enableWakeLock(context);

@@ -15,9 +15,8 @@ import java.util.Set;
  */
 public class BluetoothReceiver extends BroadcastReceiver {
 
-    public final static String TAG = "BluetoothReceiver";
-
-    private static boolean IsAUserSelectedBTDevice = false;
+    private final String TAG = "BluetoothReceiver";
+    private String btDevice = "None";
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
@@ -36,33 +35,33 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                String connectedBTDevice = device.getName();
-                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(connectedBTDevice);
-                if(IsAUserSelectedBTDevice) {
-                    VariableStore.btDevice = connectedBTDevice;
-                    waitingForBTA2dpOn(context);
+
+                if(BAPMPreferences.getBTDevices(context).contains(device.getName())) {
+                    btDevice = device.getName();
+                    waitingForBTA2dpOn(context, BAPMPreferences.getBTDevices(context).contains(device.getName()));
                 }
                 else {
-                    VariableStore.btDevice = "Device NOT on List";
+                    btDevice = "Device NOT on List";
                 }
 
                 for(String cd : BAPMPreferences.getBTDevices(context)){
                     Log.i(TAG, "User selected device: " + cd);
                 }
-                Log.i(TAG, "Connected device: " + VariableStore.btDevice);
-                Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
+                Log.i(TAG, "Connected device: " + btDevice);
+                Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " +
+                        Boolean.toString(BAPMPreferences.getBTDevices(context).contains(device.getName())));
                 break;
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 String disconnectedDevice = device.getName();
                 Log.i(TAG, "Device disonnected: " + disconnectedDevice);
 
-                IsAUserSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(disconnectedDevice);
-                Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " + Boolean.toString(IsAUserSelectedBTDevice));
+                Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
+                        Boolean.toString(BAPMPreferences.getBTDevices(context).contains(device.getName())));
 
-                if (IsAUserSelectedBTDevice) {
+                if (BAPMPreferences.getBTDevices(context).contains(device.getName())) {
                     VariableStore.isBTConnected = false;
-                    if(VariableStore.ranBTConnectPhoneDoStuff || VariableStore.isNotificationPresent){
+                    if(VariableStore.ranBTConnectPhoneDoStuff){
                         BluetoothActions.BTDisconnectPhoneDoStuff(context);
                     }
                 }
@@ -70,20 +69,20 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
     }
 
-    private void checksBeforeLaunch(Context context){
+    private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice){
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
 
-        if (powerRequired && IsAUserSelectedBTDevice) {
+        if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && VariableStore.isBTConnected) {
-                BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
+                BluetoothActions.BTConnectPhoneDoStuff(context);
             }
-        } else if (!powerRequired && IsAUserSelectedBTDevice && VariableStore.isBTConnected) {
-            BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
+        } else if (!powerRequired && isAUserSelectedBTDevice && VariableStore.isBTConnected) {
+            BluetoothActions.BTConnectPhoneDoStuff(context);
         }
 
     }
 
-    private void waitingForBTA2dpOn(final Context context) {
+    private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice) {
 
         AudioFocus.getCurrentAudioFocus(context);
 
@@ -92,8 +91,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
         screenONLock.releaseWakeLock();
 
         //Get original MediaVolume
-        VariableStore.originalMediaVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VariableStore.originalMediaVolume));
+        VolumeControl.originalMediaVolume = VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
 
         //Start 10sec countdown checking for A2dp connection every second
         new CountDownTimer(30000,
@@ -104,12 +103,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 if(VariableStore.am.isBluetoothA2dpOn()){
                     VariableStore.isBTConnected = true;
                     cancel();
-                    checksBeforeLaunch(context);
+                    checksBeforeLaunch(context, _isAUserSelectedBTDevice);
                 }
             }
 
             public void onFinish() {
-                Log.i(TAG, VariableStore.btDevice + " did NOT CONNECT via a2dp");
+                Log.i(TAG, btDevice + " did NOT CONNECT via a2dp");
                 VariableStore.isBTConnected = false;
             }
         }.start();

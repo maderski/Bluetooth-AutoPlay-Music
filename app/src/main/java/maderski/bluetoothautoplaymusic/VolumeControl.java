@@ -9,7 +9,8 @@ import android.util.Log;
  */
 public class VolumeControl {
 
-    public static String TAG = VolumeControl.class.getName();
+    private static String TAG = VolumeControl.class.getName();
+    public static int originalMediaVolume;
 
     //Set Mediavolume to MAX
     public static void volumeMAX(){
@@ -20,8 +21,8 @@ public class VolumeControl {
 
     //Set media volume
     public static void setOriginalVolume(){
-        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, VariableStore.originalMediaVolume, 0);
-        Log.i(TAG, "Media Volume is set to: " + Integer.toString(VariableStore.originalMediaVolume));
+        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
+        Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
 
     public static void checkSetMAXVol(int seconds, int seconds_interval){
@@ -32,7 +33,7 @@ public class VolumeControl {
             boolean runme = false;
             public void onTick(long millisUntilFinished) {
                 if(runme) {
-                    if (VariableStore.isBTConnected || VariableStore.isNotificationPresent) {
+                    if (VariableStore.isBTConnected) {
                         if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
                                 VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
                             int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -48,7 +49,7 @@ public class VolumeControl {
             }
 
             public void onFinish() {
-                if(VariableStore.isBTConnected || VariableStore.isNotificationPresent) {
+                if(VariableStore.isBTConnected) {
                     if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
                             VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
                         Log.i(TAG, "Volume is at MAX!");

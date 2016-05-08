@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class PowerConnectionReceiver extends BroadcastReceiver {
 
-    private final static String TAG = PowerConnectionReceiver.class.getName();
+    private final String TAG = PowerConnectionReceiver.class.getName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,7 +37,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
             if(powerRequired && !VariableStore.ranBTConnectPhoneDoStuff && VariableStore.isBTConnected){
                 //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
-                BluetoothActions.BTConnectPhoneDoStuff(context, VariableStore.btDevice);
+                BluetoothActions.BTConnectPhoneDoStuff(context);
             }
         }
     }

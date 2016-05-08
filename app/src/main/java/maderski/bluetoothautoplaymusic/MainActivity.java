@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         mapAppName = "GOOGLE MAPS";
                     }
-                    VariableStore.toastMapApp = mapAppName;
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage());
                 }
@@ -88,11 +87,14 @@ public class MainActivity extends AppCompatActivity {
                             .setAction(mapAppName, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (mapApp.equals(ConstantStore.WAZE))
+                                    if (mapApp.equals(ConstantStore.WAZE)) {
                                         BAPMPreferences.setMapsChoice(context, ConstantStore.MAPS);
-                                    else
+                                        Toast.makeText(context, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
                                         BAPMPreferences.setMapsChoice(context, ConstantStore.WAZE);
-                                    Toast.makeText(context, "Changed to " + VariableStore.toastMapApp, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
+                                    }
                                     Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
                                     setMapsButtonText(context);
                                 }

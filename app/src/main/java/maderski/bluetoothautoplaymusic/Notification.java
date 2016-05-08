@@ -19,15 +19,15 @@ public class Notification {
     private static final int nID = 608;
 
     //Create notification message for BAPM
-    public static void BAPMMessage(Context context, String btDevice){
+    public static void BAPMMessage(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String mapAppName = "GOOGLE MAPS";
         if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(ConstantStore.WAZE)){
             mapAppName = "WAZE";
         }
 
-        String title = "Device " + btDevice + " connected";
-        String message = "Click to launch " + mapAppName;
+        String title = "Click to launch " + mapAppName;
+        String message = "Bluetooth device connected";
 
         //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
         //        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -47,7 +47,6 @@ public class Notification {
                 //.addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
                 //.addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
         nManager.notify(nTAG, nID, builder.build());
-        VariableStore.isNotificationPresent = true;
     }
 
     //Remove notification that was created by BAPM
@@ -56,7 +55,6 @@ public class Notification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             nManager.cancel(nTAG, nID);
-            VariableStore.isNotificationPresent = false;
         }catch(Exception e){
             Log.e(nTAG, e.getMessage());
         }
