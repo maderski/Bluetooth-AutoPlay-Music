@@ -102,7 +102,7 @@ public class BluetoothActions {
         if(playMusic){
             PlayMusic.checkIfPlaying(context, am);
         }
-
+        VariableStore.setRanBTConnectPhoneDoStuff(true);
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
@@ -158,6 +158,7 @@ public class BluetoothActions {
         }catch(Exception e){
             Log.e(TAG, e.getMessage());
         }
+        VariableStore.setRanBTConnectPhoneDoStuff(false);
     }
 
     //Launch MainActivity, used for unlocking the screen
