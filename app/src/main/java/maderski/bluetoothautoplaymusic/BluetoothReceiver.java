@@ -76,7 +76,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 Log.i(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
                 //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
                 boolean powerRequired = BAPMPreferences.getPowerConnected(context);
-                
+
                 if(powerRequired && isBTConnected && !VariableStore.getRanBTConnectPhoneDoStuff()){
                     //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
                     BluetoothActions.BTConnectPhoneDoStuff(context, am);

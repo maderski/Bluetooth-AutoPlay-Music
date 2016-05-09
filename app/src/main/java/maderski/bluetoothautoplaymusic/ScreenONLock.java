@@ -14,6 +14,9 @@ public class ScreenONLock {
 
     private final static String TAG = ScreenONLock.class.getName();
 
+    public static PowerManager.WakeLock wakeLock;
+    public static String stayOnTAG = "Stay ON";
+
     //Enable WakeLock
     public void enableWakeLock(Context context){
 
@@ -26,10 +29,10 @@ public class ScreenONLock {
         }
 
         PowerManager pm = (PowerManager)context.getSystemService(context.POWER_SERVICE);
-        VariableStore.wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                screenBrightness, VariableStore.stayOnTAG);
+        wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                screenBrightness, stayOnTAG);
         try{
-            VariableStore.wakeLock.acquire();
+            wakeLock.acquire();
             Log.i("WakeLock ", "enabled");
         }catch (Exception e){
             Log.e("WakeLock Error: ", e.getMessage());
@@ -38,9 +41,9 @@ public class ScreenONLock {
 
     //Disable and release WakeLock
     public void releaseWakeLock(){
-        if (VariableStore.wakeLock != null && VariableStore.wakeLock.isHeld()) {
+        if (wakeLock != null && wakeLock.isHeld()) {
             try {
-                VariableStore.wakeLock.release();
+                wakeLock.release();
                 Log.i("Wakelock: ", "disabled");
             } catch (Exception e) {
                 Log.e("WakeLock: ", "error " + e.getMessage());
