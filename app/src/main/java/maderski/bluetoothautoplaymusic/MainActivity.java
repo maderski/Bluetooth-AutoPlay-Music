@@ -170,6 +170,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         checkIfWazeRemoved(this);
+
+        isBTConnected = getIsBTConnected(this);
+    }
+
+    private boolean getIsBTConnected(Context context){
+        AudioFocus audioFocus = new AudioFocus(context);
+        return audioFocus.am.isBluetoothA2dpOn();
     }
 
     //Save the BTDevices when program is paused

@@ -10,6 +10,4 @@ public class VariableStore {
     //Variables for wakelock
     public static PowerManager.WakeLock wakeLock;
     public static String stayOnTAG = "Stay ON";
-
-
 }
