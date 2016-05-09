@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -9,23 +10,30 @@ import android.util.Log;
  */
 public class VolumeControl {
 
-    private static String TAG = VolumeControl.class.getName();
+    private final String TAG = VolumeControl.class.getName();
+
     public static int originalMediaVolume;
 
+    private AudioManager am;
+
+    public VolumeControl(Context context, AudioManager audioManager){
+        am = audioManager;
+    }
+
     //Set Mediavolume to MAX
-    public static void volumeMAX(){
-        int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    public void volumeMAX(){
+        int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         Log.i(TAG, "Max Media Volume is: " + Integer.toString(maxVolume));
-        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
     }
 
     //Set media volume
-    public static void setOriginalVolume(){
-        VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
+    public void setOriginalVolume(){
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
         Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
 
-    public static void checkSetMAXVol(int seconds, int seconds_interval){
+    public void checkSetMAXVol(int seconds, int seconds_interval){
         int _seconds = seconds * 1000;
         int _interval = seconds_interval * 1000;
         new CountDownTimer(_seconds, _interval)
@@ -33,14 +41,14 @@ public class VolumeControl {
             boolean runme = false;
             public void onTick(long millisUntilFinished) {
                 if(runme) {
-                    if (VariableStore.isBTConnected) {
-                        if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
-                                VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                            int maxVolume = VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                            VariableStore.am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+                    if (am.isBluetoothA2dpOn()) {
+                        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
+                                am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                            int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
                             Log.i(TAG, "Set Volume To MAX");
-                        } else if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
-                                VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                        } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
+                                am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
                             Log.i(TAG, "Volume is at MAX!");
                         }
                     }
@@ -49,9 +57,9 @@ public class VolumeControl {
             }
 
             public void onFinish() {
-                if(VariableStore.isBTConnected) {
-                    if (VariableStore.am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
-                            VariableStore.am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                if(am.isBluetoothA2dpOn()) {
+                    if (am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
+                            am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
                         Log.i(TAG, "Volume is at MAX!");
                     } else {
                         Log.i(TAG, "Unable to to set Volume to MAX :(");

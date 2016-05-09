@@ -10,6 +10,8 @@ public class AudioFocusListen{
 
     private static final String TAG = AudioFocusListen.class.getName();
 
+    private boolean inAudioFocus = false;
+
     //AudioFocus Listener, provides audioFocus feedback
     private AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
@@ -17,7 +19,7 @@ public class AudioFocusListen{
             switch (focusChange){
                 case AudioManager.AUDIOFOCUS_GAIN:
                     Log.i(TAG, "AUDIOFOCUS_GAIN");
-                    VariableStore.inAudioFocus = true;
+                    inAudioFocus = true;
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN_TRANSIENT:
                     Log.i(TAG, "AUDIOFOCUS_GAIN_TRANSIENT");
@@ -27,7 +29,7 @@ public class AudioFocusListen{
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
                     Log.e(TAG, "AUDIOFOCUS_LOSS");
-                    VariableStore.inAudioFocus = false;
+                    inAudioFocus = false;
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     Log.e(TAG, "AUDIOFOCUS_LOSS_TRANSIENT");

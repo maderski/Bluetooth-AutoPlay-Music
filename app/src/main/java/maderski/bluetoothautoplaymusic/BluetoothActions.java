@@ -18,7 +18,6 @@ public class BluetoothActions {
     final static String TAG = BluetoothActions.class.getName();
 
     private static ScreenONLock screenONLock = new ScreenONLock();
-    private static RingerControl ringerControl = new RingerControl();
     private static int currentRingerSet;
 
     //Return true if Bluetooth Audio is ready
@@ -51,7 +50,7 @@ public class BluetoothActions {
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    public static void BTConnectPhoneDoStuff(Context context){
+    public static void BTConnectPhoneDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
@@ -59,6 +58,8 @@ public class BluetoothActions {
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+
+        RingerControl ringerControl = new RingerControl(am);
 
         Notification.BAPMMessage(context);
 
@@ -86,7 +87,7 @@ public class BluetoothActions {
         }
 
         if(playMusic){
-            PlayMusic.auto_Play(context);
+            PlayMusic.auto_Play(context, am);
         }
 
         if(launchMaps && !launchMusicPlayer){
@@ -94,25 +95,26 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            VolumeControl.checkSetMAXVol(12, 4);
+            VolumeControl volumeControl = new VolumeControl(context, am);
+            volumeControl.checkSetMAXVol(12, 4);
         }
 
         if(playMusic){
-            PlayMusic.checkIfPlaying(context);
+            PlayMusic.checkIfPlaying(context, am);
         }
-
-        VariableStore.ranBTConnectPhoneDoStuff = true;
 
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music and abandons AudioFocus
-    public static void BTDisconnectPhoneDoStuff(Context context){
+    public static void BTDisconnectPhoneDoStuff(Context context, AudioManager am, AudioFocus af){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
+
+        RingerControl ringerControl = new RingerControl(am);
 
         Notification.removeBAPMMessage(context);
 
@@ -139,11 +141,12 @@ public class BluetoothActions {
         }
 
         if(launchMusicPlayer) {
-            PlayMusic.pause();
+            PlayMusic.pause(am);
         }
 
         if(volumeMAX){
-            VolumeControl.setOriginalVolume();
+            VolumeControl volumeControl = new VolumeControl(context, am);
+            volumeControl.setOriginalVolume();
         }
 
         if(sendToBackground) {
@@ -151,12 +154,10 @@ public class BluetoothActions {
         }
 
         try {
-            AudioFocus.abandonAudioFocus();
+            af.abandonAudioFocus();
         }catch(Exception e){
             Log.e(TAG, e.getMessage());
         }
-
-        VariableStore.ranBTConnectPhoneDoStuff = false;
     }
 
     //Launch MainActivity, used for unlocking the screen

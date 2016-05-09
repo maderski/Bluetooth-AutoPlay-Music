@@ -30,21 +30,21 @@ public class PlayMusic {
     }
 
     //KeyEvent PLAY
-    public static void play(){
+    public static void play(AudioManager am){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
-        VariableStore.am.dispatchMediaKeyEvent(downEvent);
+        am.dispatchMediaKeyEvent(downEvent);
 
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
-        VariableStore.am.dispatchMediaKeyEvent(upEvent);
+        am.dispatchMediaKeyEvent(upEvent);
     }
 
     //KeyEvent PAUSE
-    public static void pause(){
+    public static void pause(AudioManager am){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
-        VariableStore.am.dispatchMediaKeyEvent(downEvent);
+        am.dispatchMediaKeyEvent(downEvent);
 
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
-        VariableStore.am.dispatchMediaKeyEvent(upEvent);
+        am.dispatchMediaKeyEvent(upEvent);
     }
 
     public static void play_UsingServiceCommand(Context context){
@@ -82,7 +82,7 @@ public class PlayMusic {
     }
 
     //Autoplay music if enabled
-    public static void auto_Play(final Context context){
+    public static void auto_Play(final Context context, final AudioManager am){
         int index = BAPMPreferences.getSelectedMusicPlayer(context);
         String pkgName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
@@ -94,37 +94,37 @@ public class PlayMusic {
                 play_UsingServiceCommand(context);
                 break;
             default:
-                play();
+                play(am);
                 break;
         }
-        Log.i(TAG, "Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
+        Log.i(TAG, "Is Music Active: " + Boolean.toString(am.isMusicActive()));
     }
 
-    public static void checkIfPlaying(final Context context){
+    public static void checkIfPlaying(final Context context, final AudioManager am){
         new CountDownTimer(3000, 1000)
         {
             public void onTick(long millisUntilFinished) {
-                if(VariableStore.am.isMusicActive()){
-                    Log.i(TAG, "3 sec Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
+                if(am.isMusicActive()){
+                    Log.i(TAG, "3 sec Is Music Active: " + Boolean.toString(am.isMusicActive()));
                     cancel();
                 }else{
-                    Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
+                    Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(am.isMusicActive()));
                 }
             }
 
             public void onFinish() {
                 //For 10 seconds, each second check to see if music is playing, if not try a keyEvent play
-                if(!VariableStore.am.isMusicActive()) {
+                if(!am.isMusicActive()) {
                     new CountDownTimer(10000, 1000)
                     {
                         Boolean useServiceCommand = false;
 
                         public void onTick(long millisUntilFinished) {
-                            Log.i(TAG, "On Tick: Is Music Active: " + Boolean.toString(VariableStore.am.isMusicActive()));
-                            if (!VariableStore.am.isMusicActive()) {
+                            Log.i(TAG, "On Tick: Is Music Active: " + Boolean.toString(am.isMusicActive()));
+                            if (!am.isMusicActive()) {
                                 if(!useServiceCommand){
-                                    pause();
-                                    play();
+                                    pause(am);
+                                    play(am);
                                     Log.i(TAG, "Pressed Play again");
                                     useServiceCommand = true;
                                 }else if(useServiceCommand){
@@ -132,15 +132,14 @@ public class PlayMusic {
                                     Log.i(TAG, "Pressed Play again using service command");
                                     useServiceCommand = false;
                                 }
-                            }else if(VariableStore.am.isMusicActive()){
+                            }else if(am.isMusicActive()){
                                 cancel();
-                            }else if(!VariableStore.isBTConnected){
+                            }else if(!am.isBluetoothA2dpOn()){
                                 Log.i(TAG, "Bluetooth is not connected");
-                                pause();
+                                pause(am);
                                 cancel();
                             }
                         }
-
                         public void onFinish() {
                             Log.i(TAG, "Unable to Play :(");
                         }

@@ -9,14 +9,20 @@ import android.util.Log;
  */
 public class AudioFocus {
 
-    private static final String TAG = AudioFocus.class.getName();
+    private final String TAG = AudioFocus.class.getName();
+
+    private AudioManager.OnAudioFocusChangeListener listener;
+    public AudioManager am;
+
+    public AudioFocus(Context context){
+        AudioFocusListen afl = new AudioFocusListen();
+        listener = afl.getAudioFocusChangeListener();
+        am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+    }
 
     //Request AudioFocus for Bluetooth autoplay music
-    public static void requestAudioFocus(Context context){
-        AudioFocusListen afl = new AudioFocusListen();
-        VariableStore.listener = afl.getAudioFocusChangeListener();
-        VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        int result = VariableStore.am.requestAudioFocus(VariableStore.listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+    public void requestAudioFocus(Context context){
+        int result = am.requestAudioFocus(listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 
         //Bluetooth autoplay music now has audioFocus
         if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
@@ -26,18 +32,11 @@ public class AudioFocus {
     }
 
     //Abandon AudioFocus
-    public static void abandonAudioFocus(){
+    public void abandonAudioFocus(){
         int requestGranted = AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-        int abandonFocus = VariableStore.am.abandonAudioFocus(VariableStore.listener);
+        int abandonFocus = am.abandonAudioFocus(listener);
         if(requestGranted == abandonFocus){
             Log.i(TAG, "Audiofocus Abandoned");
         }
-    }
-
-    //Get current AudioFocus
-    public static void getCurrentAudioFocus(Context context){
-        AudioFocusListen afl = new AudioFocusListen();
-        VariableStore.listener = afl.getAudioFocusChangeListener();
-        VariableStore.am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 }

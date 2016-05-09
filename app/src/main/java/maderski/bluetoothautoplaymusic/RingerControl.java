@@ -9,23 +9,28 @@ import android.util.Log;
  */
 public class RingerControl {
     private String TAG = RingerControl.class.getName();
+    private AudioManager am;
+
+    public RingerControl(AudioManager audioManager){
+        am = audioManager;
+    }
 
     //turns phone sounds OFF & initialize AudioManager
     public void soundsOFF(){
-        VariableStore.am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         Log.i(TAG, "RingerControl: " + "Silent");
     }
     //turns phone sounds ON
     public void soundsON(){
-        VariableStore.am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         Log.i(TAG, "RingerControl: " + "Normal");
     }
 
     public void vibrateOnly(){
-        VariableStore.am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+        am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
     }
 
     public int ringerSetting(){
-        return VariableStore.am.getRingerMode();
+        return am.getRingerMode();
     }
 }

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getName();
     private Set<String> saveBTDevices = new HashSet<String>();
+    private boolean isBTConnected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
     //Dismiss the KeyGuard
     private void dismissKeyGuard(Context context){
 
-        if (!BAPMPreferences.getKeepScreenON(context) && VariableStore.isBTConnected){
+        if (!BAPMPreferences.getKeepScreenON(context) && isBTConnected){
             ScreenONLock screenONLock = new ScreenONLock();
             screenONLock.enableWakeLock(context);
             Window window = ((Activity) context).getWindow();
@@ -315,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!VariableStore.isBTConnected) {
+                if(!isBTConnected) {
                     if (cb.isChecked()) {
                         saveBTDevices.add(BTD);
                         Log.i(TAG, "TRUE" + " " + BTD);
@@ -469,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void keepONToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(!VariableStore.isBTConnected) {
+        if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setKeepScreenON(this, true);
                 Log.i(TAG, "Keep Screen ON Button is ON");
@@ -485,7 +486,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void priorityToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(!VariableStore.isBTConnected) {
+        if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setPriorityMode(this, true);
                 Log.i(TAG, "Priority Button is ON");
@@ -501,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void volumeMAXToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(!VariableStore.isBTConnected) {
+        if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setMaxVolume(this, true);
                 Log.i(TAG, "Max Volume Button is ON");
@@ -517,7 +518,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchMusicPlayerToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
-        if(!VariableStore.isBTConnected) {
+        if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setLaunchMusicPlayer(this, true);
                 Log.i(TAG, "Launch Music Player Button is ON");
