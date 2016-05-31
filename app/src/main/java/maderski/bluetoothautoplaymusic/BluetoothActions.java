@@ -94,20 +94,21 @@ public class BluetoothActions {
             LaunchApp.delayLaunchMaps(context, 2);
         }
 
+        if(playMusic){
+            PlayMusic.checkIfPlaying(context, am);
+        }
+
         if(volumeMAX){
             VolumeControl volumeControl = new VolumeControl(context, am);
             volumeControl.checkSetMAXVol(12, 4);
         }
 
-        if(playMusic){
-            PlayMusic.checkIfPlaying(context, am);
-        }
         VariableStore.setRanBTConnectPhoneDoStuff(true);
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music and abandons AudioFocus
-    public static void BTDisconnectPhoneDoStuff(Context context, AudioManager am, AudioFocus af){
+    public static void BTDisconnectPhoneDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
@@ -153,11 +154,6 @@ public class BluetoothActions {
             sendEverythingToBackground(context);
         }
 
-        try {
-            af.abandonAudioFocus();
-        }catch(Exception e){
-            Log.e(TAG, e.getMessage());
-        }
         VariableStore.setRanBTConnectPhoneDoStuff(false);
     }
 

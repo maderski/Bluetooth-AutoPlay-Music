@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -175,8 +176,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean getIsBTConnected(Context context){
-        AudioFocus audioFocus = new AudioFocus(context);
-        return audioFocus.am.isBluetoothA2dpOn();
+
+        AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        boolean isBTConnected = am.isBluetoothA2dpOn();
+        Log.i(TAG, "IsBTConnected");
+
+        return isBTConnected;
     }
 
     //Save the BTDevices when program is paused

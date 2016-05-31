@@ -19,7 +19,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private final String TAG = "BluetoothReceiver";
 
     private String btDevice = "None";
-    private AudioFocus audioFocus;
     private AudioManager am;
 
     //On receive of Broadcast
@@ -42,7 +41,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
                 if(isSelectedBTDevice) {
                     btDevice = device.getName();
-                    getCurrentAudioFocus(context);
+                    am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
                     waitingForBTA2dpOn(context, isSelectedBTDevice);
                 }
                 else {
@@ -58,19 +57,20 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
-                getCurrentAudioFocus(context);
                 Log.i(TAG, "Device disonnected: " + device.getName());
 
                 Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
                         Boolean.toString(isSelectedBTDevice));
 
                 if (isSelectedBTDevice && VariableStore.getRanBTConnectPhoneDoStuff()) {
-                    BluetoothActions.BTDisconnectPhoneDoStuff(context, am, audioFocus);
+                    am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+                    BluetoothActions.BTDisconnectPhoneDoStuff(context, am);
                 }
                 break;
 
             case Intent.ACTION_POWER_CONNECTED:
-                getCurrentAudioFocus(context);
+                am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
                 boolean isBTConnected = am.isBluetoothA2dpOn();
                 Log.i(TAG, "Power Connected");
                 Log.i(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
@@ -125,10 +125,5 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 Log.i(TAG, btDevice + " did NOT CONNECT via a2dp");
             }
         }.start();
-    }
-
-    private void getCurrentAudioFocus(Context context){
-        audioFocus = new AudioFocus(context);
-        am = audioFocus.am;
     }
 }
