@@ -62,7 +62,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
                         Boolean.toString(isSelectedBTDevice));
 
-                if (isSelectedBTDevice && VariableStore.getRanBTConnectPhoneDoStuff()) {
+                if (isSelectedBTDevice && BluetoothActions.getRanBTConnectPhoneDoStuff()) {
                     am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
                     BluetoothActions.BTDisconnectPhoneDoStuff(context, am);
                 }
@@ -77,7 +77,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
                 boolean powerRequired = BAPMPreferences.getPowerConnected(context);
 
-                if(powerRequired && isBTConnected && !VariableStore.getRanBTConnectPhoneDoStuff()){
+                if(powerRequired && isBTConnected && !BluetoothActions.getRanBTConnectPhoneDoStuff()){
                     //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
                     BluetoothActions.BTConnectPhoneDoStuff(context, am);
                 }

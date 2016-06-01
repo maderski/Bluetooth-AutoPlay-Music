@@ -17,6 +17,7 @@ public class BluetoothActions {
 
     final static String TAG = BluetoothActions.class.getName();
 
+    private static boolean ranBTConnectPhoneDoStuff;
     private static ScreenONLock screenONLock = new ScreenONLock();
     private static int currentRingerSet;
 
@@ -103,11 +104,11 @@ public class BluetoothActions {
             volumeControl.checkSetMAXVol(12, 4);
         }
 
-        VariableStore.setRanBTConnectPhoneDoStuff(true);
+        ranBTConnectPhoneDoStuff = true;
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
-    //pauses the music and abandons AudioFocus
+    //pauses the music
     public static void BTDisconnectPhoneDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
@@ -154,7 +155,7 @@ public class BluetoothActions {
             sendEverythingToBackground(context);
         }
 
-        VariableStore.setRanBTConnectPhoneDoStuff(false);
+        ranBTConnectPhoneDoStuff = false;
     }
 
     //Launch MainActivity, used for unlocking the screen
@@ -169,5 +170,12 @@ public class BluetoothActions {
         i.addCategory(Intent.CATEGORY_HOME);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
+    }
+
+    public static boolean getRanBTConnectPhoneDoStuff(){
+        return ranBTConnectPhoneDoStuff;
+    }
+    public static void setRanBTConnectPhoneDoStuff(boolean didItRun){
+        ranBTConnectPhoneDoStuff = didItRun;
     }
 }

@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkIfWazeRemoved(this);
 
-        isBTConnected = getIsBTConnected(this);
+        isBTConnected = BluetoothActions.getRanBTConnectPhoneDoStuff(); //getIsBTConnected(this);
     }
 
     private boolean getIsBTConnected(Context context){
