@@ -22,7 +22,7 @@ public class BluetoothActions {
     private static int currentRingerSet;
 
     //Return true if Bluetooth Audio is ready
-    public static boolean isBTAudioIsReady(Intent intent){
+    public boolean isBTAudioIsReady(Intent intent){
         boolean ready = false;
         int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
         if(state == BluetoothA2dp.STATE_CONNECTED) {
@@ -36,7 +36,7 @@ public class BluetoothActions {
 
     //Returns true if a connected device on the connected device list is on the BAPMPreferences.
     //getBTDevices List that is set by the user in the UI
-    public static boolean isDeviceOnBAPMList(Context context){
+    public boolean isDeviceOnBAPMList(Context context){
         Set<String> userBTDeviceList = BAPMPreferences.getBTDevices(context);
         List<String> connectedBTDeviceList = VariousLists.ConnectedBTDevices;
 
@@ -51,7 +51,7 @@ public class BluetoothActions {
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    public static void BTConnectPhoneDoStuff(Context context, AudioManager am){
+    public void BTConnectPhoneDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
@@ -109,7 +109,7 @@ public class BluetoothActions {
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
-    public static void BTDisconnectPhoneDoStuff(Context context, AudioManager am){
+    public void BTDisconnectPhoneDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
@@ -159,13 +159,13 @@ public class BluetoothActions {
     }
 
     //Launch MainActivity, used for unlocking the screen
-    private static void launchMainActivity(Context context){
+    private void launchMainActivity(Context context){
         Intent i = new Intent(context, MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
 
-    private static void sendEverythingToBackground(Context context){
+    private void sendEverythingToBackground(Context context){
         Intent i = new Intent(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_HOME);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

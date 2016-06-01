@@ -64,7 +64,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 if (isSelectedBTDevice && BluetoothActions.getRanBTConnectPhoneDoStuff()) {
                     am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                    BluetoothActions.BTDisconnectPhoneDoStuff(context, am);
+                    BluetoothActions bluetoothActions = new BluetoothActions();
+                    bluetoothActions.BTDisconnectPhoneDoStuff(context, am);
                 }
                 break;
 
@@ -79,7 +80,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 if(powerRequired && isBTConnected && !BluetoothActions.getRanBTConnectPhoneDoStuff()){
                     //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
-                    BluetoothActions.BTConnectPhoneDoStuff(context, am);
+                    BluetoothActions bluetoothActions = new BluetoothActions();
+                    bluetoothActions.BTConnectPhoneDoStuff(context, am);
                 }
                 break;
         }
@@ -91,10 +93,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
-                BluetoothActions.BTConnectPhoneDoStuff(context, am);
+                BluetoothActions bluetoothActions = new BluetoothActions();
+                bluetoothActions.BTConnectPhoneDoStuff(context, am);
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
-            BluetoothActions.BTConnectPhoneDoStuff(context, am);
+            BluetoothActions bluetoothActions = new BluetoothActions();
+            bluetoothActions.BTConnectPhoneDoStuff(context, am);
         }
 
     }

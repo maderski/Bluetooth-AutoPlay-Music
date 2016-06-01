@@ -14,8 +14,8 @@ public class ScreenONLock {
 
     private final static String TAG = ScreenONLock.class.getName();
 
-    public static PowerManager.WakeLock wakeLock;
-    public static String stayOnTAG = "Stay ON";
+    private static PowerManager.WakeLock wakeLock;
+    private static String stayOnTAG = "Stay ON";
 
     //Enable WakeLock
     public void enableWakeLock(Context context){
@@ -54,7 +54,7 @@ public class ScreenONLock {
     }
 
     //Return true if Dark
-    private static boolean isDark(Context context){
+    private boolean isDark(Context context){
         Boolean dark;
         Calendar c = Calendar.getInstance();
         SunriseSunset ss = new SunriseSunset(context);
