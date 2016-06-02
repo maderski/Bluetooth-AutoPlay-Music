@@ -26,7 +26,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
         //Toast.makeText(context, "Bluetooth Intent Received", Toast.LENGTH_SHORT).show();
 
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-        Set<String> BTDeviceList = BAPMPreferences.getBTDevices(context);
         boolean isSelectedBTDevice = false;
         //Get action that was broadcasted
         String action = "None";
