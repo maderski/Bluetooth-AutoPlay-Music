@@ -2,8 +2,11 @@ package maderski.bluetoothautoplaymusic;
 
 import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import java.util.Collections;
@@ -48,10 +51,73 @@ public class BluetoothActions {
         return false;
     }
 
+    public void OnBTConnect(Context context, AudioManager audioManager){
+        boolean waitTillOffPhone = true;
+        boolean onCall = false;
+
+        if(waitTillOffPhone){
+            Telephone telephone = new Telephone(context);
+            if(Power.isPluggedIn(context)){
+                if(telephone.isOnCall()) {
+                    Log.i(TAG, "ON a call");
+                    //Run CheckIfOnPhone
+                    CheckIfOnPhone(context, audioManager);
+                }else{
+                    Log.i(TAG, "NOT on a call");
+                    BTConnectDoStuff(context, audioManager);
+                }
+            }else{
+                if(telephone.isOnCall()) {
+                    //do nothing
+                }else{
+                    BTConnectDoStuff(context, audioManager);
+                }
+            }
+        }else{
+            BTConnectDoStuff(context, audioManager);
+        }
+    }
+
+    private void CheckIfOnPhone(Context context, AudioManager audioManager){
+        final Context ctx = context;
+        final AudioManager am = audioManager;
+        final Telephone telephone = new Telephone(ctx);
+
+        int _seconds = 7200000; //check for 2 hours
+        int _interval = 5000; //5 second interval
+
+        new CountDownTimer(_seconds, _interval)
+        {
+            public void onTick(long millisUntilFinished) {
+                if(Power.isPluggedIn(ctx)){
+                    if(telephone.isOnCall()){
+                        Log.i(TAG, "On Call, check again in 5 sec");
+                    }else{
+                        Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
+                        cancel();
+                        //Get original volume
+                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+                        //Launch Bluetooth Autoplay Music
+                        BTConnectDoStuff(ctx, am);
+                    }
+                }else{
+                    //Bailing cause phone is not plugged in
+                    Log.i(TAG, "Phone is no longer plugged in to power");
+                    cancel();
+                }
+            }
+
+            public void onFinish() {
+                //does nothing currently
+            }
+        }.start();
+    }
+
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    public void BTConnectPhoneDoStuff(Context context, AudioManager am){
+    private void BTConnectDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
@@ -109,7 +175,7 @@ public class BluetoothActions {
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
-    public void BTDisconnectPhoneDoStuff(Context context, AudioManager am){
+    public void BTDisconnectDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);

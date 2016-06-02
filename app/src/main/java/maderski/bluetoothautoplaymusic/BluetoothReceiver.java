@@ -1,15 +1,12 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
-
-import java.util.Set;
 
 /**
  * Created by Jason on 1/5/16.
@@ -64,7 +61,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 if (isSelectedBTDevice && BluetoothActions.getRanBTConnectPhoneDoStuff()) {
                     am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
                     BluetoothActions bluetoothActions = new BluetoothActions();
-                    bluetoothActions.BTDisconnectPhoneDoStuff(context, am);
+                    bluetoothActions.BTDisconnectDoStuff(context, am);
                 }
                 break;
 
@@ -80,7 +77,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 if(powerRequired && isBTConnected && !BluetoothActions.getRanBTConnectPhoneDoStuff()){
                     //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
                     BluetoothActions bluetoothActions = new BluetoothActions();
-                    bluetoothActions.BTConnectPhoneDoStuff(context, am);
+                    bluetoothActions.OnBTConnect(context, am);
                 }
                 break;
         }
@@ -93,11 +90,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
                 BluetoothActions bluetoothActions = new BluetoothActions();
-                bluetoothActions.BTConnectPhoneDoStuff(context, am);
+                bluetoothActions.OnBTConnect(context, am);
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
             BluetoothActions bluetoothActions = new BluetoothActions();
-            bluetoothActions.BTConnectPhoneDoStuff(context, am);
+            bluetoothActions.OnBTConnect(context, am);
         }
 
     }
@@ -108,9 +105,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
         ScreenONLock screenONLock = new ScreenONLock();
         screenONLock.releaseWakeLock();
 
-        //Get original MediaVolume
-        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+        //Get original MediaVolume if not on a call
+        Telephone telephone = new Telephone(context);
+        if(!telephone.isOnCall()) {
+            VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+        }
 
         //Start 10sec countdown checking for A2dp connection every second
         new CountDownTimer(30000,
