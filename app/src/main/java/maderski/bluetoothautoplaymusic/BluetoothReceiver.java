@@ -105,9 +105,13 @@ public class BluetoothReceiver extends BroadcastReceiver {
         ScreenONLock screenONLock = new ScreenONLock();
         screenONLock.releaseWakeLock();
 
+        boolean waitTillOffCall = BAPMPreferences.getWaitTillOffPhone(context);
         //Get original MediaVolume if not on a call
         Telephone telephone = new Telephone(context);
         if(!telephone.isOnCall()) {
+            VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+        }else if(!waitTillOffCall){
             VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
             Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
         }

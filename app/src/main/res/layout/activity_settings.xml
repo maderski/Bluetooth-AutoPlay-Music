@@ -102,6 +102,27 @@
             android:text="Go to homescreen on device disconnect"
             android:id="@+id/textView12"
             android:textSize="12dp" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CALL completed"
+            android:id="@+id/wait_till_off_phone"
+            android:checked="false"
+            android:paddingTop="20dp"
+            android:onClick="waitTillOffPhoneSwitch"
+            android:textSize="16dp"
+            android:switchPadding="100dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="On a call, Will NOT launch until call is over"
+            android:id="@+id/textView13"
+            android:textSize="12dp" />
     </LinearLayout>
 
 </LinearLayout>

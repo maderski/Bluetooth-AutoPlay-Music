@@ -48,6 +48,10 @@ public class SettingsActivity extends AppCompatActivity {
         setting_switch = (Switch) findViewById(R.id.send_to_background);
         setting_switch.setChecked(btnState);
 
+        btnState = BAPMPreferences.getWaitTillOffPhone(context);
+        setting_switch = (Switch) findViewById(R.id.wait_till_off_phone);
+        setting_switch.setChecked(btnState);
+
     }
 
     public void autoPlaySwitch(View view){
@@ -80,6 +84,17 @@ public class SettingsActivity extends AppCompatActivity {
         }else{
             BAPMPreferences.setSendToBackground(this, false);
             Log.i(TAG, "SendToBackground Switch is OFF");
+        }
+    }
+
+    public void waitTillOffPhoneSwitch(View view){
+        boolean on = ((Switch) view).isChecked();
+        if(on){
+            BAPMPreferences.setWaitTillOffPhone(this, true);
+            Log.i(TAG, "WaitTillOffPhone Switch is ON");
+        }else{
+            BAPMPreferences.setWaitTillOffPhone(this, false);
+            Log.i(TAG, "WaitTillOffPhone Switch is OFF");
         }
     }
 

@@ -52,7 +52,7 @@ public class BluetoothActions {
     }
 
     public void OnBTConnect(Context context, AudioManager audioManager){
-        boolean waitTillOffPhone = true;
+        boolean waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context);
         boolean onCall = false;
 
         if(waitTillOffPhone){

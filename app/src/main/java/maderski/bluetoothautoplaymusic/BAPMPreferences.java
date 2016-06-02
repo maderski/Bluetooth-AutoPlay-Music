@@ -30,6 +30,7 @@ public class BAPMPreferences {
     public static final String AUTOPLAY_MUSIC_KEY = "AutoPlayMusic";
     public static final String POWER_CONNECTED_KEY = "PowerConnected";
     public static final String SEND_TO_BACKGROUND_KEY = "SendToBackground";
+    public static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -172,6 +173,15 @@ public class BAPMPreferences {
 
     public static boolean getSendToBackground(Context context){
         return reader(context).getBoolean(SEND_TO_BACKGROUND_KEY, false);
+    }
+
+    public static void setWaitTillOffPhone(Context context, boolean enabled){
+        editor(context).putBoolean(WAIT_TILL_OFF_PHONE_KEY, enabled);
+        commit(context);
+    }
+
+    public static boolean getWaitTillOffPhone(Context context){
+        return reader(context).getBoolean(WAIT_TILL_OFF_PHONE_KEY, true);
     }
 
     //Commits write to SharedPreferences
