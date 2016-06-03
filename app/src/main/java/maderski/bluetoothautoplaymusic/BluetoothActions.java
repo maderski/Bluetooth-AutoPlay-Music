@@ -84,7 +84,7 @@ public class BluetoothActions {
         final Telephone telephone = new Telephone(ctx);
 
         int _seconds = 7200000; //check for 2 hours
-        int _interval = 5000; //5 second interval
+        int _interval = 6000; //6 second interval
 
         new CountDownTimer(_seconds, _interval)
         {
@@ -96,8 +96,8 @@ public class BluetoothActions {
                         Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
                         //Get original volume
-                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+//                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+//                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
                         //Launch Bluetooth Autoplay Music
                         BTConnectDoStuff(ctx, am);
                     }
@@ -143,6 +143,11 @@ public class BluetoothActions {
             launchMainActivity(context);
         }
 
+        if(volumeMAX){
+            VolumeControl volumeControl = new VolumeControl(am);
+            volumeControl.getOriginalAndSetMAXVolume();
+        }
+
         if(launchMusicPlayer) {
             try {
                 LaunchApp.musicPlayerLaunch(context, 2, launchMaps);
@@ -163,11 +168,6 @@ public class BluetoothActions {
 
         if(playMusic){
             PlayMusic.checkIfPlaying(context, am);
-        }
-
-        if(volumeMAX){
-            VolumeControl volumeControl = new VolumeControl(context, am);
-            volumeControl.checkSetMAXVol(12, 4);
         }
 
         ranBTConnectPhoneDoStuff = true;
@@ -213,7 +213,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            VolumeControl volumeControl = new VolumeControl(context, am);
+            VolumeControl volumeControl = new VolumeControl(am);
             volumeControl.setOriginalVolume();
         }
 
