@@ -105,9 +105,16 @@ public class BluetoothReceiver extends BroadcastReceiver {
         ScreenONLock screenONLock = new ScreenONLock();
         screenONLock.releaseWakeLock();
 
-        //Start 10sec countdown checking for A2dp connection every second
+        Telephone telephone = new Telephone(context);
+
+        if(!telephone.isOnCall()){
+            VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+        }
+
+        //Start 30sec countdown checking for A2dp connection every second
         new CountDownTimer(30000,
-                1000) // onTick time, not used
+                1000)
         {
             public void onTick(long millisUntilFinished) {
                 Log.i(TAG, "A2dp Ready: " + Boolean.toString(am.isBluetoothA2dpOn()));

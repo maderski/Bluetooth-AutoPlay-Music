@@ -95,9 +95,8 @@ public class BluetoothActions {
                     }else{
                         Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
-                        //Get original volume
-//                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-//                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+                        //Get Original Volume
+                        delayGetOrigVol(am);
                         //Launch Bluetooth Autoplay Music
                         BTConnectDoStuff(ctx, am);
                     }
@@ -110,6 +109,23 @@ public class BluetoothActions {
 
             public void onFinish() {
                 //does nothing currently
+            }
+        }.start();
+    }
+
+    //Wait 3 seconds before getting the Original Volume
+    private void delayGetOrigVol(final AudioManager am){
+        new CountDownTimer(3000,
+                1000)
+        {
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            public void onFinish() {
+                //Get original volume
+                VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
             }
         }.start();
     }
@@ -145,7 +161,7 @@ public class BluetoothActions {
 
         if(volumeMAX){
             VolumeControl volumeControl = new VolumeControl(am);
-            volumeControl.getOriginalAndSetMAXVolume();
+            volumeControl.checkSetMAXVol(12,4);
         }
 
         if(launchMusicPlayer) {

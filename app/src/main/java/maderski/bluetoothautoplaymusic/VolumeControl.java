@@ -39,14 +39,10 @@ public class VolumeControl {
         Log.i(TAG, "Original Media Volume is: " + Integer.toString(originalMediaVolume));
     }
 
-    public void getOriginalAndSetMAXVolume(){
-        getOriginalVolume();
-        checkSetMAXVol(12,4);
-    }
-
     public void checkSetMAXVol(int seconds, int seconds_interval){
         int _seconds = seconds * 1000;
         int _interval = seconds_interval * 1000;
+
         new CountDownTimer(_seconds, _interval)
         {
             boolean runme = false;
