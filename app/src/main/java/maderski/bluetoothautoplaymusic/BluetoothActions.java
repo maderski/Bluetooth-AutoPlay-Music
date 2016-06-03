@@ -8,6 +8,7 @@ import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +69,7 @@ public class BluetoothActions {
                 }
             }else{
                 if(telephone.isOnCall()) {
-                    //do nothing
+                    Notification.launchBAPM(context);
                 }else{
                     BTConnectDoStuff(context, audioManager);
                 }
@@ -95,10 +96,8 @@ public class BluetoothActions {
                     }else{
                         Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
-                        //Get Original Volume
-                        delayGetOrigVol(am);
-                        //Launch Bluetooth Autoplay Music
-                        BTConnectDoStuff(ctx, am);
+                        //Get Original Volume and Launch Bluetooth Autoplay Music
+                        delayGetOrigVol(ctx);
                     }
                 }else{
                     //Bailing cause phone is not plugged in
@@ -113,27 +112,31 @@ public class BluetoothActions {
         }.start();
     }
 
-    //Wait 3 seconds before getting the Original Volume
-    private void delayGetOrigVol(final AudioManager am){
-        new CountDownTimer(3000,
-                1000)
-        {
-            public void onTick(long millisUntilFinished) {
+    //Wait 3 seconds before getting the Original Volume and return true when done
+    public void delayGetOrigVol(final Context ctx){
+        final AudioManager am = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
+        if(am.isBluetoothA2dpOn()) {
+            new CountDownTimer(6000,
+                    1000) {
+                public void onTick(long millisUntilFinished) {
+                    if (millisUntilFinished > 3000 && millisUntilFinished < 4000) {
+                        //Get original volume
+                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+                    }
+                }
 
-            }
-
-            public void onFinish() {
-                //Get original volume
-                VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-                Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
-            }
-        }.start();
+                public void onFinish() {
+                    BTConnectDoStuff(ctx, am);
+                }
+            }.start();
+        }
     }
 
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    private void BTConnectDoStuff(Context context, AudioManager am){
+    public void BTConnectDoStuff(Context context, AudioManager am){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);

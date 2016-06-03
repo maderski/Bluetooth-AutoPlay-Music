@@ -62,6 +62,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
                     BluetoothActions bluetoothActions = new BluetoothActions();
                     bluetoothActions.BTDisconnectDoStuff(context, am);
+                }else if(BAPMPreferences.getWaitTillOffPhone(context) && Notification.launchNotifPresent){
+                    Notification.removeBAPMMessage(context);
                 }
                 break;
 

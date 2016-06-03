@@ -18,6 +18,8 @@ public class Notification {
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
 
+    public static boolean launchNotifPresent = false;
+
     //Create notification message for BAPM
     public static void BAPMMessage(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
@@ -49,12 +51,37 @@ public class Notification {
         nManager.notify(nTAG, nID, builder.build());
     }
 
+    public static void launchBAPM(Context context){
+        int color = ContextCompat.getColor(context, R.color.colorAccent);
+
+        String title = "Launch Bluetooth Autoplay Music";
+        String message = "Bluetooth device connected";
+
+        PendingIntent appIntent = PendingIntent.getActivity(context, 0,
+                new Intent(context, LaunchBAPMActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationManager nManager = (NotificationManager)context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_notif_icon)
+                .setAutoCancel(false)
+                .setContentIntent(appIntent)
+                .setColor(color)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
+        nManager.notify(nTAG, nID, builder.build());
+        launchNotifPresent = true;
+    }
+
     //Remove notification that was created by BAPM
     public static void removeBAPMMessage(Context context){
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             nManager.cancel(nTAG, nID);
+            launchNotifPresent = false;
         }catch(Exception e){
             Log.e(nTAG, e.getMessage());
         }

@@ -20,6 +20,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -41,6 +42,7 @@
 
         <activity android:name=".LaunchMapActivity" />
         <activity android:name=".SettingsActivity" />
+        <activity android:name=".LaunchBAPMActivity"></activity>
     </application>
 
 </manifest>
