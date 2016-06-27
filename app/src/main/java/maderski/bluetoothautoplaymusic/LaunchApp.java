@@ -21,7 +21,8 @@ public class LaunchApp {
 
     //Launches App that was inputted into method
     public static void launch(Context context, String pkg){
-        Log.i("Package intent: ", pkg + " started");
+        if(BuildConfig.DEBUG)
+            Log.i("Package intent: ", pkg + " started");
         Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(LaunchIntent);
@@ -85,10 +86,12 @@ public class LaunchApp {
 
             public void onFinish() {
                 launchMaps(ctx);
-                Log.i("Launch Delay: ", "Finished");
+                if(BuildConfig.DEBUG)
+                    Log.i("Launch Delay: ", "Finished");
             }
         }.start();
-        Log.i(TAG, "delayLaunchmaps started");
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "delayLaunchmaps started");
     }
 }
 

@@ -30,10 +30,13 @@ public class BluetoothActions {
         boolean ready = false;
         int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
         if(state == BluetoothA2dp.STATE_CONNECTED) {
-            Log.e(TAG, "CONNECTED!!! :D");
+            if(BuildConfig.DEBUG)
+                Log.e(TAG, "CONNECTED!!! :D");
             ready = true;
-        }else
-            Log.i(TAG, "BTAudioIsReady: " + Boolean.toString(ready));
+        }else {
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "BTAudioIsReady: " + Boolean.toString(ready));
+        }
 
         return ready;
     }
@@ -47,24 +50,26 @@ public class BluetoothActions {
         if(VariousLists.ConnectedBTDevices != null){
             return !Collections.disjoint(userBTDeviceList, connectedBTDeviceList);
         }else{
-            Log.i(TAG, "ConnectedBTDevices List = null");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "ConnectedBTDevices List = null");
         }
         return false;
     }
 
     public void OnBTConnect(Context context, AudioManager audioManager){
         boolean waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context);
-        boolean onCall = false;
 
         if(waitTillOffPhone){
             Telephone telephone = new Telephone(context);
             if(Power.isPluggedIn(context)){
                 if(telephone.isOnCall()) {
-                    Log.i(TAG, "ON a call");
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "ON a call");
                     //Run CheckIfOnPhone
-                    CheckIfOnPhone(context, audioManager);
+                    CheckIfOnPhone(context);
                 }else{
-                    Log.i(TAG, "NOT on a call");
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "NOT on a call");
                     BTConnectDoStuff(context, audioManager);
                 }
             }else{
@@ -79,9 +84,8 @@ public class BluetoothActions {
         }
     }
 
-    private void CheckIfOnPhone(Context context, AudioManager audioManager){
+    private void CheckIfOnPhone(Context context){
         final Context ctx = context;
-        final AudioManager am = audioManager;
         final Telephone telephone = new Telephone(ctx);
 
         int _seconds = 7200000; //check for 2 hours
@@ -92,16 +96,19 @@ public class BluetoothActions {
             public void onTick(long millisUntilFinished) {
                 if(Power.isPluggedIn(ctx)){
                     if(telephone.isOnCall()){
-                        Log.i(TAG, "On Call, check again in 5 sec");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "On Call, check again in 5 sec");
                     }else{
-                        Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
                         //Get Original Volume and Launch Bluetooth Autoplay Music
                         delayGetOrigVol(ctx);
                     }
                 }else{
                     //Bailing cause phone is not plugged in
-                    Log.i(TAG, "Phone is no longer plugged in to power");
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "Phone is no longer plugged in to power");
                     cancel();
                 }
             }
@@ -122,7 +129,9 @@ public class BluetoothActions {
                     if (millisUntilFinished > 3000 && millisUntilFinished < 4000) {
                         //Get original volume
                         VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
                     }
                 }
 
@@ -174,7 +183,8 @@ public class BluetoothActions {
                 Log.e(TAG, e.getMessage());
             }
         }else{
-            Log.i(TAG, "Launch Music Player is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Launch Music Player is OFF");
         }
 
         if(playMusic){
@@ -213,7 +223,8 @@ public class BluetoothActions {
             try {
                 switch(currentRingerSet){
                     case AudioManager.RINGER_MODE_SILENT:
-                        Log.i(TAG, "Phone is on Silent");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "Phone is on Silent");
                         break;
                     case AudioManager.RINGER_MODE_VIBRATE:
                         ringerControl.vibrateOnly();

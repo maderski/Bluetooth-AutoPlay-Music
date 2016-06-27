@@ -97,7 +97,8 @@ public class PlayMusic {
                 play(am);
                 break;
         }
-        Log.i(TAG, "Is Music Active: " + Boolean.toString(am.isMusicActive()));
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Is Music Active: " + Boolean.toString(am.isMusicActive()));
     }
 
     public static void checkIfPlaying(final Context context, final AudioManager am){
@@ -105,10 +106,12 @@ public class PlayMusic {
         {
             public void onTick(long millisUntilFinished) {
                 if(am.isMusicActive()){
-                    Log.i(TAG, "3 sec Is Music Active: " + Boolean.toString(am.isMusicActive()));
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "3 sec Is Music Active: " + Boolean.toString(am.isMusicActive()));
                     cancel();
                 }else{
-                    Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(am.isMusicActive()));
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "3 sec On Tick: Is Music Active: " + Boolean.toString(am.isMusicActive()));
                 }
             }
 
@@ -120,28 +123,33 @@ public class PlayMusic {
                         Boolean useServiceCommand = false;
 
                         public void onTick(long millisUntilFinished) {
-                            Log.i(TAG, "On Tick: Is Music Active: " + Boolean.toString(am.isMusicActive()));
+                            if(BuildConfig.DEBUG)
+                                Log.i(TAG, "On Tick: Is Music Active: " + Boolean.toString(am.isMusicActive()));
                             if (!am.isMusicActive()) {
                                 if(!useServiceCommand){
                                     pause(am);
                                     play(am);
-                                    Log.i(TAG, "Pressed Play again");
+                                    if(BuildConfig.DEBUG)
+                                        Log.i(TAG, "Pressed Play again");
                                     useServiceCommand = true;
                                 }else if(useServiceCommand){
                                     play_UsingServiceCommand(context);
-                                    Log.i(TAG, "Pressed Play again using service command");
+                                    if(BuildConfig.DEBUG)
+                                        Log.i(TAG, "Pressed Play again using service command");
                                     useServiceCommand = false;
                                 }
                             }else if(am.isMusicActive()){
                                 cancel();
                             }else if(!am.isBluetoothA2dpOn()){
-                                Log.i(TAG, "Bluetooth is not connected");
+                                if(BuildConfig.DEBUG)
+                                    Log.i(TAG, "Bluetooth is not connected");
                                 pause(am);
                                 cancel();
                             }
                         }
                         public void onFinish() {
-                            Log.i(TAG, "Unable to Play :(");
+                            if(BuildConfig.DEBUG)
+                                Log.i(TAG, "Unable to Play :(");
                         }
                     }.start();
                 }

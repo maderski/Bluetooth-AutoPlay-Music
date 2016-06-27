@@ -58,10 +58,12 @@ public class SettingsActivity extends AppCompatActivity {
         boolean on = ((Switch) view).isChecked();
         if (on) {
             BAPMPreferences.setAutoplayMusic(this, true);
-            Log.i(TAG, "AutoPlaySwitch is ON");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "AutoPlaySwitch is ON");
         } else {
             BAPMPreferences.setAutoplayMusic(this, false);
-            Log.i(TAG, "AutoPlaySwitch is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "AutoPlaySwitch is OFF");
         }
     }
 
@@ -69,10 +71,12 @@ public class SettingsActivity extends AppCompatActivity {
         boolean on = ((Switch) view).isChecked();
         if(on){
             BAPMPreferences.setPowerConnected(this, true);
-            Log.i(TAG, "PowerConnected Switch is ON");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "PowerConnected Switch is ON");
         }else{
             BAPMPreferences.setPowerConnected(this, false);
-            Log.i(TAG, "PowerConnected Switch is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "PowerConnected Switch is OFF");
         }
     }
 
@@ -80,10 +84,12 @@ public class SettingsActivity extends AppCompatActivity {
         boolean on = ((Switch) view).isChecked();
         if(on){
             BAPMPreferences.setSendToBackground(this, true);
-            Log.i(TAG, "SendToBackground Switch is ON");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "SendToBackground Switch is ON");
         }else{
             BAPMPreferences.setSendToBackground(this, false);
-            Log.i(TAG, "SendToBackground Switch is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "SendToBackground Switch is OFF");
         }
     }
 
@@ -91,10 +97,12 @@ public class SettingsActivity extends AppCompatActivity {
         boolean on = ((Switch) view).isChecked();
         if(on){
             BAPMPreferences.setWaitTillOffPhone(this, true);
-            Log.i(TAG, "WaitTillOffPhone Switch is ON");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "WaitTillOffPhone Switch is ON");
         }else{
             BAPMPreferences.setWaitTillOffPhone(this, false);
-            Log.i(TAG, "WaitTillOffPhone Switch is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "WaitTillOffPhone Switch is OFF");
         }
     }
 

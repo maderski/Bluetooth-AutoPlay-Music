@@ -21,10 +21,12 @@ public class Telephone {
         int currentCallState = telephonyManager.getCallState();
 
         if(currentCallState == telephonyManager.CALL_STATE_OFFHOOK){
-            Log.i(TAG, "ON CALL!");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "ON CALL!");
             return true;
         }else{
-            Log.i(TAG, "Not on Call");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Not on Call");
             return false;
         }
     }

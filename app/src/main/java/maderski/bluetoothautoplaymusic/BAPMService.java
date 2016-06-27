@@ -13,7 +13,8 @@ public class BAPMService extends Service {
     //Start the Bluetooth receiver as a service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("BAPMService: ", "started");
+        if(BuildConfig.DEBUG)
+            Log.i("BAPMService: ", "started");
         BluetoothReceiver br = new BluetoothReceiver();
         br.onReceive(this, intent);
         return Service.START_NOT_STICKY;
@@ -22,7 +23,8 @@ public class BAPMService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("BTAPMService: ", "onDestroy");
+        if(BuildConfig.DEBUG)
+            Log.d("BTAPMService: ", "onDestroy");
     }
 
     @Override

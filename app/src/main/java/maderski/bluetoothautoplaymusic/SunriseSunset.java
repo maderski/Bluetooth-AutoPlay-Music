@@ -31,10 +31,12 @@ public class SunriseSunset {
         CurrentLocation currentLocation = new CurrentLocation(context);
         Location location = new Location(currentLocation.getLatitude(), currentLocation.getLongitude());
         SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, getTimeZone());
-        Log.i(TAG, "Lat " + currentLocation.getLatitude() + " Long " + currentLocation.getLongitude());
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Lat " + currentLocation.getLatitude() + " Long " + currentLocation.getLongitude());
         sunriseTime = calculator.getCivilSunriseForDate(today);
         sunsetTime = calculator.getCivilSunsetForDate(today);
-        Log.i(TAG, "sunrise: " + sunriseTime + " sunset: " + sunsetTime);
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "sunrise: " + sunriseTime + " sunset: " + sunsetTime);
     }
 
     //Get Timezone
@@ -58,7 +60,8 @@ public class SunriseSunset {
         String time = inputTime;
         String[] split = time.split(":");
         int outputTime = (Integer.parseInt(split[0]) * 100) + Integer.parseInt(split[1]);
-        Log.i(TAG, Integer.toString(outputTime));
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, Integer.toString(outputTime));
         return outputTime;
     }
 }

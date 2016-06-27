@@ -64,10 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 boolean wazeFound;
 
                 if (LaunchApp.checkPkgOnPhone(context, ConstantStore.WAZE)) {
-                    Log.i(TAG, "FOUND");
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "FOUND");
                     wazeFound = true;
                 } else {
-                    Log.i(TAG, "NOT FOUND");
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "NOT FOUND");
                     wazeFound = false;
                 }
 
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
                                         BAPMPreferences.setMapsChoice(context, ConstantStore.WAZE);
                                         Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
                                     }
-                                    Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
+                                    if(BuildConfig.DEBUG)
+                                        Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
                                     setMapsButtonText(context);
                                 }
                             }).show();
@@ -179,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
 
         AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         boolean isBTConnected = am.isBluetoothA2dpOn();
-        Log.i(TAG, "IsBTConnected");
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "IsBTConnected");
 
         return isBTConnected;
     }
@@ -213,10 +217,13 @@ public class MainActivity extends AppCompatActivity {
         String mapAppChoice = BAPMPreferences.getMapsChoice(context);
         if(mapAppChoice.equalsIgnoreCase(ConstantStore.WAZE)) {
             if (!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)) {
-                Log.i(TAG, "Checked");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Checked");
                 BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
-            }else
-                Log.i(TAG, "WAZE is installed");
+            }else {
+                if (BuildConfig.DEBUG)
+                    Log.i(TAG, "WAZE is installed");
+            }
         }
     }
 
@@ -261,12 +268,14 @@ public class MainActivity extends AppCompatActivity {
 
     //Used for testing, Lists Music players and BT devices in logcat
     private void listMusicplayersAndBTDevices(Context context){
-        for(String pkg:VariousLists.listOfInstalledMediaPlayers(context)){
-            Log.i("Pkg ", pkg);
-        }
+        if(BuildConfig.DEBUG) {
+            for (String pkg : VariousLists.listOfInstalledMediaPlayers(context)) {
+                Log.i("Pkg ", pkg);
+            }
 
-        for(String btDevice:VariousLists.listOfBluetoothDevices()){
-            Log.i("BTDevice ", btDevice);
+            for (String btDevice : VariousLists.listOfBluetoothDevices()) {
+                Log.i("BTDevice ", btDevice);
+            }
         }
     }
 
@@ -331,14 +340,18 @@ public class MainActivity extends AppCompatActivity {
                 if(!isBTConnected) {
                     if (cb.isChecked()) {
                         saveBTDevices.add(BTD);
-                        Log.i(TAG, "TRUE" + " " + BTD);
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "TRUE" + " " + BTD);
                         BAPMPreferences.setBTDevices(ctx, saveBTDevices);
-                        Log.i(TAG, "SAVED");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "SAVED");
                     } else {
                         saveBTDevices.remove(BTD);
-                        Log.i(TAG, "FALSE" + " " + BTD);
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "FALSE" + " " + BTD);
                         BAPMPreferences.setBTDevices(ctx, saveBTDevices);
-                        Log.i(TAG, "SAVED");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "SAVED");
                     }
                 }else{
                     cb.toggle();
@@ -472,11 +485,14 @@ public class MainActivity extends AppCompatActivity {
             BAPMPreferences.setLaunchGoogleMaps(this, true);
             BAPMPreferences.setUnlockScreen(this, true);
             setButtonPreferences(this);
-            Log.i(TAG, "MapButton is ON");
-            Log.i(TAG, "Dismiss Keyguard is ON");
+            if(BuildConfig.DEBUG) {
+                Log.i(TAG, "MapButton is ON");
+                Log.i(TAG, "Dismiss Keyguard is ON");
+            }
         } else {
             BAPMPreferences.setLaunchGoogleMaps(this, false);
-            Log.i(TAG, "MapButton is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "MapButton is OFF");
         }
     }
 
@@ -485,10 +501,12 @@ public class MainActivity extends AppCompatActivity {
         if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setKeepScreenON(this, true);
-                Log.i(TAG, "Keep Screen ON Button is ON");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Keep Screen ON Button is ON");
             } else {
                 BAPMPreferences.setKeepScreenON(this, false);
-                Log.i(TAG, "Keep Screen ON Button is OFF");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Keep Screen ON Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -501,10 +519,12 @@ public class MainActivity extends AppCompatActivity {
         if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setPriorityMode(this, true);
-                Log.i(TAG, "Priority Button is ON");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Priority Button is ON");
             } else {
                 BAPMPreferences.setPriorityMode(this, false);
-                Log.i(TAG, "Priority Button is OFF");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Priority Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -517,10 +537,12 @@ public class MainActivity extends AppCompatActivity {
         if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setMaxVolume(this, true);
-                Log.i(TAG, "Max Volume Button is ON");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Max Volume Button is ON");
             } else {
                 BAPMPreferences.setMaxVolume(this, false);
-                Log.i(TAG, "Max Volume Button is OFF");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Max Volume Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -533,10 +555,12 @@ public class MainActivity extends AppCompatActivity {
         if(!isBTConnected) {
             if (on) {
                 BAPMPreferences.setLaunchMusicPlayer(this, true);
-                Log.i(TAG, "Launch Music Player Button is ON");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Launch Music Player Button is ON");
             } else {
                 BAPMPreferences.setLaunchMusicPlayer(this, false);
-                Log.i(TAG, "Launch Music Player Button is OFF");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Launch Music Player Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -548,10 +572,12 @@ public class MainActivity extends AppCompatActivity {
         boolean on = ((ToggleButton) view).isChecked();
         if (on) {
             BAPMPreferences.setUnlockScreen(this, true);
-            Log.i(TAG, "Dismiss KeyGuard Button is ON");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Dismiss KeyGuard Button is ON");
         } else {
             BAPMPreferences.setUnlockScreen(this, false);
-            Log.i(TAG, "Dismiss KeyGuard Button is OFF");
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Dismiss KeyGuard Button is OFF");
         }
     }
 

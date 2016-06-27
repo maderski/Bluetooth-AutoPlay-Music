@@ -30,7 +30,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if(intent != null)
             if(intent.getAction() != null)
                 action = intent.getAction();
-        Log.d(TAG, "Bluetooth Intent Received: " + action);
+
+        if(BuildConfig.DEBUG)
+            Log.d(TAG, "Bluetooth Intent Received: " + action);
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
@@ -43,20 +45,24 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 else {
                     btDevice = "Device NOT on List";
                 }
-
-                for(String cd : BAPMPreferences.getBTDevices(context)){
-                    Log.i(TAG, "User selected device: " + cd);
+                if(BuildConfig.DEBUG) {
+                    for (String cd : BAPMPreferences.getBTDevices(context)) {
+                        Log.i(TAG, "User selected device: " + cd);
+                    }
+                    Log.i(TAG, "Connected device: " + btDevice);
+                    Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + isSelectedBTDevice);
                 }
-                Log.i(TAG, "Connected device: " + btDevice);
-                Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + isSelectedBTDevice);
                 break;
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
-                Log.i(TAG, "Device disonnected: " + device.getName());
 
-                Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
-                        Boolean.toString(isSelectedBTDevice));
+                if(BuildConfig.DEBUG) {
+                    Log.i(TAG, "Device disonnected: " + device.getName());
+
+                    Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
+                            Boolean.toString(isSelectedBTDevice));
+                }
 
                 if (isSelectedBTDevice && BluetoothActions.getRanBTConnectPhoneDoStuff()) {
                     am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
@@ -71,8 +77,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
                 boolean isBTConnected = am.isBluetoothA2dpOn();
-                Log.i(TAG, "Power Connected");
-                Log.i(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
+                if(BuildConfig.DEBUG) {
+                    Log.i(TAG, "Power Connected");
+                    Log.i(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
+                }
                 //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
                 boolean powerRequired = BAPMPreferences.getPowerConnected(context);
 
@@ -111,7 +119,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         if(!telephone.isOnCall()){
             VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
         }
 
         //Start 30sec countdown checking for A2dp connection every second
@@ -119,7 +128,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 1000)
         {
             public void onTick(long millisUntilFinished) {
-                Log.i(TAG, "A2dp Ready: " + Boolean.toString(am.isBluetoothA2dpOn()));
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "A2dp Ready: " + Boolean.toString(am.isBluetoothA2dpOn()));
                 if(am.isBluetoothA2dpOn()){
                     cancel();
                     checksBeforeLaunch(context, _isAUserSelectedBTDevice);
@@ -127,7 +137,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
             }
 
             public void onFinish() {
-                Log.i(TAG, btDevice + " did NOT CONNECT via a2dp");
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, btDevice + " did NOT CONNECT via a2dp");
             }
         }.start();
     }

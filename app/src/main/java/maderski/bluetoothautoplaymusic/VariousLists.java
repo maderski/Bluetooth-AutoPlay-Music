@@ -68,7 +68,8 @@ public class VariousLists {
         List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         for(ApplicationInfo pkg:appInfo){
-            Log.i(TAG, "Installed Pkg: " + pkg.packageName);
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Installed Pkg: " + pkg.packageName);
         }
     }
 

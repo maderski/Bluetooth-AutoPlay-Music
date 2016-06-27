@@ -31,7 +31,8 @@ public class CurrentLocation {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }else {
-            Log.e(TAG, "Need GPS Permission!!!");
+            if(BuildConfig.DEBUG)
+                Log.e(TAG, "Need GPS Permission!!!");
             Toast.makeText(context, "Need GPS Permission!", Toast.LENGTH_LONG).show();
         }
     }

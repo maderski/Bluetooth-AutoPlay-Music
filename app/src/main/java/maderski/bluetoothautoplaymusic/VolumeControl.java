@@ -53,10 +53,12 @@ public class VolumeControl {
                                 am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
                             int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                             am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-                            Log.i(TAG, "Set Volume To MAX");
+                            if(BuildConfig.DEBUG)
+                                Log.i(TAG, "Set Volume To MAX");
                         } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
                                 am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                            Log.i(TAG, "Volume is at MAX!");
+                            if(BuildConfig.DEBUG)
+                                Log.i(TAG, "Volume is at MAX!");
                         }
                     }
                 }
@@ -67,9 +69,11 @@ public class VolumeControl {
                 if(am.isBluetoothA2dpOn()) {
                     if (am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
                             am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                        Log.i(TAG, "Volume is at MAX!");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "Volume is at MAX!");
                     } else {
-                        Log.i(TAG, "Unable to to set Volume to MAX :(");
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "Unable to to set Volume to MAX :(");
                     }
                 }
                 runme = false;
