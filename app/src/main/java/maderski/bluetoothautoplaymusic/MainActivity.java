@@ -434,8 +434,6 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView = (TextView)findViewById(R.id.textView4);
         textView.setText("Launch " + mapChoice);
-
-
     }
 
     //Set the button and radiobutton states
