@@ -48,6 +48,22 @@ public class LaunchApp {
         return false;
     }
 
+    public static String getMapAppName(Context context, String pkg){
+        String mapAppName = "Not Found";
+        try {
+            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(pkg, 0);
+            mapAppName = context.getPackageManager().getApplicationLabel(appInfo).toString();
+            if (mapAppName.equalsIgnoreCase("MAPS")) {
+                mapAppName = "WAZE";
+            } else {
+                mapAppName = "GOOGLE MAPS";
+            }
+        }catch(Exception e){
+            Log.e(TAG, e.getMessage());
+        }
+        return mapAppName;
+    }
+
     //Create a delay before the Music App is launched and if enable launch maps
     public static void musicPlayerLaunch(Context context, int seconds, boolean _mapsEnabled){
         int index = BAPMPreferences.getSelectedMusicPlayer(context);

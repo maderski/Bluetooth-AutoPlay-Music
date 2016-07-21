@@ -37,7 +37,8 @@
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:textColor="@color/colorPrimary"
-                    android:typeface="monospace" />
+                    android:typeface="monospace"
+                    android:onClick="debugHUDLaunch" />
 
                 <ImageView
                     android:layout_gravity="center_horizontal"

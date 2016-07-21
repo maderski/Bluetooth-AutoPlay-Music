@@ -97,7 +97,7 @@ public class BluetoothActions {
                 if(Power.isPluggedIn(ctx)){
                     if(telephone.isOnCall()){
                         if(BuildConfig.DEBUG)
-                            Log.i(TAG, "On Call, check again in 5 sec");
+                            Log.i(TAG, "On Call, check again in 6 sec");
                     }else{
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
@@ -188,15 +188,12 @@ public class BluetoothActions {
         }
 
         if(playMusic){
-            PlayMusic.auto_Play(context, am);
+            PlayMusic music = new PlayMusic();
+            music.auto_Play(context, am);
         }
 
         if(launchMaps && !launchMusicPlayer){
             LaunchApp.delayLaunchMaps(context, 2);
-        }
-
-        if(playMusic){
-            PlayMusic.checkIfPlaying(context, am);
         }
 
         ranBTConnectPhoneDoStuff = true;
@@ -239,7 +236,8 @@ public class BluetoothActions {
         }
 
         if(launchMusicPlayer) {
-            PlayMusic.pause(am);
+            PlayMusic music = new PlayMusic();
+            music.pause(am);
         }
 
         if(volumeMAX){

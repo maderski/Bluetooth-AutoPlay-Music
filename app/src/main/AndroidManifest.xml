@@ -42,7 +42,8 @@
 
         <activity android:name=".LaunchMapActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".LaunchBAPMActivity"></activity>
+        <activity android:name=".LaunchBAPMActivity" />
+        <activity android:name=".DebugHUDActivity"></activity>
     </application>
 
 </manifest>

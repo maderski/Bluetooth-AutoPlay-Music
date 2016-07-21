@@ -31,6 +31,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,30 +61,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final String mapApp = BAPMPreferences.getMapsChoice(context);
-                String mapAppName = "None";
-                boolean wazeFound;
-
-                if (LaunchApp.checkPkgOnPhone(context, ConstantStore.WAZE)) {
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "FOUND");
-                    wazeFound = true;
-                } else {
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "NOT FOUND");
-                    wazeFound = false;
-                }
-
-                try {
-                    ApplicationInfo appInfo = getPackageManager().getApplicationInfo(mapApp, 0);
-                    mapAppName = getPackageManager().getApplicationLabel(appInfo).toString();
-                    if (mapAppName.equalsIgnoreCase("MAPS")) {
-                        mapAppName = "WAZE";
-                    } else {
-                        mapAppName = "GOOGLE MAPS";
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
+                String mapAppName = LaunchApp.getMapAppName(context, mapApp);
+                //Checks if waze is on the phone
+                boolean wazeFound = LaunchApp.checkPkgOnPhone(context, ConstantStore.WAZE);
 
                 if (wazeFound) {
                     Snackbar.make(view, "Change Maps Launch to", Snackbar.LENGTH_LONG)
@@ -130,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.about_menu) {
             aboutSelected();
             return true;
-        }else if(id == R.id.settings_menu){
+        } else if (id == R.id.settings_menu) {
             settingsSelected();
             return true;
         }
@@ -175,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkIfWazeRemoved(this);
 
-        isBTConnected = BluetoothActions.getRanBTConnectPhoneDoStuff(); //getIsBTConnected(this);
+        isBTConnected = BluetoothActions.getRanBTConnectPhoneDoStuff();
     }
 
     private boolean getIsBTConnected(Context context){
@@ -576,6 +556,13 @@ public class MainActivity extends AppCompatActivity {
             BAPMPreferences.setUnlockScreen(this, false);
             if(BuildConfig.DEBUG)
                 Log.i(TAG, "Dismiss KeyGuard Button is OFF");
+        }
+    }
+
+    public void debugHUDLaunch(View view){
+        if(BuildConfig.DEBUG) {
+            Intent intent = new Intent(this, DebugHUDActivity.class);
+            startActivity(intent);
         }
     }
 
