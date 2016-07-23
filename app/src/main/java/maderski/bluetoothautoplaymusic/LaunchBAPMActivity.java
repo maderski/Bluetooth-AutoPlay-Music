@@ -12,12 +12,6 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_bapm);
 
-        AudioManager audioManager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
-
-        BluetoothActions bluetoothActions = new BluetoothActions();
-
-        bluetoothActions.delayGetOrigVol(this);
-
         finish();
     }
 }

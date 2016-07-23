@@ -31,7 +31,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkIfWazeRemoved(this);
 
-        isBTConnected = BluetoothActions.getRanBTConnectPhoneDoStuff();
+        isBTConnected = BluetoothActions.getRanActionsOnBTConnect();
     }
 
     private boolean getIsBTConnected(Context context){

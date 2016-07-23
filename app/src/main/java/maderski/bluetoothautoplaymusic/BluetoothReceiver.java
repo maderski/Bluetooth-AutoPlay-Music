@@ -17,29 +17,32 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     private String btDevice = "None";
     private AudioManager am;
+    private BluetoothActions bluetoothActions;
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
-        //Toast.makeText(context, "Bluetooth Intent Received", Toast.LENGTH_SHORT).show();
-
-        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         boolean isSelectedBTDevice = false;
-        //Get action that was broadcasted
         String action = "None";
+        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
         if(intent != null)
-            if(intent.getAction() != null)
+            if(intent.getAction() != null){
                 action = intent.getAction();
+                isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
+                PowerReceiver.selectedBTDevice = isSelectedBTDevice;
+                if(isSelectedBTDevice) {
+                    am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                    bluetoothActions = new BluetoothActions(context, am);
+                }
+            }
 
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + action);
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
                 if(isSelectedBTDevice) {
                     btDevice = device.getName();
-                    am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
                     waitingForBTA2dpOn(context, isSelectedBTDevice);
                 }
                 else {
@@ -55,8 +58,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 break;
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
-                isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
-
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, "Device disonnected: " + device.getName());
 
@@ -64,30 +65,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
                             Boolean.toString(isSelectedBTDevice));
                 }
 
-                if (isSelectedBTDevice && BluetoothActions.getRanBTConnectPhoneDoStuff()) {
-                    am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                    BluetoothActions bluetoothActions = new BluetoothActions();
-                    bluetoothActions.BTDisconnectDoStuff(context, am);
+                if (isSelectedBTDevice && BluetoothActions.getRanActionsOnBTConnect()) {
+                    bluetoothActions.actionsOnBTDisconnect();
                 }else if(BAPMPreferences.getWaitTillOffPhone(context) && Notification.launchNotifPresent){
                     Notification.removeBAPMMessage(context);
-                }
-                break;
-
-            case Intent.ACTION_POWER_CONNECTED:
-                am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-
-                boolean isBTConnected = am.isBluetoothA2dpOn();
-                if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "Power Connected");
-                    Log.i(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
-                }
-                //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
-                boolean powerRequired = BAPMPreferences.getPowerConnected(context);
-
-                if(powerRequired && isBTConnected && !BluetoothActions.getRanBTConnectPhoneDoStuff()){
-                    //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
-                    BluetoothActions bluetoothActions = new BluetoothActions();
-                    bluetoothActions.OnBTConnect(context, am);
                 }
                 break;
         }
@@ -99,12 +80,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
-                BluetoothActions bluetoothActions = new BluetoothActions();
-                bluetoothActions.OnBTConnect(context, am);
+                bluetoothActions.OnBTConnect();
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
-            BluetoothActions bluetoothActions = new BluetoothActions();
-            bluetoothActions.OnBTConnect(context, am);
+            bluetoothActions.OnBTConnect();
         }
 
     }

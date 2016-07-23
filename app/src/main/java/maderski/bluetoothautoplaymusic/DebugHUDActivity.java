@@ -8,7 +8,7 @@ import android.view.View;
 
 public class DebugHUDActivity extends AppCompatActivity {
 
-    private AudioManager am;
+    private BluetoothActions bluetoothActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,16 +19,16 @@ public class DebugHUDActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        bluetoothActions = new BluetoothActions(this, audioManager);
+        VolumeControl.originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     public void connectBTButton(View view){
-        BluetoothActions bluetoothActions = new BluetoothActions();
-        bluetoothActions.OnBTConnect(this, am);
+        bluetoothActions.OnBTConnect();
     }
 
     public void disconnectBTButton(View view){
-        BluetoothActions bluetoothActions = new BluetoothActions();
-        bluetoothActions.BTDisconnectDoStuff(this, am);
+        bluetoothActions.actionsOnBTDisconnect();
     }
 }
