@@ -14,7 +14,7 @@ import android.widget.Toast;
  */
 public class CurrentLocation {
 
-    private final static String TAG = CurrentLocation.class.getName();
+    private static final String TAG = CurrentLocation.class.getName();
 
     private LocationManager locationManager;
     private Location location;

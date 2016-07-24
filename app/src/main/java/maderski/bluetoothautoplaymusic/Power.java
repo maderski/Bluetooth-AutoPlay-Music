@@ -11,7 +11,7 @@ import android.util.Log;
  */
 public class Power {
 
-    final static String TAG = Power.class.getName();
+    private static final String TAG = Power.class.getName();
     //Returns true or false depending if battery is plugged in
     public static boolean isPluggedIn(Context context) {
         Intent batteryStatus = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));

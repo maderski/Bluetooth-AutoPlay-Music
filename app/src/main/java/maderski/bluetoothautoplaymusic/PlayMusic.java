@@ -13,7 +13,7 @@ import android.view.KeyEvent;
  */
 public class PlayMusic {
 
-    private static String TAG = PlayMusic.class.getName();
+    private static final String TAG = PlayMusic.class.getName();
 
     private AudioManager _audioManager;
     private Context _context;

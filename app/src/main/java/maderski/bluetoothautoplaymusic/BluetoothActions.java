@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.*;
 import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
@@ -16,18 +17,21 @@ import java.util.Set;
  */
 public class BluetoothActions {
 
-    final static String TAG = BluetoothActions.class.getName();
+    private static final String TAG = BluetoothActions.class.getName();
 
     private static boolean ranActionsOnBTConnect;
-    private static ScreenONLock screenONLock = new ScreenONLock();
     private static int currentRingerSet;
 
+    private ScreenONLock _screenONLock;
     private Context _context;
     private AudioManager _audioManager;
+    private Notification _notification;
 
-    public BluetoothActions(Context context, AudioManager audioManager){
+    public BluetoothActions(Context context, AudioManager audioManager, ScreenONLock screenONLock, Notification notification){
         _context = context;
         _audioManager = audioManager;
+        _screenONLock = screenONLock;
+        _notification = notification;
     }
 
     //Return true if Bluetooth Audio is ready
@@ -79,7 +83,7 @@ public class BluetoothActions {
                 }
             }else{
                 if(telephone.isOnCall()) {
-                    Notification.launchBAPM(_context);
+                    _notification.launchBAPM(_context);
                 }else{
                     actionsOnBTConnect();
                 }
@@ -161,11 +165,12 @@ public class BluetoothActions {
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(_context);
 
         RingerControl ringerControl = new RingerControl(_audioManager);
+        LaunchApp launchApp = new LaunchApp();
 
-        Notification.BAPMMessage(_context);
+        _notification.BAPMMessage(_context);
 
         if(screenON){
-            screenONLock.enableWakeLock(_context);
+            _screenONLock.enableWakeLock(_context);
         }
 
         if(priorityMode){
@@ -185,7 +190,7 @@ public class BluetoothActions {
 
         if(launchMusicPlayer) {
             try {
-                LaunchApp.musicPlayerLaunch(_context, 2, launchMaps);
+                launchApp.musicPlayerLaunch(_context, 2, launchMaps);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -200,7 +205,7 @@ public class BluetoothActions {
         }
 
         if(launchMaps && !launchMusicPlayer){
-            LaunchApp.delayLaunchMaps(_context, 2);
+            launchApp.delayLaunchMaps(_context, 2);
         }
 
         ranActionsOnBTConnect = true;
@@ -217,10 +222,10 @@ public class BluetoothActions {
 
         RingerControl ringerControl = new RingerControl(_audioManager);
 
-        Notification.removeBAPMMessage(_context);
+        _notification.removeBAPMMessage(_context);
 
         if(screenON){
-            screenONLock.releaseWakeLock();
+            _screenONLock.releaseWakeLock();
         }
 
         if(priorityMode){

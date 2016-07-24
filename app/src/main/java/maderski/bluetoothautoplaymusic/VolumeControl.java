@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class VolumeControl {
 
-    private final String TAG = VolumeControl.class.getName();
+    private static final String TAG = VolumeControl.class.getName();
 
     public static int originalMediaVolume;
 

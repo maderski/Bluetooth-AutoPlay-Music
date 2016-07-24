@@ -12,7 +12,7 @@ import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    final static String TAG = SettingsActivity.class.getName();
+    private static final String TAG = SettingsActivity.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

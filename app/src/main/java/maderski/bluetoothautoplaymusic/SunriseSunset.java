@@ -20,7 +20,7 @@ import com.luckycatlabs.sunrisesunset.dto.Location;
  */
 public class SunriseSunset {
 
-    private final static String TAG = SunriseSunset.class.getName();
+    private static final String TAG = SunriseSunset.class.getName();
 
     private String sunriseTime;
     private String sunsetTime;

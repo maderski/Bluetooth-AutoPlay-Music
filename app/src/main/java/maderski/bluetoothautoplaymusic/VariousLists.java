@@ -17,7 +17,7 @@ import java.util.Set;
  * Created by Jason on 1/5/16.
  */
 public class VariousLists {
-    private static String TAG = VariousLists.class.getName();
+    private static final String TAG = VariousLists.class.getName();
 
     public static List<String> ConnectedBTDevices = new ArrayList<>();
 

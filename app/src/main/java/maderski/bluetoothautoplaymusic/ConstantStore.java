@@ -6,9 +6,9 @@ package maderski.bluetoothautoplaymusic;
 public class ConstantStore {
 
     //Package name constants
-    public final static String MAPS = "com.google.android.apps.maps";
-    public final static String WAZE = "com.waze";
-    public final static String GOOGLEPLAYMUSIC = "com.google.android.music";
-    public final static String SPOTIFY = "com.spotify.music";
-    public final static String PANDORA = "com.pandora.android";
+    public static final String MAPS = "com.google.android.apps.maps";
+    public static final String WAZE = "com.waze";
+    public static final String GOOGLEPLAYMUSIC = "com.google.android.music";
+    public static final String SPOTIFY = "com.spotify.music";
+    public static final String PANDORA = "com.pandora.android";
 }

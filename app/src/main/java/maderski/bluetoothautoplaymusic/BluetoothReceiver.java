@@ -13,11 +13,13 @@ import android.util.Log;
  */
 public class BluetoothReceiver extends BroadcastReceiver {
 
-    private final String TAG = "BluetoothReceiver";
+    private static final String TAG = "BluetoothReceiver";
 
     private String btDevice = "None";
     private AudioManager am;
     private BluetoothActions bluetoothActions;
+    private ScreenONLock screenONLock;
+    private Notification notification;
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
@@ -32,7 +34,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 PowerReceiver.selectedBTDevice = isSelectedBTDevice;
                 if(isSelectedBTDevice) {
                     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    bluetoothActions = new BluetoothActions(context, am);
+                    screenONLock = new ScreenONLock();
+                    notification = new Notification();
+                    bluetoothActions = new BluetoothActions(context, am, screenONLock, notification);
                 }
             }
 
@@ -67,8 +71,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 if (isSelectedBTDevice && BluetoothActions.getRanActionsOnBTConnect()) {
                     bluetoothActions.actionsOnBTDisconnect();
-                }else if(BAPMPreferences.getWaitTillOffPhone(context) && Notification.launchNotifPresent){
-                    Notification.removeBAPMMessage(context);
+                }else if(BAPMPreferences.getWaitTillOffPhone(context) && notification.launchNotifPresent){
+                    notification.removeBAPMMessage(context);
                 }
                 break;
         }
@@ -81,6 +85,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
                 bluetoothActions.OnBTConnect();
+            }else{
+                PowerReceiver.bluetoothActions = bluetoothActions;
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
             bluetoothActions.OnBTConnect();
@@ -91,7 +97,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice) {
 
         //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-        ScreenONLock screenONLock = new ScreenONLock();
         screenONLock.releaseWakeLock();
 
         Telephone telephone = new Telephone(context);

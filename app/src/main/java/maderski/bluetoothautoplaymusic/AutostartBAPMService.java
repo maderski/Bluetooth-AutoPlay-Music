@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class AutostartBAPMService extends BroadcastReceiver {
 
-    private String TAG = AutostartBAPMService.class.getName();
+    private static final String TAG = AutostartBAPMService.class.getName();
 
     //Start BAPMService on phone boot
     public void onReceive(Context arg0, Intent argl) {

@@ -20,7 +20,7 @@ public class DebugHUDActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        bluetoothActions = new BluetoothActions(this, audioManager);
+        bluetoothActions = new BluetoothActions(this, audioManager, new ScreenONLock(), new Notification());
         VolumeControl.originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 

@@ -35,9 +35,11 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String TAG = MainActivity.class.getName();
+    private static final String TAG = MainActivity.class.getName();
+
     private Set<String> saveBTDevices = new HashSet<String>();
     private boolean isBTConnected = false;
+    private LaunchApp launchApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final String mapApp = BAPMPreferences.getMapsChoice(context);
-                String mapAppName = LaunchApp.getMapAppName(context, mapApp);
+                String mapAppName = launchApp.getMapAppName(context, mapApp);
                 //Checks if waze is on the phone
-                boolean wazeFound = LaunchApp.checkPkgOnPhone(context, ConstantStore.WAZE);
+                boolean wazeFound = launchApp.checkPkgOnPhone(context, ConstantStore.WAZE);
 
                 if (wazeFound) {
                     Snackbar.make(view, "Change Maps Launch to", Snackbar.LENGTH_LONG)
@@ -147,9 +149,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         setupUIElements(this);
-
+        launchApp = new LaunchApp();
         checkIfWazeRemoved(this);
-
         isBTConnected = BluetoothActions.getRanActionsOnBTConnect();
     }
 
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkIfWazeRemoved(Context context){
         String mapAppChoice = BAPMPreferences.getMapsChoice(context);
         if(mapAppChoice.equalsIgnoreCase(ConstantStore.WAZE)) {
-            if (!LaunchApp.checkPkgOnPhone(this, ConstantStore.WAZE)) {
+            if (!launchApp.checkPkgOnPhone(this, ConstantStore.WAZE)) {
                 if(BuildConfig.DEBUG)
                     Log.i(TAG, "Checked");
                 BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);

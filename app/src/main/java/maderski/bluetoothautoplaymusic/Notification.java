@@ -21,7 +21,7 @@ public class Notification {
     public static boolean launchNotifPresent = false;
 
     //Create notification message for BAPM
-    public static void BAPMMessage(Context context){
+    public void BAPMMessage(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String mapAppName = "GOOGLE MAPS";
         if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(ConstantStore.WAZE)){
@@ -51,7 +51,7 @@ public class Notification {
         nManager.notify(nTAG, nID, builder.build());
     }
 
-    public static void launchBAPM(Context context){
+    public void launchBAPM(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
 
         String title = "Launch Bluetooth Autoplay Music";
@@ -76,7 +76,7 @@ public class Notification {
     }
 
     //Remove notification that was created by BAPM
-    public static void removeBAPMMessage(Context context){
+    public void removeBAPMMessage(Context context){
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {

@@ -9,7 +9,7 @@ import android.util.Log;
  */
 public class Telephone {
 
-    private final String TAG = Telephone.class.getName();
+    private static final String TAG = Telephone.class.getName();
 
     private TelephonyManager telephonyManager;
 

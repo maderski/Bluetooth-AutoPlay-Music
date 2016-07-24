@@ -14,13 +14,13 @@ import java.util.List;
  */
 public class LaunchApp {
 
-    private static String TAG = LaunchApp.class.getName();
+    private static final String TAG = LaunchApp.class.getName();
     //package name for google play music is: "com.google.android.music"
     //package name for google maps is: "com.google.android.apps.maps"
     //package name for waze: "com.waze"
 
     //Launches App that was inputted into method
-    public static void launch(Context context, String pkg){
+    public void launch(Context context, String pkg){
         if(BuildConfig.DEBUG)
             Log.i("Package intent: ", pkg + " started");
         Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
@@ -29,13 +29,13 @@ public class LaunchApp {
     }
 
     //Launches Maps or Waze
-    public static void launchMaps(Context context){
+    public void launchMaps(Context context){
         String mapAppName = BAPMPreferences.getMapsChoice(context);
         launch(context, mapAppName);
     }
 
     //Returns true if Package is on phone
-    public static boolean checkPkgOnPhone(Context context, String pkg){
+    public boolean checkPkgOnPhone(Context context, String pkg){
         List<ApplicationInfo> packages;
         PackageManager pm;
 
@@ -48,7 +48,7 @@ public class LaunchApp {
         return false;
     }
 
-    public static String getMapAppName(Context context, String pkg){
+    public String getMapAppName(Context context, String pkg){
         String mapAppName = "Not Found";
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(pkg, 0);
@@ -65,7 +65,7 @@ public class LaunchApp {
     }
 
     //Create a delay before the Music App is launched and if enable launch maps
-    public static void musicPlayerLaunch(Context context, int seconds, boolean _mapsEnabled){
+    public void musicPlayerLaunch(Context context, int seconds, boolean _mapsEnabled){
         int index = BAPMPreferences.getSelectedMusicPlayer(context);
 
         final Context ctx = context;
@@ -90,7 +90,7 @@ public class LaunchApp {
     }
 
     //Create a delay before Maps or Waze is launched
-    public static void delayLaunchMaps(Context context, int seconds){
+    public void delayLaunchMaps(Context context, int seconds){
         final Context ctx = context;
         seconds = seconds * 1000;
         new CountDownTimer(seconds,

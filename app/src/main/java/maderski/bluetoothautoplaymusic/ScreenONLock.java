@@ -12,7 +12,7 @@ import java.util.Calendar;
  */
 public class ScreenONLock {
 
-    private final static String TAG = ScreenONLock.class.getName();
+    private static final String TAG = ScreenONLock.class.getName();
 
     private static PowerManager.WakeLock wakeLock;
     private static String stayOnTAG = "Stay ON";

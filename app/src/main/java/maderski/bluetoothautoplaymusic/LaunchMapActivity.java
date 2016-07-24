@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class LaunchMapActivity extends AppCompatActivity {
 
-    final static String TAG = LaunchMapActivity.class.getName();
+    private static final String TAG = LaunchMapActivity.class.getName();
 
     //Get Map App and then run launchMapApp and close activity
     @Override
