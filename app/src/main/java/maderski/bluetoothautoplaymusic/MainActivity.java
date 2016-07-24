@@ -148,10 +148,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         setupUIElements(this);
 
-        if(BAPMPreferences.getUnlockScreen(this)){
-            dismissKeyGuard(this);
-        }
-
         checkIfWazeRemoved(this);
 
         isBTConnected = BluetoothActions.getRanActionsOnBTConnect();
@@ -171,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected  void onPause(){
         super.onPause();
-        //BAPMPreferences.setBTDevices(this, saveBTDevices);
     }
 
     @Override
@@ -206,26 +201,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Dismiss the KeyGuard
-    private void dismissKeyGuard(Context context){
-
-        if (!BAPMPreferences.getKeepScreenON(context) && isBTConnected){
-            ScreenONLock screenONLock = new ScreenONLock();
-            screenONLock.enableWakeLock(context);
-            Window window = ((Activity) context).getWindow();
-            //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-            //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            screenONLock.releaseWakeLock();
-        }else{
-            Window window = ((Activity) context).getWindow();
-            //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-            //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-    }
     //On initial install so saveBTdevices is not null
     private void runOnFirstInstall(){
         Set<String> firstRun = new HashSet<>();

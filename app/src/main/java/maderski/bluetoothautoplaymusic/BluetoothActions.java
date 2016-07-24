@@ -174,7 +174,8 @@ public class BluetoothActions {
         }
 
         if(unlockScreen){
-            launchMainActivity(_context);
+            //launchMainActivity(_context);
+            launchBAPMActivity(_context);
         }
 
         if(volumeMAX){
@@ -269,6 +270,12 @@ public class BluetoothActions {
         Intent i = new Intent(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_HOME);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    private void launchBAPMActivity(Context context){
+        Intent i = new Intent(context, LaunchBAPMActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
 

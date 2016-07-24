@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="maderski.bluetoothautoplaymusic.LaunchBAPMActivity">
 
     <ImageView
@@ -15,7 +11,7 @@
         android:id="@+id/imageView3"
         android:src="@mipmap/ic_launcher"
         android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:layout_toStartOf="@+id/textView14" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,13 +20,14 @@
         android:text="Bluetooth Autoplay Music"
         android:id="@+id/textView14"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/imageView3" />
+        android:layout_alignParentEnd="true"
+        android:paddingRight="40dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="launching..."
+        android:text="Dismissed KeyGuard..."
         android:id="@+id/textView15"
         android:layout_marginTop="53dp"
         android:layout_below="@+id/imageView3"
