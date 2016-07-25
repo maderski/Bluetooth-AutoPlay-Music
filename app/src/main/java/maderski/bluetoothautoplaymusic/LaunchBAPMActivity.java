@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -16,13 +15,6 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launch_bapm);
         dismissKeyGuard(this);
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
-
 
     //Dismiss the KeyGuard
     private void dismissKeyGuard(Context context){

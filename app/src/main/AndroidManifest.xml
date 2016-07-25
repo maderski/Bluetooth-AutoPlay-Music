@@ -47,7 +47,7 @@
         <activity android:name=".LaunchMapActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".LaunchBAPMActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".DebugHUDActivity"></activity>
     </application>
 
