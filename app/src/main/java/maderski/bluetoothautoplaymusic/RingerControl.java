@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
 

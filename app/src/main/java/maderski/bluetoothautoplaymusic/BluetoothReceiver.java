@@ -1,12 +1,17 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.IntentService;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Jason on 1/5/16.
@@ -14,10 +19,12 @@ import android.util.Log;
 public class BluetoothReceiver extends BroadcastReceiver {
 
     private static final String TAG = "BluetoothReceiver";
+    private static final String ACTION_POWER_LAUNCH = "maderski.bluetoothautoplaymusic.pluggedinlaunch";
+
+    private static BluetoothActions bluetoothActions;
 
     private String btDevice = "None";
     private AudioManager am;
-    private BluetoothActions bluetoothActions;
     private ScreenONLock screenONLock;
     private Notification notification;
 
@@ -26,12 +33,18 @@ public class BluetoothReceiver extends BroadcastReceiver {
         boolean isSelectedBTDevice = false;
         String action = "None";
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        if(device != null)
+            isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
 
         if(intent != null)
             if(intent.getAction() != null){
                 action = intent.getAction();
-                isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
-                PowerReceiver.selectedBTDevice = isSelectedBTDevice;
+
+                Intent isSelectedIntent = new Intent();
+                isSelectedIntent.putExtra("isSelected", isSelectedBTDevice);
+                isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
+                context.sendBroadcast(isSelectedIntent);
+
                 if(isSelectedBTDevice) {
                     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     screenONLock = new ScreenONLock();
@@ -71,9 +84,17 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 if (isSelectedBTDevice && BluetoothActions.getRanActionsOnBTConnect()) {
                     bluetoothActions.actionsOnBTDisconnect();
+
+                    Intent isSelectedIntent = new Intent();
+                    isSelectedIntent.putExtra("isSelected", false);
+                    isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
+                    context.sendBroadcast(isSelectedIntent);
                 }else if(BAPMPreferences.getWaitTillOffPhone(context) && notification.launchNotifPresent){
                     notification.removeBAPMMessage(context);
                 }
+                break;
+            case ACTION_POWER_LAUNCH:
+                bluetoothActions.OnBTConnect();
                 break;
         }
     }
@@ -85,8 +106,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
                 bluetoothActions.OnBTConnect();
-            }else{
-                PowerReceiver.bluetoothActions = bluetoothActions;
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
             bluetoothActions.OnBTConnect();

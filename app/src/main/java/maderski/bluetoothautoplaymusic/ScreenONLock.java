@@ -1,7 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.util.Log;
 

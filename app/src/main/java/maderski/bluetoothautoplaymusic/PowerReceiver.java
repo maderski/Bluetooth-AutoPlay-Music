@@ -12,15 +12,17 @@ import android.util.Log;
 public class PowerReceiver extends BroadcastReceiver {
     private static final String TAG = PowerReceiver.class.getName();
 
-    public static boolean selectedBTDevice = false;
-    public static BluetoothActions bluetoothActions;
+    private static boolean selectedBTDevice = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
+        if(intent.getAction().equalsIgnoreCase("maderski.bluetoothautoplaymusic.isselected")){
+            selectedBTDevice = intent.getBooleanExtra("isSelected", false);
+        }
 
-        if(selectedBTDevice) {
+        if(intent.getAction().equalsIgnoreCase(Intent.ACTION_POWER_CONNECTED) && selectedBTDevice) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             boolean isBTConnected = audioManager.isBluetoothA2dpOn();
 
@@ -30,8 +32,9 @@ public class PowerReceiver extends BroadcastReceiver {
             }
             if (powerRequired && isBTConnected && !BluetoothActions.getRanActionsOnBTConnect()) {
                 //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
-                if(bluetoothActions != null)
-                    bluetoothActions.OnBTConnect();
+                Intent launchIntent = new Intent();
+                launchIntent.setAction("maderski.bluetoothautoplaymusic.pluggedinlaunch");
+                context.sendBroadcast(launchIntent);
             }
         }
     }
