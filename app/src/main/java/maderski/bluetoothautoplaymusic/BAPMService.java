@@ -17,8 +17,14 @@ public class BAPMService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(BuildConfig.DEBUG)
             Log.i("BAPMService: ", "started");
-        BluetoothReceiver br = new BluetoothReceiver();
-        br.onReceive(this, intent);
+        BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
+        bluetoothReceiver.onReceive(this, intent);
+
+        CustomReceiver customReceiver = new CustomReceiver();
+        customReceiver.onReceive(this, intent);
+
+        PowerReceiver powerReceiver = new PowerReceiver();
+        powerReceiver.onReceive(this, intent);
         return Service.START_NOT_STICKY;
     }
 

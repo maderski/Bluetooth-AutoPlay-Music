@@ -13,9 +13,9 @@ public class AutostartBAPMService extends BroadcastReceiver {
     private static final String TAG = AutostartBAPMService.class.getName();
 
     //Start BAPMService on phone boot
-    public void onReceive(Context arg0, Intent argl) {
-        Intent intent = new Intent(arg0, BAPMService.class);
-        arg0.startService(intent);
+    public void onReceive(Context context, Intent intent) {
+        Intent serviceIntent = new Intent(context, BAPMService.class);
+        context.startService(serviceIntent);
 
         if(BuildConfig.DEBUG)
             Log.i(TAG, "BAPM Service Started");
