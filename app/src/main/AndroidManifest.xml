@@ -52,7 +52,6 @@
 
         <service android:name=".BAPMService" />
 
-        <activity android:name=".LaunchMapActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".LaunchBAPMActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,7 +22,7 @@ public class Notification {
     public static boolean launchNotifPresent = false;
 
     //Create notification message for BAPM
-    public void BAPMMessage(Context context){
+    public void BAPMMessage(Context context, String mapChoicePkg){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String mapAppName = "GOOGLE MAPS";
         if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(PackageTools.WAZE)){
@@ -33,8 +34,11 @@ public class Notification {
 
         //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
         //        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
+        //        new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent appLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(mapChoicePkg);
+        appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent mapIntent = PendingIntent.getActivity(context, 0, appLaunchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -57,8 +61,11 @@ public class Notification {
         String title = "Launch Bluetooth Autoplay Music";
         String message = "Bluetooth device connected";
 
-        PendingIntent appIntent = PendingIntent.getActivity(context, 0,
-                new Intent(context, LaunchBAPMActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        //PendingIntent appIntent = PendingIntent.getActivity(context, 0,
+        //        new Intent(context, LaunchBAPMActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent launchBAPMIntent = new Intent();
+        launchBAPMIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
+        PendingIntent appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);

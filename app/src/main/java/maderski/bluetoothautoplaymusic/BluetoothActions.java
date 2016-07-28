@@ -87,10 +87,12 @@ public class BluetoothActions {
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
 
+        String mapChoice = BAPMPreferences.getMapsChoice(context);
+
         RingerControl ringerControl = new RingerControl(audioManager);
         LaunchApp launchApp = new LaunchApp(context);
 
-        notification.BAPMMessage(context);
+        notification.BAPMMessage(context, mapChoice);
 
         if(screenON){
             screenONLock.enableWakeLock(context);

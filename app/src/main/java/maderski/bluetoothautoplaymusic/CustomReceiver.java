@@ -43,9 +43,10 @@ public class CustomReceiver extends BroadcastReceiver {
                     bluetoothActions.actionsOnBTConnect();
                     break;
                 case ACTION_IS_SELECTED:
-                    boolean ahh = intent.getBooleanExtra("isSelected", false);
-                    Log.i("CustomRecevier: ", Boolean.toString(ahh));
-                    setIsSelectedDevice(ahh);
+                    boolean isSelected = intent.getBooleanExtra("isSelected", false);
+                    setIsSelectedDevice(isSelected);
+                    if(BuildConfig.DEBUG)
+                        Log.i("CustomReceiver: ", Boolean.toString(isSelected));
                     break;
             }
         }
