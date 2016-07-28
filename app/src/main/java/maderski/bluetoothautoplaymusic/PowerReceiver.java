@@ -12,19 +12,14 @@ import android.util.Log;
 public class PowerReceiver extends BroadcastReceiver {
     private static final String TAG = PowerReceiver.class.getName();
 
-    private static boolean selectedBTDevice = false;
-
     @Override
     public void onReceive(Context context, Intent intent) {
         //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
-        boolean powerRequired = BAPMPreferences.getPowerConnected(context);
-        if(intent.getAction().equalsIgnoreCase("maderski.bluetoothautoplaymusic.isselected")){
-            selectedBTDevice = intent.getBooleanExtra("isSelected", false);
-        }
 
-        if(intent.getAction().equalsIgnoreCase(Intent.ACTION_POWER_CONNECTED) && selectedBTDevice) {
+        if(CustomReceiver.getIsSelectedDevice()) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             boolean isBTConnected = audioManager.isBluetoothA2dpOn();
+            boolean powerRequired = BAPMPreferences.getPowerConnected(context);
 
             if(BuildConfig.DEBUG) {
                 Log.i(TAG, "Power Connected to a Selected BTDevice");

@@ -11,6 +11,9 @@ import android.media.AudioManager;
 public class CustomReceiver extends BroadcastReceiver {
     private static final String ACTION_POWER_LAUNCH = "maderski.bluetoothautoplaymusic.pluggedinlaunch";
     private static final String ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch";
+    private static final String ACTION_IS_SELECTED = "maderski.bluetoothautoplaymusic.isselected";
+
+    private static boolean isSelectedDevice = false;
 
     private BluetoothActions bluetoothActions;
 
@@ -38,6 +41,17 @@ public class CustomReceiver extends BroadcastReceiver {
                 //Calling actionsOnBTConnect cause onBTConnect already ran
                 bluetoothActions.actionsOnBTConnect();
                 break;
+            case ACTION_IS_SELECTED:
+                setIsSelectedDevice(intent.getBooleanExtra("isSelectedDevice", false));
+                break;
         }
+    }
+
+    public static void setIsSelectedDevice(boolean isSelected){
+        isSelectedDevice = isSelected;
+    }
+
+    public static boolean getIsSelectedDevice(){
+        return isSelectedDevice;
     }
 }
