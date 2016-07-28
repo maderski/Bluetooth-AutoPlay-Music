@@ -15,12 +15,12 @@ public class PlayMusic {
 
     private static final String TAG = PlayMusic.class.getName();
 
-    private AudioManager _audioManager;
-    private Context _context;
+    private AudioManager audioManager;
+    private Context context;
 
     public PlayMusic(Context context, AudioManager audioManager){
-        _audioManager = audioManager;
-        _context = context;
+        this.audioManager = audioManager;
+        this.context = context;
     }
 
     //Not used
@@ -29,51 +29,51 @@ public class PlayMusic {
         Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
         downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
-        _context.sendOrderedBroadcast(downIntent, null);
+        context.sendOrderedBroadcast(downIntent, null);
 
         Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
         upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
-        _context.sendOrderedBroadcast(upIntent, null);
+        context.sendOrderedBroadcast(upIntent, null);
     }
 
     //KeyEvent PLAY
     public void play(){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
-        _audioManager.dispatchMediaKeyEvent(downEvent);
+        audioManager.dispatchMediaKeyEvent(downEvent);
 
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
-        _audioManager.dispatchMediaKeyEvent(upEvent);
+        audioManager.dispatchMediaKeyEvent(upEvent);
     }
 
     //KeyEvent PAUSE
     public void pause(){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
-        _audioManager.dispatchMediaKeyEvent(downEvent);
+        audioManager.dispatchMediaKeyEvent(downEvent);
 
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
-        _audioManager.dispatchMediaKeyEvent(upEvent);
+        audioManager.dispatchMediaKeyEvent(upEvent);
     }
 
     public void play_UsingServiceCommand(){
         Intent intent = new Intent("com.android.music.musicservicecommand");
         intent.putExtra("command", "play");
-        _context.sendBroadcast(intent);
+        context.sendBroadcast(intent);
     }
 
     //Play Google Play Music
     public void play_googlePlayMusic(){
         Intent intent = new Intent("com.android.music.musicservicecommand");
-        intent.setPackage(ConstantStore.GOOGLEPLAYMUSIC);
+        intent.setPackage(PackageTools.GOOGLEPLAYMUSIC);
         intent.putExtra("command", "play");
-        _context.sendBroadcast(intent);
+        context.sendBroadcast(intent);
     }
 
     public void pause_googlePlayMusic(){
         Intent intent = new Intent("com.android.music.musicservicecommand");
-        intent.setPackage(ConstantStore.GOOGLEPLAYMUSIC);
+        intent.setPackage(PackageTools.GOOGLEPLAYMUSIC);
         intent.putExtra("command", "pause");
-        _context.sendBroadcast(intent);
+        context.sendBroadcast(intent);
     }
 
     //Play Spotify
@@ -81,24 +81,24 @@ public class PlayMusic {
         Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
         i.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.internal.receiver.MediaButtonReceiver"));
         i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
-        _context.sendOrderedBroadcast(i, null);
+        context.sendOrderedBroadcast(i, null);
 
         i = new Intent(Intent.ACTION_MEDIA_BUTTON);
         i.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.internal.receiver.MediaButtonReceiver"));
         i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-        _context.sendOrderedBroadcast(i, null);
+        context.sendOrderedBroadcast(i, null);
     }
 
     //Autoplay music if enabled
     public void auto_Play(){
-        int index = BAPMPreferences.getSelectedMusicPlayer(_context);
-        String pkgName = VariousLists.listOfInstalledMediaPlayers(_context).get(index);
+        int index = BAPMPreferences.getSelectedMusicPlayer(context);
+        String pkgName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
 
         switch (pkgName) {
-            case ConstantStore.SPOTIFY:
+            case PackageTools.SPOTIFY:
                 play_spotify();
                 break;
-            case ConstantStore.GOOGLEPLAYMUSIC:
+            case PackageTools.GOOGLEPLAYMUSIC:
                 play_UsingServiceCommand();
                 break;
             default:
@@ -107,9 +107,9 @@ public class PlayMusic {
         }
 
         if(BuildConfig.DEBUG)
-            Log.i(TAG, "Is Music Active: " + Boolean.toString(_audioManager.isMusicActive()));
+            Log.i(TAG, "Is Music Active: " + Boolean.toString(audioManager.isMusicActive()));
 
-        checkIfPlaying(_audioManager, pkgName);
+        checkIfPlaying(audioManager, pkgName);
     }
 
     private void checkIfPlaying(final AudioManager am, final String packageName){
@@ -126,7 +126,7 @@ public class PlayMusic {
                             Log.i(TAG, "Music is playing");
                         cancel();
                     } else {
-                        if(packageName.equalsIgnoreCase(ConstantStore.SPOTIFY)){
+                        if(packageName.equalsIgnoreCase(PackageTools.SPOTIFY)){
                             play_spotify();
                         }else{
                             useServiceCommand = !useServiceCommand;

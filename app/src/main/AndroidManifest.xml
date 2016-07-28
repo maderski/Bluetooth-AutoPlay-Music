@@ -34,13 +34,19 @@
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-                <action android:name="maderski.bluetoothautoplaymusic.pluggedinlaunch" />
+
             </intent-filter>
         </receiver>
         <receiver android:name=".PowerReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="maderski.bluetoothautoplaymusic.isselected" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".CustomReceiver">
+            <intent-filter>
+                <action android:name="maderski.bluetoothautoplaymusic.pluggedinlaunch" />
+                <action android:name="maderski.bluetoothautoplaymusic.offtelephonelaunch" />
             </intent-filter>
         </receiver>
 
@@ -50,7 +56,6 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".LaunchBAPMActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".DebugHUDActivity"></activity>
     </application>
 
 </manifest>

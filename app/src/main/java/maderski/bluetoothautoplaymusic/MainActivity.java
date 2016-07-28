@@ -1,7 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -62,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final String mapApp = BAPMPreferences.getMapsChoice(context);
-                String mapAppName = launchApp.getMapAppName(context, mapApp);
+                String mapAppName = launchApp.getMapAppName(mapApp);
                 //Checks if waze is on the phone
-                boolean wazeFound = launchApp.checkPkgOnPhone(context, ConstantStore.WAZE);
+                boolean wazeFound = launchApp.checkPkgOnPhone(PackageTools.WAZE);
 
                 if (wazeFound) {
                     Snackbar.make(view, "Change Maps Launch to", Snackbar.LENGTH_LONG)
@@ -72,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
                             .setAction(mapAppName, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (mapApp.equals(ConstantStore.WAZE)) {
-                                        BAPMPreferences.setMapsChoice(context, ConstantStore.MAPS);
+                                    if (mapApp.equals(PackageTools.WAZE)) {
+                                        BAPMPreferences.setMapsChoice(context, PackageTools.MAPS);
                                         Toast.makeText(context, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
                                     }
                                     else {
-                                        BAPMPreferences.setMapsChoice(context, ConstantStore.WAZE);
+                                        BAPMPreferences.setMapsChoice(context, PackageTools.WAZE);
                                         Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
                                     }
                                     if(BuildConfig.DEBUG)
@@ -149,19 +146,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         setupUIElements(this);
-        launchApp = new LaunchApp();
+        launchApp = new LaunchApp(this);
         checkIfWazeRemoved(this);
         isBTConnected = BluetoothActions.getRanActionsOnBTConnect();
-    }
-
-    private boolean getIsBTConnected(Context context){
-
-        AudioManager am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        boolean isBTConnected = am.isBluetoothA2dpOn();
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "IsBTConnected");
-
-        return isBTConnected;
     }
 
     //Save the BTDevices when program is paused
@@ -175,26 +162,15 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    //Not used, check if BAPMService is Running
-    private boolean isBAPMServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (BAPMService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //Checks if WAZE was removed and if WAZE was set to the MapsChoice and if so, set MapsChoice in
     //SharedPrefs to MAPS
     private void checkIfWazeRemoved(Context context){
         String mapAppChoice = BAPMPreferences.getMapsChoice(context);
-        if(mapAppChoice.equalsIgnoreCase(ConstantStore.WAZE)) {
-            if (!launchApp.checkPkgOnPhone(this, ConstantStore.WAZE)) {
+        if(mapAppChoice.equalsIgnoreCase(PackageTools.WAZE)) {
+            if (!launchApp.checkPkgOnPhone(PackageTools.WAZE)) {
                 if(BuildConfig.DEBUG)
                     Log.i(TAG, "Checked");
-                BAPMPreferences.setMapsChoice(this, ConstantStore.MAPS);
+                BAPMPreferences.setMapsChoice(this, PackageTools.MAPS);
             }else {
                 if (BuildConfig.DEBUG)
                     Log.i(TAG, "WAZE is installed");
@@ -211,14 +187,6 @@ public class MainActivity extends AppCompatActivity {
 
         BAPMPreferences.setBTDevices(this, firstRun);
         BAPMPreferences.setFirstInstall(this, false);
-    }
-
-    //Not used
-    private void sendAppToBackground(Context context){
-        Intent i = new Intent();
-        i.setAction(Intent.ACTION_MAIN);
-        i.addCategory(Intent.CATEGORY_HOME);
-        context.startActivity(i);
     }
 
     //Used for testing, Lists Music players and BT devices in logcat
@@ -531,13 +499,6 @@ public class MainActivity extends AppCompatActivity {
             BAPMPreferences.setUnlockScreen(this, false);
             if(BuildConfig.DEBUG)
                 Log.i(TAG, "Dismiss KeyGuard Button is OFF");
-        }
-    }
-
-    public void debugHUDLaunch(View view){
-        if(BuildConfig.DEBUG) {
-            Intent intent = new Intent(this, DebugHUDActivity.class);
-            startActivity(intent);
         }
     }
 

@@ -10,6 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -18,8 +19,6 @@ import java.util.Set;
  */
 public class VariousLists {
     private static final String TAG = VariousLists.class.getName();
-
-    public static List<String> ConnectedBTDevices = new ArrayList<>();
 
     //List of Mediaplayers that is installed on the phone
     public static List<String> listOfInstalledMediaPlayers(Context context){
@@ -62,15 +61,18 @@ public class VariousLists {
         return btDevices;
     }
 
-    //List of Installed Packages on the phone
-    public static void listOfPackagesOnPhone(Context context){
-        final PackageManager pm = context.getPackageManager();
-        List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+    //Returns true if a connected device on the connected device list is on the BAPMPreferences.
+    //getBTDevices List that is set by the user in the UI
+    public static boolean isADeviceOnBAPMList(Context context, List<String> connectedBTDeviceList){
+        Set<String> userBTDeviceList = BAPMPreferences.getBTDevices(context);
 
-        for(ApplicationInfo pkg:appInfo){
+        if(connectedBTDeviceList != null){
+            return !Collections.disjoint(userBTDeviceList, connectedBTDeviceList);
+        }else{
             if(BuildConfig.DEBUG)
-                Log.i(TAG, "Installed Pkg: " + pkg.packageName);
+                Log.i(TAG, "ConnectedBTDevices List = null");
         }
+        return false;
     }
 
     //Generate a Test List

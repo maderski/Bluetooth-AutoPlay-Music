@@ -1,6 +1,8 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -32,5 +34,4 @@ public class BAPMService extends Service {
         //TODO for communication return IBinder implementation
         return null;
     }
-
 }

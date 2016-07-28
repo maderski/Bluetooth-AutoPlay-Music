@@ -24,11 +24,11 @@ public class Notification {
     public void BAPMMessage(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String mapAppName = "GOOGLE MAPS";
-        if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(ConstantStore.WAZE)){
+        if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(PackageTools.WAZE)){
             mapAppName = "WAZE";
         }
 
-        String title = "Click to launch " + mapAppName;
+        String title = "Click to launchPackage " + mapAppName;
         String message = "Bluetooth device connected";
 
         //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,

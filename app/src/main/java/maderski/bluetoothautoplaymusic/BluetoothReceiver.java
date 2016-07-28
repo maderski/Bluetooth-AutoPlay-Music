@@ -19,10 +19,8 @@ import android.widget.Toast;
 public class BluetoothReceiver extends BroadcastReceiver {
 
     private static final String TAG = "BluetoothReceiver";
-    private static final String ACTION_POWER_LAUNCH = "maderski.bluetoothautoplaymusic.pluggedinlaunch";
 
-    private static BluetoothActions bluetoothActions;
-
+    private BluetoothActions bluetoothActions;
     private String btDevice = "None";
     private AudioManager am;
     private ScreenONLock screenONLock;
@@ -36,8 +34,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if(device != null)
             isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
 
-        if(intent != null)
-            if(intent.getAction() != null){
+        if(intent != null) {
+            if (intent.getAction() != null) {
                 action = intent.getAction();
 
                 Intent isSelectedIntent = new Intent();
@@ -45,13 +43,14 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
                 context.sendBroadcast(isSelectedIntent);
 
-                if(isSelectedBTDevice) {
+                if (isSelectedBTDevice) {
                     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     screenONLock = new ScreenONLock();
                     notification = new Notification();
-                    bluetoothActions = new BluetoothActions(context, am, screenONLock, notification);
+                    bluetoothActions = new BluetoothActions(context, am, screenONLock, notification, new VolumeControl(am));
                 }
             }
+        }
 
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + action);
@@ -92,9 +91,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 }else if(BAPMPreferences.getWaitTillOffPhone(context) && notification.launchNotifPresent){
                     notification.removeBAPMMessage(context);
                 }
-                break;
-            case ACTION_POWER_LAUNCH:
-                bluetoothActions.OnBTConnect();
                 break;
         }
     }

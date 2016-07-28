@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -37,6 +38,32 @@ public class VolumeControl {
     public void getOriginalVolume(){
         originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
         Log.i(TAG, "Original Media Volume is: " + Integer.toString(originalMediaVolume));
+    }
+
+    //Wait 3 seconds before getting the Original Volume and return true when done
+    public void delayGetOrigVol(Context context, AudioManager audioManager){
+        final Context ctx = context;
+        final AudioManager am = audioManager;
+        if(am.isBluetoothA2dpOn()) {
+            new CountDownTimer(6000,
+                    1000) {
+                public void onTick(long millisUntilFinished) {
+                    if (millisUntilFinished > 3000 && millisUntilFinished < 4000) {
+                        //Get original volume
+                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+                        if(BuildConfig.DEBUG)
+                            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+                    }
+                }
+
+                public void onFinish() {
+                    Intent launchIntent = new Intent();
+                    launchIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
+                    ctx.sendBroadcast(launchIntent);
+                }
+            }.start();
+        }
     }
 
     public void checkSetMAXVol(int seconds, int seconds_interval){
@@ -79,6 +106,5 @@ public class VolumeControl {
                 runme = false;
             }
         }.start();
-
     }
 }
