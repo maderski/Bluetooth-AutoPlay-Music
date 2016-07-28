@@ -75,9 +75,11 @@ public class LaunchApp extends PackageTools {
 
 
     public void launchBAPMActivity(){
-        Intent i = new Intent(context, LaunchBAPMActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
+        Intent[] intentArray = new Intent[2];
+        intentArray[0] = new Intent(context, MainActivity.class);
+        intentArray[0].addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intentArray[1] = new Intent(context, LaunchBAPMActivity.class);
+        context.startActivities(intentArray);
     }
 
     public void sendEverythingToBackground(){
