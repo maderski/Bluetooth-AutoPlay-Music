@@ -17,12 +17,6 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         dismissKeyGuard(this);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
-
     //Dismiss the KeyGuard
     private void dismissKeyGuard(Context context){
 

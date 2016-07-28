@@ -29,7 +29,7 @@ public class Notification {
             mapAppName = "WAZE";
         }
 
-        String title = "Click to launchPackage " + mapAppName;
+        String title = "Click to launch " + mapAppName;
         String message = "Bluetooth device connected";
 
         //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
