@@ -124,7 +124,7 @@ public class BluetoothActions {
 
         if(playMusic){
             PlayMusic music = new PlayMusic(context, audioManager);
-            music.auto_Play();
+            music.checkIfPlaying();
         }
 
         if(launchMaps && !launchMusicPlayer){

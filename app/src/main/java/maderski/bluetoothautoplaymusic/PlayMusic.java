@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -108,38 +109,33 @@ public class PlayMusic {
 
         if(BuildConfig.DEBUG)
             Log.i(TAG, "Is Music Active: " + Boolean.toString(audioManager.isMusicActive()));
-
-        checkIfPlaying(audioManager, pkgName);
     }
 
-    private void checkIfPlaying(final AudioManager am, final String packageName){
-        //Wait 3 seconds then, check if music is playing every second for 10 seconds
+    public void checkIfPlaying(){
+        final AudioManager am = audioManager;
         new CountDownTimer(13000, 1000){
-            boolean useServiceCommand = false;
             @Override
             public void onTick(long millisUntilFinished) {
                 if(BuildConfig.DEBUG)
                     Log.i(TAG, "millisUntilFinished: " + Long.toString(millisUntilFinished));
-                if(millisUntilFinished <= 10000) {
-                    if (am.isMusicActive()) {
-                        if (BuildConfig.DEBUG)
-                            Log.i(TAG, "Music is playing");
-                        cancel();
-                    } else {
-                        if(packageName.equalsIgnoreCase(PackageTools.SPOTIFY)){
-                            play_spotify();
-                        }else{
-                            useServiceCommand = !useServiceCommand;
-                            playToggle(useServiceCommand);
-                        }
-                    }
 
-                    if (!am.isBluetoothA2dpOn()) {
+                if (am.isMusicActive()) {
+                    if (BuildConfig.DEBUG)
+                        Log.i(TAG, "Music is playing");
+                    if(millisUntilFinished < 8000) {
                         if (BuildConfig.DEBUG)
-                            Log.i(TAG, "Bluetooth is not connected");
-                        pause();
+                            Log.i(TAG, "checkIfPlaying cancelled");
                         cancel();
                     }
+                } else {
+                    auto_Play();
+                }
+
+                if(!am.isBluetoothA2dpOn()){
+                    if (BuildConfig.DEBUG)
+                        Log.i(TAG, "Bluetooth is not connected");
+                    pause();
+                    cancel();
                 }
             }
 
@@ -149,22 +145,6 @@ public class PlayMusic {
                     Log.i(TAG, "Unable to Play :(");
             }
         }.start();
-    }
-
-    private void playToggle(boolean _useServiceCommand) {
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Use Service Command: " + Boolean.toString(_useServiceCommand));
-        //if playAttempt number is even play using service command
-        if (_useServiceCommand) {
-            play_UsingServiceCommand();
-            if (BuildConfig.DEBUG)
-                Log.i(TAG, "Pressed Play again using service command");
-        } else {
-            pause();
-            play();
-            if (BuildConfig.DEBUG)
-                Log.i(TAG, "Pressed Play again");
-        }
     }
 }
 
