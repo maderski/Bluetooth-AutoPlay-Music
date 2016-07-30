@@ -75,13 +75,14 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "Device disonnected: " + device.getName());
+                    Log.i(TAG, "Device disconnected: " + device.getName());
 
                     Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
                             Boolean.toString(isSelectedBTDevice));
+                    Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BluetoothActions.getRanActionsOnBTConnect()));
                 }
 
-                if (isSelectedBTDevice && BluetoothActions.getRanActionsOnBTConnect()) {
+                if (isSelectedBTDevice) {
                     bluetoothActions.actionsOnBTDisconnect();
 
                     Intent isSelectedIntent = new Intent();

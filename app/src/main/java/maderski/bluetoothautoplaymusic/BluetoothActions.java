@@ -131,7 +131,7 @@ public class BluetoothActions {
             launchApp.launchMaps(2);
         }
 
-        ranActionsOnBTConnect = true;
+        setRanActionsOnBTConnect(true);
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
@@ -183,7 +183,7 @@ public class BluetoothActions {
             launchApp.sendEverythingToBackground();
         }
 
-        ranActionsOnBTConnect = false;
+        setRanActionsOnBTConnect(false);
     }
 
     public static boolean getRanActionsOnBTConnect(){
