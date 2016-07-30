@@ -94,6 +94,8 @@ public class BluetoothActions {
 
         notification.BAPMMessage(context, mapChoice);
 
+        setRanActionsOnBTConnect(true);
+
         if(screenON){
             screenONLock.enableWakeLock(context);
         }
@@ -130,8 +132,6 @@ public class BluetoothActions {
         if(launchMaps && !launchMusicPlayer){
             launchApp.launchMaps(2);
         }
-
-        setRanActionsOnBTConnect(true);
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
@@ -145,7 +145,10 @@ public class BluetoothActions {
 
         RingerControl ringerControl = new RingerControl(audioManager);
         LaunchApp launchApp = new LaunchApp(context);
+
         notification.removeBAPMMessage(context);
+
+        setRanActionsOnBTConnect(false);
 
         if(screenON){
             screenONLock.releaseWakeLock();
@@ -182,8 +185,6 @@ public class BluetoothActions {
         if(sendToBackground) {
             launchApp.sendEverythingToBackground();
         }
-
-        setRanActionsOnBTConnect(false);
     }
 
     public static boolean getRanActionsOnBTConnect(){
