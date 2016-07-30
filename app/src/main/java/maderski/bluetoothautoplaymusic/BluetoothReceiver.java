@@ -82,7 +82,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BluetoothActions.getRanActionsOnBTConnect()));
                 }
 
-                if (isSelectedBTDevice && BluetoothActions.getRanActionsOnBTConnect()) {
+                if (isSelectedBTDevice) {
                     bluetoothActions.actionsOnBTDisconnect();
 
                     Intent isSelectedIntent = new Intent();
