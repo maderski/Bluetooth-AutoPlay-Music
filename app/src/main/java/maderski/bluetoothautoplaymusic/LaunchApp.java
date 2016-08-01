@@ -23,9 +23,7 @@ public class LaunchApp extends PackageTools {
     public void musicPlayerLaunch(int seconds, boolean _mapsEnabled){
         int index = BAPMPreferences.getSelectedMusicPlayer(context);
 
-        final Context ctx = context;
         final String pkgName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
-        final boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
         final boolean mapsEnabled = _mapsEnabled;
         seconds = seconds * 1000;
         new CountDownTimer(seconds,

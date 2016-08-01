@@ -172,8 +172,8 @@ public class BluetoothActions {
         }
 
         if(launchMusicPlayer) {
-            PlayMusic music = new PlayMusic(context, audioManager);
-            music.pause();
+            PlayMusic playMusic = new PlayMusic(context, audioManager);
+            playMusic.pause();
         }
 
         if(volumeMAX){
