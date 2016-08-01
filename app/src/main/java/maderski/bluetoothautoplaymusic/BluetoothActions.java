@@ -14,9 +14,6 @@ public class BluetoothActions {
 
     private static final String TAG = BluetoothActions.class.getName();
 
-    private static boolean ranActionsOnBTConnect;
-    private static int currentRingerSet;
-
     private ScreenONLock screenONLock;
     private Context context;
     private AudioManager audioManager;
@@ -94,14 +91,14 @@ public class BluetoothActions {
 
         notification.BAPMMessage(context, mapChoice);
 
-        setRanActionsOnBTConnect(true);
+        Singleton.getInstance().setRanActionsOnBTConnect(true);
 
         if(screenON){
             screenONLock.enableWakeLock(context);
         }
 
         if(priorityMode){
-            currentRingerSet = ringerControl.ringerSetting();
+            Singleton.getInstance().setCurrentRingerSet(ringerControl.ringerSetting());
             ringerControl.soundsOFF();
         }
 
@@ -148,15 +145,16 @@ public class BluetoothActions {
 
         notification.removeBAPMMessage(context);
 
-        setRanActionsOnBTConnect(false);
+        Singleton.getInstance().setRanActionsOnBTConnect(false);
 
         if(screenON){
             screenONLock.releaseWakeLock();
         }
 
         if(priorityMode){
+            int currentRinger = Singleton.getInstance().getCurrentRingerSet();
             try {
-                switch(currentRingerSet){
+                switch(currentRinger){
                     case AudioManager.RINGER_MODE_SILENT:
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "Phone is on Silent");
@@ -185,12 +183,5 @@ public class BluetoothActions {
         if(sendToBackground) {
             launchApp.sendEverythingToBackground();
         }
-    }
-
-    public static boolean getRanActionsOnBTConnect(){
-        return ranActionsOnBTConnect;
-    }
-    public static void setRanActionsOnBTConnect(boolean didItRun){
-        ranActionsOnBTConnect = didItRun;
     }
 }

@@ -45,7 +45,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 if (isSelectedBTDevice) {
                     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    screenONLock = new ScreenONLock();
+                    screenONLock = Singleton.getInstance().getScreenONLock();
                     notification = new Notification();
                     bluetoothActions = new BluetoothActions(context, am, screenONLock, notification, new VolumeControl(am));
                 }
@@ -79,7 +79,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                     Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
                             Boolean.toString(isSelectedBTDevice));
-                    Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BluetoothActions.getRanActionsOnBTConnect()));
+                    Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(Singleton.getInstance().getRanActionsOnBTConnect()));
                 }
 
                 if (isSelectedBTDevice) {

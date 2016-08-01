@@ -14,13 +14,12 @@ public class CustomReceiver extends BroadcastReceiver {
     private static final String ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch";
     private static final String ACTION_IS_SELECTED = "maderski.bluetoothautoplaymusic.isselected";
 
-    private static boolean isSelectedDevice = false;
-
     private BluetoothActions bluetoothActions;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = "None";
+        ScreenONLock screenONLock = Singleton.getInstance().getScreenONLock();
         if(intent != null) {
             if (intent.getAction() != null) {
                 action = intent.getAction();
@@ -28,7 +27,7 @@ public class CustomReceiver extends BroadcastReceiver {
                 bluetoothActions = new BluetoothActions(
                         context,
                         audioManager,
-                        new ScreenONLock(),
+                        screenONLock,
                         new Notification(),
                         new VolumeControl(audioManager));
             }
@@ -44,19 +43,11 @@ public class CustomReceiver extends BroadcastReceiver {
                     break;
                 case ACTION_IS_SELECTED:
                     boolean isSelected = intent.getBooleanExtra("isSelected", false);
-                    setIsSelectedDevice(isSelected);
+                    Singleton.getInstance().setIsSelected(isSelected);
                     if(BuildConfig.DEBUG)
                         Log.i("CustomReceiver: ", Boolean.toString(isSelected));
                     break;
             }
         }
-    }
-
-    public static void setIsSelectedDevice(boolean isSelected){
-        isSelectedDevice = isSelected;
-    }
-
-    public static boolean getIsSelectedDevice(){
-        return isSelectedDevice;
     }
 }
