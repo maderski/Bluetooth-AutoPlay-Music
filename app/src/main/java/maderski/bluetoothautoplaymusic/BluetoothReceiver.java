@@ -89,7 +89,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     isSelectedIntent.putExtra("isSelected", false);
                     isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
                     context.sendBroadcast(isSelectedIntent);
-                }else if(BAPMPreferences.getWaitTillOffPhone(context) && notification.launchNotifPresent){
+                }else if(BAPMPreferences.getWaitTillOffPhone(context) && Singleton.getInstance().getLaunchNotifPresent()){
                     notification.removeBAPMMessage(context);
                 }
                 break;

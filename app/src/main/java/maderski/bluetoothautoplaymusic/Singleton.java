@@ -9,6 +9,7 @@ public class Singleton {
 
     private boolean isSelected;
     private boolean ranActionsOnBTConnect;
+    private boolean launchNotifPresent;
 
     private int currentRingerSet;
 
@@ -26,6 +27,9 @@ public class Singleton {
 
     public void setCurrentRingerSet(int currentRinger){ currentRingerSet = currentRinger; }
     public int getCurrentRingerSet(){ return currentRingerSet; }
+
+    public void setLaunchNotifPresent(boolean notifPresent){ launchNotifPresent = notifPresent; }
+    public boolean getLaunchNotifPresent(){ return launchNotifPresent; }
 
 
 

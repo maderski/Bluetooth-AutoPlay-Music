@@ -19,8 +19,6 @@ public class Notification {
     private static final String nTAG = Notification.class.getName();
     private static final int nID = 608;
 
-    public static boolean launchNotifPresent = false;
-
     //Create notification message for BAPM
     public void BAPMMessage(Context context, String mapChoicePkg){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
@@ -79,7 +77,7 @@ public class Notification {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
         nManager.notify(nTAG, nID, builder.build());
-        launchNotifPresent = true;
+        Singleton.getInstance().setLaunchNotifPresent(true);
     }
 
     //Remove notification that was created by BAPM
@@ -88,7 +86,7 @@ public class Notification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             nManager.cancel(nTAG, nID);
-            launchNotifPresent = false;
+            Singleton.getInstance().setLaunchNotifPresent(false);
         }catch(Exception e){
             Log.e(nTAG, e.getMessage());
         }
