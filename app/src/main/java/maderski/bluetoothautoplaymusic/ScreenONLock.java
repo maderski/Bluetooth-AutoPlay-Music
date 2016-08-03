@@ -13,8 +13,7 @@ public class ScreenONLock {
 
     private static final String TAG = ScreenONLock.class.getName();
 
-    private static PowerManager.WakeLock wakeLock;
-    private static String stayOnTAG = "Stay ON";
+    private PowerManager.WakeLock wakeLock;
 
     //Enable WakeLock
     public void enableWakeLock(Context context){
@@ -29,13 +28,13 @@ public class ScreenONLock {
 
         PowerManager pm = (PowerManager)context.getSystemService(context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                screenBrightness, stayOnTAG);
+                screenBrightness, "Stay ON");
         try{
             wakeLock.acquire();
             if(BuildConfig.DEBUG)
-                Log.i("WakeLock ", "enabled");
+                Log.i(TAG, "Wakelock enabled");
         }catch (Exception e){
-            Log.e("WakeLock Error: ", e.getMessage());
+            Log.e(TAG, "WakeLock Error: " + e.getMessage());
         }
     }
 
@@ -45,13 +44,13 @@ public class ScreenONLock {
             try {
                 wakeLock.release();
                 if(BuildConfig.DEBUG)
-                    Log.i("Wakelock: ", "disabled");
+                    Log.i(TAG, "Wakelock: " + "disabled");
             } catch (Exception e) {
-                Log.e("WakeLock: ", "error " + e.getMessage());
+                Log.e(TAG, "WakeLock: " + "error " + e.getMessage());
             }
         }else{
             if(BuildConfig.DEBUG)
-                Log.i("Wakelock: ", "Not Held");
+                Log.i(TAG, "Wakelock: " + "Not Held");
         }
     }
 
@@ -79,6 +78,13 @@ public class ScreenONLock {
         if(BuildConfig.DEBUG)
             Log.i(TAG, "dark: " + Boolean.toString(dark));
         return dark;
+    }
+
+    public boolean wakeLockHeld(){
+        if(wakeLock != null && wakeLock.isHeld()){
+            return true;
+        }
+        return false;
     }
 
 }

@@ -23,7 +23,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private BluetoothActions bluetoothActions;
     private String btDevice = "None";
     private AudioManager am;
-    private ScreenONLock screenONLock;
     private Notification notification;
 
     //On receive of Broadcast
@@ -44,9 +43,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 context.sendBroadcast(isSelectedIntent);
 
                 if (isSelectedBTDevice) {
-                    am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    screenONLock = Singleton.getInstance().getScreenONLock();
+                    ScreenONLock screenONLock = Singleton.getInstance().getScreenONLock();
                     notification = new Notification();
+                    am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     bluetoothActions = new BluetoothActions(context, am, screenONLock, notification, new VolumeControl(am));
                 }
             }
@@ -113,7 +112,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice) {
 
         //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-        screenONLock.releaseWakeLock();
+        Singleton.getInstance().getScreenONLock().releaseWakeLock();
 
         Telephone telephone = new Telephone(context);
 

@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -25,7 +26,8 @@ public class BAPMService extends Service {
 
         PowerReceiver powerReceiver = new PowerReceiver();
         powerReceiver.onReceive(this, intent);
-        return Service.START_NOT_STICKY;
+
+        return Service.START_STICKY;
     }
 
     @Override

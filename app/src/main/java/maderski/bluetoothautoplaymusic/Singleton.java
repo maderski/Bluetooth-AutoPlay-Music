@@ -5,19 +5,24 @@ package maderski.bluetoothautoplaymusic;
  */
 public class Singleton {
     private static final Singleton INSTANCE = new Singleton();
-    private static final ScreenONLock SCREEN_ON_LOCK = new ScreenONLock();
 
-    private boolean isSelected;
-    private boolean ranActionsOnBTConnect;
-    private boolean launchNotifPresent;
+    private static ScreenONLock screenONLock = null;
+    private static boolean ranActionsOnBTConnect;
 
-    private int currentRingerSet;
+    private static boolean isSelected;
+    private static boolean launchNotifPresent;
+
+    private static int currentRingerSet;
 
     public static Singleton getInstance() { return INSTANCE; }
 
     private Singleton() {}
 
-    public ScreenONLock getScreenONLock(){ return SCREEN_ON_LOCK; }
+    public ScreenONLock getScreenONLock(){
+        if(screenONLock == null)
+            screenONLock = new ScreenONLock();
+        return screenONLock;
+    }
 
     public void setIsSelected(boolean isSelectedDevice){ isSelected = isSelectedDevice; }
     public boolean getIsSelected(){ return isSelected; }
