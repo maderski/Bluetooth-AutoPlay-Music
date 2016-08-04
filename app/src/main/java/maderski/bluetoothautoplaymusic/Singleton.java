@@ -7,8 +7,8 @@ public class Singleton {
     private static final Singleton INSTANCE = new Singleton();
 
     private static ScreenONLock screenONLock = null;
-    private static boolean ranActionsOnBTConnect;
 
+    private static boolean ranActionsOnBTConnect;
     private static boolean isSelected;
     private static boolean launchNotifPresent;
 
