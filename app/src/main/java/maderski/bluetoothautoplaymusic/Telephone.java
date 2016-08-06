@@ -41,7 +41,7 @@ public class Telephone {
         final VolumeControl vc = volumeControl;
 
         int _seconds = 7200000; //check for 2 hours
-        int _interval = 6000; //6 second interval
+        int _interval = 4000; //4 second interval
 
         new CountDownTimer(_seconds, _interval)
         {
@@ -49,7 +49,7 @@ public class Telephone {
                 if(Power.isPluggedIn(ctx)){
                     if(isOnCall()){
                         if(BuildConfig.DEBUG)
-                            Log.i(TAG, "On Call, check again in 6 sec");
+                            Log.i(TAG, "On Call, check again in 4 sec");
                     }else{
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");

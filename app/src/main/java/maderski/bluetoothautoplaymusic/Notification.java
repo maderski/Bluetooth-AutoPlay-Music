@@ -59,8 +59,8 @@ public class Notification {
         String title = "Launch Bluetooth Autoplay Music";
         String message = "Bluetooth device connected";
 
-        //PendingIntent appIntent = PendingIntent.getActivity(context, 0,
-        //        new Intent(context, LaunchBAPMActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        BAPMDataPreferences.setLaunchNotifPresent(context, true);
+
         Intent launchBAPMIntent = new Intent();
         launchBAPMIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
         PendingIntent appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -77,7 +77,6 @@ public class Notification {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
         nManager.notify(nTAG, nID, builder.build());
-        BAPMDataPreferences.setLaunchNotifPresent(context, true);
     }
 
     //Remove notification that was created by BAPM

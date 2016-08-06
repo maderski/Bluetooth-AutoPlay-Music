@@ -76,6 +76,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
                             Boolean.toString(isSelectedBTDevice));
                     Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(context)));
+                    Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(context)));
                 }
 
                 if (isSelectedBTDevice) {
@@ -83,7 +84,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                     if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
                         bluetoothActions.actionsOnBTDisconnect();
-                }else if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
+                }
+
+                if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
                     notification.removeBAPMMessage(context);
                 }
                 break;
