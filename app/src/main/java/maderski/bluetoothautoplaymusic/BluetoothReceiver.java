@@ -28,9 +28,15 @@ public class BluetoothReceiver extends BroadcastReceiver {
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
         boolean isSelectedBTDevice = false;
+        BluetoothDevice device;
         String action = "None";
-        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-        if(device != null)
+        if(BluetoothDevice.EXTRA_DEVICE != null) {
+            device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        }else{
+            device = null;
+        }
+
+        if (device != null)
             isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
 
         if(intent != null) {
