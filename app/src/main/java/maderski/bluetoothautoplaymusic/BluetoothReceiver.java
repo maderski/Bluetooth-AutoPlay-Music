@@ -78,17 +78,18 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                     Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
                             Boolean.toString(isSelectedBTDevice));
-                    Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(Singleton.getInstance().getRanActionsOnBTConnect()));
+                    Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(context)));
                 }
 
                 if (isSelectedBTDevice) {
-                    bluetoothActions.actionsOnBTDisconnect();
-
                     Intent isSelectedIntent = new Intent();
                     isSelectedIntent.putExtra("isSelected", false);
                     isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
                     context.sendBroadcast(isSelectedIntent);
-                }else if(BAPMPreferences.getWaitTillOffPhone(context) && Singleton.getInstance().getLaunchNotifPresent()){
+
+                    if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
+                        bluetoothActions.actionsOnBTDisconnect();
+                }else if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
                     notification.removeBAPMMessage(context);
                 }
                 break;
@@ -117,9 +118,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         Telephone telephone = new Telephone(context);
 
         if(!telephone.isOnCall()){
-            VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
             if(BuildConfig.DEBUG)
-                Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
         }
 
         //Start 30sec countdown checking for A2dp connection every second

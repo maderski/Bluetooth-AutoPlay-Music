@@ -77,7 +77,7 @@ public class Notification {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
         nManager.notify(nTAG, nID, builder.build());
-        Singleton.getInstance().setLaunchNotifPresent(true);
+        BAPMDataPreferences.setLaunchNotifPresent(context, true);
     }
 
     //Remove notification that was created by BAPM
@@ -86,7 +86,7 @@ public class Notification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {
             nManager.cancel(nTAG, nID);
-            Singleton.getInstance().setLaunchNotifPresent(false);
+            BAPMDataPreferences.setLaunchNotifPresent(context, false);
         }catch(Exception e){
             Log.e(nTAG, e.getMessage());
         }

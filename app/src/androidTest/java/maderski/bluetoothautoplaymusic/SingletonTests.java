@@ -32,41 +32,41 @@ public class SingletonTests extends AndroidTestCase {
         assertEquals(false, Singleton.getInstance().getScreenONLock().wakeLockHeld());
     }
 
-    @SmallTest
-    public void testCurrentRingerSet(){
-        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        RingerControl ringerControl = new RingerControl(audioManager);
-        int tempRinger = ringerControl.ringerSetting();
-        Singleton.getInstance().setCurrentRingerSet(tempRinger);
-        assertEquals(tempRinger, Singleton.getInstance().getCurrentRingerSet());
-    }
+//    @SmallTest
+//    public void testCurrentRingerSet(){
+//        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+//        RingerControl ringerControl = new RingerControl(audioManager);
+//        int tempRinger = ringerControl.ringerSetting();
+//        Singleton.getInstance().setCurrentRingerSet(tempRinger);
+//        assertEquals(tempRinger, Singleton.getInstance().getCurrentRingerSet());
+//    }
 
-    @SmallTest
-    public void testIsSelected(){
-        Singleton.getInstance().setIsSelected(true);
-        Singleton.getInstance().setIsSelected(false);
-        Singleton.getInstance().setIsSelected(true);
+//    @SmallTest
+//    public void testIsSelected(){
+//        Singleton.getInstance().setIsSelected(true);
+//        Singleton.getInstance().setIsSelected(false);
+//        Singleton.getInstance().setIsSelected(true);
+//
+//        assertEquals(true, Singleton.getInstance().getIsSelected());
+//    }
 
-        assertEquals(true, Singleton.getInstance().getIsSelected());
-    }
+//    @SmallTest
+//    public void testRanActionsOnBTConnect(){
+//        Singleton.getInstance().setRanActionsOnBTConnect(true);
+//        Singleton.getInstance().setRanActionsOnBTConnect(false);
+//        Singleton.getInstance().setRanActionsOnBTConnect(true);
+//
+//        assertEquals(true, Singleton.getInstance().getRanActionsOnBTConnect());
+//    }
 
-    @SmallTest
-    public void testRanActionsOnBTConnect(){
-        Singleton.getInstance().setRanActionsOnBTConnect(true);
-        Singleton.getInstance().setRanActionsOnBTConnect(false);
-        Singleton.getInstance().setRanActionsOnBTConnect(true);
-
-        assertEquals(true, Singleton.getInstance().getRanActionsOnBTConnect());
-    }
-
-    @SmallTest
-    public void testLaunchNotifPresent(){
-        Singleton.getInstance().setLaunchNotifPresent(true);
-        Singleton.getInstance().setLaunchNotifPresent(true);
-        Singleton.getInstance().setLaunchNotifPresent(true);
-
-        assertEquals(true, Singleton.getInstance().getLaunchNotifPresent());
-    }
+//    @SmallTest
+//    public void testLaunchNotifPresent(){
+//        Singleton.getInstance().setLaunchNotifPresent(true);
+//        Singleton.getInstance().setLaunchNotifPresent(true);
+//        Singleton.getInstance().setLaunchNotifPresent(true);
+//
+//        assertEquals(true, Singleton.getInstance().getLaunchNotifPresent());
+//    }
 
     @Override
     protected void tearDown() throws Exception {

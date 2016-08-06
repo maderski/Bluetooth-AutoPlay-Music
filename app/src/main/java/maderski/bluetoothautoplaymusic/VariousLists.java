@@ -20,6 +20,8 @@ import java.util.Set;
 public class VariousLists {
     private static final String TAG = VariousLists.class.getName();
 
+    private VariousLists(){}
+
     //List of Mediaplayers that is installed on the phone
     public static List<String> listOfInstalledMediaPlayers(Context context){
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);

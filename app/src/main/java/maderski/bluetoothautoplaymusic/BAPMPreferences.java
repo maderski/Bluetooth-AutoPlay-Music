@@ -16,12 +16,12 @@ public class BAPMPreferences {
 
     public static String MY_PREFS_NAME = "BAPMPreference";
 
+    //Keys for enabling/disabling things
     public static final String LAUNCH_MAPS_KEY =  "googleMaps";
     public static final String KEEP_SCREEN_ON_KEY = "keepScreenON";
     public static final String PRIORITY_MODE_KEY = "priorityMode";
     public static final String MAX_VOLUME_KEY = "maxVolume";
     public static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
-    public static final String BTDEVICE_TOAST_MSG_KEY = "BTDeviceToastMsg";
     public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
@@ -36,7 +36,7 @@ public class BAPMPreferences {
     private static SharedPreferences.Editor editor(Context context){
 
         if(_editor == null){
-            _editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_MULTI_PROCESS).edit();
+            _editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
             _editor.commit();
         }
 
@@ -46,9 +46,10 @@ public class BAPMPreferences {
     //Reads SharedPreferences value
     private static SharedPreferences reader(Context context){
 
-        return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_MULTI_PROCESS);
+        return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
     }
 
+    //Preferences for enabling and disabling things
     public static void setLaunchGoogleMaps(Context context, boolean enabled){
         editor(context).putBoolean(LAUNCH_MAPS_KEY, enabled);
         commit(context);
@@ -92,15 +93,6 @@ public class BAPMPreferences {
 
     public static boolean getLaunchMusicPlayer(Context context){
         return reader(context).getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false);
-    }
-
-    public static void setBTDeviceToastMsg(Context context, boolean enabled){
-        editor(context).putBoolean(BTDEVICE_TOAST_MSG_KEY, enabled);
-        commit(context);
-    }
-
-    public static boolean getBTDeviceToastMsg(Context context){
-        return reader(context).getBoolean(BTDEVICE_TOAST_MSG_KEY, false);
     }
 
     public static void setSelectedMusicPlayer(Context context, int index){

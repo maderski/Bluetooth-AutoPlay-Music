@@ -20,7 +20,7 @@ public class CustomReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = "None";
         ScreenONLock screenONLock = Singleton.getInstance().getScreenONLock();
-        if(intent != null) {
+        if (intent != null) {
             if (intent.getAction() != null) {
                 action = intent.getAction();
                 AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -43,8 +43,8 @@ public class CustomReceiver extends BroadcastReceiver {
                     break;
                 case ACTION_IS_SELECTED:
                     boolean isSelected = intent.getBooleanExtra("isSelected", false);
-                    Singleton.getInstance().setIsSelected(isSelected);
-                    if(BuildConfig.DEBUG)
+                    BAPMDataPreferences.setIsSelected(context, isSelected);
+                    if (BuildConfig.DEBUG)
                         Log.i("CustomReceiver: ", Boolean.toString(isSelected));
                     break;
             }

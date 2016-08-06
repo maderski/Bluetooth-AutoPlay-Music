@@ -91,14 +91,15 @@ public class BluetoothActions {
 
         notification.BAPMMessage(context, mapChoice);
 
-        Singleton.getInstance().setRanActionsOnBTConnect(true);
+        //setRanActionsOnBTConnect(true);
+        BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
 
         if(screenON){
             screenONLock.enableWakeLock(context);
         }
 
         if(priorityMode){
-            Singleton.getInstance().setCurrentRingerSet(ringerControl.ringerSetting());
+            BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
             ringerControl.soundsOFF();
         }
 
@@ -145,14 +146,15 @@ public class BluetoothActions {
 
         notification.removeBAPMMessage(context);
 
-        Singleton.getInstance().setRanActionsOnBTConnect(false);
+        //setRanActionsOnBTConnect(false);
+        BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
 
         if(screenON){
             screenONLock.releaseWakeLock();
         }
 
         if(priorityMode){
-            int currentRinger = Singleton.getInstance().getCurrentRingerSet();
+            int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
             try {
                 switch(currentRinger){
                     case AudioManager.RINGER_MODE_SILENT:
@@ -177,7 +179,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            volumeControl.setOriginalVolume();
+            volumeControl.setOriginalVolume(context);
         }
 
         if(sendToBackground) {

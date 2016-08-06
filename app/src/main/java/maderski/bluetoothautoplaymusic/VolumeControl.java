@@ -13,8 +13,6 @@ public class VolumeControl {
 
     private static final String TAG = VolumeControl.class.getName();
 
-    public static int originalMediaVolume;
-
     private AudioManager am;
 
     public VolumeControl(AudioManager audioManager){
@@ -29,15 +27,10 @@ public class VolumeControl {
     }
 
     //Set original media volume
-    public void setOriginalVolume(){
+    public void setOriginalVolume(Context context){
+        int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(context);
         am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
         Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
-    }
-
-    //Get original media volume
-    public void getOriginalVolume(){
-        originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        Log.i(TAG, "Original Media Volume is: " + Integer.toString(originalMediaVolume));
     }
 
     //Wait 3 seconds before getting the Original Volume and return true when done
@@ -49,11 +42,11 @@ public class VolumeControl {
                     1000) {
                 public void onTick(long millisUntilFinished) {
                     if (millisUntilFinished > 3000 && millisUntilFinished < 4000) {
-                        //Get original volume
-                        VolumeControl.originalMediaVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        //Set original volume value in persistent data so it can be retrieved later
+                        BAPMDataPreferences.setOriginalMediaVolume(ctx, am.getStreamVolume(AudioManager.STREAM_MUSIC));
 
                         if(BuildConfig.DEBUG)
-                            Log.i(TAG, "Original Media Volume is: " + Integer.toString(VolumeControl.originalMediaVolume));
+                            Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(ctx)));
                     }
                 }
 

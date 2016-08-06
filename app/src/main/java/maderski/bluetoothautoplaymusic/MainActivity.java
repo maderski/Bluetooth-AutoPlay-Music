@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         setupUIElements(this);
         launchApp = new LaunchApp(this);
         checkIfWazeRemoved(this);
-        isBTConnected = Singleton.getInstance().getRanActionsOnBTConnect();
+        isBTConnected = BAPMDataPreferences.getRanActionsOnBtConnect(this);
     }
 
     //Save the BTDevices when program is paused

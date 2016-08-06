@@ -8,6 +8,7 @@ import android.util.Log;
  */
 public class RingerControl {
     private static final String TAG = RingerControl.class.getName();
+
     private AudioManager am;
 
     public RingerControl(AudioManager audioManager){
