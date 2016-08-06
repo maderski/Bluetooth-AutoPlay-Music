@@ -37,16 +37,13 @@ public class BluetoothReceiver extends BroadcastReceiver {
             if (intent.getAction() != null) {
                 action = intent.getAction();
 
-                Intent isSelectedIntent = new Intent();
-                isSelectedIntent.putExtra("isSelected", isSelectedBTDevice);
-                isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
-                context.sendBroadcast(isSelectedIntent);
-
                 if (isSelectedBTDevice) {
                     ScreenONLock screenONLock = Singleton.getInstance().getScreenONLock();
                     notification = new Notification();
                     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     bluetoothActions = new BluetoothActions(context, am, screenONLock, notification, new VolumeControl(am));
+
+                    sendIsSelectedBroadcast(context, true);
                 }
             }
         }
@@ -82,10 +79,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 }
 
                 if (isSelectedBTDevice) {
-                    Intent isSelectedIntent = new Intent();
-                    isSelectedIntent.putExtra("isSelected", false);
-                    isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
-                    context.sendBroadcast(isSelectedIntent);
+                    sendIsSelectedBroadcast(context, false);
 
                     if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
                         bluetoothActions.actionsOnBTDisconnect();
@@ -141,5 +135,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     Log.i(TAG, btDevice + " did NOT CONNECT via a2dp");
             }
         }.start();
+    }
+
+    private void sendIsSelectedBroadcast(Context context, boolean isSelectedBTDevice){
+        Intent isSelectedIntent = new Intent();
+        isSelectedIntent.putExtra("isSelected", isSelectedBTDevice);
+        isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
+        context.sendBroadcast(isSelectedIntent);
     }
 }
