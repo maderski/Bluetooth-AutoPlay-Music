@@ -10,6 +10,7 @@ import android.util.Log;
  * Created by Jason on 7/28/16.
  */
 public class CustomReceiver extends BroadcastReceiver {
+    public static final String TAG = CustomReceiver.class.getName();
     private static final String ACTION_POWER_LAUNCH = "maderski.bluetoothautoplaymusic.pluggedinlaunch";
     private static final String ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch";
     private static final String ACTION_IS_SELECTED = "maderski.bluetoothautoplaymusic.isselected";
@@ -35,9 +36,13 @@ public class CustomReceiver extends BroadcastReceiver {
 
             switch (action) {
                 case ACTION_POWER_LAUNCH:
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "POWER_LAUNCH");
                     bluetoothActions.OnBTConnect();
                     break;
                 case ACTION_OFF_TELE_LAUNCH:
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "OFF_TELE_LAUNCH");
                     //Calling actionsOnBTConnect cause onBTConnect already ran
                     bluetoothActions.actionsOnBTConnect();
                     break;
@@ -45,7 +50,7 @@ public class CustomReceiver extends BroadcastReceiver {
                     boolean isSelected = intent.getBooleanExtra("isSelected", false);
                     BAPMDataPreferences.setIsSelected(context, isSelected);
                     if (BuildConfig.DEBUG)
-                        Log.i("CustomReceiver: ", Boolean.toString(isSelected));
+                        Log.i(TAG, "IS_SELECTED: " + Boolean.toString(isSelected));
                     break;
             }
         }
