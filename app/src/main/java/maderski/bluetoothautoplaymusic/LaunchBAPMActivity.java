@@ -23,7 +23,7 @@ public class LaunchBAPMActivity extends AppCompatActivity {
     private void dismissKeyGuard(Context context){
 
         if (!BAPMPreferences.getKeepScreenON(context)){
-            ScreenONLock screenONLock = new ScreenONLock();
+            ScreenONLock screenONLock = ScreenONLock.getInstance();
             screenONLock.enableWakeLock(context);
             Window window = ((Activity) context).getWindow();
             //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);

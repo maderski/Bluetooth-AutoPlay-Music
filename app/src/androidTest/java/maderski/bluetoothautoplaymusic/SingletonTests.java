@@ -17,19 +17,19 @@ public class SingletonTests extends AndroidTestCase {
 
     @SmallTest
     public void testWakeLockNotNull(){
-        assertNotNull(Singleton.getInstance().getScreenONLock());
+        assertNotNull(ScreenONLock.getInstance());
     }
 
     @SmallTest
     public void testWakeLockIsEnabled(){
-        Singleton.getInstance().getScreenONLock().enableWakeLock(getContext());
-        assertEquals(true, Singleton.getInstance().getScreenONLock().wakeLockHeld());
+        ScreenONLock.getInstance().enableWakeLock(getContext());
+        assertEquals(true, ScreenONLock.getInstance().wakeLockHeld());
     }
 
     @SmallTest
     public void testWakeLockIsDisabled(){
-        Singleton.getInstance().getScreenONLock().releaseWakeLock();
-        assertEquals(false, Singleton.getInstance().getScreenONLock().wakeLockHeld());
+        ScreenONLock.getInstance().releaseWakeLock();
+        assertEquals(false, ScreenONLock.getInstance().wakeLockHeld());
     }
 
     @Override

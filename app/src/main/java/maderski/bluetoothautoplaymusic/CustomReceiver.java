@@ -20,7 +20,7 @@ public class CustomReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = "None";
-        ScreenONLock screenONLock = Singleton.getInstance().getScreenONLock();
+        ScreenONLock screenONLock = ScreenONLock.getInstance();
         if (intent != null) {
             if (intent.getAction() != null) {
                 action = intent.getAction();

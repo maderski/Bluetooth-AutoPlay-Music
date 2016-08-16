@@ -9,11 +9,20 @@ import java.util.Calendar;
 /**
  * Created by Jason on 1/5/16.
  */
+
+//Uses the singleton pattern, only want one instance of ScreenONLock
 public class ScreenONLock {
 
     private static final String TAG = ScreenONLock.class.getName();
+    private static final ScreenONLock instance = new ScreenONLock();
 
     private PowerManager.WakeLock wakeLock;
+
+    private ScreenONLock(){}
+
+    public static synchronized ScreenONLock getInstance(){
+        return instance;
+    }
 
     //Enable WakeLock
     public void enableWakeLock(Context context){

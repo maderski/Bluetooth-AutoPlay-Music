@@ -40,7 +40,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 action = intent.getAction();
 
                 if (isSelectedBTDevice) {
-                    ScreenONLock screenONLock = Singleton.getInstance().getScreenONLock();
+                    ScreenONLock screenONLock = ScreenONLock.getInstance();
                     notification = new Notification();
                     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     bluetoothActions = new BluetoothActions(context, am, screenONLock, notification, new VolumeControl(am));
@@ -112,7 +112,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice) {
 
         //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-        Singleton.getInstance().getScreenONLock().releaseWakeLock();
+        ScreenONLock.getInstance().releaseWakeLock();
 
         Telephone telephone = new Telephone(context);
 
