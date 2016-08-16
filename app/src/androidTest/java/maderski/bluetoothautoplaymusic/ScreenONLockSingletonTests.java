@@ -1,14 +1,13 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.util.Log;
 
 /**
  * Created by Jason on 8/3/16.
  */
-public class SingletonTests extends AndroidTestCase {
+public class ScreenONLockSingletonTests extends AndroidTestCase {
 
     @Override
     protected void setUp() throws Exception {
