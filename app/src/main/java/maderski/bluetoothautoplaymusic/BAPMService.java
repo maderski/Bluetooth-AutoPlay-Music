@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Jason on 1/5/16.
@@ -16,8 +17,10 @@ public class BAPMService extends Service {
     //Start the Bluetooth receiver as a service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(BuildConfig.DEBUG)
+        if(BuildConfig.DEBUG) {
             Log.i("BAPMService: ", "started");
+            Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
+        }
         BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
         bluetoothReceiver.onReceive(this, intent);
 
@@ -26,6 +29,9 @@ public class BAPMService extends Service {
 
         PowerReceiver powerReceiver = new PowerReceiver();
         powerReceiver.onReceive(this, intent);
+
+        //Rehold WakeLock due to Service Restart
+        reHoldWakeLock();
 
         return Service.START_STICKY;
     }
@@ -41,5 +47,19 @@ public class BAPMService extends Service {
     public IBinder onBind(Intent intent) {
         //TODO for communication return IBinder implementation
         return null;
+    }
+
+    private void reHoldWakeLock(){
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        boolean shouldKeepScreenOn = BAPMPreferences.getKeepScreenON(this);
+        boolean ranBAPM = BAPMDataPreferences.getRanActionsOnBtConnect(this);
+        boolean isConnectedToBT = audioManager.isBluetoothA2dpOn();
+
+        if(shouldKeepScreenOn && ranBAPM && isConnectedToBT){
+            ScreenONLock screenONLock = ScreenONLock.getInstance();
+            screenONLock.releaseWakeLock();
+            screenONLock.enableWakeLock(this);
+        }
+
     }
 }
