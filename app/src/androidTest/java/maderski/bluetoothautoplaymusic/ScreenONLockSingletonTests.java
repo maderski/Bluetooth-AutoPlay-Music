@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.util.Log;
 
 /**
  * Created by Jason on 8/3/16.
