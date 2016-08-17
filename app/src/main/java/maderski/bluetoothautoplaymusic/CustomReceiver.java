@@ -20,10 +20,10 @@ public class CustomReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = "None";
-        ScreenONLock screenONLock = ScreenONLock.getInstance();
         if (intent != null) {
             if (intent.getAction() != null) {
                 action = intent.getAction();
+                ScreenONLock screenONLock = ScreenONLock.getInstance();
                 AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                 bluetoothActions = new BluetoothActions(
                         context,
