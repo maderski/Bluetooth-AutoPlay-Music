@@ -40,7 +40,7 @@ public class BAPMService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if(BuildConfig.DEBUG)
-            Log.d("BTAPMService: ", "onDestroy");
+            Toast.makeText(this, "BAPMService Destoryed", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -50,16 +50,18 @@ public class BAPMService extends Service {
     }
 
     private void reHoldWakeLock(){
-        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         boolean shouldKeepScreenOn = BAPMPreferences.getKeepScreenON(this);
-        boolean ranBAPM = BAPMDataPreferences.getRanActionsOnBtConnect(this);
-        boolean isConnectedToBT = audioManager.isBluetoothA2dpOn();
 
-        if(shouldKeepScreenOn && ranBAPM && isConnectedToBT){
-            ScreenONLock screenONLock = ScreenONLock.getInstance();
-            screenONLock.releaseWakeLock();
-            screenONLock.enableWakeLock(this);
+        if(shouldKeepScreenOn) {
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            boolean ranBAPM = BAPMDataPreferences.getRanActionsOnBtConnect(this);
+            boolean isConnectedToBT = audioManager.isBluetoothA2dpOn();
+
+            if (ranBAPM && isConnectedToBT) {
+                ScreenONLock screenONLock = ScreenONLock.getInstance();
+                screenONLock.releaseWakeLock();
+                screenONLock.enableWakeLock(this);
+            }
         }
-
     }
 }

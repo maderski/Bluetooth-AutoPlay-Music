@@ -28,6 +28,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
             runOnFirstInstall();
 
         checkLocationPermission();
+
+        checkIfBAPMServiceRunning();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -140,6 +143,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return version;
+    }
+
+    //Starts BAPMService if it is not running
+    private void checkIfBAPMServiceRunning(){
+        if(!isServiceRunning(BAPMService.class)){
+            Intent serviceIntent = new Intent(this, BAPMService.class);
+            startService(serviceIntent);
+        }
     }
 
     @Override
@@ -533,6 +544,18 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView)findViewById(R.id.textView9);
         textView.setTypeface(typeface);
 
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass){
+        ActivityManager activityManager = (ActivityManager)this.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals(serviceClass.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
