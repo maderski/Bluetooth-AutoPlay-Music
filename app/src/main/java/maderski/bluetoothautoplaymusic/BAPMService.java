@@ -39,8 +39,6 @@ public class BAPMService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(BuildConfig.DEBUG)
-            Toast.makeText(this, "BAPMService Destoryed", Toast.LENGTH_LONG).show();
     }
 
     @Override
