@@ -16,7 +16,7 @@ public class PowerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
 
-        if(BAPMDataPreferences.getIsSelected(context)) {
+        if(BAPMDataPreferences.getIsSelected(context) && Power.isPluggedIn(context)) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             boolean isBTConnected = audioManager.isBluetoothA2dpOn();
             boolean powerRequired = BAPMPreferences.getPowerConnected(context);

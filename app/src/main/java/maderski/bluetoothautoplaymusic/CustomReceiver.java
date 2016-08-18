@@ -39,8 +39,7 @@ public class CustomReceiver extends BroadcastReceiver {
                     if(BuildConfig.DEBUG)
                         Log.i(TAG, "POWER_LAUNCH");
 
-                    if(Power.isPluggedIn(context))
-                        bluetoothActions.OnBTConnect();
+                    bluetoothActions.OnBTConnect();
                     break;
                 case ACTION_OFF_TELE_LAUNCH:
                     if(BuildConfig.DEBUG)
