@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="maderski.bluetoothautoplaymusic.LaunchBAPMActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/textView14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Bluetooth Autoplay Music"
+        android:id="@+id/textView14"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="40dp" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_marginEnd="102dp"
+        android:layout_alignTop="@+id/imageView3"
+        android:layout_toStartOf="@+id/imageView3" />
+
+
+</RelativeLayout>
