@@ -23,16 +23,17 @@ public class CustomReceiver extends BroadcastReceiver {
         if (intent != null) {
             if (intent.getAction() != null) {
                 action = intent.getAction();
-                ScreenONLock screenONLock = ScreenONLock.getInstance();
-                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                bluetoothActions = new BluetoothActions(
-                        context,
-                        audioManager,
-                        screenONLock,
-                        new Notification(),
-                        new VolumeControl(audioManager));
+                if(!action.equalsIgnoreCase("ACTION_IS_SELECTED")) {
+                    ScreenONLock screenONLock = ScreenONLock.getInstance();
+                    AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                    bluetoothActions = new BluetoothActions(
+                            context,
+                            audioManager,
+                            screenONLock,
+                            new Notification(),
+                            new VolumeControl(audioManager));
+                }
             }
-
 
             switch (action) {
                 case ACTION_POWER_LAUNCH:
