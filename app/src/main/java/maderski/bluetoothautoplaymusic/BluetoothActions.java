@@ -95,6 +95,10 @@ public class BluetoothActions {
         BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
 
         if(screenON){
+            //Try to releaseWakeLock() in case for some reason it was not released on disconnect
+            if(screenONLock.wakeLockHeld())
+                screenONLock.releaseWakeLock();
+
             screenONLock.enableWakeLock(context);
         }
 

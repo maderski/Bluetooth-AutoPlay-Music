@@ -110,10 +110,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     }
 
     private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice) {
-
-        //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-        ScreenONLock.getInstance().releaseWakeLock();
-
         Telephone telephone = new Telephone(context);
 
         if(!telephone.isOnCall()){
