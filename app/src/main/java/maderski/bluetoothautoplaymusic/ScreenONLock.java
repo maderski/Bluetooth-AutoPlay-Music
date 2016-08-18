@@ -30,9 +30,11 @@ public class ScreenONLock {
         int screenBrightness;
 
         if(isDark(context)){
-            screenBrightness = PowerManager.SCREEN_DIM_WAKE_LOCK;
+            //Dim Screen Brightness
+            screenBrightness = 6;
         }else{
-            screenBrightness = PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
+            //Bright Screen Brightness
+            screenBrightness = 10;
         }
 
         PowerManager pm = (PowerManager)context.getSystemService(context.POWER_SERVICE);
