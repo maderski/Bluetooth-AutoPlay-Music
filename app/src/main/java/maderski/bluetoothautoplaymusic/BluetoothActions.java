@@ -117,7 +117,7 @@ public class BluetoothActions {
 
         if(launchMusicPlayer) {
             try {
-                launchApp.musicPlayerLaunch(2, launchMaps);
+                launchApp.musicPlayerLaunch(3, launchMaps);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
@@ -132,7 +132,7 @@ public class BluetoothActions {
         }
 
         if(launchMaps && !launchMusicPlayer){
-            launchApp.launchMaps(2);
+            launchApp.launchMaps(3);
         }
     }
 
