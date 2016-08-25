@@ -34,7 +34,8 @@ public class VariousLists {
             if(resolveInfo.contains("pandora")
                     || resolveInfo.contains(".playback")
                     || resolveInfo.contains("music")
-                    || resolveInfo.contains("Music")) {
+                    || resolveInfo.contains("Music")
+                    || resolveInfo.contains("audioplayer")) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
                 String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
                 if (!installedMediaPlayers.contains(pkg)) {
