@@ -18,7 +18,7 @@ import android.widget.Toast;
  */
 public class BluetoothReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "BluetoothReceiver";
+    private static final String TAG = BluetoothReceiver.class.getName();
 
     private String btDevice = "None";
 
