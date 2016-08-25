@@ -20,36 +20,38 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     private static final String TAG = "BluetoothReceiver";
 
-    private BluetoothActions bluetoothActions;
     private String btDevice = "None";
-    private AudioManager am;
-    private Notification notification;
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
         boolean isSelectedBTDevice = false;
-        BluetoothDevice device = null;
-        String action = "None";
 
         if(intent != null) {
-            device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (device != null)
                 isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
 
             if (intent.getAction() != null) {
-                action = intent.getAction();
+                String action = intent.getAction();
 
                 if (isSelectedBTDevice) {
                     ScreenONLock screenONLock = ScreenONLock.getInstance();
-                    notification = new Notification();
-                    am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    bluetoothActions = new BluetoothActions(context, am, screenONLock, notification, new VolumeControl(am));
+                    AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                    BluetoothActions bluetoothActions = new BluetoothActions(context, am,
+                            screenONLock, new Notification(), new VolumeControl(am));
 
+                    bluetoothConnectDisconnectSwitch(context, action, device, am, bluetoothActions,
+                            isSelectedBTDevice);
                     sendIsSelectedBroadcast(context, true);
                 }
             }
         }
+    }
 
+    private void bluetoothConnectDisconnectSwitch(Context context, String action,
+                                                   BluetoothDevice device, AudioManager am,
+                                                   BluetoothActions bluetoothActions,
+                                                   boolean isSelectedBTDevice){
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + action);
 
@@ -57,7 +59,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
                 if(isSelectedBTDevice) {
                     btDevice = device.getName();
-                    waitingForBTA2dpOn(context, isSelectedBTDevice);
+                    waitingForBTA2dpOn(context, isSelectedBTDevice, bluetoothActions, am);
                 }
                 else {
                     btDevice = "Device NOT on List";
@@ -89,13 +91,15 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 }
 
                 if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
+                    Notification notification = new Notification();
                     notification.removeBAPMMessage(context);
                 }
                 break;
         }
     }
 
-    private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice){
+    private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice,
+                                    BluetoothActions bluetoothActions, AudioManager am){
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
         boolean isBTConnected = am.isBluetoothA2dpOn();
 
@@ -109,7 +113,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     }
 
-    private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice) {
+    private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice,
+                                    final BluetoothActions bluetoothActions, final AudioManager am) {
         Telephone telephone = new Telephone(context);
 
         if(!telephone.isOnCall()){
@@ -127,7 +132,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     Log.i(TAG, "A2dp Ready: " + Boolean.toString(am.isBluetoothA2dpOn()));
                 if(am.isBluetoothA2dpOn()){
                     cancel();
-                    checksBeforeLaunch(context, _isAUserSelectedBTDevice);
+                    checksBeforeLaunch(context, _isAUserSelectedBTDevice, bluetoothActions, am);
                 }
             }
 
