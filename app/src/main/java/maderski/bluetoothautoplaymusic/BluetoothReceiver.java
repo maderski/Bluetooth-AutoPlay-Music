@@ -40,9 +40,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     BluetoothActions bluetoothActions = new BluetoothActions(context, am,
                             screenONLock, new Notification(), new VolumeControl(am));
 
+                    if(!BAPMDataPreferences.getIsSelected(context))
+                        sendIsSelectedBroadcast(context, true);
+
                     bluetoothConnectDisconnectSwitch(context, action, device, am, bluetoothActions,
                             isSelectedBTDevice);
-                    sendIsSelectedBroadcast(context, true);
                 }
             }
         }
@@ -57,13 +59,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                if(isSelectedBTDevice) {
-                    btDevice = device.getName();
-                    waitingForBTA2dpOn(context, isSelectedBTDevice, bluetoothActions, am);
-                }
-                else {
-                    btDevice = "Device NOT on List";
-                }
+                btDevice = device.getName();
+                waitingForBTA2dpOn(context, isSelectedBTDevice, bluetoothActions, am);
+
                 if(BuildConfig.DEBUG) {
                     for (String cd : BAPMPreferences.getBTDevices(context)) {
                         Log.i(TAG, "User selected device: " + cd);
@@ -83,12 +81,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(context)));
                 }
 
-                if (isSelectedBTDevice) {
-                    sendIsSelectedBroadcast(context, false);
+                sendIsSelectedBroadcast(context, false);
 
-                    if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
-                        bluetoothActions.actionsOnBTDisconnect();
-                }
+                if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
+                    bluetoothActions.actionsOnBTDisconnect();
 
                 if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
                     Notification notification = new Notification();
