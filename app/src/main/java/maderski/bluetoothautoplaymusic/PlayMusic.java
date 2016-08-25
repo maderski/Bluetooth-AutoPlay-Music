@@ -29,8 +29,7 @@ public class PlayMusic {
         if(!launchMusicPlayer){
             playerControls = new OtherMusicPlayer(audioManager);
         }else {
-            int index = BAPMPreferences.getSelectedMusicPlayer(context);
-            String pkgName = VariousLists.listOfInstalledMediaPlayers(context).get(index);
+            String pkgName = BAPMPreferences.getSelectedMusicPlayer(context);
             switch (pkgName) {
                 case PackageTools.SPOTIFY:
                     playerControls = new Spotify(context, audioManager);

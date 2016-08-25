@@ -22,48 +22,6 @@ public class VariousLists {
 
     private VariousLists(){}
 
-    //List of Mediaplayers that is installed on the phone
-    public static List<String> listOfInstalledMediaPlayers(Context context){
-        Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        List<ResolveInfo> pkgAppsList = context.getPackageManager().queryBroadcastReceivers(intent, 0);
-        List<String> installedMediaPlayers = new ArrayList<>();
-
-        for(ResolveInfo ri:pkgAppsList){
-            String resolveInfo = ri.toString();
-            //Log.i("resolve ", resolveInfo);
-            if(resolveInfo.contains("pandora")
-                    || resolveInfo.contains(".playback")
-                    || resolveInfo.contains("music")
-                    || resolveInfo.contains("Music")
-                    || resolveInfo.contains("audioplayer")) {
-                String[] resolveInfoSplit = resolveInfo.split(" ");
-                String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
-                if (!installedMediaPlayers.contains(pkg)) {
-                    installedMediaPlayers.add(pkg);
-                }
-            }
-        }
-
-        return installedMediaPlayers;
-    }
-
-    //List of bluetooth devices on the phone
-    public static List<String> listOfBluetoothDevices(){
-        List<String> btDevices = new ArrayList<String>();
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        if(mBluetoothAdapter != null) {
-            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-
-            for(BluetoothDevice bt : pairedDevices)
-                btDevices.add(bt.getName());
-        }else{
-            btDevices.add(0, "No Bluetooth Device found");
-        }
-
-        return btDevices;
-    }
-
     //Returns true if a connected device on the connected device list is on the BAPMPreferences.
     //getBTDevices List that is set by the user in the UI
     public static boolean isADeviceOnBAPMList(Context context, List<String> connectedBTDeviceList){

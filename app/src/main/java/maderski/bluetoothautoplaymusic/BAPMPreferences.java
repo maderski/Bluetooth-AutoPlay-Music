@@ -95,13 +95,13 @@ public class BAPMPreferences {
         return reader(context).getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false);
     }
 
-    public static void setSelectedMusicPlayer(Context context, int index){
-        editor(context).putInt(SELECTED_MUSIC_PLAYER_KEY, index);
+    public static void setSelectedMusicPlayer(Context context, String packageName){
+        editor(context).putString(SELECTED_MUSIC_PLAYER_KEY, packageName);
         commit(context);
     }
 
-    public static int getSelectedMusicPlayer(Context context){
-        return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
+    public static String getSelectedMusicPlayer(Context context){
+        return reader(context).getString(SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
     }
 
     public static void setUnlockScreen(Context context, Boolean enabled){

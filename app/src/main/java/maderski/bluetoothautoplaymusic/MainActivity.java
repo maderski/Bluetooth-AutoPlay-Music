@@ -2,11 +2,14 @@ package maderski.bluetoothautoplaymusic;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,13 +42,12 @@ public class MainActivity extends AppCompatActivity {
     private Set<String> saveBTDevices = new HashSet<String>();
     private boolean isBTConnected = false;
     private LaunchApp launchApp;
+    private List<String> installedMediaPlayers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final Context context = this;
 
         if(BAPMPreferences.getFirstInstallKey(this))
             runOnFirstInstall();
@@ -56,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setFloatingActionButton(this);
+
+    }
+
+    private void setFloatingActionButton(final Context context){
         //When Floating Action Button is clicked show snackbar with MAPS/WAZE selection
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -72,16 +80,7 @@ public class MainActivity extends AppCompatActivity {
                             .setAction(mapAppName, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (mapApp.equals(PackageTools.WAZE)) {
-                                        BAPMPreferences.setMapsChoice(context, PackageTools.MAPS);
-                                        Toast.makeText(context, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
-                                    }
-                                    else {
-                                        BAPMPreferences.setMapsChoice(context, PackageTools.WAZE);
-                                        Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
-                                    }
-                                    if(BuildConfig.DEBUG)
-                                        Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
+                                    setMapsChoice(context, mapApp);
                                     setMapsButtonText(context);
                                 }
                             }).show();
@@ -90,6 +89,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setMapsChoice(final Context context, String mapApp){
+        if (mapApp.equals(PackageTools.WAZE)) {
+            BAPMPreferences.setMapsChoice(context, PackageTools.MAPS);
+            Toast.makeText(context, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
+        }
+        else {
+            BAPMPreferences.setMapsChoice(context, PackageTools.WAZE);
+            Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
+        }
+
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
     }
 
     @Override
@@ -156,10 +169,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        installedMediaPlayers = listOfInstalledMediaPlayers(this);
         setupUIElements(this);
         launchApp = new LaunchApp(this);
         checkIfWazeRemoved(this);
         isBTConnected = BAPMDataPreferences.getRanActionsOnBtConnect(this);
+
     }
 
     //Save the BTDevices when program is paused
@@ -192,9 +207,7 @@ public class MainActivity extends AppCompatActivity {
     //On initial install so saveBTdevices is not null
     private void runOnFirstInstall(){
         Set<String> firstRun = new HashSet<>();
-        saveBTDevices = new HashSet<>(VariousLists.listOfBluetoothDevices());
-
-        //firstRun.add(saveBTDevices.iterator().next());
+        saveBTDevices = new HashSet<>(listOfBluetoothDevices());
 
         BAPMPreferences.setBTDevices(this, firstRun);
         BAPMPreferences.setFirstInstall(this, false);
@@ -203,11 +216,11 @@ public class MainActivity extends AppCompatActivity {
     //Used for testing, Lists Music players and BT devices in logcat
     private void listMusicplayersAndBTDevices(Context context){
         if(BuildConfig.DEBUG) {
-            for (String pkg : VariousLists.listOfInstalledMediaPlayers(context)) {
+            for (String pkg : installedMediaPlayers) {
                 Log.i("Pkg ", pkg);
             }
 
-            for (String btDevice : VariousLists.listOfBluetoothDevices()) {
+            for (String btDevice : listOfBluetoothDevices()) {
                 Log.i("BTDevice ", btDevice);
             }
         }
@@ -232,13 +245,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
 
-        if (VariousLists.listOfBluetoothDevices().contains("No Bluetooth Device found") ||
-                VariousLists.listOfBluetoothDevices().isEmpty()){
+        if (listOfBluetoothDevices().contains("No Bluetooth Device found") ||
+                listOfBluetoothDevices().isEmpty()){
             textView = new TextView(this);
             textView.setText(R.string.no_BT_found);
             BTDeviceCkBoxLL.addView(textView);
         }else{
-            for (String BTDevice : VariousLists.listOfBluetoothDevices()) {
+            for (String BTDevice : listOfBluetoothDevices()) {
                 checkBox = new CheckBox(this);
                 checkBox.setText(BTDevice);
                 checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -306,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
         RadioGroup rdoMPGroup = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
         rdoMPGroup.removeAllViews();
 
-        for(String packageName : VariousLists.listOfInstalledMediaPlayers(context)){
+        for(String packageName : installedMediaPlayers){
 
             try{
                 appInfo = pm.getApplicationInfo(packageName, 0);
@@ -333,10 +346,14 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 View radioButton = radioGroup.findViewById(i);
                 int index = radioGroup.indexOfChild(radioButton);
-                BAPMPreferences.setSelectedMusicPlayer(context, index);
-                //Log.i(TAG, Integer.toString(index));
-                //Log.i(TAG, Integer.toString(BAPMPreferences.getSelectedMusicPlayer(context)));
-                //Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
+                String packageName = installedMediaPlayers.get(index);
+                BAPMPreferences.setSelectedMusicPlayer(context, packageName);
+
+                if(BuildConfig.DEBUG) {
+                    Log.i(TAG, Integer.toString(index));
+                    Log.i(TAG, BAPMPreferences.getSelectedMusicPlayer(context));
+                    Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
+                }
             }
         });
     }
@@ -401,12 +418,17 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             RadioGroup rdoGroup = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
-            int index = BAPMPreferences.getSelectedMusicPlayer(context);
+            int index = getRadioButtonIndex();
             RadioButton radioButton = (RadioButton) rdoGroup.getChildAt(index);
             radioButton.setChecked(true);
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    private int getRadioButtonIndex(){
+        String selectedMusicPlayer = BAPMPreferences.getSelectedMusicPlayer(this);
+        return installedMediaPlayers.indexOf(selectedMusicPlayer);
     }
 
     //***Toggle button actions are below, basically set SharedPref value for specified button***
@@ -556,6 +578,48 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    //List of bluetooth devices on the phone
+    private List<String> listOfBluetoothDevices(){
+        List<String> btDevices = new ArrayList<String>();
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if(mBluetoothAdapter != null) {
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+
+            for(BluetoothDevice bt : pairedDevices)
+                btDevices.add(bt.getName());
+        }else{
+            btDevices.add(0, "No Bluetooth Device found");
+        }
+
+        return btDevices;
+    }
+
+    //List of Mediaplayers that is installed on the phone
+    private List<String> listOfInstalledMediaPlayers(Context context){
+        Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        List<ResolveInfo> pkgAppsList = context.getPackageManager().queryBroadcastReceivers(intent, 0);
+        List<String> installedMediaPlayers = new ArrayList<>();
+
+        for(ResolveInfo ri:pkgAppsList){
+            String resolveInfo = ri.toString();
+            //Log.i("resolve ", resolveInfo);
+            if(resolveInfo.contains("pandora")
+                    || resolveInfo.contains(".playback")
+                    || resolveInfo.contains("music")
+                    || resolveInfo.contains("Music")
+                    || resolveInfo.contains("audioplayer")) {
+                String[] resolveInfoSplit = resolveInfo.split(" ");
+                String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
+                if (!installedMediaPlayers.contains(pkg)) {
+                    installedMediaPlayers.add(pkg);
+                }
+            }
+        }
+
+        return installedMediaPlayers;
     }
 
 }
