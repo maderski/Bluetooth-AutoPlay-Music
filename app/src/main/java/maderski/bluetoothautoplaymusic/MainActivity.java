@@ -179,21 +179,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Temporary fix to issues version 2.64 caused----------------------------------
     private void v264UpdateHotfix(){
-        Object object = BAPMPreferences.getSelectedMusicPlayer(this);
-        String nameOf = object.getClass().getSimpleName();
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Name of: " + nameOf);
+        if(!BAPMPreferences.getV264Hotfix(this)) {
+            Object object = null;
+            try {
+                object = BAPMPreferences.getSelectedMusicPlayer(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        if(nameOf.equalsIgnoreCase("Integer")) {
-            if (BAPMPreferences.getSelectedMusicPlayer(this) != 9999) {
-                int index = BAPMPreferences.getSelectedMusicPlayer(this);
-                String packageName = installedMediaPlayers.get(index);
-                BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
-                BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
+            try {
+                object = BAPMPreferences.getSelectedMusicPlayer(this, "isAString");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(object != null) {
+                String nameOf = object.getClass().getSimpleName();
+                if (BuildConfig.DEBUG)
+                    Log.i(TAG, "Name of: " + nameOf);
+
+                if (nameOf.equalsIgnoreCase("Integer")) {
+                    if (BAPMPreferences.getSelectedMusicPlayer(this) != 9999) {
+                        int index = BAPMPreferences.getSelectedMusicPlayer(this);
+                        String packageName = installedMediaPlayers.get(index);
+                        BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
+                        BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
+                        BAPMPreferences.setV264Hotfix(this, true);
+                    }
+                } else if (nameOf.equalsIgnoreCase("String")) {
+                    String packageName = (String)object;
+                    BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
+                    BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
+                    BAPMPreferences.setV264Hotfix(this, true);
+                }
             }
         }
     }
+    //------------------------------------------------------------------------------
 
     //Save the BTDevices when program is paused
     @Override

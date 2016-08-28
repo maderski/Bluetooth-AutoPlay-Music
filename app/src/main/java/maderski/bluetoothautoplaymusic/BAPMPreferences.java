@@ -33,6 +33,8 @@ public class BAPMPreferences {
     public static final String SEND_TO_BACKGROUND_KEY = "SendToBackground";
     public static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
 
+    public static final String V264_HOTFIX = "V264Hotfix";
+
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
 
@@ -49,6 +51,26 @@ public class BAPMPreferences {
 
         return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
     }
+
+
+    //Temporary fix to issues version 2.64 caused----------------------------------
+    public static void setV264Hotfix(Context context, boolean enabled){
+        editor(context).putBoolean(V264_HOTFIX, enabled);
+        commit(context);
+    }
+
+    public static boolean getV264Hotfix(Context context){
+        return reader(context).getBoolean(V264_HOTFIX, false);
+    }
+
+    public static void setSelectedMusicPlayerKey(Context context, int index){
+        editor(context).putInt(SELECTED_MUSIC_PLAYER_KEY, index);
+    }
+
+    public static int getSelectedMusicPlayer(Context context){
+        return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
+    }
+    //------------------------------------------------------------------------------
 
     //Preferences for enabling and disabling things
     public static void setLaunchGoogleMaps(Context context, boolean enabled){
@@ -105,12 +127,8 @@ public class BAPMPreferences {
         return reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
     }
 
-    public static void setSelectedMusicPlayerKey(Context context, int index){
-        editor(context).putInt(SELECTED_MUSIC_PLAYER_KEY, index);
-    }
-
-    public static int getSelectedMusicPlayer(Context context){
-        return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
+    public static String getSelectedMusicPlayer(Context context, String text){
+        return reader(context).getString(SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
     }
 
     public static void setUnlockScreen(Context context, Boolean enabled){
