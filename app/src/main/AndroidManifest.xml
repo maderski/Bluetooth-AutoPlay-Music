@@ -52,7 +52,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:noHistory="true"/>
         <activity android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/SplashTheme"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
