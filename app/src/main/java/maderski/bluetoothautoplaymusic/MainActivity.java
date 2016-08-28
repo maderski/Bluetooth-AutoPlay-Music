@@ -181,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Temporary fix to issues version 2.64 caused----------------------------------
     private void v264UpdateHotfix(){
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "V246Hotfix: " + Boolean.toString(BAPMPreferences.getV264Hotfix(this)));
         if(!BAPMPreferences.getV264Hotfix(this)) {
             Object object = null;
             try {
@@ -206,15 +208,14 @@ public class MainActivity extends AppCompatActivity {
                         String packageName = installedMediaPlayers.get(index);
                         BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
                         BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
-                        BAPMPreferences.setV264Hotfix(this, true);
                     }
                 } else if (nameOf.equalsIgnoreCase("String")) {
                     String packageName = (String)object;
                     BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
                     BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
-                    BAPMPreferences.setV264Hotfix(this, true);
                 }
             }
+            BAPMPreferences.setV264Hotfix(this, true);
         }
     }
     //------------------------------------------------------------------------------
