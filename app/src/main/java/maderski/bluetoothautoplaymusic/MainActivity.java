@@ -180,11 +180,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void v264UpdateHotfix(){
-        if(BAPMPreferences.getSelectedMusicPlayer(this) != 9999){
-            int index = BAPMPreferences.getSelectedMusicPlayer(this);
-            String packageName = installedMediaPlayers.get(index);
-            BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
-            BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
+        Object object = BAPMPreferences.getSelectedMusicPlayer(this);
+        String nameOf = object.getClass().getSimpleName();
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Name of: " + nameOf);
+
+        if(nameOf.equalsIgnoreCase("Integer")) {
+            if (BAPMPreferences.getSelectedMusicPlayer(this) != 9999) {
+                int index = BAPMPreferences.getSelectedMusicPlayer(this);
+                String packageName = installedMediaPlayers.get(index);
+                BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
+                BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
+            }
         }
     }
 
