@@ -23,6 +23,7 @@ public class BAPMPreferences {
     public static final String MAX_VOLUME_KEY = "maxVolume";
     public static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
     public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
+    public static final String PKG_SELECTED_MUSIC_PLAYER_KEY = "PkgSelectedMusicPlayer";
     public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     public static final String BTDEVICES_KEY = "BTDevices";
     public static final String MAPS_CHOICE_KEY = "MapsChoice";
@@ -95,13 +96,21 @@ public class BAPMPreferences {
         return reader(context).getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false);
     }
 
-    public static void setSelectedMusicPlayer(Context context, String packageName){
-        editor(context).putString(SELECTED_MUSIC_PLAYER_KEY, packageName);
+    public static void setPkgSelectedMusicPlayer(Context context, String packageName){
+        editor(context).putString(PKG_SELECTED_MUSIC_PLAYER_KEY, packageName);
         commit(context);
     }
 
-    public static String getSelectedMusicPlayer(Context context){
-        return reader(context).getString(SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
+    public static String getPkgSelectedMusicPlayer(Context context){
+        return reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
+    }
+
+    public static void setSelectedMusicPlayerKey(Context context, int index){
+        editor(context).putInt(SELECTED_MUSIC_PLAYER_KEY, index);
+    }
+
+    public static int getSelectedMusicPlayer(Context context){
+        return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
     }
 
     public static void setUnlockScreen(Context context, Boolean enabled){

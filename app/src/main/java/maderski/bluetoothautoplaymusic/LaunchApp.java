@@ -21,7 +21,7 @@ public class LaunchApp extends PackageTools {
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
     public void musicPlayerLaunch(int seconds, boolean _mapsEnabled){
-        final String pkgName = BAPMPreferences.getSelectedMusicPlayer(context);
+        final String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
         final boolean mapsEnabled = _mapsEnabled;
         seconds = seconds * 1000;
         new CountDownTimer(seconds,

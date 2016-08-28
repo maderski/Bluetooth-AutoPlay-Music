@@ -11,7 +11,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -170,11 +169,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         installedMediaPlayers = listOfInstalledMediaPlayers(this);
+
+        v264UpdateHotfix();
+
         setupUIElements(this);
         launchApp = new LaunchApp(this);
         checkIfWazeRemoved(this);
         isBTConnected = BAPMDataPreferences.getRanActionsOnBtConnect(this);
 
+    }
+
+    private void v264UpdateHotfix(){
+        if(BAPMPreferences.getSelectedMusicPlayer(this) != 9999){
+            int index = BAPMPreferences.getSelectedMusicPlayer(this);
+            String packageName = installedMediaPlayers.get(index);
+            BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
+            BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
+        }
     }
 
     //Save the BTDevices when program is paused
@@ -347,11 +358,11 @@ public class MainActivity extends AppCompatActivity {
                 View radioButton = radioGroup.findViewById(i);
                 int index = radioGroup.indexOfChild(radioButton);
                 String packageName = installedMediaPlayers.get(index);
-                BAPMPreferences.setSelectedMusicPlayer(context, packageName);
+                BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName);
 
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, Integer.toString(index));
-                    Log.i(TAG, BAPMPreferences.getSelectedMusicPlayer(context));
+                    Log.i(TAG, BAPMPreferences.getPkgSelectedMusicPlayer(context));
                     Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
                 }
             }
@@ -427,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getRadioButtonIndex(){
-        String selectedMusicPlayer = BAPMPreferences.getSelectedMusicPlayer(this);
+        String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(this);
         return installedMediaPlayers.indexOf(selectedMusicPlayer);
     }
 

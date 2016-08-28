@@ -1,13 +1,9 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
 
 /**
  * Created by Jason on 12/8/15.
@@ -29,7 +25,7 @@ public class PlayMusic {
         if(!launchMusicPlayer){
             playerControls = new OtherMusicPlayer(audioManager);
         }else {
-            String pkgName = BAPMPreferences.getSelectedMusicPlayer(context);
+            String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
             switch (pkgName) {
                 case PackageTools.SPOTIFY:
                     playerControls = new Spotify(context, audioManager);
