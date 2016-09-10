@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = SettingsActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         btnState = BAPMPreferences.getWaitTillOffPhone(context);
         setting_switch = (Switch) findViewById(R.id.wait_till_off_phone);
+        setting_switch.setChecked(btnState);
+
+        Permissions permissions = new Permissions();
+        if(!permissions.isLocationPermissionGranted(this))
+            BAPMPreferences.setAutoBrightness(this, false);
+        btnState = BAPMPreferences.getAutoBrightness(context);
+        setting_switch = (Switch) findViewById(R.id.auto_brightness);
         setting_switch.setChecked(btnState);
 
     }
@@ -106,6 +115,23 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    public void autoBrightnessSwitch(View view){
+        boolean on = ((Switch) view).isChecked();
+        if(on){
+            Permissions permissions = new Permissions();
+            permissions.checkLocationPermission(this);
+
+            BAPMPreferences.setAutoBrightness(this, true);
+
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "WaitTillOffPhone Switch is ON");
+        }else{
+            BAPMPreferences.setAutoBrightness(this, false);
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "WaitTillOffPhone Switch is OFF");
+        }
+    }
+
     private void setFonts(){
         Typeface typeface_bold = Typeface.createFromAsset(getAssets(), "fonts/TitilliumText600wt.otf");
 
@@ -119,6 +145,12 @@ public class SettingsActivity extends AppCompatActivity {
         textView.setTypeface(typeface_bold);
 
         textView = (TextView)findViewById(R.id.send_to_background);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.wait_till_off_phone);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.auto_brightness);
         textView.setTypeface(typeface_bold);
     }
 }

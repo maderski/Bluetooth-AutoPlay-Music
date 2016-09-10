@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="When music player is launched play music"
-            android:id="@+id/textView10"
+            android:id="@+id/playMusicExplaination"
             android:textSize="12dp" />
 
         <Switch
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Will NOT launch unless phone is charging"
-            android:id="@+id/textView11"
+            android:id="@+id/powerRequiredExplaination"
             android:textSize="12dp" />
 
         <Switch
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Go to homescreen on device disconnect"
-            android:id="@+id/textView12"
+            android:id="@+id/GoHomeExplaination"
             android:textSize="12dp" />
 
         <Switch
@@ -121,7 +121,28 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="On a call, Will NOT launch until call is over"
-            android:id="@+id/textView13"
+            android:id="@+id/CallCompletedExplaination"
+            android:textSize="12dp" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Auto BRIGHTNESS"
+            android:id="@+id/auto_brightness"
+            android:checked="false"
+            android:paddingTop="20dp"
+            android:onClick="autoBrightnessSwitch"
+            android:textSize="16dp"
+            android:switchPadding="100dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Set Keep Screen ON&apos; brightness bright/dim"
+            android:id="@+id/autoBrightnessExplainatino"
             android:textSize="12dp" />
     </LinearLayout>
 

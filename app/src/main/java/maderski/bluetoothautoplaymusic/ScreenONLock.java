@@ -27,15 +27,10 @@ public class ScreenONLock {
     //Enable WakeLock
     public void enableWakeLock(Context context){
 
-        int screenBrightness;
+        int screenBrightness = 2;
 
-        if(isDark(context)){
-            //Dim Screen Brightness
-            screenBrightness = 6;
-        }else{
-            //Bright Screen Brightness
-            screenBrightness = 10;
-        }
+        if(BAPMPreferences.getAutoBrightness(context))
+            screenBrightness = getAutoScreenBrightness(context);
 
         PowerManager pm = (PowerManager)context.getSystemService(context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
@@ -47,6 +42,20 @@ public class ScreenONLock {
         }catch (Exception e){
             Log.e(TAG, "WakeLock Error: " + e.getMessage());
         }
+    }
+
+    private int getAutoScreenBrightness(Context context){
+        int screenBrightness;
+
+        if(isDark(context)){
+            //Dim Screen Brightness
+            screenBrightness = 6;
+        }else{
+            //Bright Screen Brightness
+            screenBrightness = 10;
+        }
+
+        return screenBrightness;
     }
 
     //Disable and release WakeLock

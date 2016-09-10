@@ -32,6 +32,7 @@ public class BAPMPreferences {
     public static final String POWER_CONNECTED_KEY = "PowerConnected";
     public static final String SEND_TO_BACKGROUND_KEY = "SendToBackground";
     public static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
+    public static final String AUTO_BRIGHTNESS_KEY = "AutoBrightness";
 
     public static final String V264_HOTFIX = "V264Hotfix";
 
@@ -73,6 +74,15 @@ public class BAPMPreferences {
     //------------------------------------------------------------------------------
 
     //Preferences for enabling and disabling things
+    public static void setAutoBrightness(Context context, boolean enabled){
+        editor(context).putBoolean(AUTO_BRIGHTNESS_KEY, enabled);
+        commit(context);
+    }
+
+    public static boolean getAutoBrightness(Context context){
+        return reader(context).getBoolean(AUTO_BRIGHTNESS_KEY, false);
+    }
+
     public static void setLaunchGoogleMaps(Context context, boolean enabled){
         editor(context).putBoolean(LAUNCH_MAPS_KEY, enabled);
         commit(context);

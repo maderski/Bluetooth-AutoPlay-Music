@@ -51,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
         if(BAPMPreferences.getFirstInstallKey(this))
             runOnFirstInstall();
 
-        checkLocationPermission();
+        if(BAPMPreferences.getAutoBrightness(this)) {
+            Permissions permissions = new Permissions();
+            permissions.checkLocationPermission(this);
+        }
 
         checkIfBAPMServiceRunning();
 
@@ -399,19 +402,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void checkLocationPermission() {
-        PackageManager packageManager = getPackageManager();
-        int hasPermission = packageManager.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
-                getPackageName());
-        //Check if Permission is granted
-        if(hasPermission != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PackageManager.PERMISSION_GRANTED);
-        }
     }
 
     //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
