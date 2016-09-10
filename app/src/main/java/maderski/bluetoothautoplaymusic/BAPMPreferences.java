@@ -3,6 +3,8 @@ package maderski.bluetoothautoplaymusic;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -14,27 +16,30 @@ public class BAPMPreferences {
 
     private static SharedPreferences.Editor _editor;
 
-    public static String MY_PREFS_NAME = "BAPMPreference";
+    private static String[] setValues = new String[]{"1", "2", "3", "4", "5", "6", "7"};
+    private static Set<String> launchDays = new HashSet<>(Arrays.asList(setValues));
+    private static String MY_PREFS_NAME = "BAPMPreference";
 
     //Keys for enabling/disabling things
-    public static final String LAUNCH_MAPS_KEY =  "googleMaps";
-    public static final String KEEP_SCREEN_ON_KEY = "keepScreenON";
-    public static final String PRIORITY_MODE_KEY = "priorityMode";
-    public static final String MAX_VOLUME_KEY = "maxVolume";
-    public static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
-    public static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
-    public static final String PKG_SELECTED_MUSIC_PLAYER_KEY = "PkgSelectedMusicPlayer";
-    public static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
-    public static final String BTDEVICES_KEY = "BTDevices";
-    public static final String MAPS_CHOICE_KEY = "MapsChoice";
-    public static final String FIRST_INSTALL_KEY = "FirstInstall";
-    public static final String AUTOPLAY_MUSIC_KEY = "AutoPlayMusic";
-    public static final String POWER_CONNECTED_KEY = "PowerConnected";
-    public static final String SEND_TO_BACKGROUND_KEY = "SendToBackground";
-    public static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
-    public static final String AUTO_BRIGHTNESS_KEY = "AutoBrightness";
+    private static final String LAUNCH_MAPS_KEY =  "googleMaps";
+    private static final String KEEP_SCREEN_ON_KEY = "keepScreenON";
+    private static final String PRIORITY_MODE_KEY = "priorityMode";
+    private static final String MAX_VOLUME_KEY = "maxVolume";
+    private static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
+    private static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
+    private static final String PKG_SELECTED_MUSIC_PLAYER_KEY = "PkgSelectedMusicPlayer";
+    private static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
+    private static final String BTDEVICES_KEY = "BTDevices";
+    private static final String MAPS_CHOICE_KEY = "MapsChoice";
+    private static final String FIRST_INSTALL_KEY = "FirstInstall";
+    private static final String AUTOPLAY_MUSIC_KEY = "AutoPlayMusic";
+    private static final String POWER_CONNECTED_KEY = "PowerConnected";
+    private static final String SEND_TO_BACKGROUND_KEY = "SendToBackground";
+    private static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
+    private static final String AUTO_BRIGHTNESS_KEY = "AutoBrightness";
+    private static final String DAYS_TO_LAUNCH_MAPS_KEY = "DaysToLaunchMaps";
 
-    public static final String V264_HOTFIX = "V264Hotfix";
+    private static final String V264_HOTFIX = "V264Hotfix";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -74,6 +79,15 @@ public class BAPMPreferences {
     //------------------------------------------------------------------------------
 
     //Preferences for enabling and disabling things
+    public static void setDaysToLaunchMaps(Context context, Set<String> _stringSet){
+        editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet);
+        commit(context);
+    }
+
+    public static Set<String> getDaysToLaunchMaps(Context context){
+        return reader(context).getStringSet(DAYS_TO_LAUNCH_MAPS_KEY, launchDays);
+    }
+
     public static void setAutoBrightness(Context context, boolean enabled){
         editor(context).putBoolean(AUTO_BRIGHTNESS_KEY, enabled);
         commit(context);

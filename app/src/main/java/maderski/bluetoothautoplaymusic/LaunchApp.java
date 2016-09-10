@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import java.util.Calendar;
+
 /**
  * Created by Jason on 12/8/15.
  */
@@ -42,33 +44,28 @@ public class LaunchApp extends PackageTools {
 
     //Launch Maps or Waze with a delay
     public void launchMaps(int seconds){
-        final Context ctx = context;
-        seconds = seconds * 1000;
-        new CountDownTimer(seconds,
-                9999) // onTick time, not used
-        {
-            public void onTick(long millisUntilFinished) {
-                // Not used
-            }
+        boolean canLaunchToday = canLaunchOnThisDay(context);
+        if(canLaunchToday) {
+            final Context ctx = context;
+            seconds = seconds * 1000;
+            new CountDownTimer(seconds,
+                    9999) // onTick time, not used
+            {
+                public void onTick(long millisUntilFinished) {
+                    // Not used
+                }
 
-            public void onFinish() {
-                String mapAppName = BAPMPreferences.getMapsChoice(ctx);
-                launchPackage(mapAppName);
-                if(BuildConfig.DEBUG)
-                    Log.i("Launch Delay: ", "Finished");
-            }
-        }.start();
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "delayLaunchmaps started");
+                public void onFinish() {
+                    String mapAppName = BAPMPreferences.getMapsChoice(ctx);
+                    launchPackage(mapAppName);
+                    if (BuildConfig.DEBUG)
+                        Log.i("Launch Delay: ", "Finished");
+                }
+            }.start();
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "delayLaunchmaps started");
+        }
     }
-
-    //Launch MainActivity, used for unlocking the screen
-    public void launchMainActivity(){
-        Intent i = new Intent(context, MainActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
-    }
-
 
     public void launchBAPMActivity(){
         Intent[] intentArray = new Intent[2];
@@ -83,6 +80,13 @@ public class LaunchApp extends PackageTools {
         i.addCategory(Intent.CATEGORY_HOME);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
+    }
+
+    private boolean canLaunchOnThisDay(Context context){
+        String today = Integer.toString(Calendar.DAY_OF_WEEK);
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Day of the week: " + today);
+        return BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
     }
 }
 
