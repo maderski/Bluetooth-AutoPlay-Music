@@ -27,7 +27,7 @@ public class ScreenONLock {
     //Enable WakeLock
     public void enableWakeLock(Context context){
 
-        int screenBrightness = 2;
+        int screenBrightness = 6;
 
         if(BAPMPreferences.getAutoBrightness(context))
             screenBrightness = getAutoScreenBrightness(context);

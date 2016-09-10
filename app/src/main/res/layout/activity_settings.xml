@@ -34,116 +34,122 @@
         android:paddingRight="150dp"
         android:id="@+id/imageView2" />
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp">
+        android:id="@+id/scrollView" >
 
-        <Switch
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="PLAY music"
-            android:id="@+id/auto_play"
-            android:checked="false"
-            android:switchPadding="100dp"
-            android:paddingTop="10dp"
-            android:onClick="autoPlaySwitch"
-            android:textSize="16dp"
-            android:paddingBottom="2dp"
-            android:textColor="@color/colorPrimary"/>
+            android:layout_height="match_parent"
+            android:paddingTop="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="When music player is launched play music"
-            android:id="@+id/playMusicExplaination"
-            android:textSize="12dp" />
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PLAY music"
+                android:id="@+id/auto_play"
+                android:checked="false"
+                android:switchPadding="100dp"
+                android:paddingTop="10dp"
+                android:onClick="autoPlaySwitch"
+                android:textSize="16dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"/>
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="POWER required"
-            android:id="@+id/power_connected"
-            android:checked="false"
-            android:paddingTop="20dp"
-            android:onClick="powerConnectedSwitch"
-            android:textSize="16dp"
-            android:switchPadding="100dp"
-            android:paddingBottom="2dp"
-            android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="When music player is launched play music"
+                android:id="@+id/playMusicExplaination"
+                android:textSize="12dp" />
 
-        <TextView
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Will NOT launch unless phone is charging"
-            android:id="@+id/powerRequiredExplaination"
-            android:textSize="12dp" />
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="POWER required"
+                android:id="@+id/power_connected"
+                android:checked="false"
+                android:paddingTop="20dp"
+                android:onClick="powerConnectedSwitch"
+                android:textSize="16dp"
+                android:switchPadding="100dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"/>
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Go HOME"
-            android:id="@+id/send_to_background"
-            android:checked="false"
-            android:paddingTop="20dp"
-            android:onClick="sendToBackgroundSwitch"
-            android:textSize="16dp"
-            android:switchPadding="100dp"
-            android:paddingBottom="2dp"
-            android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="264dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Will NOT launch unless phone is charging"
+                android:id="@+id/powerRequiredExplaination"
+                android:textSize="12dp" />
 
-        <TextView
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Go to homescreen on device disconnect"
-            android:id="@+id/GoHomeExplaination"
-            android:textSize="12dp" />
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Go HOME"
+                android:id="@+id/send_to_background"
+                android:checked="false"
+                android:paddingTop="20dp"
+                android:onClick="sendToBackgroundSwitch"
+                android:textSize="16dp"
+                android:switchPadding="100dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"/>
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CALL completed"
-            android:id="@+id/wait_till_off_phone"
-            android:checked="false"
-            android:paddingTop="20dp"
-            android:onClick="waitTillOffPhoneSwitch"
-            android:textSize="16dp"
-            android:switchPadding="100dp"
-            android:paddingBottom="2dp"
-            android:textColor="@color/colorPrimary"/>
+            <TextView
+                android:layout_width="264dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Go to homescreen on device disconnect"
+                android:id="@+id/GoHomeExplaination"
+                android:textSize="12dp" />
 
-        <TextView
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="On a call, Will NOT launch until call is over"
-            android:id="@+id/CallCompletedExplaination"
-            android:textSize="12dp" />
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CALL completed"
+                android:id="@+id/wait_till_off_phone"
+                android:checked="false"
+                android:paddingTop="20dp"
+                android:onClick="waitTillOffPhoneSwitch"
+                android:textSize="16dp"
+                android:switchPadding="100dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"/>
 
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Auto BRIGHTNESS"
-            android:id="@+id/auto_brightness"
-            android:checked="false"
-            android:paddingTop="20dp"
-            android:onClick="autoBrightnessSwitch"
-            android:textSize="16dp"
-            android:switchPadding="100dp"
-            android:paddingBottom="2dp"
-            android:textColor="@color/colorPrimary" />
+            <TextView
+                android:layout_width="264dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="On a call, Will NOT launch until call is over"
+                android:id="@+id/CallCompletedExplaination"
+                android:textSize="12dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Set Keep Screen ON&apos; brightness bright/dim"
-            android:id="@+id/autoBrightnessExplainatino"
-            android:textSize="12dp" />
-    </LinearLayout>
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Auto BRIGHTNESS"
+                android:id="@+id/auto_brightness"
+                android:checked="false"
+                android:paddingTop="20dp"
+                android:onClick="autoBrightnessSwitch"
+                android:textSize="16dp"
+                android:switchPadding="100dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Set Keep Screen ON&apos; brightness bright/dim"
+                android:id="@+id/autoBrightnessExplainatino"
+                android:textSize="12dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
