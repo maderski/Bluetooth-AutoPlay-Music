@@ -15,8 +15,6 @@ public class CustomReceiver extends BroadcastReceiver {
     private static final String ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch";
     private static final String ACTION_IS_SELECTED = "maderski.bluetoothautoplaymusic.isselected";
 
-    private BluetoothActions bluetoothActions;
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = "None";
@@ -26,35 +24,43 @@ public class CustomReceiver extends BroadcastReceiver {
                 if(!action.equalsIgnoreCase("ACTION_IS_SELECTED")) {
                     ScreenONLock screenONLock = ScreenONLock.getInstance();
                     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    bluetoothActions = new BluetoothActions(
+                    BluetoothActions bluetoothActions = new BluetoothActions(
                             context,
                             audioManager,
                             screenONLock,
                             new Notification(),
                             new VolumeControl(audioManager));
+                    performAction(action, bluetoothActions);
                 }
             }
 
-            switch (action) {
-                case ACTION_POWER_LAUNCH:
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "POWER_LAUNCH");
+            updateIsSelected(context, intent, action);
+        }
+    }
 
-                    bluetoothActions.OnBTConnect();
-                    break;
-                case ACTION_OFF_TELE_LAUNCH:
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "OFF_TELE_LAUNCH");
-                    //Calling actionsOnBTConnect cause onBTConnect already ran
-                    bluetoothActions.actionsOnBTConnect();
-                    break;
-                case ACTION_IS_SELECTED:
-                    boolean isSelected = intent.getBooleanExtra("isSelected", false);
-                    BAPMDataPreferences.setIsSelected(context, isSelected);
-                    if (BuildConfig.DEBUG)
-                        Log.i(TAG, "IS_SELECTED: " + Boolean.toString(isSelected));
-                    break;
-            }
+    private void performAction(String action, BluetoothActions bluetoothActions){
+        switch (action) {
+            case ACTION_POWER_LAUNCH:
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "POWER_LAUNCH");
+
+                bluetoothActions.OnBTConnect();
+                break;
+            case ACTION_OFF_TELE_LAUNCH:
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "OFF_TELE_LAUNCH");
+                //Calling actionsOnBTConnect cause onBTConnect already ran
+                bluetoothActions.actionsOnBTConnect();
+                break;
+        }
+    }
+
+    private void updateIsSelected(Context context, Intent intent, String action){
+        if(action.equalsIgnoreCase(ACTION_IS_SELECTED)) {
+            boolean isSelected = intent.getBooleanExtra("isSelected", false);
+            BAPMDataPreferences.setIsSelected(context, isSelected);
+            if (BuildConfig.DEBUG)
+                Log.i(TAG, "IS_SELECTED: " + Boolean.toString(isSelected));
         }
     }
 }
