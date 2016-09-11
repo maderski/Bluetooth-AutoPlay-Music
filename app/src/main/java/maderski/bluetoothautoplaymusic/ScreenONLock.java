@@ -33,7 +33,7 @@ public class ScreenONLock {
         if(BAPMPreferences.getAutoBrightness(context))
             screenBrightness = getAutoScreenBrightness(context);
 
-        PowerManager pm = (PowerManager)context.getSystemService(context.POWER_SERVICE);
+        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
                 screenBrightness, "Stay ON");
         try{
