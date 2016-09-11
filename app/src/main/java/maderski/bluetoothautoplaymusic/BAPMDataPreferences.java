@@ -9,13 +9,13 @@ import android.content.SharedPreferences;
 public class BAPMDataPreferences{
     private static SharedPreferences.Editor _editor;
 
-    public static String MY_PREFS_NAME = "BAPMDataPreference";
+    private static String MY_PREFS_NAME = "BAPMDataPreference";
 
-    public static final String IS_SELECTED_KEY = "IsSelectedDevice";
-    public static final String RAN_ACTIONS_ON_BT_CONNECT_KEY = "RanActionsOnBTConnect";
-    public static final String CURRENT_RINGER_SET = "CurrentRingerSet";
-    public static final String ORIGINAL_MEDIA_VOLUME = "OriginalMediaVolume";
-    public static final String LAUNCH_NOTIF_PRESENT = "LaunchNotifPresent";
+    private static final String IS_SELECTED_KEY = "IsSelectedDevice";
+    private static final String RAN_ACTIONS_ON_BT_CONNECT_KEY = "RanActionsOnBTConnect";
+    private static final String CURRENT_RINGER_SET = "CurrentRingerSet";
+    private static final String ORIGINAL_MEDIA_VOLUME = "OriginalMediaVolume";
+    private static final String LAUNCH_NOTIF_PRESENT = "LaunchNotifPresent";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
