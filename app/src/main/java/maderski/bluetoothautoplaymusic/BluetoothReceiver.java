@@ -20,8 +20,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     private static final String TAG = BluetoothReceiver.class.getName();
 
-    private String btDevice = "None";
-
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
         boolean isSelectedBTDevice = false;
@@ -33,20 +31,24 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             if (intent.getAction() != null) {
                 String action = intent.getAction();
-
-                if (isSelectedBTDevice) {
-                    ScreenONLock screenONLock = ScreenONLock.getInstance();
-                    AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    BluetoothActions bluetoothActions = new BluetoothActions(context, am,
-                            screenONLock, new Notification(), new VolumeControl(am));
-
-                    if(!BAPMDataPreferences.getIsSelected(context))
-                        sendIsSelectedBroadcast(context, true);
-
-                    bluetoothConnectDisconnectSwitch(context, action, device, am, bluetoothActions,
-                            isSelectedBTDevice);
-                }
+                selectedDevicePrepForActions(context, action, device, isSelectedBTDevice);
             }
+        }
+    }
+
+    private void selectedDevicePrepForActions(Context context, String action,
+                                              BluetoothDevice device, boolean isSelectedBTDevice){
+        if (isSelectedBTDevice) {
+            ScreenONLock screenONLock = ScreenONLock.getInstance();
+            AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            BluetoothActions bluetoothActions = new BluetoothActions(context, am,
+                    screenONLock, new Notification(), new VolumeControl(am));
+
+            if(!BAPMDataPreferences.getIsSelected(context))
+                sendIsSelectedBroadcast(context, true);
+
+            bluetoothConnectDisconnectSwitch(context, action, device, am, bluetoothActions,
+                    isSelectedBTDevice);
         }
     }
 
@@ -59,7 +61,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                btDevice = device.getName();
+                String btDevice = device.getName();
                 waitingForBTA2dpOn(context, isSelectedBTDevice, bluetoothActions, am);
 
                 if(BuildConfig.DEBUG) {
@@ -134,7 +136,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             public void onFinish() {
                 if(BuildConfig.DEBUG)
-                    Log.i(TAG, btDevice + " did NOT CONNECT via a2dp");
+                    Log.i(TAG, "BTDevice did NOT CONNECT via a2dp");
             }
         }.start();
     }
