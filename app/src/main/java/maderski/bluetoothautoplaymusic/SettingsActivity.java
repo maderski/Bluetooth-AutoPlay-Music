@@ -206,11 +206,11 @@ public class SettingsActivity extends AppCompatActivity {
         final Context ctx = this;
         final CheckBox cb = checkBox;
         final String dn = dayNumber;
-        final Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getDaysToLaunchMaps(this));
 
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getDaysToLaunchMaps(ctx));
                 if(cb.isChecked()){
                     daysToLaunch.add(dn);
                     BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
