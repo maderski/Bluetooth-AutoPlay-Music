@@ -149,6 +149,68 @@
                 android:text="Set Keep Screen ON&apos; brightness bright/dim"
                 android:id="@+id/autoBrightnessExplainatino"
                 android:textSize="12dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="DAYS to launch Maps"
+                    android:id="@+id/daysToLaunchLabel"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="5dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:src="@android:drawable/divider_horizontal_bright"
+                    android:background="@color/colorAccent"
+                    android:paddingLeft="100dp"
+                    android:paddingRight="100dp"
+                    android:id="@+id/imageView" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/daysChkBoxLL">
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monday"
+                        android:id="@+id/mondayChkBox"
+                        android:layout_gravity="left|center_horizontal"
+                        android:checked="false" />
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tuesday"
+                        android:id="@+id/tuesdayChkBox"
+                        android:layout_gravity="left|center_horizontal"
+                        android:checked="false" />
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="etc..."
+                        android:id="@+id/etcChkBox"
+                        android:layout_gravity="left|center_horizontal"
+                        android:checked="false" />
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -1,15 +1,24 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -26,6 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
         setFonts();
         setButtonPreferences(this);
+        setDaysToLaunchLabel();
+        setCheckBoxes();
     }
 
     @Override
@@ -152,5 +163,83 @@ public class SettingsActivity extends AppCompatActivity {
 
         textView = (TextView)findViewById(R.id.auto_brightness);
         textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.daysToLaunchLabel);
+        textView.setTypeface(typeface_bold);
+    }
+
+    private void setDaysToLaunchLabel(){
+        String mapChoice = BAPMPreferences.getMapsChoice(this);
+        PackageManager packageManager = getPackageManager();
+        try {
+            ApplicationInfo appInfo = packageManager.getApplicationInfo(mapChoice, 0);
+            mapChoice = packageManager.getApplicationLabel(appInfo).toString();
+        }catch (Exception e){
+            Log.e(TAG, e.getMessage());
+            mapChoice = "Maps";
+        }
+
+        TextView textView = (TextView)findViewById(R.id.daysToLaunchLabel);
+        textView.setText("DAYS to launch " + mapChoice);
+    }
+
+    private void setCheckBoxes(){
+        CheckBox checkBox;
+        String[] entireWeek = {"1", "2", "3", "4", "5", "6", "7"};
+        Set<String> daysToLaunchSet = BAPMPreferences.getDaysToLaunchMaps(this);
+
+        LinearLayout daysToLaunchChkBoxLL = (LinearLayout) findViewById(R.id.daysChkBoxLL);
+        daysToLaunchChkBoxLL.removeAllViews();
+
+        for(String day : entireWeek){
+            checkBox = new CheckBox(this);
+            checkBox.setText(getNameOfDay(day));
+            checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
+            checkBox.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/TitilliumText400wt.otf"));
+            checkBox.setChecked(daysToLaunchSet.contains(day));
+            checkboxListener(checkBox, day);
+            daysToLaunchChkBoxLL.addView(checkBox);
+        }
+    }
+
+    private void checkboxListener(CheckBox checkBox, String dayNumber){
+        final Context ctx = this;
+        final CheckBox cb = checkBox;
+        final String dn = dayNumber;
+        final Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getDaysToLaunchMaps(this));
+
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cb.isChecked()){
+                    daysToLaunch.add(dn);
+                    BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
+                }else{
+                    daysToLaunch.remove(dn);
+                    BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
+                }
+            }
+        });
+    }
+
+    private String getNameOfDay(String dayNumber){
+        switch(dayNumber){
+            case "1":
+                return "Monday";
+            case "2":
+                return "Tuesday";
+            case "3":
+                return "Wednesday";
+            case "4":
+                return "Thursday";
+            case "5":
+                return "Friday";
+            case "6":
+                return "Saturday";
+            case "7":
+                return "Sunday";
+            default:
+                return "Unknown Day Number";
+        }
     }
 }
