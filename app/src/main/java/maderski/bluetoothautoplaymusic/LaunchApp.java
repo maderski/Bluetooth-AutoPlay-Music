@@ -83,7 +83,8 @@ public class LaunchApp extends PackageTools {
     }
 
     private boolean canLaunchOnThisDay(Context context){
-        String today = Integer.toString(Calendar.DAY_OF_WEEK);
+        Calendar calendar = Calendar.getInstance();
+        String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
         if(BuildConfig.DEBUG) {
             Log.i(TAG, "Day of the week: " + today);
