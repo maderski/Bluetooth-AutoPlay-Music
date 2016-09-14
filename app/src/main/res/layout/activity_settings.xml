@@ -143,11 +143,11 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="246dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Set Keep Screen ON&apos; brightness bright/dim"
-                android:id="@+id/autoBrightnessExplainatino"
+                android:text="Set &apos;Keep Screen ON&apos; brightness dim/bright using sunrise/sunset times on connect"
+                android:id="@+id/autoBrightnessExplaination"
                 android:textSize="12dp" />
 
             <LinearLayout
