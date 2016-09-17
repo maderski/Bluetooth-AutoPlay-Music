@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -18,12 +20,14 @@ public class TimePickerFragment extends DialogFragment
 
     private boolean isDimFragment;
     private int previouslySetTime;
+    private String pickerTitle;
     public TimePickerDialogListener dialogListener;
 
-    public static TimePickerFragment newInstance(boolean isDim, int previouslySetTime){
+    public static TimePickerFragment newInstance(boolean isDim, int previouslySetTime, String title){
         Bundle args = new Bundle();
         args.putBoolean("picker_isDim", isDim);
         args.putInt("picker_previouslySetTime", previouslySetTime);
+        args.putString("picker_title", title);
         TimePickerFragment fragment = new TimePickerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -31,20 +35,32 @@ public class TimePickerFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // get the current time as the default values for the picker
         isDimFragment = getArguments().getBoolean("picker_isDim");
         previouslySetTime = getArguments().getInt("picker_previouslySetTime");
+        pickerTitle = getArguments().getString("picker_title");
         dialogListener = getActivity() instanceof TimePickerDialogListener ? (TimePickerDialogListener) getActivity() : null;
+
+        //Create and set Title
+        TextView tpfTitle = new TextView(getActivity());
+        tpfTitle.setText(pickerTitle);
+        tpfTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        //Get minutes
         int tempToGetMinutes = previouslySetTime;
         while(tempToGetMinutes > 60){
             tempToGetMinutes -= 100;
         }
         int minute = tempToGetMinutes;
+        //Get hour
         int hour = (previouslySetTime - tempToGetMinutes)/100;
 
-        // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        // Create a new instance of TimePickerDialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
+        //Add title to picker
+        timePickerDialog.setCustomTitle(tpfTitle);
+        //Return TimePickerDialog
+        return timePickerDialog;
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

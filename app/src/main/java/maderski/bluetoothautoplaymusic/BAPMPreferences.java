@@ -81,20 +81,22 @@ public class BAPMPreferences {
     //------------------------------------------------------------------------------
 
     //Preferences for enabling and disabling things
-    public static void setBrightTime(Context context, int index){
-        editor(context).putInt(BRIGHT_TIME_KEY, index);
+    public static void setBrightTime(Context context, int time){
+        editor(context).putInt(BRIGHT_TIME_KEY, time);
+        commit(context);
     }
 
     public static int getBrightTime(Context context){
-        return reader(context).getInt(BRIGHT_TIME_KEY, 2000);
+        return reader(context).getInt(BRIGHT_TIME_KEY, 700);
     }
 
-    public static void setDimTime(Context context, int index){
-        editor(context).putInt(DIM_TIME_KEY, index);
+    public static void setDimTime(Context context, int time){
+        editor(context).putInt(DIM_TIME_KEY, time);
+        commit(context);
     }
 
     public static int getDimTime(Context context){
-        return reader(context).getInt(DIM_TIME_KEY, 700);
+        return reader(context).getInt(DIM_TIME_KEY, 2000);
     }
 
     public static void setDaysToLaunchMaps(Context context, Set<String> _stringSet){

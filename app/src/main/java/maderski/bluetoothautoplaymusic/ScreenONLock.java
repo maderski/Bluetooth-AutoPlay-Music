@@ -28,12 +28,12 @@ public class ScreenONLock {
     public void enableWakeLock(Context context){
 
         //Set Screen Brightness(Dim: 6 / Bright: 10)
-        int screenBrightness = 6;
+        int screenBrightness;
 
         if(BAPMPreferences.getAutoBrightness(context))
             screenBrightness = getAutoScreenBrightness(context);
         else
-            screenBrightness = getManualScreenBrightness();
+            screenBrightness = getManualScreenBrightness(context);
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
@@ -47,16 +47,17 @@ public class ScreenONLock {
         }
     }
 
-    private int getManualScreenBrightness(){
+    private int getManualScreenBrightness(Context context){
         int screenBrightness;
 
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         int currentTime = (hour * 100) + minute;
-        int brightnessSetTime = 1000;
+        int brightSetTime = BAPMPreferences.getBrightTime(context);
+        int dimSetTime = BAPMPreferences.getDimTime(context);
 
-        if (currentTime >= brightnessSetTime || currentTime <= brightnessSetTime){
+        if (currentTime >= dimSetTime || currentTime <= brightSetTime){
             screenBrightness = 6;
         }else
             screenBrightness = 10;

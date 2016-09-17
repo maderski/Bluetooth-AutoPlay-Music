@@ -146,22 +146,25 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     }
 
     public void dimBrightnessButton(View view){
-        DialogFragment newFragment = TimePickerFragment.newInstance(true, BAPMPreferences.getDimTime(this));
+        DialogFragment newFragment = TimePickerFragment.newInstance(true, BAPMPreferences.getDimTime(this), "Set Dim Time");
         newFragment.show(getSupportFragmentManager(), "timePicker");
 
     }
 
     public void brightBrightnessButton(View view){
-        DialogFragment newFragment = TimePickerFragment.newInstance(false, BAPMPreferences.getBrightTime(this));
+        DialogFragment newFragment = TimePickerFragment.newInstance(false, BAPMPreferences.getBrightTime(this), "Set Bright Time");
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     @Override
     public void onTimeSet(boolean isDim, TimePicker view, int hourOfDay, int minute) {
+        int timeSet = (hourOfDay * 100) + minute;
         if(isDim){
+            BAPMPreferences.setDimTime(this, timeSet);
             if(BuildConfig.DEBUG)
                 Log.i("Settings", "Dim brightness");
         }else{
+            BAPMPreferences.setBrightTime(this, timeSet);
             if(BuildConfig.DEBUG)
                 Log.i("Settings", "Bright brightness");
         }
