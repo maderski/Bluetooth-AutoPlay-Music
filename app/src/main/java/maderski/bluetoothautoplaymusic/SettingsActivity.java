@@ -191,6 +191,9 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         textView = (TextView)findViewById(R.id.auto_brightness);
         textView.setTypeface(typeface_bold);
 
+        textView = (TextView)findViewById(R.id.manualBrtLabel);
+        textView.setTypeface(typeface_bold);
+
         textView = (TextView)findViewById(R.id.daysToLaunchLabel);
         textView.setTypeface(typeface_bold);
     }
