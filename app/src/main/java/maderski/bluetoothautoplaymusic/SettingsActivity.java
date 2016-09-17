@@ -1,9 +1,11 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -20,7 +23,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements TimePickerFragment.TimePickerDialogListener{
 
     private static final String TAG = SettingsActivity.class.getName();
 
@@ -42,7 +45,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        finish();
     }
 
     private void setButtonPreferences(Context context) {
@@ -140,6 +142,28 @@ public class SettingsActivity extends AppCompatActivity {
             BAPMPreferences.setAutoBrightness(this, false);
             if(BuildConfig.DEBUG)
                 Log.i(TAG, "WaitTillOffPhone Switch is OFF");
+        }
+    }
+
+    public void dimBrightnessButton(View view){
+        DialogFragment newFragment = TimePickerFragment.newInstance(true, BAPMPreferences.getDimTime(this));
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+
+    }
+
+    public void brightBrightnessButton(View view){
+        DialogFragment newFragment = TimePickerFragment.newInstance(false, BAPMPreferences.getBrightTime(this));
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    @Override
+    public void onTimeSet(boolean isDim, TimePicker view, int hourOfDay, int minute) {
+        if(isDim){
+            if(BuildConfig.DEBUG)
+                Log.i("Settings", "Dim brightness");
+        }else{
+            if(BuildConfig.DEBUG)
+                Log.i("Settings", "Bright brightness");
         }
     }
 

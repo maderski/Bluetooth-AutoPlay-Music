@@ -154,8 +154,49 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
                 android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Manual Brightness Times"
+                    android:id="@+id/textView10"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="7dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    android:paddingTop="20dp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dim Time"
+                        android:id="@+id/dimtimebutton"
+                        android:onClick="dimBrightnessButton"
+                        android:background="@drawable/on_state"
+                        android:textColor="@color/white"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:paddingLeft="35dp"
+                        android:paddingRight="35dp" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bright Time"
+                        android:id="@+id/brighttimebutton"
+                        android:onClick="brightBrightnessButton"
+                        android:background="@drawable/on_state"
+                        android:textColor="@color/white"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -164,20 +205,10 @@
                     android:text="DAYS to launch Maps"
                     android:id="@+id/daysToLaunchLabel"
                     android:layout_gravity="center_horizontal"
-                    android:paddingBottom="5dp"
+                    android:paddingBottom="7dp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16dp" />
-
-                <ImageView
-                    android:paddingTop="1dp"
-                    android:paddingBottom="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:src="@android:drawable/divider_horizontal_bright"
-                    android:background="@color/colorAccent"
-                    android:paddingLeft="100dp"
-                    android:paddingRight="100dp"
-                    android:id="@+id/imageView" />
+                    android:textSize="16dp"
+                    android:paddingTop="20dp" />
 
                 <LinearLayout
                     android:orientation="vertical"

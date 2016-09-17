@@ -38,6 +38,8 @@ public class BAPMPreferences {
     private static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
     private static final String AUTO_BRIGHTNESS_KEY = "AutoBrightness";
     private static final String DAYS_TO_LAUNCH_MAPS_KEY = "DaysToLaunchMaps";
+    private static final String DIM_TIME_KEY = "DimTime";
+    private static final String BRIGHT_TIME_KEY = "BrightTime";
 
     private static final String V264_HOTFIX = "V264Hotfix";
 
@@ -79,6 +81,22 @@ public class BAPMPreferences {
     //------------------------------------------------------------------------------
 
     //Preferences for enabling and disabling things
+    public static void setBrightTime(Context context, int index){
+        editor(context).putInt(BRIGHT_TIME_KEY, index);
+    }
+
+    public static int getBrightTime(Context context){
+        return reader(context).getInt(BRIGHT_TIME_KEY, 2000);
+    }
+
+    public static void setDimTime(Context context, int index){
+        editor(context).putInt(DIM_TIME_KEY, index);
+    }
+
+    public static int getDimTime(Context context){
+        return reader(context).getInt(DIM_TIME_KEY, 700);
+    }
+
     public static void setDaysToLaunchMaps(Context context, Set<String> _stringSet){
         editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet);
         commit(context);

@@ -32,6 +32,8 @@ public class ScreenONLock {
 
         if(BAPMPreferences.getAutoBrightness(context))
             screenBrightness = getAutoScreenBrightness(context);
+        else
+            screenBrightness = getManualScreenBrightness();
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
@@ -43,6 +45,23 @@ public class ScreenONLock {
         }catch (Exception e){
             Log.e(TAG, "WakeLock Error: " + e.getMessage());
         }
+    }
+
+    private int getManualScreenBrightness(){
+        int screenBrightness;
+
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int currentTime = (hour * 100) + minute;
+        int brightnessSetTime = 1000;
+
+        if (currentTime >= brightnessSetTime || currentTime <= brightnessSetTime){
+            screenBrightness = 6;
+        }else
+            screenBrightness = 10;
+
+        return screenBrightness;
     }
 
     private int getAutoScreenBrightness(Context context){

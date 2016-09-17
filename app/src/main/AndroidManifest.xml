@@ -29,7 +29,6 @@
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-
             </intent-filter>
         </receiver>
         <receiver android:name=".PowerReceiver">
@@ -48,12 +47,14 @@
         <service android:name=".BAPMService" />
 
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".LaunchBAPMActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:noHistory="true"/>
-        <activity android:name=".SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:noHistory="true">
+        <activity
+            android:name=".LaunchBAPMActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
+            android:noHistory="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
