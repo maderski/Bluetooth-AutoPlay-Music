@@ -255,19 +255,19 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     private String getNameOfDay(String dayNumber){
         switch(dayNumber){
             case "1":
-                return "Monday";
-            case "2":
-                return "Tuesday";
-            case "3":
-                return "Wednesday";
-            case "4":
-                return "Thursday";
-            case "5":
-                return "Friday";
-            case "6":
-                return "Saturday";
-            case "7":
                 return "Sunday";
+            case "2":
+                return "Monday";
+            case "3":
+                return "Tuesday";
+            case "4":
+                return "Wednesday";
+            case "5":
+                return "Thursday";
+            case "6":
+                return "Friday";
+            case "7":
+                return "Saturday";
             default:
                 return "Unknown Day Number";
         }
