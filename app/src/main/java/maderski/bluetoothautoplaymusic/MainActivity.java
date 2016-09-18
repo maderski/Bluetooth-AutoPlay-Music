@@ -4,17 +4,22 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -129,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.settings_menu) {
             settingsSelected();
             return true;
+        } else if (id == R.id.link_menu){
+            linkSelected();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -144,6 +152,43 @@ public class MainActivity extends AppCompatActivity {
     private void settingsSelected(){
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void linkSelected(){
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Bluetooth Autoplay Music");
+        alertDialog.setMessage("Google Play Store location");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Launch Store",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse("market://details?id=maderski.bluetoothautoplaymusic"));
+                        startActivity(intent);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Copy Link",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ClipboardManager clipboard = (ClipboardManager)
+                                getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("PlayStoreLink",
+                                "https://play.google.com/store/apps/details?id=maderski.bluetoothautoplaymusic");
+                        clipboard.setPrimaryClip(clip);
+                        showClipboardToast();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private void showClipboardToast(){
+        Toast.makeText(this, "Play Store link copied to clipboard",
+                Toast.LENGTH_LONG).show();
     }
 
     //Show Version of the BAPM App

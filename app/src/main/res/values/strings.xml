@@ -3,4 +3,5 @@
     <string name="about_menu">About</string>
     <string name="no_BT_found">No Bluetooth Device found</string>
     <string name="settings_menu">Options</string>
+    <string name="link_menu">Play Store</string>
 </resources>
