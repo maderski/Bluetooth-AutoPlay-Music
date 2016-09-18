@@ -173,17 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal">
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dim Time"
-                        android:id="@+id/dimtimebutton"
-                        android:onClick="dimBrightnessButton"
-                        android:background="@drawable/on_state"
-                        android:textColor="@color/white"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:paddingLeft="35dp"
-                        android:paddingRight="35dp" />
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -195,6 +185,18 @@
                         style="?android:attr/borderlessButtonStyle"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dim Time"
+                        android:id="@+id/dimtimebutton"
+                        android:onClick="dimBrightnessButton"
+                        android:background="@drawable/on_state"
+                        android:textColor="@color/white"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:paddingLeft="35dp"
+                        android:paddingRight="35dp" />
 
                 </LinearLayout>
 
