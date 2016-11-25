@@ -688,7 +688,8 @@ public class MainActivity extends AppCompatActivity {
                     || resolveInfo.contains(".playback")
                     || resolveInfo.contains("music")
                     || resolveInfo.contains("Music")
-                    || resolveInfo.contains("audioplayer")) {
+                    || resolveInfo.contains("audioplayer")
+                    || resolveInfo.contains("mobi.beyondpod")) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
                 String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
                 if (!installedMediaPlayers.contains(pkg)) {

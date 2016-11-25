@@ -33,6 +33,9 @@ public class PlayMusic {
                 case PackageTools.GOOGLEPLAYMUSIC:
                     playerControls = new GooglePlayMusic(context, audioManager);
                     break;
+                case PackageTools.BEYONDPOD:
+                    playerControls = new BeyondPod(context, audioManager);
+                    break;
                 default:
                     playerControls = new OtherMusicPlayer(audioManager);
                     break;

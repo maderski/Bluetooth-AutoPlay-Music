@@ -26,6 +26,21 @@ public abstract class PlayerControls {
     }
 }
 
+class BeyondPod extends PlayerControls{
+    private Context context;
+
+    public BeyondPod(Context context, AudioManager audioManager){
+        super(audioManager);
+        this.context = context;
+    }
+    @Override
+    public void play() {
+        Intent intent = new Intent();
+        intent.setAction("mobi.beyondpod.command.PLAY");
+        context.sendBroadcast(intent);
+    }
+}
+
 class Spotify extends PlayerControls{
     private Context context;
 

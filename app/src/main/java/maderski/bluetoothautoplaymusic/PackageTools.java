@@ -23,6 +23,7 @@ public class PackageTools {
     public static final String GOOGLEPLAYMUSIC = "com.google.android.music";
     public static final String SPOTIFY = "com.spotify.music";
     public static final String PANDORA = "com.pandora.android";
+    public static final String BEYONDPOD = "mobi.beyondpod";
 
     private Context context;
 
