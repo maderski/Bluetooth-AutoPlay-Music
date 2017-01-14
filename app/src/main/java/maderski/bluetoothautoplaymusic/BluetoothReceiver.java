@@ -20,55 +20,68 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     private static final String TAG = BluetoothReceiver.class.getName();
 
+    private String action = "None";
+    private BluetoothDevice device;
+    private boolean isSelectedBTDevice = false;
+
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
-        boolean isSelectedBTDevice = false;
-
         if(intent != null) {
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (device != null)
                 isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
 
             if (intent.getAction() != null) {
-                String action = intent.getAction();
-                selectedDevicePrepForActions(context, action, device, isSelectedBTDevice);
+                action = intent.getAction();
+                selectedDevicePrepForActions(context);
             }
         }
     }
 
-    private void selectedDevicePrepForActions(Context context, String action,
-                                              BluetoothDevice device, boolean isSelectedBTDevice){
-        if (isSelectedBTDevice) {
-            ScreenONLock screenONLock = ScreenONLock.getInstance();
-            AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            BluetoothActions bluetoothActions = new BluetoothActions(context, am,
-                    screenONLock, new Notification(), new VolumeControl(am));
-
-            if(!BAPMDataPreferences.getIsSelected(context))
+    private void selectedDevicePrepForActions(Context context){
+        boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(device.getName());
+        if (isSelectedBTDevice && !isAHeadphonesBTDevice) {
+            if(!BAPMDataPreferences.getIsSelected(context)) {
                 sendIsSelectedBroadcast(context, true);
-
-            bluetoothConnectDisconnectSwitch(context, action, device, am, bluetoothActions,
-                    isSelectedBTDevice);
+            }
+            bluetoothConnectDisconnectSwitch(context);
+        } else if(isSelectedBTDevice){
+            onHeadphonesConnectSwitch(context);
         }
     }
 
-    private void bluetoothConnectDisconnectSwitch(Context context, String action,
-                                                   BluetoothDevice device, AudioManager am,
-                                                   BluetoothActions bluetoothActions,
-                                                   boolean isSelectedBTDevice){
+    private void onHeadphonesConnectSwitch(Context context){
+
+        PlayMusic playMusic = new PlayMusic(context, (AudioManager)context.getSystemService(Context.AUDIO_SERVICE));
+        switch(action) {
+            case BluetoothDevice.ACTION_ACL_CONNECTED:
+                playMusic.play();
+                break;
+            case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+                playMusic.pause();
+                break;
+        }
+    }
+
+    private void bluetoothConnectDisconnectSwitch(Context context){
+
+        ScreenONLock screenONLock = ScreenONLock.getInstance();
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        BluetoothActions bluetoothActions = new BluetoothActions(context, am,
+                screenONLock, new Notification(), new VolumeControl(am));
+
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + action);
 
         switch (action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                String btDevice = device.getName();
                 waitingForBTA2dpOn(context, isSelectedBTDevice, bluetoothActions, am);
 
                 if(BuildConfig.DEBUG) {
                     for (String cd : BAPMPreferences.getBTDevices(context)) {
                         Log.i(TAG, "User selected device: " + cd);
                     }
-                    Log.i(TAG, "Connected device: " + btDevice);
+                    Log.i(TAG, "Connected device: " + device);
                     Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + isSelectedBTDevice);
                 }
                 break;
@@ -141,9 +154,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }.start();
     }
 
-    private void sendIsSelectedBroadcast(Context context, boolean isSelectedBTDevice){
+    private void sendIsSelectedBroadcast(Context context, boolean isSelected){
         Intent isSelectedIntent = new Intent();
-        isSelectedIntent.putExtra("isSelected", isSelectedBTDevice);
+        isSelectedIntent.putExtra("isSelected", isSelected);
         isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
         context.sendBroadcast(isSelectedIntent);
     }

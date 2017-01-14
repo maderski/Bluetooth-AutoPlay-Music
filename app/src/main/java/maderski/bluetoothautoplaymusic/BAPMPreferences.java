@@ -40,6 +40,7 @@ public class BAPMPreferences {
     private static final String DAYS_TO_LAUNCH_MAPS_KEY = "DaysToLaunchMaps";
     private static final String DIM_TIME_KEY = "DimTime";
     private static final String BRIGHT_TIME_KEY = "BrightTime";
+    private static final String HEADPHONE_DEVICES_KEY = "HeadphoneDevices";
 
     private static final String V264_HOTFIX = "V264Hotfix";
 
@@ -182,6 +183,15 @@ public class BAPMPreferences {
 
     public static Boolean getUnlockScreen(Context context){
         return reader(context).getBoolean(UNLOCK_SCREEN_KEY, false);
+    }
+
+    public static void setHeadphoneDevices(Context context, Set<String> headphoneDevices){
+        editor(context).putStringSet(HEADPHONE_DEVICES_KEY, headphoneDevices);
+        commit(context);
+    }
+
+    public static Set<String> getHeadphoneDevices(Context context){
+        return reader(context).getStringSet(HEADPHONE_DEVICES_KEY, null);
     }
 
     public static void setBTDevices(Context context, Set<String> _stringSet){
