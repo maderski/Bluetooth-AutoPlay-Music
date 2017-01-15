@@ -33,6 +33,6 @@
     <string name="volume_text">Volume</string>
     <string name="volume_caption">Volume set here ONlY effects autoplay devices.</string>
     <string name="devices_text">Devices</string>
-    <string name="device_text_caption">Perfect for headphones or a speaker that you just want to play music when connected</string>
+    <string name="device_text_caption">For headphones or a speaker that you just want to play music when connected</string>
     <string name="done_button_text">Done</string>
 </resources>

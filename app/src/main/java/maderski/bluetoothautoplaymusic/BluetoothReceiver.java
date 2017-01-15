@@ -70,7 +70,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     public void run() {
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
                         playMusic.checkIfPlaying();
-                        Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
+                        if(BuildConfig.DEBUG)
+                            Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
                 };
                 handler.postDelayed(runnable, 5000);
@@ -78,7 +79,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 playMusic.pause();
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMDataPreferences.getOriginalMediaVolume(context), 0);
-                Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
+                if(BuildConfig.DEBUG)
+                    Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
