@@ -225,6 +225,10 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
         textView = (TextView)findViewById(R.id.daysToLaunchLabel);
         textView.setTypeface(typeface_bold);
+
+        textView = (TextView)findViewById(R.id.userSetMaxVolumeLabel);
+        textView.setTypeface(typeface_bold);
+
     }
 
     private void setDaysToLaunchLabel(){
