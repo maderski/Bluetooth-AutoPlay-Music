@@ -35,4 +35,6 @@
     <string name="devices_text">Devices</string>
     <string name="device_text_caption">For headphones or a speaker that you just want to play music when connected</string>
     <string name="done_button_text">Done</string>
+    <string name="option_set_max_media_volume">Set MAX media volume</string>
+    <string name="option_set_max_volume_caption">Set the level for MAX Media Volume</string>
 </resources>

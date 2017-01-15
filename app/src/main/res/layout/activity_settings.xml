@@ -129,6 +129,32 @@
                 android:id="@+id/CallCompletedExplaination"
                 android:textSize="12dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/option_set_max_media_volume"
+                android:id="@+id/userSetMaxVolumeLabel"
+                android:layout_gravity="start"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:paddingTop="20dp" />
+
+            <TextView
+                android:layout_width="264dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/option_set_max_volume_caption"
+                android:id="@+id/option_set_max_volume_caption"
+                android:textSize="12sp" />
+
+            <SeekBar
+                android:id="@+id/max_volume_seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp" />
+
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -199,24 +225,6 @@
                         android:paddingRight="35dp" />
 
                 </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Set MAX media volume"
-                    android:id="@+id/userSetMaxVolumeLabel"
-                    android:layout_gravity="center_horizontal"
-                    android:paddingBottom="7dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16dp"
-                    android:paddingTop="20dp" />
-
-                <SeekBar
-                    android:id="@+id/max_volume_seekBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
