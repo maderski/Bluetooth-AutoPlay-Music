@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class HeadphonesFragment extends DialogFragment{
     private static final String ARG_SAVED_HEADPHONE_DEVICES = "savedHeadphoneDevices";
 
     private HashSet mSavedHeadphoneDevices;
+    private HashSet<String> removedDevices = new HashSet<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,14 +60,17 @@ public class HeadphonesFragment extends DialogFragment{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_headphones, container, false);
         checkboxCreator(rootView);
+        Button doneButton = (Button)rootView.findViewById(R.id.autoplay_done);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.headphonesDoneClicked(removedDevices);
+                dismiss();
+            }
+        });
+        if(removedDevices != null)
+            removedDevices.clear();
         return rootView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     //Create Checkboxes
@@ -89,7 +94,7 @@ public class HeadphonesFragment extends DialogFragment{
                 checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
                 checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
                 if(BAPMPreferences.getBTDevices(getActivity()) != null)
-                    checkBox.setChecked(BAPMPreferences.getBTDevices(getActivity()).contains(BTDevice));
+                    checkBox.setChecked(BAPMPreferences.getHeadphoneDevices(getActivity()).contains(BTDevice));
                 checkboxListener(view.getContext(), checkBox, BTDevice);
                 autoplayCkBoxLL.addView(checkBox);
             }
@@ -104,7 +109,6 @@ public class HeadphonesFragment extends DialogFragment{
         final Context ctx = context;
 
         mSavedHeadphoneDevices = new HashSet<String>(BAPMPreferences.getHeadphoneDevices(context));
-
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,18 +117,17 @@ public class HeadphonesFragment extends DialogFragment{
                     mSavedHeadphoneDevices.add(BTD);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "TRUE" + " " + BTD);
-                    BAPMPreferences.setHeadphoneDevices(ctx, mSavedHeadphoneDevices);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "SAVED");
                 } else {
                     mSavedHeadphoneDevices.remove(BTD);
+                    removedDevices.add(BTD);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "FALSE" + " " + BTD);
-                    BAPMPreferences.setHeadphoneDevices(ctx, mSavedHeadphoneDevices);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "SAVED");
                 }
-
+                mListener.setHeadphoneDevices(mSavedHeadphoneDevices);
             }
         });
     }
@@ -157,7 +160,7 @@ public class HeadphonesFragment extends DialogFragment{
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void setHeadphoneDevices(HashSet<String> headphoneDevices);
+        void headphonesDoneClicked(HashSet<String> removedDevices);
     }
 }

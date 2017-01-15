@@ -13,17 +13,22 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     private static final String TAG = MainActivity.class.getName();
 
     private Set<String> saveBTDevices = new HashSet<>();
+    Set<String> headphoneDevices = new HashSet<>();
     private HashSet<String> savedHeadphoneDevices = new HashSet<>();
     private boolean isBTConnected = false;
     private LaunchApp launchApp;
@@ -347,13 +353,24 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             BTDeviceCkBoxLL.addView(textView);
         }else{
             for (String BTDevice : listOfBTDevices) {
+                int textColor = R.color.colorPrimary;
                 checkBox = new CheckBox(this);
                 checkBox.setText(BTDevice);
-                checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if(BAPMPreferences.getHeadphoneDevices(this).contains(BTDevice)) {
+                    textColor = R.color.lightGray;
+                    int states[][] = {{android.R.attr.state_checked}};
+                    int colors[] = {textColor, textColor};
+                    CompoundButtonCompat.setButtonTintList(checkBox, new ColorStateList(states, colors));
+                    checkBox.setClickable(false);
+                }
+                checkBox.setTextColor(getResources().getColor(textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/TitilliumText400wt.otf"));
-                if(BAPMPreferences.getBTDevices(this) != null)
+                if(BAPMPreferences.getBTDevices(this) != null) {
                     checkBox.setChecked(BAPMPreferences.getBTDevices(this).contains(BTDevice));
-                checkboxListener(this, checkBox, BTDevice);
+                }
+                if(!BAPMPreferences.getHeadphoneDevices(this).contains(BTDevice)) {
+                    checkboxListener(this, checkBox, BTDevice);
+                }
                 BTDeviceCkBoxLL.addView(checkBox);
             }
         }
@@ -384,19 +401,18 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                         saveBTDevices.add(BTD);
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "TRUE" + " " + BTD);
-                        BAPMPreferences.setBTDevices(ctx, saveBTDevices);
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "SAVED");
                     } else {
                         saveBTDevices.remove(BTD);
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "FALSE" + " " + BTD);
-                        BAPMPreferences.setBTDevices(ctx, saveBTDevices);
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "SAVED");
                     }
+                    BAPMPreferences.setBTDevices(ctx, saveBTDevices);
                 }else{
-                    cb.toggle();
+                    cb.setClickable(false);
                     Snackbar.make(v, "Checkboxes are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -515,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     public void autoplayOnlyButton(View view){
         DialogFragment newFragment = HeadphonesFragment.newInstance(savedHeadphoneDevices);
-        newFragment.show(getSupportFragmentManager(), "autoplayONly");
+        newFragment.show(getSupportFragmentManager(), "autoplayOnlyFragment");
     }
 
     //***Toggle button actions are below, basically set SharedPref value for specified button***
@@ -693,7 +709,31 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void setHeadphoneDevices(HashSet<String> headphoneDevices) {
+        BAPMPreferences.setHeadphoneDevices(getApplicationContext(), headphoneDevices);
+        for(String deviceName : headphoneDevices){
+            Log.d(TAG, "device name: " + deviceName);
+        }
+    }
 
+    @Override
+    public void headphonesDoneClicked(HashSet<String> removeDevices) {
+        headphoneDevices = BAPMPreferences.getHeadphoneDevices(this);
+        for(String deviceName : headphoneDevices){
+            Log.d(TAG, "headphoneDevice: " + deviceName);
+            saveBTDevices.add(deviceName);
+        }
+
+        for(String deviceName : removeDevices){
+            if(saveBTDevices.contains(deviceName))
+                saveBTDevices.remove(deviceName);
+        }
+
+        for(String deviceName : saveBTDevices){
+            Log.d(TAG, "saveBTDevice: " + deviceName);
+        }
+
+        BAPMPreferences.setBTDevices(this, saveBTDevices);
+        checkboxCreator();
     }
 }

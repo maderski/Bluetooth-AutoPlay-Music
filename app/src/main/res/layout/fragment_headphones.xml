@@ -15,13 +15,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
+            android:background="@color/lightGray"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
             android:text="Autoplay Only"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textColor="@color/darkGray"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/head_phone_volume_text"
@@ -36,17 +36,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
             android:textSize="24dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorAccent"
-            android:paddingBottom="1dp"
-            android:paddingLeft="150dp"
-            android:paddingRight="150dp"
-            android:paddingTop="1dp"
-            android:src="@android:drawable/divider_horizontal_bright" />
 
         <TextView
             android:id="@+id/textView11"
@@ -79,17 +68,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
             android:textSize="24dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorAccent"
-            android:paddingBottom="1dp"
-            android:paddingLeft="150dp"
-            android:paddingRight="150dp"
-            android:paddingTop="1dp"
-            android:src="@android:drawable/divider_horizontal_bright" />
 
         <TextView
             android:id="@+id/textView10"
@@ -142,19 +120,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="right">
+            android:orientation="horizontal">
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/autoplay_done"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:textColor="@color/colorAccent"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OK"
+                android:text="Done"
                 android:textColor="@color/colorAccent"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="16dp" />
