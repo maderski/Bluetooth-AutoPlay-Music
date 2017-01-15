@@ -18,7 +18,7 @@
             android:background="@color/lightGray"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:text="Autoplay Only"
+            android:text="@string/autoplay_only"
             android:textAlignment="center"
             android:textColor="@color/darkGray"
             android:textSize="14sp" />
@@ -28,14 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:text="Volume"
+            android:text="@string/volume_text"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/textView11"
@@ -44,9 +44,9 @@
             android:gravity="center_horizontal"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Volume set here ONlY effects autoplay devices"
+            android:text="@string/volume_caption"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
         <SeekBar
             android:id="@+id/volume_seekBar"
@@ -60,10 +60,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:text="Devices"
+            android:text="@string/devices_text"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
@@ -76,9 +76,9 @@
             android:gravity="center_horizontal"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Devices set here will ONLY perform autoplay"
+            android:text="@string/device_text_caption"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                 android:id="@+id/autoplay_done"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Done"
+                android:text="@string/done_button_text"
                 android:textColor="@color/colorAccent"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="16dp" />
