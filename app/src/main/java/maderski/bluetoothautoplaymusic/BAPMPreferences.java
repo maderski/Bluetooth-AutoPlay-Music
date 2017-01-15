@@ -42,7 +42,7 @@ public class BAPMPreferences {
     private static final String BRIGHT_TIME_KEY = "BrightTime";
     private static final String HEADPHONE_DEVICES_KEY = "HeadphoneDevices";
     private static final String HEADPHONE_PREFERRED_VOLUME_KEY = "HeadphonePreferredVolumeKey";
-    private static final String USER_PREFERRED_VOLUME_KEY = "UserPreferredVolumeKey";
+    private static final String USER_SET_MAX_VOLUME_KEY = "UserSetMaxVolumeKey";
 
     private static final String V264_HOTFIX = "V264Hotfix";
 
@@ -83,13 +83,13 @@ public class BAPMPreferences {
     }
     //------------------------------------------------------------------------------
 
-    public static void setUserPreferredVolume(Context context, int volume){
-        editor(context).putInt(USER_PREFERRED_VOLUME_KEY, volume);
+    public static void setUserSetMaxVolume(Context context, int volume){
+        editor(context).putInt(USER_SET_MAX_VOLUME_KEY, volume);
         commit(context);
     }
 
-    public static int getUserPreferredVolume(Context context){
-        return reader(context).getInt(USER_PREFERRED_VOLUME_KEY, 7);
+    public static int getUserSetMaxVolume(Context context){
+        return reader(context).getInt(USER_SET_MAX_VOLUME_KEY, 15);
     }
 
     public static void setHeadphonePreferredVolume(Context context, int volume){

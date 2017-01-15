@@ -199,6 +199,24 @@
                         android:paddingRight="35dp" />
 
                 </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Set MAX media volume"
+                    android:id="@+id/userSetMaxVolumeLabel"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="7dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    android:paddingTop="20dp" />
+
+                <SeekBar
+                    android:id="@+id/max_volume_seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="24dp"
+                    android:paddingTop="8dp" />
 
                 <TextView
                     android:layout_width="wrap_content"

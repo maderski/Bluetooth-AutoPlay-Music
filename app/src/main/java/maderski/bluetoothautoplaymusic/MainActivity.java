@@ -17,6 +17,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -308,7 +309,9 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         Set<String> firstRun = new HashSet<>();
         saveBTDevices = new HashSet<>(BluetoothDeviceHelper.listOfBluetoothDevices());
         savedHeadphoneDevices = new HashSet<>(BluetoothDeviceHelper.listOfBluetoothDevices());
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
+        BAPMPreferences.setUserSetMaxVolume(this, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         BAPMPreferences.setBTDevices(this, firstRun);
         BAPMPreferences.setHeadphoneDevices(this, firstRun);
         BAPMPreferences.setFirstInstall(this, false);

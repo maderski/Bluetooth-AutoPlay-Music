@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         setButtonPreferences(this);
         setDaysToLaunchLabel();
         setCheckBoxes();
+        setMaxVolumeSeekBar();
     }
 
     @Override
@@ -154,6 +157,32 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     public void brightBrightnessButton(View view){
         DialogFragment newFragment = TimePickerFragment.newInstance(false, BAPMPreferences.getBrightTime(this), "Set Bright Time");
         newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void setMaxVolumeSeekBar(){
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        SeekBar volumeSeekBar = (SeekBar)findViewById(R.id.max_volume_seekBar);
+        volumeSeekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        volumeSeekBar.setProgress(BAPMPreferences.getUserSetMaxVolume(this));
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                BAPMPreferences.setUserSetMaxVolume(getApplicationContext(), progress);
+                if(BuildConfig.DEBUG){
+                    Log.d(TAG, "User set MAX volume: " + Integer.toString(BAPMPreferences.getUserSetMaxVolume(getApplicationContext())));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     @Override

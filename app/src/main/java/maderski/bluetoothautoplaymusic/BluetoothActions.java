@@ -112,7 +112,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            volumeControl.checkSetMAXVol(12,4);
+            volumeControl.checkSetMAXVol(context, 12,4);
         }
 
         if(launchMusicPlayer) {

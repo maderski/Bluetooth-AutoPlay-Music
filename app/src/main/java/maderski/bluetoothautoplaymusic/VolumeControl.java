@@ -35,22 +35,6 @@ public class VolumeControl {
             Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
 
-    public void setVolumeToUserPreferred(Context context){
-        int userPreferredMediaVolume = BAPMPreferences.getUserPreferredVolume(context);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, userPreferredMediaVolume, 0);
-
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Media Volume is set to: " + Integer.toString(userPreferredMediaVolume));
-    }
-
-    public void setVolumeToHeadphones(Context context){
-        int headphoneMediaVolume = BAPMPreferences.getHeadphonePreferredVolume(context);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, headphoneMediaVolume, 0);
-
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Media Volume is set to: " + Integer.toString(headphoneMediaVolume));
-    }
-
     //Wait 3 seconds before getting the Original Volume and return true when done
     public void delayGetOrigVol(Context context, AudioManager audioManager){
         final Context ctx = context;
@@ -77,9 +61,10 @@ public class VolumeControl {
         }
     }
 
-    public void checkSetMAXVol(int seconds, int seconds_interval){
+    public void checkSetMAXVol(final Context context, int seconds, int seconds_interval){
         int _seconds = seconds * 1000;
         int _interval = seconds_interval * 1000;
+        final int maxVolume = BAPMPreferences.getUserSetMaxVolume(context);
 
         new CountDownTimer(_seconds, _interval)
         {
@@ -87,14 +72,14 @@ public class VolumeControl {
             public void onTick(long millisUntilFinished) {
                 if(runme) {
                     if (am.isBluetoothA2dpOn()) {
-                        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) !=
-                                am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                            int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
+                                //am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                            //int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                             am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
                             if(BuildConfig.DEBUG)
                                 Log.i(TAG, "Set Volume To MAX");
-                        } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
-                                am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                        } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
+                                //am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
                             if(BuildConfig.DEBUG)
                                 Log.i(TAG, "Volume is at MAX!");
                         }
@@ -105,8 +90,7 @@ public class VolumeControl {
 
             public void onFinish() {
                 if(am.isBluetoothA2dpOn()) {
-                    if (am.getStreamVolume(AudioManager.STREAM_MUSIC) ==
-                            am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
+                    if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
                         if(BuildConfig.DEBUG)
                             Log.i(TAG, "Volume is at MAX!");
                     } else {
