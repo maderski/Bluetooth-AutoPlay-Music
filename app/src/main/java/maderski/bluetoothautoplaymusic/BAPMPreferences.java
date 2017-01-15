@@ -41,6 +41,8 @@ public class BAPMPreferences {
     private static final String DIM_TIME_KEY = "DimTime";
     private static final String BRIGHT_TIME_KEY = "BrightTime";
     private static final String HEADPHONE_DEVICES_KEY = "HeadphoneDevices";
+    private static final String HEADPHONE_PREFERRED_VOLUME_KEY = "HeadphonePreferredVolumeKey";
+    private static final String USER_PREFERRED_VOLUME_KEY = "UserPreferredVolumeKey";
 
     private static final String V264_HOTFIX = "V264Hotfix";
 
@@ -80,6 +82,24 @@ public class BAPMPreferences {
         return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
     }
     //------------------------------------------------------------------------------
+
+    public static void setUserPreferredVolume(Context context, int volume){
+        editor(context).putInt(USER_PREFERRED_VOLUME_KEY, volume);
+        commit(context);
+    }
+
+    public static int getUserPreferredVolume(Context context){
+        return reader(context).getInt(USER_PREFERRED_VOLUME_KEY, 7);
+    }
+
+    public static void setHeadphonePreferredVolume(Context context, int volume){
+        editor(context).putInt(HEADPHONE_PREFERRED_VOLUME_KEY, volume);
+        commit(context);
+    }
+
+    public static int getHeadphonePreferredVolume(Context context){
+        return reader(context).getInt(HEADPHONE_PREFERRED_VOLUME_KEY, 7);
+    }
 
     //Preferences for enabling and disabling things
     public static void setBrightTime(Context context, int time){

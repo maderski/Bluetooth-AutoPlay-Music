@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,11 +40,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener{
 
     private static final String TAG = MainActivity.class.getName();
 
-    private Set<String> saveBTDevices = new HashSet<String>();
+    private Set<String> saveBTDevices = new HashSet<>();
+    private HashSet<String> savedHeadphoneDevices = new HashSet<>();
     private boolean isBTConnected = false;
     private LaunchApp launchApp;
     private List<String> installedMediaPlayers = new ArrayList<>();
@@ -295,12 +297,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //On initial install so saveBTdevices is not null
+    //On initial install so saveBTdevices && savedHeadphoneDevices is not null
     private void runOnFirstInstall(){
         Set<String> firstRun = new HashSet<>();
-        saveBTDevices = new HashSet<>(listOfBluetoothDevices());
+        saveBTDevices = new HashSet<>(BluetoothDeviceHelper.listOfBluetoothDevices());
+        savedHeadphoneDevices = new HashSet<>(BluetoothDeviceHelper.listOfBluetoothDevices());
 
         BAPMPreferences.setBTDevices(this, firstRun);
+        BAPMPreferences.setHeadphoneDevices(this, firstRun);
         BAPMPreferences.setFirstInstall(this, false);
     }
 
@@ -311,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Pkg ", pkg);
             }
 
-            for (String btDevice : listOfBluetoothDevices()) {
+            for (String btDevice : BluetoothDeviceHelper.listOfBluetoothDevices()) {
                 Log.i("BTDevice ", btDevice);
             }
         }
@@ -335,14 +339,14 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
-
-        if (listOfBluetoothDevices().contains("No Bluetooth Device found") ||
-                listOfBluetoothDevices().isEmpty()){
+        List<String> listOfBTDevices = BluetoothDeviceHelper.listOfBluetoothDevices();
+        if (listOfBTDevices.contains("No Bluetooth Device found") ||
+                listOfBTDevices.isEmpty()){
             textView = new TextView(this);
             textView.setText(R.string.no_BT_found);
             BTDeviceCkBoxLL.addView(textView);
         }else{
-            for (String BTDevice : listOfBluetoothDevices()) {
+            for (String BTDevice : listOfBTDevices) {
                 checkBox = new CheckBox(this);
                 checkBox.setText(BTDevice);
                 checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -509,8 +513,12 @@ public class MainActivity extends AppCompatActivity {
         return installedMediaPlayers.indexOf(selectedMusicPlayer);
     }
 
-    //***Toggle button actions are below, basically set SharedPref value for specified button***
+    public void autoplayOnlyButton(View view){
+        DialogFragment newFragment = HeadphonesFragment.newInstance(savedHeadphoneDevices);
+        newFragment.show(getSupportFragmentManager(), "autoplayONly");
+    }
 
+    //***Toggle button actions are below, basically set SharedPref value for specified button***
     public void mapsToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
         if (on) {
@@ -658,23 +666,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    //List of bluetooth devices on the phone
-    private List<String> listOfBluetoothDevices(){
-        List<String> btDevices = new ArrayList<String>();
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        if(mBluetoothAdapter != null) {
-            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-
-            for(BluetoothDevice bt : pairedDevices)
-                btDevices.add(bt.getName());
-        }else{
-            btDevices.add(0, "No Bluetooth Device found");
-        }
-
-        return btDevices;
-    }
-
     //List of Mediaplayers that is installed on the phone
     private List<String> listOfInstalledMediaPlayers(Context context){
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
@@ -701,4 +692,8 @@ public class MainActivity extends AppCompatActivity {
         return installedMediaPlayers;
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }

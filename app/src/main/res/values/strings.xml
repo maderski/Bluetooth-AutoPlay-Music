@@ -4,4 +4,16 @@
     <string name="no_BT_found">No Bluetooth Device found</string>
     <string name="settings_menu">Options</string>
     <string name="link_menu">Rate Me</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="put_phone_in_priority_mode">Put phone in Priority Mode</string>
+    <string name="set_media_volume_to_max">Set Media Volume to MAX</string>
+    <string name="launch_music_player">Launch Music Player</string>
+    <string name="dismiss_keyguard">Dismiss KeyGuard</string>
+    <string name="keep_screen_on">Keep Screen ON</string>
+    <string name="launch_maps">Launch Maps</string>
+    <string name="bluetooth_devices">Bluetooth Devices</string>
+    <string name="music_players">Music Players</string>
+    <string name="on_connect">On Connect</string>
 </resources>

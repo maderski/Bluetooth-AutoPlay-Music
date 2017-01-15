@@ -30,7 +30,25 @@ public class VolumeControl {
     public void setOriginalVolume(Context context){
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(context);
         am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
-        Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+    }
+
+    public void setVolumeToUserPreferred(Context context){
+        int userPreferredMediaVolume = BAPMPreferences.getUserPreferredVolume(context);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, userPreferredMediaVolume, 0);
+
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Media Volume is set to: " + Integer.toString(userPreferredMediaVolume));
+    }
+
+    public void setVolumeToHeadphones(Context context){
+        int headphoneMediaVolume = BAPMPreferences.getHeadphonePreferredVolume(context);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, headphoneMediaVolume, 0);
+
+        if(BuildConfig.DEBUG)
+            Log.i(TAG, "Media Volume is set to: " + Integer.toString(headphoneMediaVolume));
     }
 
     //Wait 3 seconds before getting the Original Volume and return true when done
