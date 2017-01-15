@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.HashSet;
@@ -60,6 +62,30 @@ public class HeadphonesFragment extends DialogFragment{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_headphones, container, false);
         checkboxCreator(rootView);
+
+        AudioManager audioManager = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
+        SeekBar volumeSeekBar = (SeekBar)rootView.findViewById(R.id.volume_seekBar);
+        volumeSeekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        volumeSeekBar.setProgress(BAPMPreferences.getHeadphonePreferredVolume(getActivity()));
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                BAPMPreferences.setHeadphonePreferredVolume(getActivity(), progress);
+                if(BuildConfig.DEBUG)
+                    Log.d(TAG, "Progress: " + Integer.toString(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         Button doneButton = (Button)rootView.findViewById(R.id.autoplay_done);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
