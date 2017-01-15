@@ -711,8 +711,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     @Override
     public void setHeadphoneDevices(HashSet<String> headphoneDevices) {
         BAPMPreferences.setHeadphoneDevices(getApplicationContext(), headphoneDevices);
-        for(String deviceName : headphoneDevices){
-            Log.d(TAG, "device name: " + deviceName);
+        if(BuildConfig.DEBUG) {
+            for (String deviceName : headphoneDevices) {
+                Log.d(TAG, "device name: " + deviceName);
+            }
         }
     }
 
@@ -720,17 +722,20 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void headphonesDoneClicked(HashSet<String> removeDevices) {
         headphoneDevices = BAPMPreferences.getHeadphoneDevices(this);
         for(String deviceName : headphoneDevices){
-            Log.d(TAG, "headphoneDevice: " + deviceName);
             saveBTDevices.add(deviceName);
+            if(BuildConfig.DEBUG) {
+                Log.d(TAG, "headphoneDevice: " + deviceName);
+            }
         }
 
         for(String deviceName : removeDevices){
             if(saveBTDevices.contains(deviceName))
                 saveBTDevices.remove(deviceName);
         }
-
-        for(String deviceName : saveBTDevices){
-            Log.d(TAG, "saveBTDevice: " + deviceName);
+        if(BuildConfig.DEBUG) {
+            for (String deviceName : saveBTDevices) {
+                Log.d(TAG, "saveBTDevice: " + deviceName);
+            }
         }
 
         BAPMPreferences.setBTDevices(this, saveBTDevices);
