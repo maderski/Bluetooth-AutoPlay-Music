@@ -28,8 +28,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent != null) {
             device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            if (device != null)
+            if (device != null) {
                 isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
+                if(BuildConfig.DEBUG)
+                    Log.d(TAG, "Connected device: " + device.getName() +
+                            "\n" + "is SelectedBTDevice: " + Boolean.toString(isSelectedBTDevice));
+            }
 
             if (intent.getAction() != null) {
                 action = intent.getAction();
@@ -40,6 +44,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
     private void selectedDevicePrepForActions(Context context){
         boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(device.getName());
+        if(BuildConfig.DEBUG)
+            Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
         if (isSelectedBTDevice && !isAHeadphonesBTDevice) {
             if(!BAPMDataPreferences.getIsSelected(context)) {
                 sendIsSelectedBroadcast(context, true);
@@ -50,15 +56,24 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
     }
 
-    private void onHeadphonesConnectSwitch(Context context){
+    private void onHeadphonesConnectSwitch(final Context context){
 
-        PlayMusic playMusic = new PlayMusic(context, (AudioManager)context.getSystemService(Context.AUDIO_SERVICE));
+        final PlayMusic playMusic = new PlayMusic(context, (AudioManager)context.getSystemService(Context.AUDIO_SERVICE));
         switch(action) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                playMusic.play();
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        playMusic.play();
+                        Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                handler.postDelayed(runnable, 5000);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 playMusic.pause();
+                Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
