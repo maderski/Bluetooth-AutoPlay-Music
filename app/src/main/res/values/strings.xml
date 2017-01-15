@@ -16,4 +16,17 @@
     <string name="bluetooth_devices">Bluetooth Devices</string>
     <string name="music_players">Music Players</string>
     <string name="on_connect">On Connect</string>
+    <string name="option_play_music">PLAY music</string>
+    <string name="option_play_music_caption">Play music when connected to bluetooth</string>
+    <string name="option_power_required">POWER required</string>
+    <string name="option_power_required_caption">Will NOT launch unless phone is charging</string>
+    <string name="option_go_home">Go HOME</string>
+    <string name="option_go_home_caption">Go to homescreen on device disconnect</string>
+    <string name="option_call_completed">CALL completed</string>
+    <string name="option_call_completed_caption">On a call, Will NOT launch until call is over</string>
+    <string name="option_auto_brightness">Auto BRIGHTNESS</string>
+    <string name="option_auto_brightness_caption">Set \'Keep Screen ON\' brightness dim/bright using sunrise/sunset times on connect</string>
+    <string name="option_manual_brightness">Manual Brightness Times</string>
+    <string name="bright_time_button_text">Bright Time</string>
+    <string name="dim_time_button_text">Dim Time</string>
 </resources>

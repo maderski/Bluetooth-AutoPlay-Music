@@ -48,7 +48,7 @@
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PLAY music"
+                android:text="@string/option_play_music"
                 android:id="@+id/auto_play"
                 android:checked="false"
                 android:switchPadding="100dp"
@@ -62,14 +62,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="When music player is launched play music"
+                android:text="@string/option_play_music_caption"
                 android:id="@+id/playMusicExplaination"
                 android:textSize="12dp" />
 
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="POWER required"
+                android:text="@string/option_power_required"
                 android:id="@+id/power_connected"
                 android:checked="false"
                 android:paddingTop="20dp"
@@ -83,14 +83,14 @@
                 android:layout_width="264dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Will NOT launch unless phone is charging"
+                android:text="@string/option_power_required_caption"
                 android:id="@+id/powerRequiredExplaination"
                 android:textSize="12dp" />
 
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Go HOME"
+                android:text="@string/option_go_home"
                 android:id="@+id/send_to_background"
                 android:checked="false"
                 android:paddingTop="20dp"
@@ -104,14 +104,14 @@
                 android:layout_width="264dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Go to homescreen on device disconnect"
+                android:text="@string/option_go_home_caption"
                 android:id="@+id/GoHomeExplaination"
                 android:textSize="12dp" />
 
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CALL completed"
+                android:text="@string/option_call_completed"
                 android:id="@+id/wait_till_off_phone"
                 android:checked="false"
                 android:paddingTop="20dp"
@@ -125,14 +125,14 @@
                 android:layout_width="264dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="On a call, Will NOT launch until call is over"
+                android:text="@string/option_call_completed_caption"
                 android:id="@+id/CallCompletedExplaination"
                 android:textSize="12dp" />
 
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Auto BRIGHTNESS"
+                android:text="@string/option_auto_brightness"
                 android:id="@+id/auto_brightness"
                 android:checked="false"
                 android:paddingTop="20dp"
@@ -146,7 +146,7 @@
                 android:layout_width="246dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Set &apos;Keep Screen ON&apos; brightness dim/bright using sunrise/sunset times on connect"
+                android:text="@string/option_auto_brightness_caption"
                 android:id="@+id/autoBrightnessExplaination"
                 android:textSize="12dp" />
 
@@ -160,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Manual Brightness Times"
+                    android:text="@string/option_manual_brightness"
                     android:id="@+id/manualBrtLabel"
                     android:layout_gravity="center_horizontal"
                     android:paddingBottom="7dp"
@@ -177,7 +177,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bright Time"
+                        android:text="@string/bright_time_button_text"
                         android:id="@+id/brighttimebutton"
                         android:onClick="brightBrightnessButton"
                         android:background="@drawable/on_state"
@@ -189,7 +189,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dim Time"
+                        android:text="@string/dim_time_button_text"
                         android:id="@+id/dimtimebutton"
                         android:onClick="dimBrightnessButton"
                         android:background="@drawable/on_state"
