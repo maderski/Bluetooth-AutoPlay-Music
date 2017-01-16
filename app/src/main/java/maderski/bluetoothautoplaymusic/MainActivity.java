@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             Set<String> update291Patch = new HashSet<>();
             BAPMPreferences.setHeadphoneDevices(this, update291Patch);
         }
-
+        //----------------------------------------------------
         if(BAPMPreferences.getAutoBrightness(this)) {
             Permissions permissions = new Permissions();
             permissions.checkLocationPermission(this);
@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         setFloatingActionButton(this);
 
-
-        //----------------------------------------------------
     }
 
     private void setFloatingActionButton(final Context context){
