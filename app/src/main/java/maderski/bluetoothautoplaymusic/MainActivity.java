@@ -77,6 +77,12 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         setFloatingActionButton(this);
 
+        //-----------Hotfix for version 2.91 apps that update
+        if(BAPMPreferences.getHeadphoneDevices(this) == null){
+            Set<String> update291Patch = new HashSet<>();
+            BAPMPreferences.setHeadphoneDevices(this, update291Patch);
+        }
+        //----------------------------------------------------
     }
 
     private void setFloatingActionButton(final Context context){
