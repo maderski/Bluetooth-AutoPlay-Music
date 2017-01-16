@@ -62,8 +62,15 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(BAPMPreferences.getFirstInstallKey(this))
+        if(BAPMPreferences.getFirstInstallKey(this)) {
             runOnFirstInstall();
+        }
+
+        //-----------Hotfix for version 2.91 apps that update
+        if(BAPMPreferences.getHeadphoneDevices(this) == null){
+            Set<String> update291Patch = new HashSet<>();
+            BAPMPreferences.setHeadphoneDevices(this, update291Patch);
+        }
 
         if(BAPMPreferences.getAutoBrightness(this)) {
             Permissions permissions = new Permissions();
@@ -77,11 +84,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         setFloatingActionButton(this);
 
-        //-----------Hotfix for version 2.91 apps that update
-        if(BAPMPreferences.getHeadphoneDevices(this) == null){
-            Set<String> update291Patch = new HashSet<>();
-            BAPMPreferences.setHeadphoneDevices(this, update291Patch);
-        }
+
         //----------------------------------------------------
     }
 
