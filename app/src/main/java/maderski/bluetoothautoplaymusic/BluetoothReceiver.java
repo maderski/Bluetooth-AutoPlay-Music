@@ -46,10 +46,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
     }
 
     private void selectedDevicePrepForActions(Context context){
-        if(BAPMPreferences.getHeadphoneDevices(context) == null){
-            Set<String> update291Patch = new HashSet<>();
-            BAPMPreferences.setHeadphoneDevices(context, update291Patch);
-        }
         boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(device.getName());
         if(BuildConfig.DEBUG)
             Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));

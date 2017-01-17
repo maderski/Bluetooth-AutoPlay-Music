@@ -66,12 +66,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             runOnFirstInstall();
         }
 
-        //-----------Hotfix for version 2.91 apps that update
-        if(BAPMPreferences.getHeadphoneDevices(this) == null){
-            Set<String> update291Patch = new HashSet<>();
-            BAPMPreferences.setHeadphoneDevices(this, update291Patch);
-        }
-        //----------------------------------------------------
         if(BAPMPreferences.getAutoBrightness(this)) {
             Permissions permissions = new Permissions();
             permissions.checkLocationPermission(this);
@@ -320,7 +314,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         BAPMPreferences.setUserSetMaxVolume(this, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         BAPMPreferences.setBTDevices(this, firstRun);
-        BAPMPreferences.setHeadphoneDevices(this, firstRun);
         BAPMPreferences.setFirstInstall(this, false);
     }
 

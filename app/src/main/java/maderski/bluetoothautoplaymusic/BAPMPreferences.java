@@ -211,7 +211,7 @@ public class BAPMPreferences {
     }
 
     public static Set<String> getHeadphoneDevices(Context context){
-        return reader(context).getStringSet(HEADPHONE_DEVICES_KEY, null);
+        return reader(context).getStringSet(HEADPHONE_DEVICES_KEY, new HashSet<String>());
     }
 
     public static void setBTDevices(Context context, Set<String> _stringSet){
