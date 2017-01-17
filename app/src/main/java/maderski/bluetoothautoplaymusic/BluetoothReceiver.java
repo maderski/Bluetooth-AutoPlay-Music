@@ -13,6 +13,9 @@ import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Jason on 1/5/16.
  */
@@ -43,6 +46,10 @@ public class BluetoothReceiver extends BroadcastReceiver {
     }
 
     private void selectedDevicePrepForActions(Context context){
+        if(BAPMPreferences.getHeadphoneDevices(context) == null){
+            Set<String> update291Patch = new HashSet<>();
+            BAPMPreferences.setHeadphoneDevices(context, update291Patch);
+        }
         boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(device.getName());
         if(BuildConfig.DEBUG)
             Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
