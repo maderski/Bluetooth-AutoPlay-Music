@@ -141,10 +141,13 @@ public class HeadphonesFragment extends DialogFragment{
 
                 if (cb.isChecked()) {
                     mSavedHeadphoneDevices.add(BTD);
-                    if (BuildConfig.DEBUG)
+                    if(removedDevices.contains(BTD)){
+                        removedDevices.remove(BTD);
+                    }
+                    if (BuildConfig.DEBUG) {
                         Log.i(TAG, "TRUE" + " " + BTD);
-                    if (BuildConfig.DEBUG)
                         Log.i(TAG, "SAVED");
+                    }
                 } else {
                     mSavedHeadphoneDevices.remove(BTD);
                     removedDevices.add(BTD);
