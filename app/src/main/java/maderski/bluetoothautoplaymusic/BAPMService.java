@@ -1,8 +1,10 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
@@ -20,19 +22,11 @@ public class BAPMService extends Service {
             Log.i("BAPMService: ", "started");
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
-        BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
-        bluetoothReceiver.onReceive(this, intent);
 
-        CustomReceiver customReceiver = new CustomReceiver();
-        customReceiver.onReceive(this, intent);
-
-        PowerReceiver powerReceiver = new PowerReceiver();
-        powerReceiver.onReceive(this, intent);
-
-        //Rehold WakeLock due to Service Restart
+        // Rehold WakeLock due to Service Restart
         reHoldWakeLock();
 
-        return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     @Override

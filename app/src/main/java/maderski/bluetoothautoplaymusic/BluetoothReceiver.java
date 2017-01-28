@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.app.IntentService;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,42 +20,42 @@ import java.util.Set;
 /**
  * Created by Jason on 1/5/16.
  */
-public class BluetoothReceiver extends BroadcastReceiver {
+public class BluetoothReceiver extends BroadcastReceiver{
 
     private static final String TAG = BluetoothReceiver.class.getName();
 
-    private String action = "None";
-    private BluetoothDevice device;
-    private boolean isSelectedBTDevice = false;
+    private String mAction = "None";
+    private BluetoothDevice mDevice;
+    private boolean mIsSelectedBTDevice = false;
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
         if(intent != null) {
-            device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            if (device != null) {
-                isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(device.getName());
+            mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            if (mDevice != null) {
+                mIsSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(mDevice.getName());
                 if(BuildConfig.DEBUG)
-                    Log.d(TAG, "Connected device: " + device.getName() +
-                            "\n" + "is SelectedBTDevice: " + Boolean.toString(isSelectedBTDevice));
+                    Log.d(TAG, "Connected device: " + mDevice.getName() +
+                            "\n" + "is SelectedBTDevice: " + Boolean.toString(mIsSelectedBTDevice));
             }
 
             if (intent.getAction() != null) {
-                action = intent.getAction();
+                mAction = intent.getAction();
                 selectedDevicePrepForActions(context);
             }
         }
     }
 
     private void selectedDevicePrepForActions(Context context){
-        boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(device.getName());
+        boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(mDevice.getName());
         if(BuildConfig.DEBUG)
             Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
-        if (isSelectedBTDevice && !isAHeadphonesBTDevice) {
+        if (mIsSelectedBTDevice && !isAHeadphonesBTDevice) {
             if(!BAPMDataPreferences.getIsSelected(context)) {
                 sendIsSelectedBroadcast(context, true);
             }
             bluetoothConnectDisconnectSwitch(context);
-        } else if(isSelectedBTDevice){
+        } else if(mIsSelectedBTDevice){
             onHeadphonesConnectSwitch(context);
         }
     }
@@ -65,7 +66,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
         BAPMDataPreferences.setOriginalMediaVolume(context, audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
-        switch(action) {
+        switch(mAction) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
                 Handler handler = new Handler();
                 Runnable runnable = new Runnable() {
@@ -96,27 +97,27 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 screenONLock, new Notification(), new VolumeControl(am));
 
         if(BuildConfig.DEBUG)
-            Log.d(TAG, "Bluetooth Intent Received: " + action);
+            Log.d(TAG, "Bluetooth Intent Received: " + mAction);
 
-        switch (action) {
+        switch (mAction) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
-                waitingForBTA2dpOn(context, isSelectedBTDevice, bluetoothActions, am);
+                waitingForBTA2dpOn(context, mIsSelectedBTDevice, bluetoothActions, am);
 
                 if(BuildConfig.DEBUG) {
                     for (String cd : BAPMPreferences.getBTDevices(context)) {
                         Log.i(TAG, "User selected device: " + cd);
                     }
-                    Log.i(TAG, "Connected device: " + device);
-                    Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + isSelectedBTDevice);
+                    Log.i(TAG, "Connected device: " + mDevice);
+                    Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + mIsSelectedBTDevice);
                 }
                 break;
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "Device disconnected: " + device.getName());
+                    Log.i(TAG, "Device disconnected: " + mDevice.getName());
 
                     Log.i(TAG, "OnDisconnect: isAUserSelectedBTDevice: " +
-                            Boolean.toString(isSelectedBTDevice));
+                            Boolean.toString(mIsSelectedBTDevice));
                     Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(context)));
                     Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(context)));
                 }
