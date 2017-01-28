@@ -5,6 +5,8 @@ import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+
 /**
  * Created by Jason on 12/8/15.
  */

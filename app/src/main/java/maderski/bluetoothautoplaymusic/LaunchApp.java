@@ -7,6 +7,10 @@ import android.util.Log;
 
 import java.util.Calendar;
 
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.UI.LaunchBAPMActivity;
+import maderski.bluetoothautoplaymusic.UI.MainActivity;
+
 /**
  * Created by Jason on 12/8/15.
  */

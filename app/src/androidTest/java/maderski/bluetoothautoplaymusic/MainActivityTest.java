@@ -4,6 +4,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.widget.Button;
 
+import maderski.bluetoothautoplaymusic.UI.MainActivity;
+
 /**
  * Created by Jason on 7/26/16.
  */

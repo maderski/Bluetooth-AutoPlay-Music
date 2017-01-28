@@ -1,26 +1,31 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Receivers;
 
-import android.app.IntentService;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.HashSet;
-import java.util.Set;
+import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.BluetoothActions;
+import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.Notification;
+import maderski.bluetoothautoplaymusic.PlayMusic;
+import maderski.bluetoothautoplaymusic.Power;
+import maderski.bluetoothautoplaymusic.ScreenONLock;
+import maderski.bluetoothautoplaymusic.Telephone;
+import maderski.bluetoothautoplaymusic.VolumeControl;
 
 /**
  * Created by Jason on 1/5/16.
  */
-public class BluetoothReceiver extends BroadcastReceiver{
+public class BluetoothReceiver extends BroadcastReceiver implements BluetoothState{
 
     private static final String TAG = BluetoothReceiver.class.getName();
 
@@ -91,10 +96,8 @@ public class BluetoothReceiver extends BroadcastReceiver{
 
     private void bluetoothConnectDisconnectSwitch(Context context){
 
-        ScreenONLock screenONLock = ScreenONLock.getInstance();
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        BluetoothActions bluetoothActions = new BluetoothActions(context, am,
-                screenONLock, new Notification(), new VolumeControl(am));
+        BluetoothActions bluetoothActions = new BluetoothActions(context, am);
 
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + mAction);
@@ -185,5 +188,14 @@ public class BluetoothReceiver extends BroadcastReceiver{
         isSelectedIntent.putExtra("isSelected", isSelected);
         isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
         context.sendBroadcast(isSelectedIntent);
+    }
+
+    @Override
+    public void adapterOff(Context context) {
+        // Set volume back
+        final AudioManager audioManager  = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
+        BluetoothActions bluetoothActions = new BluetoothActions(context, audioManager);
+        bluetoothActions.actionsBTStateOff();
     }
 }

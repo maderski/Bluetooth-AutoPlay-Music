@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.SharedPrefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;

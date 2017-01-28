@@ -4,8 +4,11 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.CountDownTimer;
 import android.util.Log;
+import android.widget.Toast;
+
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
  * Created by Jason on 2/22/16.
@@ -20,12 +23,12 @@ public class BluetoothActions {
     private Notification notification;
     private VolumeControl volumeControl;
 
-    public BluetoothActions(Context context, AudioManager audioManager, ScreenONLock screenONLock, Notification notification, VolumeControl volumeControl){
+    public BluetoothActions(Context context, AudioManager audioManager){
         this.context = context;
         this.audioManager = audioManager;
-        this.screenONLock = screenONLock;
-        this.notification = notification;
-        this.volumeControl = volumeControl;
+        this.screenONLock = ScreenONLock.getInstance();
+        this.notification = new Notification();
+        this.volumeControl = new VolumeControl(audioManager);
     }
 
     //Return true if Bluetooth Audio is ready
@@ -91,7 +94,6 @@ public class BluetoothActions {
 
         notification.BAPMMessage(context, mapChoice);
 
-        //setRanActionsOnBTConnect(true);
         BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
 
         if(screenON){
@@ -150,7 +152,6 @@ public class BluetoothActions {
 
         notification.removeBAPMMessage(context);
 
-        //setRanActionsOnBTConnect(false);
         BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
 
         if(screenON){
@@ -189,5 +190,18 @@ public class BluetoothActions {
         if(sendToBackground) {
             launchApp.sendEverythingToBackground();
         }
+    }
+
+    public void actionsBTStateOff(){
+        // Pause music
+        PlayMusic playMusic = new PlayMusic(context, audioManager);
+        playMusic.pause();
+
+        // Put music volume back to original volume
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMDataPreferences.getOriginalMediaVolume(context), 0);
+        if(BuildConfig.DEBUG)
+            Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
+
+        actionsOnBTDisconnect();
     }
 }

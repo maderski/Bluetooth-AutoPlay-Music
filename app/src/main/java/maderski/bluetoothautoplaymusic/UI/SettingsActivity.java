@@ -1,7 +1,6 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.UI;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -17,15 +16,16 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
-public class SettingsActivity extends AppCompatActivity implements TimePickerFragment.TimePickerDialogListener{
+import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.Permissions;
+import maderski.bluetoothautoplaymusic.R;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+
+public class SettingsActivity extends AppCompatActivity implements TimePickerFragment.TimePickerDialogListener {
 
     private static final String TAG = SettingsActivity.class.getName();
 

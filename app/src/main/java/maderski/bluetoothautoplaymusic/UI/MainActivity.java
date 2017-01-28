@@ -1,9 +1,6 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.UI;
 
-import android.Manifest;
 import android.app.ActivityManager;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -14,22 +11,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +38,16 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import maderski.bluetoothautoplaymusic.Services.BAPMService;
+import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
+import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.PackageTools;
+import maderski.bluetoothautoplaymusic.Permissions;
+import maderski.bluetoothautoplaymusic.R;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener{
 
@@ -399,25 +402,24 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isBTConnected) {
-                    if (cb.isChecked()) {
-                        saveBTDevices.add(BTD);
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "TRUE" + " " + BTD);
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "SAVED");
-                    } else {
-                        saveBTDevices.remove(BTD);
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "FALSE" + " " + BTD);
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "SAVED");
+                if (cb.isChecked()) {
+                    saveBTDevices.add(BTD);
+                    if(BuildConfig.DEBUG) {
+                        Log.i(TAG, "TRUE" + " " + BTD);
                     }
-                    BAPMPreferences.setBTDevices(ctx, saveBTDevices);
-                }else{
-                    cb.setClickable(false);
-                    Snackbar.make(v, "Checkboxes are disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
+                    if(BuildConfig.DEBUG) {
+                        Log.i(TAG, "SAVED");
+                    }
+                } else {
+                    saveBTDevices.remove(BTD);
+                    if(BuildConfig.DEBUG) {
+                        Log.i(TAG, "FALSE" + " " + BTD);
+                    }
+                    if(BuildConfig.DEBUG) {
+                        Log.i(TAG, "SAVED");
+                    }
                 }
+                BAPMPreferences.setBTDevices(ctx, saveBTDevices);
             }
         });
     }

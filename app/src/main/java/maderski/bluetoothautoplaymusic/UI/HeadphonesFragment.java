@@ -1,15 +1,11 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.UI;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +17,11 @@ import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
+import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.R;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class HeadphonesFragment extends DialogFragment{
 

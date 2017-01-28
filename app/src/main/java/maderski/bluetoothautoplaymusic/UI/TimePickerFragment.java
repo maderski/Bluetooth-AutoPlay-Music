@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.UI;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -10,7 +10,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
+import maderski.bluetoothautoplaymusic.BuildConfig;
 
 /**
  * Created by Jason on 9/17/16.

@@ -1,9 +1,11 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import maderski.bluetoothautoplaymusic.BuildConfig;
 
 /**
  * Created by Jason on 1/5/16.

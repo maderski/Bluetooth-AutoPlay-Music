@@ -1,10 +1,17 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.util.Log;
+
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
+import maderski.bluetoothautoplaymusic.BluetoothActions;
+import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.Notification;
+import maderski.bluetoothautoplaymusic.ScreenONLock;
+import maderski.bluetoothautoplaymusic.VolumeControl;
 
 /**
  * Created by Jason on 7/28/16.
@@ -22,14 +29,8 @@ public class CustomReceiver extends BroadcastReceiver {
             if (intent.getAction() != null) {
                 action = intent.getAction();
                 if(!action.equalsIgnoreCase("ACTION_IS_SELECTED")) {
-                    ScreenONLock screenONLock = ScreenONLock.getInstance();
                     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    BluetoothActions bluetoothActions = new BluetoothActions(
-                            context,
-                            audioManager,
-                            screenONLock,
-                            new Notification(),
-                            new VolumeControl(audioManager));
+                    BluetoothActions bluetoothActions = new BluetoothActions(context, audioManager);
                     performAction(action, bluetoothActions);
                 }
             }
