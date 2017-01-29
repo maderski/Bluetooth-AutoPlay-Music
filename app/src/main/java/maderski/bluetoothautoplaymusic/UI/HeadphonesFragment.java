@@ -157,6 +157,7 @@ public class HeadphonesFragment extends DialogFragment{
                         Log.i(TAG, "SAVED");
                 }
                 mListener.setHeadphoneDevices(mSavedHeadphoneDevices);
+                mListener.headDeviceSelection(BTD, cb.isChecked());
             }
         });
     }
@@ -191,5 +192,6 @@ public class HeadphonesFragment extends DialogFragment{
     public interface OnFragmentInteractionListener {
         void setHeadphoneDevices(HashSet<String> headphoneDevices);
         void headphonesDoneClicked(HashSet<String> removedDevices);
+        void headDeviceSelection(String deviceName, boolean addDevice);
     }
 }

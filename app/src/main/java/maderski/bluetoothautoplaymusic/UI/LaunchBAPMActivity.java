@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.ScreenONLock;
@@ -19,7 +20,15 @@ public class LaunchBAPMActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_bapm);
+
+        // Create Firebase Event
+        FirebaseHelper firebaseHelper = new FirebaseHelper(this);
+        firebaseHelper.activityLaunched(FirebaseHelper.ActivityName.LAUNCH_BAPM);
+
+        // Dismiss the keyguard
         dismissKeyGuard(this);
+
+        // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
         sendHomeAppTimer(3);
     }
 

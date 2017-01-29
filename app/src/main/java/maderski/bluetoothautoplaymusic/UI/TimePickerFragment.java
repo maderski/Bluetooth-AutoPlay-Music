@@ -2,7 +2,9 @@ package maderski.bluetoothautoplaymusic.UI;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -17,7 +19,7 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
  */
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
-
+    private static final String TAG = "TimePickerFragment";
     private boolean isDimFragment;
     private int previouslySetTime;
     private String pickerTitle;
@@ -63,12 +65,23 @@ public class TimePickerFragment extends DialogFragment
         return timePickerDialog;
     }
 
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        if(dialogListener != null) {
+            dialogListener.onTimeCancel(isDimFragment);
+            if(BuildConfig.DEBUG){
+                Log.d(TAG, "Cancelled time set...isDim: " + Boolean.toString(isDimFragment));
+            }
+        }
+        super.onCancel(dialog);
+    }
+
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         int setTime = (hourOfDay * 100) + minute;
         if(BuildConfig.DEBUG) {
-            Log.i("TimePickerFragment", "Set time: " + Integer.toString(setTime));
-            Log.i("TimePickerFragment", "Is Dim: " + Boolean.toString(isDimFragment));
+            Log.i(TAG, "Set time: " + Integer.toString(setTime));
+            Log.i(TAG, "Is Dim: " + Boolean.toString(isDimFragment));
         }
 
         if(dialogListener != null)
@@ -79,5 +92,6 @@ public class TimePickerFragment extends DialogFragment
 
     public interface TimePickerDialogListener {
         void onTimeSet(boolean isDim, TimePicker view, int hourOfDay, int minute);
+        void onTimeCancel(boolean isDim);
     }
 }

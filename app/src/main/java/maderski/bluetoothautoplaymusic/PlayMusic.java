@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
@@ -16,10 +17,12 @@ public class PlayMusic {
 
     private AudioManager audioManager;
     private PlayerControls playerControls;
+    private FirebaseHelper mFirebaseHelper;
 
     public PlayMusic(Context context, AudioManager audioManager){
         this.audioManager = audioManager;
         setPlayerControls(context, audioManager);
+        mFirebaseHelper = new FirebaseHelper(context);
     }
 
     private void setPlayerControls(Context context, AudioManager audioManager){
@@ -60,11 +63,14 @@ public class PlayMusic {
                 }
 
                 if (am.isMusicActive()) {
-                    if (BuildConfig.DEBUG)
+                    if (BuildConfig.DEBUG) {
                         Log.i(TAG, "Music is playing");
+                    }
                     if(millisUntilFinished < 8000) {
-                        if (BuildConfig.DEBUG)
+                        mFirebaseHelper.musicAutoPlay(true);
+                        if (BuildConfig.DEBUG) {
                             Log.i(TAG, "checkIfPlaying cancelled");
+                        }
                         cancel();
                     }
                 } else {
@@ -72,8 +78,9 @@ public class PlayMusic {
                 }
 
                 if(!am.isBluetoothA2dpOn()){
-                    if (BuildConfig.DEBUG)
+                    if (BuildConfig.DEBUG) {
                         Log.i(TAG, "Bluetooth is not connected");
+                    }
                     pause();
                     cancel();
                 }
@@ -81,8 +88,10 @@ public class PlayMusic {
 
             @Override
             public void onFinish() {
-                if(BuildConfig.DEBUG)
+                mFirebaseHelper.musicAutoPlay(false);
+                if(BuildConfig.DEBUG) {
                     Log.i(TAG, "Unable to Play :(");
+                }
             }
         }.start();
     }

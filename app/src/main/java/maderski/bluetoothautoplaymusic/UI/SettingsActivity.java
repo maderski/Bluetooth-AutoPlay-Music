@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import java.util.HashSet;
 import java.util.Set;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Permissions;
 import maderski.bluetoothautoplaymusic.R;
@@ -29,10 +30,14 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
     private static final String TAG = SettingsActivity.class.getName();
 
+    FirebaseHelper mFirebaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        mFirebaseHelper = new FirebaseHelper(this);
+        mFirebaseHelper.activityLaunched(FirebaseHelper.ActivityName.SETTINGS);
     }
 
     @Override
@@ -81,6 +86,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
     public void autoPlaySwitch(View view){
         boolean on = ((Switch) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Option.PLAY_MUSIC, on);
         if (on) {
             BAPMPreferences.setAutoplayMusic(this, true);
             if(BuildConfig.DEBUG)
@@ -94,6 +100,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
     public void powerConnectedSwitch(View view){
         boolean on = ((Switch) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Option.POWER_REQUIRED, on);
         if(on){
             BAPMPreferences.setPowerConnected(this, true);
             if(BuildConfig.DEBUG)
@@ -107,6 +114,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
     public void sendToBackgroundSwitch(View view){
         boolean on = ((Switch) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Option.GO_HOME, on);
         if(on){
             BAPMPreferences.setSendToBackground(this, true);
             if(BuildConfig.DEBUG)
@@ -120,6 +128,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
     public void waitTillOffPhoneSwitch(View view){
         boolean on = ((Switch) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Option.CALL_COMPLETED, on);
         if(on){
             BAPMPreferences.setWaitTillOffPhone(this, true);
             if(BuildConfig.DEBUG)
@@ -133,6 +142,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
     public void autoBrightnessSwitch(View view){
         boolean on = ((Switch) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Option.AUTO_BRIGHTNESS, on);
         if(on){
             Permissions permissions = new Permissions();
             permissions.checkLocationPermission(this);
@@ -151,7 +161,6 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     public void dimBrightnessButton(View view){
         DialogFragment newFragment = TimePickerFragment.newInstance(true, BAPMPreferences.getDimTime(this), "Set Dim Time");
         newFragment.show(getSupportFragmentManager(), "timePicker");
-
     }
 
     public void brightBrightnessButton(View view){
@@ -189,14 +198,21 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     public void onTimeSet(boolean isDim, TimePicker view, int hourOfDay, int minute) {
         int timeSet = (hourOfDay * 100) + minute;
         if(isDim){
+            mFirebaseHelper.manualTimeSet(FirebaseHelper.Selection.DIM_TIME, true);
             BAPMPreferences.setDimTime(this, timeSet);
             if(BuildConfig.DEBUG)
                 Log.i("Settings", "Dim brightness");
         }else{
+            mFirebaseHelper.manualTimeSet(FirebaseHelper.Selection.BRIGHT_TIME, true);
             BAPMPreferences.setBrightTime(this, timeSet);
             if(BuildConfig.DEBUG)
                 Log.i("Settings", "Bright brightness");
         }
+    }
+
+    @Override
+    public void onTimeCancel(boolean isDim) {
+        mFirebaseHelper.manualTimeSet(isDim ? FirebaseHelper.Selection.DIM_TIME : FirebaseHelper.Selection.BRIGHT_TIME, false);
     }
 
     private void setFonts(){

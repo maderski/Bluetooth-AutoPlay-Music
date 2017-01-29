@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.BluetoothActions;
 import maderski.bluetoothautoplaymusic.BuildConfig;
@@ -22,6 +23,8 @@ public class CustomReceiver extends BroadcastReceiver {
     private static final String ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch";
     private static final String ACTION_IS_SELECTED = "maderski.bluetoothautoplaymusic.isselected";
 
+    private FirebaseHelper mFirebaseHelper;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = "None";
@@ -31,6 +34,7 @@ public class CustomReceiver extends BroadcastReceiver {
                 if(!action.equalsIgnoreCase("ACTION_IS_SELECTED")) {
                     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                     BluetoothActions bluetoothActions = new BluetoothActions(context, audioManager);
+                    mFirebaseHelper = new FirebaseHelper(context);
                     performAction(action, bluetoothActions);
                 }
             }
@@ -42,14 +46,17 @@ public class CustomReceiver extends BroadcastReceiver {
     private void performAction(String action, BluetoothActions bluetoothActions){
         switch (action) {
             case ACTION_POWER_LAUNCH:
-                if(BuildConfig.DEBUG)
+                if(BuildConfig.DEBUG) {
                     Log.i(TAG, "POWER_LAUNCH");
-
+                }
+                mFirebaseHelper.bluetoothActionLaunch(FirebaseHelper.BTActionsLaunch.POWER);
                 bluetoothActions.OnBTConnect();
                 break;
             case ACTION_OFF_TELE_LAUNCH:
-                if(BuildConfig.DEBUG)
+                if(BuildConfig.DEBUG) {
                     Log.i(TAG, "OFF_TELE_LAUNCH");
+                }
+                mFirebaseHelper.bluetoothActionLaunch(FirebaseHelper.BTActionsLaunch.TELEPHONE);
                 //Calling actionsOnBTConnect cause onBTConnect already ran
                 bluetoothActions.actionsOnBTConnect();
                 break;

@@ -34,11 +34,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
 import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
@@ -59,11 +62,15 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     private boolean isBTConnected = false;
     private LaunchApp launchApp;
     private List<String> installedMediaPlayers = new ArrayList<>();
+    private FirebaseHelper mFirebaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFirebaseHelper = new FirebaseHelper(this);
+        mFirebaseHelper.activityLaunched(FirebaseHelper.ActivityName.MAIN);
 
         if(BAPMPreferences.getFirstInstallKey(this)) {
             runOnFirstInstall();
@@ -114,10 +121,12 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     private void setMapsChoice(final Context context, String mapApp){
         if (mapApp.equals(PackageTools.WAZE)) {
             BAPMPreferences.setMapsChoice(context, PackageTools.MAPS);
+            mFirebaseHelper.useGoogleMaps();
             Toast.makeText(context, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
         }
         else {
             BAPMPreferences.setMapsChoice(context, PackageTools.WAZE);
+            mFirebaseHelper.useWaze();
             Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
         }
 
@@ -142,12 +151,15 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.about_menu) {
+            mFirebaseHelper.selectionMade(FirebaseHelper.Selection.ABOUT);
             aboutSelected();
             return true;
         } else if (id == R.id.settings_menu) {
+            mFirebaseHelper.selectionMade(FirebaseHelper.Selection.OPTIONS);
             settingsSelected();
             return true;
         } else if (id == R.id.link_menu){
+            mFirebaseHelper.selectionMade(FirebaseHelper.Selection.RATE_ME);
             linkSelected();
             return true;
         }
@@ -420,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     }
                 }
                 BAPMPreferences.setBTDevices(ctx, saveBTDevices);
+                mFirebaseHelper.deviceAdd(FirebaseHelper.Selection.BLUETOOTH_DEVICE, BTD, cb.isChecked());
             }
         });
     }
@@ -464,6 +477,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 int index = radioGroup.indexOfChild(radioButton);
                 String packageName = installedMediaPlayers.get(index);
                 BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName);
+                mFirebaseHelper.musicPlayerChoice(packageName);
 
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, Integer.toString(index));
@@ -535,6 +549,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     public void autoplayOnlyButton(View view){
+        mFirebaseHelper.selectionMade(FirebaseHelper.Selection.SET_AUTOPLAY_ONLY);
         DialogFragment newFragment = HeadphonesFragment.newInstance(savedHeadphoneDevices);
         newFragment.show(getSupportFragmentManager(), "autoplayOnlyFragment");
     }
@@ -542,9 +557,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     //***Toggle button actions are below, basically set SharedPref value for specified button***
     public void mapsToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MAPS, on);
         if (on) {
             BAPMPreferences.setLaunchGoogleMaps(this, true);
-            BAPMPreferences.setUnlockScreen(this, true);
+//            BAPMPreferences.setUnlockScreen(this, true);
+//            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
             setButtonPreferences(this);
             if(BuildConfig.DEBUG) {
                 Log.i(TAG, "MapButton is ON");
@@ -560,6 +577,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void keepONToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
         if(!isBTConnected) {
+            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.KEEP_SCREEN_ON, on);
             if (on) {
                 BAPMPreferences.setKeepScreenON(this, true);
                 if(BuildConfig.DEBUG)
@@ -578,6 +596,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void priorityToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
         if(!isBTConnected) {
+            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
             if (on) {
                 BAPMPreferences.setPriorityMode(this, true);
                 if(BuildConfig.DEBUG)
@@ -596,6 +615,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void volumeMAXToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
         if(!isBTConnected) {
+            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.MAX_VOLUME, on);
             if (on) {
                 BAPMPreferences.setMaxVolume(this, true);
                 if(BuildConfig.DEBUG)
@@ -614,6 +634,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void launchMusicPlayerToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
         if(!isBTConnected) {
+            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MUSIC_PLAYER, on);
             if (on) {
                 BAPMPreferences.setLaunchMusicPlayer(this, true);
                 if(BuildConfig.DEBUG)
@@ -631,6 +652,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     public void unlockScreenToggleButton(View view){
         boolean on = ((ToggleButton) view).isChecked();
+        mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
         if (on) {
             BAPMPreferences.setUnlockScreen(this, true);
             if(BuildConfig.DEBUG)
@@ -745,5 +767,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         BAPMPreferences.setBTDevices(this, saveBTDevices);
         checkboxCreator();
+    }
+
+    @Override
+    public void headDeviceSelection(String deviceName, boolean addDevice) {
+        if(mFirebaseHelper != null)
+            mFirebaseHelper.deviceAdd(FirebaseHelper.Selection.HEADPHONE_DEVICE, deviceName, addDevice);
     }
 }

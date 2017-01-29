@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -32,6 +34,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private String mAction = "None";
     private BluetoothDevice mDevice;
     private boolean mIsSelectedBTDevice = false;
+    private FirebaseHelper mFirebaseHelper;
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
@@ -46,6 +49,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
             if (intent.getAction() != null) {
                 mAction = intent.getAction();
+                mFirebaseHelper = new FirebaseHelper(context);
                 selectedDevicePrepForActions(context);
             }
         }
@@ -172,11 +176,13 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     Log.i(TAG, "A2dp Ready: " + Boolean.toString(am.isBluetoothA2dpOn()));
                 if(am.isBluetoothA2dpOn()){
                     cancel();
+                    mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
                     checksBeforeLaunch(context, _isAUserSelectedBTDevice, bluetoothActions, am);
                 }
             }
 
             public void onFinish() {
+                mFirebaseHelper.connectViaA2DP(mDevice.getName(), false);
                 if(BuildConfig.DEBUG)
                     Log.i(TAG, "BTDevice did NOT CONNECT via a2dp");
             }

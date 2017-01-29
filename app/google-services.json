@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "333720191050",
+    "firebase_url": "https://bluetoothautoplaymusic.firebaseio.com",
+    "project_id": "bluetoothautoplaymusic",
+    "storage_bucket": "bluetoothautoplaymusic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333720191050:android:a510675d233a58a4",
+        "android_client_info": {
+          "package_name": "maderski.bluetoothautoplaymusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333720191050-2unkuh8q7pck1q12vd9thhrilcu7fees.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "maderski.bluetoothautoplaymusic",
+            "certificate_hash": "E8E06A6897009527909C51BE52A1A52357E3AAF4"
+          }
+        },
+        {
+          "client_id": "333720191050-t7853nljcgth6qd6i8kbepfroq1o9i5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Ipgb3eO83hf55e6pcbEXNyYw-QyY6KA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333720191050-t7853nljcgth6qd6i8kbepfroq1o9i5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

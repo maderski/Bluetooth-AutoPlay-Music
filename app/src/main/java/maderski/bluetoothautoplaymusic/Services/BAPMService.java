@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
@@ -64,6 +65,10 @@ public class BAPMService extends Service {
                 ScreenONLock screenONLock = ScreenONLock.getInstance();
                 screenONLock.releaseWakeLock();
                 screenONLock.enableWakeLock(this);
+
+                // Log rehold wakelock event
+                FirebaseHelper firebaseHelper = new FirebaseHelper(this);
+                firebaseHelper.wakelockRehold();
             }
         }
     }
