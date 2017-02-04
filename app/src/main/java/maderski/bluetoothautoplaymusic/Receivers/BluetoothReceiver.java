@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.Receivers;
 
+import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
@@ -50,13 +51,14 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
             if (intent.getAction() != null) {
                 mAction = intent.getAction();
+                Log.d(TAG, "ACTION: " + mAction);
                 mFirebaseHelper = new FirebaseHelper(context);
-                selectedDevicePrepForActions(context);
+                selectedDevicePrepForActions(context, intent);
             }
         }
     }
 
-    private void selectedDevicePrepForActions(Context context){
+    private void selectedDevicePrepForActions(Context context, Intent intent){
         boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(mDevice.getName());
         if(BuildConfig.DEBUG)
             Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
@@ -64,7 +66,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             if(!BAPMDataPreferences.getIsSelected(context)) {
                 sendIsSelectedBroadcast(context, true);
             }
-            bluetoothConnectDisconnectSwitch(context);
+            bluetoothConnectDisconnectSwitch(context, intent);
         } else if(mIsSelectedBTDevice){
             onHeadphonesConnectSwitch(context);
         }
@@ -99,7 +101,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         }
     }
 
-    private void bluetoothConnectDisconnectSwitch(Context context){
+    private void bluetoothConnectDisconnectSwitch(Context context, Intent intent){
 
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         BluetoothActions bluetoothActions = new BluetoothActions(context, am);
@@ -108,17 +110,21 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             Log.d(TAG, "Bluetooth Intent Received: " + mAction);
 
         switch (mAction) {
-            case BluetoothDevice.ACTION_ACL_CONNECTED:
-                waitingForBTA2dpOn(context, mIsSelectedBTDevice, bluetoothActions, am);
-
-                if(BuildConfig.DEBUG) {
-                    for (String cd : BAPMPreferences.getBTDevices(context)) {
-                        Log.i(TAG, "User selected device: " + cd);
-                    }
-                    Log.i(TAG, "Connected device: " + mDevice);
-                    Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + mIsSelectedBTDevice);
-                }
+            case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
+                a2dpAction(context, intent, am, bluetoothActions);
                 break;
+
+//            case BluetoothDevice.ACTION_ACL_CONNECTED:
+//                waitingForBTA2dpOn(context, mIsSelectedBTDevice, bluetoothActions, am);
+//
+//                if(BuildConfig.DEBUG) {
+//                    for (String cd : BAPMPreferences.getBTDevices(context)) {
+//                        Log.i(TAG, "User selected device: " + cd);
+//                    }
+//                    Log.i(TAG, "Connected device: " + mDevice);
+//                    Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + mIsSelectedBTDevice);
+//                }
+//                break;
 
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 if(BuildConfig.DEBUG) {
@@ -143,6 +149,34 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         }
     }
 
+    private void a2dpAction(final Context context, Intent intent, final AudioManager am, final BluetoothActions bluetoothActions) {
+        final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
+        switch (state) {
+            case BluetoothProfile.STATE_CONNECTING:
+                Log.d(TAG, "A2DP CONNECTING");
+                break;
+            case BluetoothProfile.STATE_CONNECTED:
+                Log.d(TAG, "A2DP CONNECTED");
+                Telephone telephone = new Telephone(context);
+
+                if(!telephone.isOnCall()){
+                    BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
+                    if(BuildConfig.DEBUG)
+                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+                }
+
+                mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
+                checksBeforeLaunch(context, mIsSelectedBTDevice, bluetoothActions, am);
+                break;
+            case BluetoothProfile.STATE_DISCONNECTING:
+                Log.d(TAG, "A2DP DISCONNECTING");
+                break;
+            case BluetoothProfile.STATE_DISCONNECTED:
+                Log.d(TAG, "A2DP DISCONNECTED");
+                break;
+        }
+    }
+
     private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice,
                                     BluetoothActions bluetoothActions, AudioManager am){
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
@@ -156,38 +190,6 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             bluetoothActions.OnBTConnect();
         }
 
-    }
-
-    private void waitingForBTA2dpOn(final Context context, final Boolean _isAUserSelectedBTDevice,
-                                    final BluetoothActions bluetoothActions, final AudioManager am) {
-        Telephone telephone = new Telephone(context);
-
-        if(!telephone.isOnCall()){
-            BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
-        }
-
-        //Start 30sec countdown checking for A2dp connection every second
-        new CountDownTimer(30000,
-                1000)
-        {
-            public void onTick(long millisUntilFinished) {
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "A2dp Ready: " + Boolean.toString(am.isBluetoothA2dpOn()));
-                if(am.isBluetoothA2dpOn()){
-                    cancel();
-                    mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
-                    checksBeforeLaunch(context, _isAUserSelectedBTDevice, bluetoothActions, am);
-                }
-            }
-
-            public void onFinish() {
-                mFirebaseHelper.connectViaA2DP(mDevice.getName(), false);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "BTDevice did NOT CONNECT via a2dp");
-            }
-        }.start();
     }
 
     private void sendIsSelectedBroadcast(Context context, boolean isSelected){
