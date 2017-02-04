@@ -35,13 +35,12 @@ public class Telephone {
         }
     }
 
-    public void CheckIfOnPhone(AudioManager audioManager, VolumeControl volumeControl){
+    public void CheckIfOnPhone(VolumeControl volumeControl){
         final Context ctx = context;
-        final AudioManager am = audioManager;
         final VolumeControl vc = volumeControl;
 
         int _seconds = 7200000; //check for 2 hours
-        int _interval = 3000; //3 second interval
+        int _interval = 2000; //2 second interval
 
         new CountDownTimer(_seconds, _interval)
         {
@@ -55,7 +54,7 @@ public class Telephone {
                             Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
                         //Get Original Volume and Launch Bluetooth Autoplay Music
-                        vc.delayGetOrigVol(ctx, am);
+                        vc.delayGetOrigVol(ctx, 3);
                     }
                 }else{
                     //Bailing cause phone is not plugged in

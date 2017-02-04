@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -57,7 +58,7 @@ public class BluetoothActions {
                     if(BuildConfig.DEBUG)
                         Log.i(TAG, "ON a call");
                     //Run CheckIfOnPhone
-                    telephone.CheckIfOnPhone(audioManager, volumeControl);
+                    telephone.CheckIfOnPhone(volumeControl);
                 }else{
                     if(BuildConfig.DEBUG)
                         Log.i(TAG, "NOT on a call");
@@ -101,7 +102,14 @@ public class BluetoothActions {
             if(screenONLock.wakeLockHeld())
                 screenONLock.releaseWakeLock();
 
-            screenONLock.enableWakeLock(context);
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    screenONLock.enableWakeLock(context);
+                }
+            };
+            handler.post(runnable);
         }
 
         if(priorityMode){
@@ -114,7 +122,7 @@ public class BluetoothActions {
         }
 
         if(volumeMAX){
-            volumeControl.checkSetMAXVol(context, 12,4);
+            volumeControl.checkSetMAXVol(context, 4);
         }
 
         if(launchMusicPlayer) {
@@ -129,8 +137,15 @@ public class BluetoothActions {
         }
 
         if(playMusic){
-            PlayMusic music = new PlayMusic(context, audioManager);
-            music.checkIfPlaying();
+            final PlayMusic music = new PlayMusic(context, audioManager);
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    music.checkIfPlaying(13);
+                }
+            };
+            handler.post(runnable);
         }
 
         if(launchMaps && !launchMusicPlayer){

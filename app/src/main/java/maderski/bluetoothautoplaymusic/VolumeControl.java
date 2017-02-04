@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
@@ -39,70 +40,50 @@ public class VolumeControl {
     }
 
     //Wait 3 seconds before getting the Original Volume and return true when done
-    public void delayGetOrigVol(Context context, AudioManager audioManager){
-        final Context ctx = context;
-        final AudioManager am = audioManager;
-        if(am.isBluetoothA2dpOn()) {
-            new CountDownTimer(6000,
-                    1000) {
-                public void onTick(long millisUntilFinished) {
-                    if (millisUntilFinished > 3000 && millisUntilFinished < 4000) {
-                        //Set original volume value in persistent data so it can be retrieved later
-                        BAPMDataPreferences.setOriginalMediaVolume(ctx, am.getStreamVolume(AudioManager.STREAM_MUSIC));
+    public void delayGetOrigVol(final Context context, int seconds){
+        int milliseconds = seconds * 1000;
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
 
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(ctx)));
-                    }
-                }
+                if(BuildConfig.DEBUG)
+                    Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
 
-                public void onFinish() {
-                    Intent launchIntent = new Intent();
-                    launchIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
-                    ctx.sendBroadcast(launchIntent);
-                }
-            }.start();
+                Intent launchIntent = new Intent();
+                launchIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
+                context.sendBroadcast(launchIntent);
+            }
+        };
+
+        handler.postDelayed(runnable, milliseconds);
+    }
+
+    private void setMaxVol(Context context){
+        final int maxVolume = BAPMPreferences.getUserSetMaxVolume(context);
+        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Set Volume To MAX");
+        } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
+            if(BuildConfig.DEBUG)
+                Log.i(TAG, "Volume is at MAX!");
         }
     }
 
-    public void checkSetMAXVol(final Context context, int seconds, int seconds_interval){
-        int _seconds = seconds * 1000;
-        int _interval = seconds_interval * 1000;
-        final int maxVolume = BAPMPreferences.getUserSetMaxVolume(context);
+    public void checkSetMAXVol(final Context context, int seconds){
+        int milliseconds = seconds * 1000;
 
-        new CountDownTimer(_seconds, _interval)
-        {
-            boolean runme = false;
-            public void onTick(long millisUntilFinished) {
-                if(runme) {
-                    if (am.isBluetoothA2dpOn()) {
-                        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
-                                //am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                            //int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-                            if(BuildConfig.DEBUG)
-                                Log.i(TAG, "Set Volume To MAX");
-                        } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
-                                //am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)) {
-                            if(BuildConfig.DEBUG)
-                                Log.i(TAG, "Volume is at MAX!");
-                        }
-                    }
-                }
-                runme = true;
-            }
+        setMaxVol(context);
 
-            public void onFinish() {
-                if(am.isBluetoothA2dpOn()) {
-                    if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "Volume is at MAX!");
-                    } else {
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "Unable to to set Volume to MAX :(");
-                    }
-                }
-                runme = false;
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                setMaxVol(context);
             }
-        }.start();
+        };
+        handler.postDelayed(runnable, milliseconds);
     }
 }

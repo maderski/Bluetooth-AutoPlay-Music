@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic.Receivers;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,7 @@ import maderski.bluetoothautoplaymusic.VolumeControl;
 /**
  * Created by Jason on 1/5/16.
  */
-public class BluetoothReceiver extends BroadcastReceiver implements BluetoothState{
+public class BluetoothReceiver extends BroadcastReceiver implements BluetoothState {
 
     private static final String TAG = BluetoothReceiver.class.getName();
 
@@ -82,7 +83,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     @Override
                     public void run() {
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
-                        playMusic.checkIfPlaying();
+                        playMusic.checkIfPlaying(5);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }

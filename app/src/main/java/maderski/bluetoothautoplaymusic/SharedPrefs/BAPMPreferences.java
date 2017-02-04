@@ -28,7 +28,6 @@ public class BAPMPreferences {
     private static final String PRIORITY_MODE_KEY = "priorityMode";
     private static final String MAX_VOLUME_KEY = "maxVolume";
     private static final String LAUNCH_MUSIC_PLAYER_KEY = "launchMusic";
-    private static final String SELECTED_MUSIC_PLAYER_KEY = "SelectedMusicPlayer";
     private static final String PKG_SELECTED_MUSIC_PLAYER_KEY = "PkgSelectedMusicPlayer";
     private static final String UNLOCK_SCREEN_KEY = "UnlockScreen";
     private static final String BTDEVICES_KEY = "BTDevices";
@@ -45,8 +44,7 @@ public class BAPMPreferences {
     private static final String HEADPHONE_DEVICES_KEY = "HeadphoneDevices";
     private static final String HEADPHONE_PREFERRED_VOLUME_KEY = "HeadphonePreferredVolumeKey";
     private static final String USER_SET_MAX_VOLUME_KEY = "UserSetMaxVolumeKey";
-
-    private static final String V264_HOTFIX = "V264Hotfix";
+    
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -64,26 +62,6 @@ public class BAPMPreferences {
 
         return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
     }
-
-
-    //Temporary fix to issues version 2.64 caused----------------------------------
-    public static void setV264Hotfix(Context context, boolean enabled){
-        editor(context).putBoolean(V264_HOTFIX, enabled);
-        commit(context);
-    }
-
-    public static boolean getV264Hotfix(Context context){
-        return reader(context).getBoolean(V264_HOTFIX, false);
-    }
-
-    public static void setSelectedMusicPlayerKey(Context context, int index){
-        editor(context).putInt(SELECTED_MUSIC_PLAYER_KEY, index);
-    }
-
-    public static int getSelectedMusicPlayer(Context context){
-        return reader(context).getInt(SELECTED_MUSIC_PLAYER_KEY, 0);
-    }
-    //------------------------------------------------------------------------------
 
     public static void setUserSetMaxVolume(Context context, int volume){
         editor(context).putInt(USER_SET_MAX_VOLUME_KEY, volume);
@@ -194,9 +172,6 @@ public class BAPMPreferences {
         return reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
     }
 
-    public static String getSelectedMusicPlayer(Context context, String text){
-        return reader(context).getString(SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
-    }
 
     public static void setUnlockScreen(Context context, Boolean enabled){
         editor(context).putBoolean(UNLOCK_SCREEN_KEY, enabled);

@@ -2,7 +2,9 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
@@ -18,6 +20,7 @@ public class PlayMusic {
     private AudioManager audioManager;
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
+    private CountDownTimer mCheckIfPlayingTimer;
 
     public PlayMusic(Context context, AudioManager audioManager){
         this.audioManager = audioManager;
@@ -48,13 +51,21 @@ public class PlayMusic {
         }
     }
 
+    public void pauseAndCancel(){
+        playerControls.pause();
+        if(mCheckIfPlayingTimer != null) {
+            mCheckIfPlayingTimer.cancel();
+        }
+    }
+
     public void pause(){ playerControls.pause(); }
 
     public void play(){ playerControls.play(); }
 
-    public void checkIfPlaying(){
+    public void checkIfPlaying(int seconds){
+        int milliseconds = seconds * 1000;
         final AudioManager am = audioManager;
-        new CountDownTimer(13000, 1000){
+        mCheckIfPlayingTimer = new CountDownTimer(milliseconds, 1000){
             @Override
             public void onTick(long millisUntilFinished) {
                 if(BuildConfig.DEBUG){
@@ -81,13 +92,23 @@ public class PlayMusic {
                     if (BuildConfig.DEBUG) {
                         Log.i(TAG, "Bluetooth is not connected");
                     }
-                    pause();
-                    cancel();
+//                    pause();
+//                    cancel();
+                    pauseAndCancel();
                 }
             }
 
             @Override
             public void onFinish() {
+                pause();
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        play();
+                    }
+                };
+                handler.postDelayed(runnable, 1000);
                 mFirebaseHelper.musicAutoPlay(false);
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, "Unable to Play :(");

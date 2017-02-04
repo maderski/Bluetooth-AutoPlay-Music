@@ -108,11 +108,6 @@ public class FirebaseHelper {
     private FirebaseAnalytics mFirebaseAnalytics;
     private Activity mActivity;
 
-//    public FirebaseHelper(Activity activity){
-//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(activity);
-//        mActivity = activity;
-//    }
-
     public FirebaseHelper(Context context){
         if(context instanceof Activity){
             mActivity = (Activity)context;
@@ -146,20 +141,22 @@ public class FirebaseHelper {
 
     public void deviceAdd(String typeOfDevice, String deviceName, boolean addDevice){
         Bundle bundle = new Bundle();
-        bundle.putString("device_name", deviceName);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, deviceName);
         bundle.putInt(FirebaseAnalytics.Param.VALUE, addDevice ? 1 : 0);
         mFirebaseAnalytics.logEvent(typeOfDevice, bundle);
     }
 
-    public void musicPlayerChoice(String packageName){
+    public void musicPlayerChoice(String packageName, boolean musicChoiceChanged){
         try{
             PackageManager packageManager = mActivity.getPackageManager();
             ApplicationInfo appInfo = packageManager.getApplicationInfo(packageName, 0);
             String musicPlayerName = packageManager.getApplicationLabel(appInfo).toString();
 
             Bundle bundle = new Bundle();
-            bundle.putString("player_name", musicPlayerName);
-            mFirebaseAnalytics.logEvent("music_player_selected", bundle);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, musicPlayerName);
+            bundle.putInt(FirebaseAnalytics.Param.VALUE, musicChoiceChanged ? 1 : 0);
+//            mFirebaseAnalytics.logEvent("music_player_selected", bundle);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         }catch (Exception e){
             Log.e(TAG, e.getMessage());
         }
@@ -177,7 +174,7 @@ public class FirebaseHelper {
 
     public void connectViaA2DP(String deviceName, boolean success){
         Bundle bundle = new Bundle();
-        bundle.putString("device_name", deviceName);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, deviceName);
         bundle.putInt(FirebaseAnalytics.Param.VALUE, success ? 1 :0);
         mFirebaseAnalytics.logEvent("connect_via_a2dp", bundle);
     }

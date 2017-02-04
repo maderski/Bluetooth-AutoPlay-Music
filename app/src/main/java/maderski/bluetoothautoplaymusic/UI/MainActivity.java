@@ -243,55 +243,12 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         super.onResume();
         installedMediaPlayers = listOfInstalledMediaPlayers(this);
 
-        v264UpdateHotfix();
-
         setupUIElements(this);
         launchApp = new LaunchApp(this);
         checkIfWazeRemoved(this);
         isBTConnected = BAPMDataPreferences.getRanActionsOnBtConnect(this);
 
     }
-
-    //Temporary fix to issues version 2.64 caused----------------------------------
-    private void v264UpdateHotfix(){
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "V246Hotfix: " + Boolean.toString(BAPMPreferences.getV264Hotfix(this)));
-        if(!BAPMPreferences.getV264Hotfix(this)) {
-            Object object = null;
-            try {
-                object = BAPMPreferences.getSelectedMusicPlayer(this);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                object = BAPMPreferences.getSelectedMusicPlayer(this, "isAString");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if(object != null) {
-                String nameOf = object.getClass().getSimpleName();
-                if (BuildConfig.DEBUG)
-                    Log.i(TAG, "Name of: " + nameOf);
-
-                if (nameOf.equalsIgnoreCase("Integer")) {
-                    if (BAPMPreferences.getSelectedMusicPlayer(this) != 9999) {
-                        int index = BAPMPreferences.getSelectedMusicPlayer(this);
-                        String packageName = installedMediaPlayers.get(index);
-                        BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
-                        BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
-                    }
-                } else if (nameOf.equalsIgnoreCase("String")) {
-                    String packageName = (String)object;
-                    BAPMPreferences.setPkgSelectedMusicPlayer(this, packageName);
-                    BAPMPreferences.setSelectedMusicPlayerKey(this, 9999);
-                }
-            }
-            BAPMPreferences.setV264Hotfix(this, true);
-        }
-    }
-    //------------------------------------------------------------------------------
 
     //Save the BTDevices when program is paused
     @Override
@@ -477,7 +434,13 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 int index = radioGroup.indexOfChild(radioButton);
                 String packageName = installedMediaPlayers.get(index);
                 BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName);
-                mFirebaseHelper.musicPlayerChoice(packageName);
+                if(BAPMPreferences.getPkgSelectedMusicPlayer(context) != null) {
+                    if(!BAPMPreferences.getPkgSelectedMusicPlayer(context).equalsIgnoreCase(packageName)) {
+                        mFirebaseHelper.musicPlayerChoice(packageName, true);
+                    } else {
+                        mFirebaseHelper.musicPlayerChoice(packageName, false);
+                    }
+                }
 
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, Integer.toString(index));
