@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -77,115 +78,125 @@ public class BluetoothActions {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     public void actionsOnBTConnect(){
-        boolean screenON = BAPMPreferences.getKeepScreenON(context);
-        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
-        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
-        boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
-        boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
-        boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
-        boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+        synchronized (this) {
+            boolean screenON = BAPMPreferences.getKeepScreenON(context);
+            boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+            boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
+            boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
+            boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
+            boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
+            boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
 
-        String mapChoice = BAPMPreferences.getMapsChoice(context);
+            String mapChoice = BAPMPreferences.getMapsChoice(context);
 
-        RingerControl ringerControl = new RingerControl(context);
-        LaunchApp launchApp = new LaunchApp();
+            RingerControl ringerControl = new RingerControl(context);
+            LaunchApp launchApp = new LaunchApp();
 
-        notification.BAPMMessage(context, mapChoice);
+            notification.BAPMMessage(context, mapChoice);
 
-        if(screenON){
-            //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-            if(screenONLock.wakeLockHeld()) {
-                screenONLock.releaseWakeLock();
+            if (screenON) {
+                //Try to releaseWakeLock() in case for some reason it was not released on disconnect
+                if (screenONLock.wakeLockHeld()) {
+                    screenONLock.releaseWakeLock();
+                }
+                screenONLock.enableWakeLock(context);
             }
-            screenONLock.enableWakeLock(context);
-        }
 
-        if(priorityMode){
-            BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
-            ringerControl.soundsOFF();
-        }
-
-        if(unlockScreen){
-            launchApp.launchBAPMActivity(context);
-        }
-
-        if(volumeMAX){
-            volumeControl.checkSetMAXVol(context, 4);
-        }
-
-        if(launchMusicPlayer && !launchMaps) {
-            try {
-                launchApp.musicPlayerLaunch(context, 3);
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+            if (priorityMode) {
+                BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                ringerControl.soundsOFF();
             }
-        }
 
-        if(playMusic){
-            final PlayMusic music = new PlayMusic(context);
-            music.play();
-            music.checkIPlaying(context, 5);
-        }
+            if (unlockScreen) {
+                launchApp.launchBAPMActivity(context);
+            }
 
-        if(launchMaps){
-            launchApp.launchMaps(context, 3);
-        }
+            if (volumeMAX) {
+                volumeControl.checkSetMAXVol(context, 4);
+            }
 
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
+            if (launchMusicPlayer && !launchMaps) {
+                try {
+                    launchApp.musicPlayerLaunch(context, 3);
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+
+            if (playMusic) {
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        final PlayMusic music = new PlayMusic(context);
+                        music.play();
+                    }
+                };
+                handler.postDelayed(runnable, 3000);
+            }
+
+            if (launchMaps) {
+                launchApp.launchMaps(context, 3);
+            }
+
+            BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
+        }
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     public void actionsOnBTDisconnect(){
-        boolean screenON = BAPMPreferences.getKeepScreenON(context);
-        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
-        boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
-        boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
-        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
+        synchronized (this) {
+            boolean screenON = BAPMPreferences.getKeepScreenON(context);
+            boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+            boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
+            boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
+            boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
 
-        RingerControl ringerControl = new RingerControl(context);
-        LaunchApp launchApp = new LaunchApp();
+            RingerControl ringerControl = new RingerControl(context);
+            LaunchApp launchApp = new LaunchApp();
 
-        notification.removeBAPMMessage(context);
+            notification.removeBAPMMessage(context);
 
-        if(screenON){
-            screenONLock.releaseWakeLock();
-        }
-
-        if(priorityMode){
-            int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
-            try {
-                switch(currentRinger){
-                    case AudioManager.RINGER_MODE_SILENT:
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "Phone is on Silent");
-                        break;
-                    case AudioManager.RINGER_MODE_VIBRATE:
-                        ringerControl.vibrateOnly();
-                        break;
-                    case AudioManager.RINGER_MODE_NORMAL:
-                        ringerControl.soundsON();
-                        break;
-                }
-            }catch(Exception e){
-                Log.e(TAG, e.getMessage());
+            if (screenON) {
+                screenONLock.releaseWakeLock();
             }
-        }
 
-        if(launchMusicPlayer) {
-            PlayMusic playMusic = new PlayMusic(context);
-            playMusic.pause();
-        }
+            if (priorityMode) {
+                int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
+                try {
+                    switch (currentRinger) {
+                        case AudioManager.RINGER_MODE_SILENT:
+                            if (BuildConfig.DEBUG)
+                                Log.i(TAG, "Phone is on Silent");
+                            break;
+                        case AudioManager.RINGER_MODE_VIBRATE:
+                            ringerControl.vibrateOnly();
+                            break;
+                        case AudioManager.RINGER_MODE_NORMAL:
+                            ringerControl.soundsON();
+                            break;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
 
-        if(volumeMAX){
-            volumeControl.setOriginalVolume(context);
-        }
+            if (launchMusicPlayer) {
+                PlayMusic playMusic = new PlayMusic(context);
+                playMusic.pause();
+            }
 
-        if(sendToBackground) {
-            launchApp.sendEverythingToBackground(context);
-        }
+            if (volumeMAX) {
+                volumeControl.setOriginalVolume(context);
+            }
 
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
+            if (sendToBackground) {
+                launchApp.sendEverythingToBackground(context);
+            }
+
+            BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
+        }
     }
 
     public void actionsBTStateOff(){

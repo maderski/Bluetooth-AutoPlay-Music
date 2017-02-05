@@ -51,22 +51,6 @@ public class PlayMusic {
 
     public void play(){ playerControls.play(); }
 
-    public void checkIPlaying(Context context, int delaySeconds) {
-        long milliseconds = delaySeconds * 1000;
-        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if(!audioManager.isMusicActive()){
-                    pause();
-                    play();
-                }
-            }
-        };
-        handler.postDelayed(runnable, milliseconds);
-    }
-
 //    public void checkIfPlaying(int seconds, int intervalSeconds){
 //        int milliseconds = seconds * 1000;
 //        int intervalMills = intervalSeconds * 1000;

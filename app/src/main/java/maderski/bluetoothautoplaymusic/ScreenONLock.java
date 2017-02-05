@@ -18,30 +18,31 @@ public class ScreenONLock {
     private static final String TAG = ScreenONLock.class.getName();
     private static final ScreenONLock instance = new ScreenONLock();
 
-    private PowerManager.WakeLock wakeLock;
+    private PowerManager.WakeLock mWakeLock;
 
     private ScreenONLock(){}
 
-    public static synchronized ScreenONLock getInstance(){
+    public static ScreenONLock getInstance(){
         return instance;
     }
 
     //Enable WakeLock
     public void enableWakeLock(Context context){
-
         //Set Screen Brightness(Dim: 6 / Bright: 10)
         int screenBrightness;
 
-        if(BAPMPreferences.getAutoBrightness(context))
-            screenBrightness = getAutoScreenBrightness(context);
-        else
+        if(BAPMPreferences.getAutoBrightness(context)) {
+            screenBrightness = isDark(context);
+        } else {
             screenBrightness = getManualScreenBrightness(context);
+        }
 
-        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
+        PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP |
                 screenBrightness, "Stay ON");
+
         try{
-            wakeLock.acquire();
+            mWakeLock.acquire();
             if(BuildConfig.DEBUG)
                 Log.i(TAG, "Wakelock enabled");
         }catch (Exception e){
@@ -67,25 +68,12 @@ public class ScreenONLock {
         return screenBrightness;
     }
 
-    private int getAutoScreenBrightness(Context context){
-        int screenBrightness;
-
-        if(isDark(context)){
-            //Dim Screen Brightness
-            screenBrightness = 6;
-        }else{
-            //Bright Screen Brightness
-            screenBrightness = 10;
-        }
-
-        return screenBrightness;
-    }
-
     //Disable and release WakeLock
     public void releaseWakeLock(){
-        if (wakeLock != null && wakeLock.isHeld()) {
+        if (mWakeLock != null && mWakeLock.isHeld()) {
             try {
-                wakeLock.release();
+                mWakeLock.release();
+                mWakeLock = null;
                 if(BuildConfig.DEBUG)
                     Log.i(TAG, "Wakelock: " + "disabled");
             } catch (Exception e) {
@@ -97,9 +85,9 @@ public class ScreenONLock {
         }
     }
 
-    //Return true if Dark
-    private boolean isDark(Context context){
-        Boolean dark;
+    //Return dimmer screen brightness if Dark
+    private int isDark(Context context){
+        int dark;
         Calendar c = Calendar.getInstance();
         SunriseSunset ss = new SunriseSunset(context);
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -114,20 +102,17 @@ public class ScreenONLock {
                 " SS: " + Integer.toString(sunsetTime));
 
         if (currentTime >= sunsetTime || currentTime <= sunriseTime){
-            dark = true;
+            dark = 6;
         }else
-            dark = false;
+            dark = 10;
 
         if(BuildConfig.DEBUG)
-            Log.i(TAG, "dark: " + Boolean.toString(dark));
+            Log.i(TAG, "dark: " + Integer.toString(dark));
         return dark;
     }
 
     public boolean wakeLockHeld(){
-        if(wakeLock != null && wakeLock.isHeld()){
-            return true;
-        }
-        return false;
+        return mWakeLock != null && mWakeLock.isHeld();
     }
 
 }

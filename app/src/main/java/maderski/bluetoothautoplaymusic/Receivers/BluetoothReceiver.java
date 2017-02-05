@@ -36,6 +36,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private String mAction = "None";
     private BluetoothDevice mDevice;
     private boolean mIsSelectedBTDevice = false;
+    private BluetoothActions mBluetoothActions;
     private FirebaseHelper mFirebaseHelper;
 
     //On receive of Broadcast
@@ -86,7 +87,6 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     public void run() {
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
                         playMusic.play();
-                        playMusic.checkIPlaying(context, 5);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
@@ -105,14 +105,16 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private void bluetoothConnectDisconnectSwitch(Context context, Intent intent){
 
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        BluetoothActions bluetoothActions = new BluetoothActions(context);
+        if(mBluetoothActions == null) {
+            mBluetoothActions = new BluetoothActions(context);
+        }
 
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + mAction);
 
         switch (mAction) {
             case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
-                a2dpAction(context, intent, am, bluetoothActions);
+                a2dpAction(context, intent, am);
                 break;
 
 //            case BluetoothDevice.ACTION_ACL_CONNECTED:
@@ -140,7 +142,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 sendIsSelectedBroadcast(context, false);
 
                 if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
-                    bluetoothActions.actionsOnBTDisconnect();
+                    mBluetoothActions.actionsOnBTDisconnect();
 
                 if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
                     Notification notification = new Notification();
@@ -150,7 +152,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         }
     }
 
-    private void a2dpAction(final Context context, Intent intent, final AudioManager am, final BluetoothActions bluetoothActions) {
+    private void a2dpAction(final Context context, Intent intent, final AudioManager am) {
         final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
         switch (state) {
             case BluetoothProfile.STATE_CONNECTING:
@@ -167,7 +169,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 }
 
                 mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
-                checksBeforeLaunch(context, mIsSelectedBTDevice, bluetoothActions, am);
+                checksBeforeLaunch(context, mIsSelectedBTDevice, am);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
                 Log.d(TAG, "A2DP DISCONNECTING");
@@ -178,17 +180,16 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         }
     }
 
-    private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice,
-                                    BluetoothActions bluetoothActions, AudioManager am){
+    private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice, AudioManager am){
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
         boolean isBTConnected = am.isBluetoothA2dpOn();
 
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
-                bluetoothActions.OnBTConnect();
+                mBluetoothActions.OnBTConnect();
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
-            bluetoothActions.OnBTConnect();
+            mBluetoothActions.OnBTConnect();
         }
 
     }
