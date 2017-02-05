@@ -95,21 +95,12 @@ public class BluetoothActions {
 
         notification.BAPMMessage(context, mapChoice);
 
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
-
         if(screenON){
             //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-            if(screenONLock.wakeLockHeld())
+            if(screenONLock.wakeLockHeld()) {
                 screenONLock.releaseWakeLock();
-
-            Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    screenONLock.enableWakeLock(context);
-                }
-            };
-            handler.post(runnable);
+            }
+            screenONLock.enableWakeLock(context);
         }
 
         if(priorityMode){
@@ -138,19 +129,14 @@ public class BluetoothActions {
 
         if(playMusic){
             final PlayMusic music = new PlayMusic(context, audioManager);
-            Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    music.checkIfPlaying(13);
-                }
-            };
-            handler.post(runnable);
+            music.checkIfPlaying(12, 4);
         }
 
         if(launchMaps && !launchMusicPlayer){
             launchApp.launchMaps(3);
         }
+
+        BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
     }
 
     //Removes notification and if set releases wakelock, puts the ringer back to normal,
@@ -166,8 +152,6 @@ public class BluetoothActions {
         LaunchApp launchApp = new LaunchApp(context);
 
         notification.removeBAPMMessage(context);
-
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
 
         if(screenON){
             screenONLock.releaseWakeLock();
@@ -205,6 +189,8 @@ public class BluetoothActions {
         if(sendToBackground) {
             launchApp.sendEverythingToBackground();
         }
+
+        BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
     }
 
     public void actionsBTStateOff(){

@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
@@ -17,13 +16,16 @@ public class PlayMusic {
 
     private static final String TAG = PlayMusic.class.getName();
 
-    private AudioManager audioManager;
+    private AudioManager mAudioManager;
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
-    private CountDownTimer mCheckIfPlayingTimer;
+
+    public PlayMusic(Context context){
+        this(context, (AudioManager)context.getSystemService(Context.AUDIO_SERVICE));
+    }
 
     public PlayMusic(Context context, AudioManager audioManager){
-        this.audioManager = audioManager;
+        this.mAudioManager = audioManager;
         setPlayerControls(context, audioManager);
         mFirebaseHelper = new FirebaseHelper(context);
     }
@@ -51,29 +53,22 @@ public class PlayMusic {
         }
     }
 
-    public void pauseAndCancel(){
-        playerControls.pause();
-        if(mCheckIfPlayingTimer != null) {
-            mCheckIfPlayingTimer.cancel();
-        }
-    }
-
     public void pause(){ playerControls.pause(); }
 
     public void play(){ playerControls.play(); }
 
-    public void checkIfPlaying(int seconds){
+    public void checkIfPlaying(int seconds, int intervalSeconds){
         int milliseconds = seconds * 1000;
-        final AudioManager am = audioManager;
-        mCheckIfPlayingTimer = new CountDownTimer(milliseconds, 1000){
+        int intervalMills = intervalSeconds * 1000;
+        new CountDownTimer(milliseconds, intervalMills){
             @Override
             public void onTick(long millisUntilFinished) {
                 if(BuildConfig.DEBUG){
                     Log.i(TAG, "millisUntilFinished: " + Long.toString(millisUntilFinished));
-                    Log.i(TAG, "Is Music Active: " + Boolean.toString(audioManager.isMusicActive()));
+                    Log.i(TAG, "Is Music Active: " + Boolean.toString(mAudioManager.isMusicActive()));
                 }
 
-                if (am.isMusicActive()) {
+                if (mAudioManager.isMusicActive()) {
                     if (BuildConfig.DEBUG) {
                         Log.i(TAG, "Music is playing");
                     }
@@ -88,13 +83,12 @@ public class PlayMusic {
                     play();
                 }
 
-                if(!am.isBluetoothA2dpOn()){
+                if(!mAudioManager.isBluetoothA2dpOn()){
                     if (BuildConfig.DEBUG) {
                         Log.i(TAG, "Bluetooth is not connected");
                     }
-//                    pause();
-//                    cancel();
-                    pauseAndCancel();
+                    pause();
+                    cancel();
                 }
             }
 
