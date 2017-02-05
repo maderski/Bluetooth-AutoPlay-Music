@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,16 +19,14 @@ public class BluetoothActions {
 
     private ScreenONLock screenONLock;
     private Context context;
-    private AudioManager audioManager;
     private Notification notification;
     private VolumeControl volumeControl;
 
-    public BluetoothActions(Context context, AudioManager audioManager){
+    public BluetoothActions(Context context){
         this.context = context;
-        this.audioManager = audioManager;
         this.screenONLock = ScreenONLock.getInstance();
         this.notification = new Notification();
-        this.volumeControl = new VolumeControl(audioManager);
+        this.volumeControl = new VolumeControl(context);
     }
 
     //Return true if Bluetooth Audio is ready
@@ -90,8 +87,8 @@ public class BluetoothActions {
 
         String mapChoice = BAPMPreferences.getMapsChoice(context);
 
-        RingerControl ringerControl = new RingerControl(audioManager);
-        LaunchApp launchApp = new LaunchApp(context);
+        RingerControl ringerControl = new RingerControl(context);
+        LaunchApp launchApp = new LaunchApp();
 
         notification.BAPMMessage(context, mapChoice);
 
@@ -109,7 +106,7 @@ public class BluetoothActions {
         }
 
         if(unlockScreen){
-            launchApp.launchBAPMActivity();
+            launchApp.launchBAPMActivity(context);
         }
 
         if(volumeMAX){
@@ -118,19 +115,20 @@ public class BluetoothActions {
 
         if(launchMusicPlayer && !launchMaps) {
             try {
-                launchApp.musicPlayerLaunch(3);
+                launchApp.musicPlayerLaunch(context, 3);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
         }
 
         if(playMusic){
-            final PlayMusic music = new PlayMusic(context, audioManager);
-            music.checkIfPlaying(12, 4);
+            final PlayMusic music = new PlayMusic(context);
+            music.play();
+            music.checkIPlaying(context, 5);
         }
 
         if(launchMaps){
-            launchApp.launchMaps(3);
+            launchApp.launchMaps(context, 3);
         }
 
         BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
@@ -145,8 +143,8 @@ public class BluetoothActions {
         boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
 
-        RingerControl ringerControl = new RingerControl(audioManager);
-        LaunchApp launchApp = new LaunchApp(context);
+        RingerControl ringerControl = new RingerControl(context);
+        LaunchApp launchApp = new LaunchApp();
 
         notification.removeBAPMMessage(context);
 
@@ -175,7 +173,7 @@ public class BluetoothActions {
         }
 
         if(launchMusicPlayer) {
-            PlayMusic playMusic = new PlayMusic(context, audioManager);
+            PlayMusic playMusic = new PlayMusic(context);
             playMusic.pause();
         }
 
@@ -184,7 +182,7 @@ public class BluetoothActions {
         }
 
         if(sendToBackground) {
-            launchApp.sendEverythingToBackground();
+            launchApp.sendEverythingToBackground(context);
         }
 
         BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
@@ -192,11 +190,12 @@ public class BluetoothActions {
 
     public void actionsBTStateOff(){
         // Pause music
-        PlayMusic playMusic = new PlayMusic(context, audioManager);
+        PlayMusic playMusic = new PlayMusic(context);
         playMusic.pause();
 
         // Put music volume back to original volume
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMDataPreferences.getOriginalMediaVolume(context), 0);
+        volumeControl.setOriginalVolume(context);
+
         if(BuildConfig.DEBUG)
             Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
 

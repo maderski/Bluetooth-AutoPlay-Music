@@ -19,8 +19,8 @@ public class VolumeControl {
 
     private AudioManager am;
 
-    public VolumeControl(AudioManager audioManager){
-        am = audioManager;
+    public VolumeControl(Context context){
+        am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     //Set Mediavolume to MAX

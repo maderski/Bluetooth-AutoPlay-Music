@@ -32,8 +32,7 @@ public class CustomReceiver extends BroadcastReceiver {
             if (intent.getAction() != null) {
                 action = intent.getAction();
                 if(!action.equalsIgnoreCase("ACTION_IS_SELECTED")) {
-                    AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-                    BluetoothActions bluetoothActions = new BluetoothActions(context, audioManager);
+                    BluetoothActions bluetoothActions = new BluetoothActions(context);
                     mFirebaseHelper = new FirebaseHelper(context);
                     performAction(action, bluetoothActions);
                 }

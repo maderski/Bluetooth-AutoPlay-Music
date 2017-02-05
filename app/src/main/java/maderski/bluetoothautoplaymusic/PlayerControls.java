@@ -15,7 +15,9 @@ public abstract class PlayerControls {
 
     public abstract void play();
 
-    public PlayerControls(AudioManager audioManager){ this.audioManager = audioManager; }
+    public PlayerControls(Context context){
+        this.audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+    }
 
     public void pause(){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
@@ -29,8 +31,8 @@ public abstract class PlayerControls {
 class BeyondPod extends PlayerControls{
     private Context context;
 
-    public BeyondPod(Context context, AudioManager audioManager){
-        super(audioManager);
+    public BeyondPod(Context context){
+        super(context);
         this.context = context;
     }
     @Override
@@ -44,8 +46,8 @@ class BeyondPod extends PlayerControls{
 class Spotify extends PlayerControls{
     private Context context;
 
-    public Spotify(Context context, AudioManager audioManager){
-        super(audioManager);
+    public Spotify(Context context){
+        super(context);
         this.context = context;
     }
 
@@ -66,8 +68,8 @@ class Spotify extends PlayerControls{
 class GooglePlayMusic extends PlayerControls{
     private Context context;
 
-    public GooglePlayMusic(Context context, AudioManager audioManager){
-        super(audioManager);
+    public GooglePlayMusic(Context context){
+        super(context);
         this.context = context;
     }
 
@@ -82,9 +84,9 @@ class GooglePlayMusic extends PlayerControls{
 class OtherMusicPlayer extends PlayerControls{
     private AudioManager audioManager;
 
-    public OtherMusicPlayer(AudioManager audioManager){
-        super(audioManager);
-        this.audioManager = audioManager;
+    public OtherMusicPlayer(Context context){
+        super(context);
+        this.audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override

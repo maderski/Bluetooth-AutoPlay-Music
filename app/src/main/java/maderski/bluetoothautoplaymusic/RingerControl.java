@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
 
@@ -11,8 +12,8 @@ public class RingerControl {
 
     private AudioManager am;
 
-    public RingerControl(AudioManager audioManager){
-        am = audioManager;
+    public RingerControl(Context context){
+        am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     //turns phone sounds OFF & initialize AudioManager

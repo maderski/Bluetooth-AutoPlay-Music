@@ -20,29 +20,26 @@ public class LaunchApp extends PackageTools {
 
     private static final String TAG = LaunchApp.class.getName();
 
-    private Context context;
-
-    public LaunchApp(Context context){
-        super(context);
-        this.context = context;
+    public LaunchApp(){
+        super();
     }
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
-    public void musicPlayerLaunch(int seconds){
+    public void musicPlayerLaunch(final Context context, int seconds){
         final String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
         seconds = seconds * 1000;
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                launchPackage(pkgName);
+                launchPackage(context, pkgName);
             }
         };
         handler.postDelayed(runnable, seconds);
     }
 
     //Launch Maps or Waze with a delay
-    public void launchMaps(int seconds){
+    public void launchMaps(final Context context, int seconds){
         boolean canLaunchToday = canLaunchOnThisDay(context);
         if(canLaunchToday) {
             final Context ctx = context;
@@ -53,7 +50,7 @@ public class LaunchApp extends PackageTools {
                 @Override
                 public void run() {
                     String mapAppName = BAPMPreferences.getMapsChoice(ctx);
-                    launchPackage(mapAppName);
+                    launchPackage(context, mapAppName);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "delayLaunchmaps started");
                 }
@@ -62,7 +59,7 @@ public class LaunchApp extends PackageTools {
         }
     }
 
-    public void launchBAPMActivity(){
+    public void launchBAPMActivity(final Context context){
         Handler handler = new Handler(Looper.getMainLooper());
         Runnable runnable = new Runnable() {
             @Override
@@ -74,10 +71,10 @@ public class LaunchApp extends PackageTools {
                 context.startActivities(intentArray);
             }
         };
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 500);
     }
 
-    public void sendEverythingToBackground(){
+    public void sendEverythingToBackground(Context context){
         Intent i = new Intent(Intent.ACTION_MAIN);
         i.addCategory(Intent.CATEGORY_HOME);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

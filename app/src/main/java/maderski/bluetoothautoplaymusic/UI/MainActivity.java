@@ -97,9 +97,9 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             @Override
             public void onClick(View view) {
                 final String mapApp = BAPMPreferences.getMapsChoice(context);
-                String mapAppName = launchApp.getMapAppName(mapApp);
+                String mapAppName = launchApp.getMapAppName(context, mapApp);
                 //Checks if waze is on the phone
-                boolean wazeFound = launchApp.checkPkgOnPhone(PackageTools.WAZE);
+                boolean wazeFound = launchApp.checkPkgOnPhone(context, PackageTools.WAZE);
 
                 if (wazeFound) {
                     Snackbar.make(view, "Change Maps Launch to", Snackbar.LENGTH_LONG)
@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                             .setAction(mapAppName, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    setMapsChoice(context, mapApp);
-                                    setMapsButtonText(context);
+                                    setMapsChoice(mapApp);
+                                    setMapsButtonText();
                                 }
                             }).show();
                 } else {
@@ -118,20 +118,20 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         });
     }
 
-    private void setMapsChoice(final Context context, String mapApp){
+    private void setMapsChoice(String mapApp){
         if (mapApp.equals(PackageTools.WAZE)) {
-            BAPMPreferences.setMapsChoice(context, PackageTools.MAPS);
+            BAPMPreferences.setMapsChoice(this, PackageTools.MAPS);
             mFirebaseHelper.useGoogleMaps();
-            Toast.makeText(context, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Changed to GOOGLE MAPS", Toast.LENGTH_LONG).show();
         }
         else {
-            BAPMPreferences.setMapsChoice(context, PackageTools.WAZE);
+            BAPMPreferences.setMapsChoice(this, PackageTools.WAZE);
             mFirebaseHelper.useWaze();
-            Toast.makeText(context, "Changed to WAZE", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Changed to WAZE", Toast.LENGTH_LONG).show();
         }
 
         if(BuildConfig.DEBUG)
-            Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(context));
+            Log.i(TAG, "Maps set to: " + BAPMPreferences.getMapsChoice(this));
     }
 
     @Override
@@ -241,11 +241,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     @Override
     protected void onResume(){
         super.onResume();
-        installedMediaPlayers = listOfInstalledMediaPlayers(this);
+        installedMediaPlayers = listOfInstalledMediaPlayers();
 
-        setupUIElements(this);
-        launchApp = new LaunchApp(this);
-        checkIfWazeRemoved(this);
+        setupUIElements();
+        launchApp = new LaunchApp();
+        checkIfWazeRemoved();
         isBTConnected = BAPMDataPreferences.getRanActionsOnBtConnect(this);
 
     }
@@ -263,10 +263,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     //Checks if WAZE was removed and if WAZE was set to the MapsChoice and if so, set MapsChoice in
     //SharedPrefs to MAPS
-    private void checkIfWazeRemoved(Context context){
-        String mapAppChoice = BAPMPreferences.getMapsChoice(context);
+    private void checkIfWazeRemoved(){
+        String mapAppChoice = BAPMPreferences.getMapsChoice(this);
         if(mapAppChoice.equalsIgnoreCase(PackageTools.WAZE)) {
-            if (!launchApp.checkPkgOnPhone(PackageTools.WAZE)) {
+            if (!launchApp.checkPkgOnPhone(this, PackageTools.WAZE)) {
                 if(BuildConfig.DEBUG)
                     Log.i(TAG, "Checked");
                 BAPMPreferences.setMapsChoice(this, PackageTools.MAPS);
@@ -303,13 +303,13 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     //Setup the UI
-    private void setupUIElements(Context context){
+    private void setupUIElements(){
         setFonts();
-        radiobuttonCreator(context);
+        radiobuttonCreator();
         checkboxCreator();
-        setButtonPreferences(context);
+        setButtonPreferences();
         radioButtonListener();
-        setMapsButtonText(context);
+        setMapsButtonText();
     }
 
     //Create Checkboxes
@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     checkBox.setChecked(BAPMPreferences.getBTDevices(this).contains(BTDevice));
                 }
                 if(!BAPMPreferences.getHeadphoneDevices(this).contains(BTDevice)) {
-                    checkboxListener(this, checkBox, BTDevice);
+                    checkboxListener(checkBox, BTDevice);
                 }
                 BTDeviceCkBoxLL.addView(checkBox);
             }
@@ -361,10 +361,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     //Get Selected Checkboxes
-    private void checkboxListener(Context context, CheckBox checkBox, String BTDevice){
+    private void checkboxListener(CheckBox checkBox, String BTDevice){
         final CheckBox cb = checkBox;
         final String BTD = BTDevice;
-        final Context ctx = context;
+        final Context ctx = this;
 
         saveBTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(this));
 
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     //Get list of installed Mediaplayers and create Radiobuttons
-    private void radiobuttonCreator(Context context){
+    private void radiobuttonCreator(){
 
         RadioButton rdoButton;
         ApplicationInfo appInfo;
@@ -452,8 +452,8 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
-    private void setMapsButtonText(Context context){
-        String mapChoice = BAPMPreferences.getMapsChoice(context);
+    private void setMapsButtonText(){
+        String mapChoice = BAPMPreferences.getMapsChoice(this);
         PackageManager packageManager = getPackageManager();
         try {
             ApplicationInfo appInfo = packageManager.getApplicationInfo(mapChoice, 0);
@@ -468,31 +468,31 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     //Set the button and radiobutton states
-    private void setButtonPreferences(Context context){
+    private void setButtonPreferences(){
         Boolean btnState;
         ToggleButton toggleButton;
 
-        btnState = BAPMPreferences.getLaunchGoogleMaps(context);
+        btnState = BAPMPreferences.getLaunchGoogleMaps(this);
         toggleButton = (ToggleButton)findViewById(R.id.MapsToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getKeepScreenON(context);
+        btnState = BAPMPreferences.getKeepScreenON(this);
         toggleButton = (ToggleButton)findViewById(R.id.KeepONToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getPriorityMode(context);
+        btnState = BAPMPreferences.getPriorityMode(this);
         toggleButton = (ToggleButton)findViewById(R.id.PriorityToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getMaxVolume(context);
+        btnState = BAPMPreferences.getMaxVolume(this);
         toggleButton = (ToggleButton)findViewById(R.id.VolumeMAXToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getLaunchMusicPlayer(context);
+        btnState = BAPMPreferences.getLaunchMusicPlayer(this);
         toggleButton = (ToggleButton)findViewById(R.id.LaunchMusicPlayerToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getUnlockScreen(context);
+        btnState = BAPMPreferences.getUnlockScreen(this);
         toggleButton = (ToggleButton)findViewById(R.id.UnlockToggleButton);
         toggleButton.setChecked(btnState);
 
@@ -525,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             BAPMPreferences.setLaunchGoogleMaps(this, true);
 //            BAPMPreferences.setUnlockScreen(this, true);
 //            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
-            setButtonPreferences(this);
+            setButtonPreferences();
             if(BuildConfig.DEBUG) {
                 Log.i(TAG, "MapButton is ON");
                 Log.i(TAG, "Dismiss Keyguard is ON");
@@ -673,9 +673,9 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     //List of Mediaplayers that is installed on the phone
-    private List<String> listOfInstalledMediaPlayers(Context context){
+    private List<String> listOfInstalledMediaPlayers(){
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        List<ResolveInfo> pkgAppsList = context.getPackageManager().queryBroadcastReceivers(intent, 0);
+        List<ResolveInfo> pkgAppsList = this.getPackageManager().queryBroadcastReceivers(intent, 0);
         List<String> installedMediaPlayers = new ArrayList<>();
 
         for(ResolveInfo ri:pkgAppsList){

@@ -25,14 +25,8 @@ public class PackageTools {
     public static final String PANDORA = "com.pandora.android";
     public static final String BEYONDPOD = "mobi.beyondpod";
 
-    private Context context;
-
-    public PackageTools(Context context){
-        this.context = context;
-    }
-
     //Launches App that is associated with that package that was put into method
-    public void launchPackage(String pkg){
+    public void launchPackage(Context context, String pkg){
         if(BuildConfig.DEBUG)
             Log.i("Package intent: ", pkg + " started");
         Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
@@ -41,7 +35,7 @@ public class PackageTools {
     }
 
     //Returns true if Package is on phone
-    public boolean checkPkgOnPhone(String pkg){
+    public boolean checkPkgOnPhone(Context context, String pkg){
         List<ApplicationInfo> packages;
         PackageManager pm;
 
@@ -55,7 +49,7 @@ public class PackageTools {
     }
 
     //Returns Map App Name, intentionally only works with Google maps and Waze
-    public String getMapAppName(String pkg){
+    public String getMapAppName(Context context, String pkg){
         String mapAppName = "Not Found";
         try {
             ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(pkg, 0);
@@ -72,7 +66,7 @@ public class PackageTools {
     }
 
     //List of Installed Packages on the phone
-    public void listOfPackagesOnPhone(){
+    public void listOfPackagesOnPhone(Context context){
         final PackageManager pm = context.getPackageManager();
         List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 

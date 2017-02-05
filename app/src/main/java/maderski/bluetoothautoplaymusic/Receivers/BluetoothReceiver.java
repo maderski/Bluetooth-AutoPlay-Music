@@ -74,7 +74,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
     private void onHeadphonesConnectSwitch(final Context context){
         final AudioManager audioManager  = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        final PlayMusic playMusic = new PlayMusic(context, audioManager);
+        final PlayMusic playMusic = new PlayMusic(context);
         BAPMDataPreferences.setOriginalMediaVolume(context, audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
@@ -85,7 +85,8 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     @Override
                     public void run() {
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
-                        playMusic.checkIfPlaying(5, 1);
+                        playMusic.play();
+                        playMusic.checkIPlaying(context, 5);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
@@ -104,7 +105,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private void bluetoothConnectDisconnectSwitch(Context context, Intent intent){
 
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        BluetoothActions bluetoothActions = new BluetoothActions(context, am);
+        BluetoothActions bluetoothActions = new BluetoothActions(context);
 
         if(BuildConfig.DEBUG)
             Log.d(TAG, "Bluetooth Intent Received: " + mAction);
@@ -201,10 +202,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
     @Override
     public void adapterOff(Context context) {
-        // Set volume back
-        final AudioManager audioManager  = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-
-        BluetoothActions bluetoothActions = new BluetoothActions(context, audioManager);
+        BluetoothActions bluetoothActions = new BluetoothActions(context);
         bluetoothActions.actionsBTStateOff();
     }
 }

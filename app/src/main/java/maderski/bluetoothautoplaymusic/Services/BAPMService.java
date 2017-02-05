@@ -22,6 +22,11 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
  * Created by Jason on 1/5/16.
  */
 public class BAPMService extends Service {
+    BluetoothReceiver mBluetoothReceiver;
+    BTStateChangedReceiver mBTStateChangedReceiver;
+    CustomReceiver mCustomReceiver;
+    PowerReceiver mPowerReceiver;
+
     //Start the Bluetooth receiver as a service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -31,10 +36,17 @@ public class BAPMService extends Service {
         }
 
         // Register receivers
-        new BluetoothReceiver().onReceive(this, intent);
-        new BTStateChangedReceiver().onReceive(this, intent);
-        new CustomReceiver().onReceive(this, intent);
-        new PowerReceiver().onReceive(this, intent);
+        mBluetoothReceiver = new BluetoothReceiver();
+        mBluetoothReceiver.onReceive(this, intent);
+
+        mBTStateChangedReceiver = new BTStateChangedReceiver();
+        mBTStateChangedReceiver.onReceive(this, intent);
+
+        mCustomReceiver = new CustomReceiver();
+        mCustomReceiver.onReceive(this, intent);
+
+        mPowerReceiver = new PowerReceiver();
+        mPowerReceiver.onReceive(this, intent);
 
         // Rehold WakeLock due to Service Restart
         reHoldWakeLock();
@@ -45,6 +57,25 @@ public class BAPMService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mBluetoothReceiver != null){
+            unregisterReceiver(mBluetoothReceiver);
+            mBluetoothReceiver = null;
+        }
+
+        if(mBTStateChangedReceiver != null){
+            unregisterReceiver(mBTStateChangedReceiver);
+            mBTStateChangedReceiver = null;
+        }
+
+        if(mCustomReceiver != null) {
+            unregisterReceiver(mCustomReceiver);
+            mCustomReceiver = null;
+        }
+
+        if(mPowerReceiver != null) {
+            unregisterReceiver(mPowerReceiver);
+            mPowerReceiver = null;
+        }
     }
 
     @Override
