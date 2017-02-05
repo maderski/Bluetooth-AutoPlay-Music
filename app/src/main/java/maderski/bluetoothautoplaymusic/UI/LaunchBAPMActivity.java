@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic.UI;
 import android.app.Activity;
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -26,7 +27,12 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         firebaseHelper.activityLaunched(FirebaseHelper.ActivityName.LAUNCH_BAPM);
 
         // Dismiss the keyguard
-        dismissKeyGuard(this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismissKeyGuard(LaunchBAPMActivity.this);
+            }
+        });
 
         // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
         sendHomeAppTimer(3);
@@ -60,20 +66,15 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         if(!launchMaps && !launchPlayer) {
             final Context context = this;
             int milliSeconds = seconds * 1000;
-
-            new CountDownTimer(milliSeconds, 1000) {
-
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
                 @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
+                public void run() {
                     LaunchApp launchApp = new LaunchApp(context);
                     launchApp.sendEverythingToBackground();
                 }
-            }.start();
+            };
+            handler.postDelayed(runnable, milliSeconds);
         }
     }
 }

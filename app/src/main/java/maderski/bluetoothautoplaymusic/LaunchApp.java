@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -26,24 +27,17 @@ public class LaunchApp extends PackageTools {
     }
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
-    public void musicPlayerLaunch(int seconds, boolean _mapsEnabled){
+    public void musicPlayerLaunch(int seconds){
         final String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
-        final boolean mapsEnabled = _mapsEnabled;
         seconds = seconds * 1000;
-        new CountDownTimer(seconds,
-                9999) // onTick time, not used
-        {
-            public void onTick(long millisUntilFinished) {
-                // Not used
-            }
-
-            public void onFinish() {
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
                 launchPackage(pkgName);
-
-                if(mapsEnabled)
-                    launchMaps(2);
             }
-        }.start();
+        };
+        handler.postDelayed(runnable, seconds);
     }
 
     //Launch Maps or Waze with a delay
@@ -52,22 +46,18 @@ public class LaunchApp extends PackageTools {
         if(canLaunchToday) {
             final Context ctx = context;
             seconds = seconds * 1000;
-            new CountDownTimer(seconds,
-                    9999) // onTick time, not used
-            {
-                public void onTick(long millisUntilFinished) {
-                    // Not used
-                }
 
-                public void onFinish() {
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
                     String mapAppName = BAPMPreferences.getMapsChoice(ctx);
                     launchPackage(mapAppName);
                     if (BuildConfig.DEBUG)
-                        Log.i("Launch Delay: ", "Finished");
+                        Log.i(TAG, "delayLaunchmaps started");
                 }
-            }.start();
-            if (BuildConfig.DEBUG)
-                Log.i(TAG, "delayLaunchmaps started");
+            };
+            handler.postDelayed(runnable, seconds);
         }
     }
 

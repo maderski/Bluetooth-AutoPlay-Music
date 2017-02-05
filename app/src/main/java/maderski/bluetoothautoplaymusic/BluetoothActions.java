@@ -116,15 +116,12 @@ public class BluetoothActions {
             volumeControl.checkSetMAXVol(context, 4);
         }
 
-        if(launchMusicPlayer) {
+        if(launchMusicPlayer && !launchMaps) {
             try {
-                launchApp.musicPlayerLaunch(3, launchMaps);
+                launchApp.musicPlayerLaunch(3);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
             }
-        }else{
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Launch Music Player is OFF");
         }
 
         if(playMusic){
@@ -132,7 +129,7 @@ public class BluetoothActions {
             music.checkIfPlaying(12, 4);
         }
 
-        if(launchMaps && !launchMusicPlayer){
+        if(launchMaps){
             launchApp.launchMaps(3);
         }
 
