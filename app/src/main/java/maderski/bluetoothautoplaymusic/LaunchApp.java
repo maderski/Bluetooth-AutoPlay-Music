@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -62,11 +63,18 @@ public class LaunchApp extends PackageTools {
     }
 
     public void launchBAPMActivity(){
-        Intent[] intentArray = new Intent[2];
-        intentArray[0] = new Intent(context, MainActivity.class);
-        intentArray[0].addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intentArray[1] = new Intent(context, LaunchBAPMActivity.class);
-        context.startActivities(intentArray);
+        Handler handler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Intent[] intentArray = new Intent[2];
+                intentArray[0] = new Intent(context, MainActivity.class);
+                intentArray[0].addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intentArray[1] = new Intent(context, LaunchBAPMActivity.class);
+                context.startActivities(intentArray);
+            }
+        };
+        handler.postDelayed(runnable, 1000);
     }
 
     public void sendEverythingToBackground(){
