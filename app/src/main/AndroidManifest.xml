@@ -39,6 +39,11 @@
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".Receivers.A2DPPlayingStateReceiver">
+            <intent-filter>
+                <action android:name="android.bluetooth.a2dp.profile.action.PLAYING_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".Receivers.PowerReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />

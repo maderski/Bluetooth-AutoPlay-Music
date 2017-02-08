@@ -1,20 +1,21 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.Interfaces.A2DPPlayingState;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
  * Created by Jason on 12/8/15.
  */
-public class PlayMusic {
+public class PlayMusic implements A2DPPlayingState {
 
     private static final String TAG = PlayMusic.class.getName();
+
+    private static boolean startedPlaying = false;
 
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
@@ -49,60 +50,34 @@ public class PlayMusic {
 
     public void pause(){ playerControls.pause(); }
 
-    public void play(){ playerControls.play(); }
+    public void play(){
+        Log.d(TAG, "Tried to play");
+        playerControls.play();
 
-//    public void checkIfPlaying(int seconds, int intervalSeconds){
-//        int milliseconds = seconds * 1000;
-//        int intervalMills = intervalSeconds * 1000;
-//        new CountDownTimer(milliseconds, intervalMills){
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                if(BuildConfig.DEBUG){
-//                    Log.i(TAG, "millisUntilFinished: " + Long.toString(millisUntilFinished));
-//                    Log.i(TAG, "Is Music Active: " + Boolean.toString(mAudioManager.isMusicActive()));
-//                }
-//
-//                if (mAudioManager.isMusicActive()) {
-//                    if (BuildConfig.DEBUG) {
-//                        Log.i(TAG, "Music is playing");
-//                    }
-//                    if(millisUntilFinished < 8000) {
-//                        mFirebaseHelper.musicAutoPlay(true);
-//                        if (BuildConfig.DEBUG) {
-//                            Log.i(TAG, "checkIfPlaying cancelled");
-//                        }
-//                        cancel();
-//                    }
-//                } else {
-//                    play();
-//                }
-//
-//                if(!mAudioManager.isBluetoothA2dpOn()){
-//                    if (BuildConfig.DEBUG) {
-//                        Log.i(TAG, "Bluetooth is not connected");
-//                    }
-//                    pause();
-//                    cancel();
-//                }
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                pause();
-//                Handler handler = new Handler();
-//                Runnable runnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        play();
-//                    }
-//                };
-//                handler.postDelayed(runnable, 1000);
-//                mFirebaseHelper.musicAutoPlay(false);
-//                if(BuildConfig.DEBUG) {
-//                    Log.i(TAG, "Unable to Play :(");
-//                }
-//            }
-//        }.start();
-//    }
+        new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long l) { Log.d(TAG, "STARTED PLAYING " + Boolean.toString(startedPlaying));}
+
+            @Override
+            public void onFinish() {
+                Log.d(TAG, "Timer done");
+                if(!startedPlaying) {
+                    Log.d(TAG, "Tried to play/pause");
+                    playerControls.pause();
+                    playerControls.play();
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void isPlaying() {
+        startedPlaying = true;
+    }
+
+    @Override
+    public void notPlaying() {
+        startedPlaying = false;
+    }
 }
 
