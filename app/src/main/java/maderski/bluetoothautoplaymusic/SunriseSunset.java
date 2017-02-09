@@ -31,12 +31,10 @@ public class SunriseSunset {
         CurrentLocation currentLocation = new CurrentLocation(context);
         Location location = new Location(currentLocation.getLatitude(), currentLocation.getLongitude());
         SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, Calendar.getInstance().getTimeZone());
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Lat " + currentLocation.getLatitude() + " Long " + currentLocation.getLongitude());
+        Log.d(TAG, "Lat " + currentLocation.getLatitude() + " Long " + currentLocation.getLongitude());
         sunriseTime = calculator.getCivilSunriseForDate(today);
         sunsetTime = calculator.getCivilSunsetForDate(today);
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "sunrise: " + sunriseTime + " sunset: " + sunsetTime);
+        Log.d(TAG, "sunrise: " + sunriseTime + " sunset: " + sunsetTime);
     }
 
     //Return Sunrise time as a single integer number
@@ -53,8 +51,7 @@ public class SunriseSunset {
     private int getTime(String inputTime){
         String[] split = inputTime.split(":");
         int outputTime = (Integer.parseInt(split[0]) * 100) + Integer.parseInt(split[1]);
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, Integer.toString(outputTime));
+        Log.d(TAG, Integer.toString(outputTime));
         return outputTime;
     }
 }

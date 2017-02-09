@@ -31,7 +31,7 @@ public class BAPMService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(BuildConfig.DEBUG) {
-            Log.i("BAPMService: ", "started");
+            Log.d("BAPMService: ", "started");
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
 

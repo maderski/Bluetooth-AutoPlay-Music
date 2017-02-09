@@ -69,9 +69,7 @@ public class TimePickerFragment extends DialogFragment
     public void onCancel(DialogInterface dialog) {
         if(dialogListener != null) {
             dialogListener.onTimeCancel(isDimFragment);
-            if(BuildConfig.DEBUG){
-                Log.d(TAG, "Cancelled time set...isDim: " + Boolean.toString(isDimFragment));
-            }
+            Log.d(TAG, "Cancelled time set...isDim: " + Boolean.toString(isDimFragment));
         }
         super.onCancel(dialog);
     }
@@ -79,10 +77,8 @@ public class TimePickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         int setTime = (hourOfDay * 100) + minute;
-        if(BuildConfig.DEBUG) {
-            Log.i(TAG, "Set time: " + Integer.toString(setTime));
-            Log.i(TAG, "Is Dim: " + Boolean.toString(isDimFragment));
-        }
+        Log.d(TAG, "Set time: " + Integer.toString(setTime));
+        Log.d(TAG, "Is Dim: " + Boolean.toString(isDimFragment));
 
         if(dialogListener != null)
             dialogListener.onTimeSet(isDimFragment, view, hourOfDay, minute);

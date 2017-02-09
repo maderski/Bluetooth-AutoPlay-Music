@@ -25,12 +25,10 @@ public class Telephone {
         int currentCallState = telephonyManager.getCallState();
 
         if(currentCallState == telephonyManager.CALL_STATE_OFFHOOK){
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "ON CALL!");
+            Log.d(TAG, "ON CALL!");
             return true;
         }else{
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Not on Call");
+            Log.d(TAG, "Not on Call");
             return false;
         }
     }
@@ -47,19 +45,16 @@ public class Telephone {
             public void onTick(long millisUntilFinished) {
                 if(Power.isPluggedIn(ctx)){
                     if(isOnCall()){
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "On Call, check again in 3 sec");
+                        Log.d(TAG, "On Call, check again in 3 sec");
                     }else{
-                        if(BuildConfig.DEBUG)
-                            Log.i(TAG, "Off Call, Launching Bluetooth Autoplay music");
+                        Log.d(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
                         //Get Original Volume and Launch Bluetooth Autoplay Music
                         vc.delayGetOrigVol(ctx, 3);
                     }
                 }else{
                     //Bailing cause phone is not plugged in
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "Phone is no longer plugged in to power");
+                    Log.d(TAG, "Phone is no longer plugged in to power");
                     cancel();
                 }
             }

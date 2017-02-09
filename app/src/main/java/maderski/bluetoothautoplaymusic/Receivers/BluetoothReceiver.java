@@ -45,8 +45,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (mDevice != null) {
                 mIsSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(mDevice.getName());
-                if(BuildConfig.DEBUG)
-                    Log.d(TAG, "Connected device: " + mDevice.getName() +
+                Log.d(TAG, "Connected device: " + mDevice.getName() +
                             "\n" + "is SelectedBTDevice: " + Boolean.toString(mIsSelectedBTDevice));
             }
 
@@ -61,8 +60,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
     private void selectedDevicePrepForActions(Context context, Intent intent){
         boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(mDevice.getName());
-        if(BuildConfig.DEBUG)
-            Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
+        Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
         if (mIsSelectedBTDevice && !isAHeadphonesBTDevice) {
             if(!BAPMDataPreferences.getIsSelected(context)) {
                 sendIsSelectedBroadcast(context, true);
@@ -77,8 +75,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         final AudioManager audioManager  = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         final PlayMusic playMusic = new PlayMusic(context);
         BAPMDataPreferences.setOriginalMediaVolume(context, audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-        if(BuildConfig.DEBUG)
-            Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+        Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
         switch(mAction) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
                 Handler handler = new Handler();
@@ -109,8 +106,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             mBluetoothActions = new BluetoothActions(context);
         }
 
-        if(BuildConfig.DEBUG)
-            Log.d(TAG, "Bluetooth Intent Received: " + mAction);
+        Log.d(TAG, "Bluetooth Intent Received: " + mAction);
 
         switch (mAction) {
             case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
@@ -164,8 +160,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
                 if(!telephone.isOnCall()){
                     BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+                    Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
                 }
 
                 mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);

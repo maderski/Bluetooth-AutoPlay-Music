@@ -65,6 +65,10 @@ public class PlayMusic implements A2DPPlayingState {
                     Log.d(TAG, "Tried to play/pause");
                     playerControls.pause();
                     playerControls.play();
+                    Log.d(TAG, "Started Playing: " + Boolean.toString(startedPlaying));
+                    mFirebaseHelper.musicAutoPlay(startedPlaying);
+                } else {
+                    mFirebaseHelper.musicAutoPlay(true);
                 }
             }
         }.start();

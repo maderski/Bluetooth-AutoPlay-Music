@@ -45,16 +45,12 @@ public class CustomReceiver extends BroadcastReceiver {
     private void performAction(String action, BluetoothActions bluetoothActions){
         switch (action) {
             case ACTION_POWER_LAUNCH:
-                if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "POWER_LAUNCH");
-                }
+                Log.d(TAG, "POWER_LAUNCH");
                 mFirebaseHelper.bluetoothActionLaunch(FirebaseHelper.BTActionsLaunch.POWER);
                 bluetoothActions.OnBTConnect();
                 break;
             case ACTION_OFF_TELE_LAUNCH:
-                if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "OFF_TELE_LAUNCH");
-                }
+                Log.d(TAG, "OFF_TELE_LAUNCH");
                 mFirebaseHelper.bluetoothActionLaunch(FirebaseHelper.BTActionsLaunch.TELEPHONE);
                 //Calling actionsOnBTConnect cause onBTConnect already ran
                 bluetoothActions.actionsOnBTConnect();
@@ -66,8 +62,7 @@ public class CustomReceiver extends BroadcastReceiver {
         if(action.equalsIgnoreCase(ACTION_IS_SELECTED)) {
             boolean isSelected = intent.getBooleanExtra("isSelected", false);
             BAPMDataPreferences.setIsSelected(context, isSelected);
-            if (BuildConfig.DEBUG)
-                Log.i(TAG, "IS_SELECTED: " + Boolean.toString(isSelected));
+            Log.i(TAG, "IS_SELECTED: " + Boolean.toString(isSelected));
         }
     }
 }

@@ -51,8 +51,7 @@ public class LaunchApp extends PackageTools {
                 public void run() {
                     String mapAppName = BAPMPreferences.getMapsChoice(ctx);
                     launchPackage(context, mapAppName);
-                    if (BuildConfig.DEBUG)
-                        Log.i(TAG, "delayLaunchmaps started");
+                    Log.d(TAG, "delayLaunchmaps started");
                 }
             };
             handler.postDelayed(runnable, seconds);
@@ -85,10 +84,9 @@ public class LaunchApp extends PackageTools {
         Calendar calendar = Calendar.getInstance();
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
-        if(BuildConfig.DEBUG) {
-            Log.i(TAG, "+++++++++++++++++++++Day of the week: " + today);
-            Log.i(TAG, "Can Launch Maps: " + canLaunch);
-        }
+        Log.d(TAG, "Day of the week: " + today);
+        Log.d(TAG, "Can Launch Maps: " + canLaunch);
+
         return canLaunch;
     }
 }

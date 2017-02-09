@@ -19,14 +19,12 @@ public class RingerControl {
     //turns phone sounds OFF & initialize AudioManager
     public void soundsOFF(){
         am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "RingerControl: " + "Silent");
+        Log.d(TAG, "RingerControl: " + "Silent");
     }
     //turns phone sounds ON
     public void soundsON(){
         am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "RingerControl: " + "Normal");
+        Log.d(TAG, "RingerControl: " + "Normal");
     }
 
     public void vibrateOnly(){

@@ -43,8 +43,7 @@ public class ScreenONLock {
 
         try{
             mWakeLock.acquire();
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Wakelock enabled");
+            Log.d(TAG, "Wakelock enabled");
         }catch (Exception e){
             Log.e(TAG, "WakeLock Error: " + e.getMessage());
         }
@@ -74,14 +73,12 @@ public class ScreenONLock {
             try {
                 mWakeLock.release();
                 mWakeLock = null;
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Wakelock: " + "disabled");
+                Log.d(TAG, "Wakelock: " + "disabled");
             } catch (Exception e) {
                 Log.e(TAG, "WakeLock: " + "error " + e.getMessage());
             }
         }else{
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Wakelock: " + "Not Held");
+            Log.i(TAG, "Wakelock: " + "Not Held");
         }
     }
 
@@ -96,8 +93,7 @@ public class ScreenONLock {
         int sunriseTime = ss.getSunrise();
         int sunsetTime = ss.getSunset();
 
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Current: " + Integer.toString(currentTime) +
+        Log.d(TAG, "Current: " + Integer.toString(currentTime) +
                 " SR: " + Integer.toString(sunriseTime) +
                 " SS: " + Integer.toString(sunsetTime));
 
@@ -106,8 +102,7 @@ public class ScreenONLock {
         }else
             dark = 10;
 
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "dark: " + Integer.toString(dark));
+        Log.d(TAG, "dark: " + Integer.toString(dark));
         return dark;
     }
 

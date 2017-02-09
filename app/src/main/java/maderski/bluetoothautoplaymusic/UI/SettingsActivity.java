@@ -89,12 +89,10 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         mFirebaseHelper.featureEnabled(FirebaseHelper.Option.PLAY_MUSIC, on);
         if (on) {
             BAPMPreferences.setAutoplayMusic(this, true);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "AutoPlaySwitch is ON");
+            Log.d(TAG, "AutoPlaySwitch is ON");
         } else {
             BAPMPreferences.setAutoplayMusic(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "AutoPlaySwitch is OFF");
+            Log.d(TAG, "AutoPlaySwitch is OFF");
         }
     }
 
@@ -103,12 +101,10 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         mFirebaseHelper.featureEnabled(FirebaseHelper.Option.POWER_REQUIRED, on);
         if(on){
             BAPMPreferences.setPowerConnected(this, true);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "PowerConnected Switch is ON");
+            Log.d(TAG, "PowerConnected Switch is ON");
         }else{
             BAPMPreferences.setPowerConnected(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "PowerConnected Switch is OFF");
+            Log.d(TAG, "PowerConnected Switch is OFF");
         }
     }
 
@@ -117,12 +113,10 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         mFirebaseHelper.featureEnabled(FirebaseHelper.Option.GO_HOME, on);
         if(on){
             BAPMPreferences.setSendToBackground(this, true);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "SendToBackground Switch is ON");
+            Log.d(TAG, "SendToBackground Switch is ON");
         }else{
             BAPMPreferences.setSendToBackground(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "SendToBackground Switch is OFF");
+            Log.d(TAG, "SendToBackground Switch is OFF");
         }
     }
 
@@ -131,12 +125,10 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         mFirebaseHelper.featureEnabled(FirebaseHelper.Option.CALL_COMPLETED, on);
         if(on){
             BAPMPreferences.setWaitTillOffPhone(this, true);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "WaitTillOffPhone Switch is ON");
+            Log.d(TAG, "WaitTillOffPhone Switch is ON");
         }else{
             BAPMPreferences.setWaitTillOffPhone(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "WaitTillOffPhone Switch is OFF");
+            Log.d(TAG, "WaitTillOffPhone Switch is OFF");
         }
     }
 
@@ -149,12 +141,10 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
 
             BAPMPreferences.setAutoBrightness(this, true);
 
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "WaitTillOffPhone Switch is ON");
+            Log.d(TAG, "WaitTillOffPhone Switch is ON");
         }else{
             BAPMPreferences.setAutoBrightness(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "WaitTillOffPhone Switch is OFF");
+            Log.d(TAG, "WaitTillOffPhone Switch is OFF");
         }
     }
 
@@ -177,9 +167,7 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 BAPMPreferences.setUserSetMaxVolume(getApplicationContext(), progress);
-                if(BuildConfig.DEBUG){
-                    Log.d(TAG, "User set MAX volume: " + Integer.toString(BAPMPreferences.getUserSetMaxVolume(getApplicationContext())));
-                }
+                Log.d(TAG, "User set MAX volume: " + Integer.toString(BAPMPreferences.getUserSetMaxVolume(getApplicationContext())));
             }
 
             @Override
@@ -200,13 +188,11 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
         if(isDim){
             mFirebaseHelper.manualTimeSet(FirebaseHelper.Selection.DIM_TIME, true);
             BAPMPreferences.setDimTime(this, timeSet);
-            if(BuildConfig.DEBUG)
-                Log.i("Settings", "Dim brightness");
+            Log.d("Settings", "Dim brightness");
         }else{
             mFirebaseHelper.manualTimeSet(FirebaseHelper.Selection.BRIGHT_TIME, true);
             BAPMPreferences.setBrightTime(this, timeSet);
-            if(BuildConfig.DEBUG)
-                Log.i("Settings", "Bright brightness");
+            Log.d("Settings", "Bright brightness");
         }
     }
 

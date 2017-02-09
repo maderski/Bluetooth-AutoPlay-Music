@@ -26,10 +26,9 @@ public class PowerReceiver extends BroadcastReceiver {
             boolean isBTConnected = audioManager.isBluetoothA2dpOn();
             boolean powerRequired = BAPMPreferences.getPowerConnected(context);
 
-            if(BuildConfig.DEBUG) {
-                Log.i(TAG, "Power Connected to a Selected BTDevice");
-                Log.i(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
-            }
+            Log.d(TAG, "Power Connected to a Selected BTDevice");
+            Log.d(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
+
             if (powerRequired && isBTConnected && !BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
                 //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
                 Intent launchIntent = new Intent();

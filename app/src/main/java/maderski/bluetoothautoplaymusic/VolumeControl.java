@@ -26,7 +26,7 @@ public class VolumeControl {
     //Set Mediavolume to MAX
     public void volumeMAX(){
         int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        Log.i(TAG, "Max Media Volume is: " + Integer.toString(maxVolume));
+        Log.d(TAG, "Max Media Volume is: " + Integer.toString(maxVolume));
         am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
     }
 
@@ -35,8 +35,7 @@ public class VolumeControl {
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(context);
         am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
 
-        if(BuildConfig.DEBUG)
-            Log.i(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+        Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
 
     //Wait 3 seconds before getting the Original Volume and return true when done
@@ -48,8 +47,7 @@ public class VolumeControl {
             public void run() {
                 BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
 
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+                Log.d(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
 
                 Intent launchIntent = new Intent();
                 launchIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
@@ -64,11 +62,9 @@ public class VolumeControl {
         final int maxVolume = BAPMPreferences.getUserSetMaxVolume(context);
         if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
             am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Set Volume To MAX");
+            Log.d(TAG, "Set Volume To MAX");
         } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Volume is at MAX!");
+            Log.d(TAG, "Volume is at MAX!");
         }
     }
 

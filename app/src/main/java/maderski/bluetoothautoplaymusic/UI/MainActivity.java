@@ -267,12 +267,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         String mapAppChoice = BAPMPreferences.getMapsChoice(this);
         if(mapAppChoice.equalsIgnoreCase(PackageTools.WAZE)) {
             if (!launchApp.checkPkgOnPhone(this, PackageTools.WAZE)) {
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Checked");
+                Log.d(TAG, "Checked");
                 BAPMPreferences.setMapsChoice(this, PackageTools.MAPS);
             }else {
-                if (BuildConfig.DEBUG)
-                    Log.i(TAG, "WAZE is installed");
+                Log.d(TAG, "WAZE is installed");
             }
         }
     }
@@ -293,11 +291,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     private void listMusicplayersAndBTDevices(Context context){
         if(BuildConfig.DEBUG) {
             for (String pkg : installedMediaPlayers) {
-                Log.i("Pkg ", pkg);
+                Log.d("Pkg ", pkg);
             }
 
             for (String btDevice : BluetoothDeviceHelper.listOfBluetoothDevices()) {
-                Log.i("BTDevice ", btDevice);
+                Log.d("BTDevice ", btDevice);
             }
         }
     }
@@ -374,18 +372,18 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 if (cb.isChecked()) {
                     saveBTDevices.add(BTD);
                     if(BuildConfig.DEBUG) {
-                        Log.i(TAG, "TRUE" + " " + BTD);
+                        Log.d(TAG, "TRUE" + " " + BTD);
                     }
                     if(BuildConfig.DEBUG) {
-                        Log.i(TAG, "SAVED");
+                        Log.d(TAG, "SAVED");
                     }
                 } else {
                     saveBTDevices.remove(BTD);
                     if(BuildConfig.DEBUG) {
-                        Log.i(TAG, "FALSE" + " " + BTD);
+                        Log.d(TAG, "FALSE" + " " + BTD);
                     }
                     if(BuildConfig.DEBUG) {
-                        Log.i(TAG, "SAVED");
+                        Log.d(TAG, "SAVED");
                     }
                 }
                 BAPMPreferences.setBTDevices(ctx, saveBTDevices);
@@ -442,11 +440,9 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     }
                 }
 
-                if(BuildConfig.DEBUG) {
-                    Log.i(TAG, Integer.toString(index));
-                    Log.i(TAG, BAPMPreferences.getPkgSelectedMusicPlayer(context));
-                    Log.i(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
-                }
+                Log.d(TAG, Integer.toString(index));
+                Log.d(TAG, BAPMPreferences.getPkgSelectedMusicPlayer(context));
+                Log.d(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
             }
         });
     }
@@ -526,14 +522,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 //            BAPMPreferences.setUnlockScreen(this, true);
 //            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
             setButtonPreferences();
-            if(BuildConfig.DEBUG) {
-                Log.i(TAG, "MapButton is ON");
-                Log.i(TAG, "Dismiss Keyguard is ON");
-            }
+            Log.i(TAG, "MapButton is ON");
+            Log.i(TAG, "Dismiss Keyguard is ON");
         } else {
             BAPMPreferences.setLaunchGoogleMaps(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "MapButton is OFF");
+            Log.d(TAG, "MapButton is OFF");
         }
     }
 
@@ -543,12 +536,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.KEEP_SCREEN_ON, on);
             if (on) {
                 BAPMPreferences.setKeepScreenON(this, true);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Keep Screen ON Button is ON");
+                Log.d(TAG, "Keep Screen ON Button is ON");
             } else {
                 BAPMPreferences.setKeepScreenON(this, false);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Keep Screen ON Button is OFF");
+                Log.d(TAG, "Keep Screen ON Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -562,12 +553,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
             if (on) {
                 BAPMPreferences.setPriorityMode(this, true);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Priority Button is ON");
+                Log.d(TAG, "Priority Button is ON");
             } else {
                 BAPMPreferences.setPriorityMode(this, false);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Priority Button is OFF");
+                Log.d(TAG, "Priority Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -581,12 +570,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.MAX_VOLUME, on);
             if (on) {
                 BAPMPreferences.setMaxVolume(this, true);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Max Volume Button is ON");
+                Log.d(TAG, "Max Volume Button is ON");
             } else {
                 BAPMPreferences.setMaxVolume(this, false);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Max Volume Button is OFF");
+                Log.d(TAG, "Max Volume Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -600,12 +587,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MUSIC_PLAYER, on);
             if (on) {
                 BAPMPreferences.setLaunchMusicPlayer(this, true);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Launch Music Player Button is ON");
+                Log.d(TAG, "Launch Music Player Button is ON");
             } else {
                 BAPMPreferences.setLaunchMusicPlayer(this, false);
-                if(BuildConfig.DEBUG)
-                    Log.i(TAG, "Launch Music Player Button is OFF");
+                Log.d(TAG, "Launch Music Player Button is OFF");
             }
         }else {
             ((ToggleButton) view).toggle();
@@ -618,12 +603,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
         if (on) {
             BAPMPreferences.setUnlockScreen(this, true);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Dismiss KeyGuard Button is ON");
+            Log.i(TAG, "Dismiss KeyGuard Button is ON");
         } else {
             BAPMPreferences.setUnlockScreen(this, false);
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Dismiss KeyGuard Button is OFF");
+            Log.i(TAG, "Dismiss KeyGuard Button is OFF");
         }
     }
 
@@ -713,9 +696,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         headphoneDevices = BAPMPreferences.getHeadphoneDevices(this);
         for(String deviceName : headphoneDevices){
             saveBTDevices.add(deviceName);
-            if(BuildConfig.DEBUG) {
-                Log.d(TAG, "headphoneDevice: " + deviceName);
-            }
+            Log.d(TAG, "headphoneDevice: " + deviceName);
         }
 
         for(String deviceName : removeDevices){

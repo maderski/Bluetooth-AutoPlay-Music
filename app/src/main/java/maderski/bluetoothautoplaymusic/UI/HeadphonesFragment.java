@@ -71,8 +71,7 @@ public class HeadphonesFragment extends DialogFragment{
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 BAPMPreferences.setHeadphonePreferredVolume(getActivity(), progress);
-                if(BuildConfig.DEBUG)
-                    Log.d(TAG, "Progress: " + Integer.toString(progress));
+                Log.d(TAG, "Progress: " + Integer.toString(progress));
             }
 
             @Override

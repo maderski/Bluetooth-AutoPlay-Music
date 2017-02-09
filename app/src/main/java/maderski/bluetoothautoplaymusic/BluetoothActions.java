@@ -35,12 +35,10 @@ public class BluetoothActions {
         boolean ready = false;
         int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
         if(state == BluetoothA2dp.STATE_CONNECTED) {
-            if(BuildConfig.DEBUG)
-                Log.e(TAG, "CONNECTED!!! :D");
+            Log.d(TAG, "CONNECTED!!! :D");
             ready = true;
         }else {
-            if (BuildConfig.DEBUG)
-                Log.i(TAG, "BTAudioIsReady: " + Boolean.toString(ready));
+            Log.d(TAG, "BTAudioIsReady: " + Boolean.toString(ready));
         }
 
         return ready;
@@ -53,13 +51,11 @@ public class BluetoothActions {
             Telephone telephone = new Telephone(context);
             if(Power.isPluggedIn(context)){
                 if(telephone.isOnCall()) {
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "ON a call");
+                    Log.d(TAG, "ON a call");
                     //Run CheckIfOnPhone
                     telephone.CheckIfOnPhone(volumeControl);
                 }else{
-                    if(BuildConfig.DEBUG)
-                        Log.i(TAG, "NOT on a call");
+                    Log.d(TAG, "NOT on a call");
                     actionsOnBTConnect();
                 }
             }else{
@@ -167,8 +163,7 @@ public class BluetoothActions {
                 try {
                     switch (currentRinger) {
                         case AudioManager.RINGER_MODE_SILENT:
-                            if (BuildConfig.DEBUG)
-                                Log.i(TAG, "Phone is on Silent");
+                            Log.d(TAG, "Phone is on Silent");
                             break;
                         case AudioManager.RINGER_MODE_VIBRATE:
                             ringerControl.vibrateOnly();

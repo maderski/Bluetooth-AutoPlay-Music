@@ -27,8 +27,7 @@ public class PackageTools {
 
     //Launches App that is associated with that package that was put into method
     public void launchPackage(Context context, String pkg){
-        if(BuildConfig.DEBUG)
-            Log.i("Package intent: ", pkg + " started");
+        Log.d("Package intent: ", pkg + " started");
         Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(LaunchIntent);
@@ -71,8 +70,7 @@ public class PackageTools {
         List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         for(ApplicationInfo pkg:appInfo){
-            if(BuildConfig.DEBUG)
-                Log.i(TAG, "Installed Pkg: " + pkg.packageName);
+            Log.d(TAG, "Installed Pkg: " + pkg.packageName);
         }
     }
 }
