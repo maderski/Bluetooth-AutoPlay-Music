@@ -8,7 +8,9 @@ import android.media.AudioManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -36,6 +38,9 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mFirebaseHelper = new FirebaseHelper(this);
         mFirebaseHelper.activityLaunched(FirebaseHelper.ActivityName.SETTINGS);
     }
@@ -53,6 +58,17 @@ public class SettingsActivity extends AppCompatActivity implements TimePickerFra
     @Override
     protected void onPause(){
         super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 
     private void setButtonPreferences(Context context) {
