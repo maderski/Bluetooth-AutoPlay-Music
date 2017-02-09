@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
@@ -54,24 +55,17 @@ public class PlayMusic implements A2DPPlayingState {
         Log.d(TAG, "Tried to play");
         playerControls.play();
 
-        new CountDownTimer(5000, 1000) {
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
             @Override
-            public void onTick(long l) { Log.d(TAG, "STARTED PLAYING " + Boolean.toString(startedPlaying));}
-
-            @Override
-            public void onFinish() {
-                Log.d(TAG, "Timer done");
-                if(!startedPlaying) {
-                    Log.d(TAG, "Tried to play/pause");
-                    playerControls.pause();
+            public void run() {
+                if(!startedPlaying){
                     playerControls.play();
-                    Log.d(TAG, "Started Playing: " + Boolean.toString(startedPlaying));
-                    mFirebaseHelper.musicAutoPlay(startedPlaying);
-                } else {
-                    mFirebaseHelper.musicAutoPlay(true);
                 }
             }
-        }.start();
+        };
+        handler.postDelayed(runnable, 3000);
+        mFirebaseHelper.musicAutoPlay(startedPlaying);
     }
 
     @Override
