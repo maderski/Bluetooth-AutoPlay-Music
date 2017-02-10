@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import maderski.bluetoothautoplaymusic.Interfaces.A2DPPlayingState;
 import maderski.bluetoothautoplaymusic.PlayMusic;
 
 /**
@@ -20,18 +19,15 @@ public class A2DPPlayingStateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent != null){
             if(intent.getAction() != null){
-                A2DPPlayingState a2DPPlayingState = new PlayMusic(context);
                 String action = intent.getAction();
                 if(action.equals(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED)) {
                     final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
                     switch (state){
                         case BluetoothA2dp.STATE_PLAYING:
                             Log.d(TAG, "A2DP STATE PLAYING");
-                            a2DPPlayingState.isPlaying();
                             break;
                         case BluetoothA2dp.STATE_NOT_PLAYING:
                             Log.d(TAG, "A2DP STATE NOT PLAYING");
-                            a2DPPlayingState.notPlaying();
                             break;
                     }
                 }

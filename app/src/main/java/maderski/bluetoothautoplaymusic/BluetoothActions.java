@@ -120,15 +120,9 @@ public class BluetoothActions {
             }
 
             if (playMusic) {
-                Handler handler = new Handler();
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        final PlayMusic music = new PlayMusic(context);
-                        music.play();
-                    }
-                };
-                handler.postDelayed(runnable, 3000);
+                PlayMusic music = new PlayMusic(context);
+                music.play();
+                music.checkIfPlaying(5);
             }
 
             if (launchMaps) {

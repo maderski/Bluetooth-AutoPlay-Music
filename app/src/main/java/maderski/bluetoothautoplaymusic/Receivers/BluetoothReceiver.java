@@ -84,6 +84,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     public void run() {
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
                         playMusic.play();
+                        playMusic.checkIfPlaying(5);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
