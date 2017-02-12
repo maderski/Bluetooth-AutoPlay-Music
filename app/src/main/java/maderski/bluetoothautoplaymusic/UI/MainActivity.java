@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.UI;
 
+import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -18,11 +19,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -493,12 +496,25 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         toggleButton.setChecked(btnState);
 
         try {
-            RadioGroup rdoGroup = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
-            int index = getRadioButtonIndex();
-            RadioButton radioButton = (RadioButton) rdoGroup.getChildAt(index);
-            radioButton.setChecked(true);
+            if(!installedMediaPlayers.isEmpty()) {
+                RadioGroup rdoGroup = (RadioGroup) findViewById(R.id.rdoMusicPlayers);
+                int index = getRadioButtonIndex();
+                RadioButton radioButton = (RadioButton) rdoGroup.getChildAt(index);
+                radioButton.setChecked(true);
+            } else {
+                LinearLayout musicPlayersLL = (LinearLayout)findViewById(R.id.MusicPlayers);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+                musicPlayersLL.setLayoutParams(layoutParams);
+                TextView textView = new TextView(this);
+                textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                textView.setText("No music players found");
+                musicPlayersLL.addView(textView);
+            }
         }catch (Exception e){
-            Log.e(TAG, e.getMessage());
+            String error = e.getMessage() == null ? "RadioButton Error" : e.getMessage();
+            Log.e(TAG, error);
         }
     }
 

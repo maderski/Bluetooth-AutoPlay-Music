@@ -35,7 +35,6 @@ public class BAPMService extends Service {
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
 
-        // Register receivers
         mBluetoothReceiver = new BluetoothReceiver();
         mBluetoothReceiver.onReceive(this, intent);
 
@@ -58,22 +57,18 @@ public class BAPMService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if(mBluetoothReceiver != null){
-            unregisterReceiver(mBluetoothReceiver);
             mBluetoothReceiver = null;
         }
 
         if(mBTStateChangedReceiver != null){
-            unregisterReceiver(mBTStateChangedReceiver);
             mBTStateChangedReceiver = null;
         }
 
         if(mCustomReceiver != null) {
-            unregisterReceiver(mCustomReceiver);
             mCustomReceiver = null;
         }
 
         if(mPowerReceiver != null) {
-            unregisterReceiver(mPowerReceiver);
             mPowerReceiver = null;
         }
     }
