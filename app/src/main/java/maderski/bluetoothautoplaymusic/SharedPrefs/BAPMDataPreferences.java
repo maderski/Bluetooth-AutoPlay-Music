@@ -16,6 +16,7 @@ public class BAPMDataPreferences{
     private static final String CURRENT_RINGER_SET = "CurrentRingerSet";
     private static final String ORIGINAL_MEDIA_VOLUME = "OriginalMediaVolume";
     private static final String LAUNCH_NOTIF_PRESENT = "LaunchNotifPresent";
+    private static final String IS_HEADPHONES_DEVICE = "IsHeadphonesDevice";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -38,6 +39,15 @@ public class BAPMDataPreferences{
     private static void commit(Context context){
         editor(context).commit();
         _editor = null;
+    }
+
+    public static void setIsHeadphonesDevice(Context context, boolean isHeadphones){
+        editor(context).putBoolean(IS_HEADPHONES_DEVICE, isHeadphones);
+        commit(context);
+    }
+
+    public static boolean getIsAHeadphonesDevice(Context context){
+        return reader(context).getBoolean(IS_HEADPHONES_DEVICE, false);
     }
 
     public static void setLaunchNotifPresent(Context context, boolean enabled){

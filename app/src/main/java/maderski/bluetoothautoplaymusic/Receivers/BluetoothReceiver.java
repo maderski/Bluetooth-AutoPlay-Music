@@ -85,6 +85,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
                         playMusic.play();
                         playMusic.checkIfPlaying(5);
+                        BAPMDataPreferences.setIsHeadphonesDevice(context, true);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
@@ -94,6 +95,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 playMusic.pause();
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMDataPreferences.getOriginalMediaVolume(context), 0);
+                BAPMDataPreferences.setIsHeadphonesDevice(context, false);
                 if(BuildConfig.DEBUG)
                     Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
                 break;

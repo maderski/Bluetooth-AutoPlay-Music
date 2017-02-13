@@ -25,11 +25,13 @@ public class PowerReceiver extends BroadcastReceiver {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             boolean isBTConnected = audioManager.isBluetoothA2dpOn();
             boolean powerRequired = BAPMPreferences.getPowerConnected(context);
+            boolean ranActionsOnBtConnect = BAPMDataPreferences.getRanActionsOnBtConnect(context);
+            boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context);
 
             Log.d(TAG, "Power Connected to a Selected BTDevice");
             Log.d(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
 
-            if (powerRequired && isBTConnected && !BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
+            if (powerRequired && isBTConnected && !ranActionsOnBtConnect && !isHeadphones) {
                 //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
                 Intent launchIntent = new Intent();
                 launchIntent.setAction("maderski.bluetoothautoplaymusic.pluggedinlaunch");
