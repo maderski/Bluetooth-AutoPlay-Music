@@ -565,7 +565,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         if(!isBTConnected) {
             mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
             if (on) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     Permissions permissions = new Permissions();
                     permissions.checkDoNotDisturbPermission(this, 0);
                 }
