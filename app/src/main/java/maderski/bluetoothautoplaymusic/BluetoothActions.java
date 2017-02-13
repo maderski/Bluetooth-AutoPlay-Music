@@ -1,13 +1,17 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothA2dp;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.Handler;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -98,11 +102,6 @@ public class BluetoothActions {
                 screenONLock.enableWakeLock(context);
             }
 
-            if (priorityMode) {
-                BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
-                ringerControl.soundsOFF();
-            }
-
             if (unlockScreen) {
                 launchApp.launchBAPMActivity(context);
             }
@@ -127,6 +126,24 @@ public class BluetoothActions {
 
             if (launchMaps) {
                 launchApp.launchMaps(context, 3);
+            }
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Permissions permissions = new Permissions();
+                boolean hasDoNotDisturbPerm = permissions.checkDoNotDisturbPermission(context, 10);
+                if (priorityMode && hasDoNotDisturbPerm) {
+                    BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                    ringerControl.soundsOFF();
+                } else {
+                    BroadcastReceiver broadcastReceiver = new NotifPolicyAccessChangedReceiver();
+                    IntentFilter intentFilter = new IntentFilter(NotificationManager.ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED);
+                    context.getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
+                }
+            } else {
+                if (priorityMode) {
+                    BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                    ringerControl.soundsOFF();
+                }
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, true);

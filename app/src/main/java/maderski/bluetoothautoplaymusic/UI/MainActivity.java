@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic.UI;
 
-import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -15,11 +14,11 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,8 +35,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -568,6 +565,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         if(!isBTConnected) {
             mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
             if (on) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Permissions permissions = new Permissions();
+                    permissions.checkDoNotDisturbPermission(this, 0);
+                }
                 BAPMPreferences.setPriorityMode(this, true);
                 Log.d(TAG, "Priority Button is ON");
             } else {
