@@ -103,10 +103,14 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     }
 
     private void bluetoothConnectDisconnectSwitch(Context context, Intent intent){
-
+        boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context);
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if(mBluetoothActions == null) {
             mBluetoothActions = new BluetoothActions(context);
+        }
+
+        if(isHeadphones){
+            BAPMDataPreferences.setIsHeadphonesDevice(context, false);
         }
 
         Log.d(TAG, "Bluetooth Intent Received: " + mAction);
