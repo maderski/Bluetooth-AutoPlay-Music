@@ -15,19 +15,32 @@ import maderski.bluetoothautoplaymusic.PlayMusic;
 public class A2DPPlayingStateReceiver extends BroadcastReceiver {
     private static final String TAG = "a2dpPlayingStateReceive";
 
+    public interface PlayingStateCallback{
+        void playingState(boolean isPlaying);
+    }
+
+    private PlayingStateCallback mCallback;
+
+    public A2DPPlayingStateReceiver(PlayingStateCallback callback) {
+        mCallback = callback;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent != null){
             if(intent.getAction() != null){
                 String action = intent.getAction();
                 if(action.equals(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED)) {
+
                     final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
                     switch (state){
                         case BluetoothA2dp.STATE_PLAYING:
                             Log.d(TAG, "A2DP STATE PLAYING");
+                            mCallback.playingState(true);
                             break;
                         case BluetoothA2dp.STATE_NOT_PLAYING:
                             Log.d(TAG, "A2DP STATE NOT PLAYING");
+                            mCallback.playingState(false);
                             break;
                     }
                 }

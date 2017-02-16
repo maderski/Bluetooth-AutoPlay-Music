@@ -121,7 +121,7 @@ public class BluetoothActions {
             if (playMusic) {
                 PlayMusic music = new PlayMusic(context);
                 music.play();
-                music.checkIfPlaying(5);
+                music.checkIfPlaying(15);
             }
 
             if (launchMaps) {

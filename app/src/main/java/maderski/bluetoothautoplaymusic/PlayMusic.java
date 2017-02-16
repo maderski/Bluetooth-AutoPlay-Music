@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.bluetooth.BluetoothA2dp;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.media.AudioManager;
@@ -10,17 +11,19 @@ import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Receivers.A2DPPlayingStateReceiver;
+import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
  * Created by Jason on 12/8/15.
  */
-public class PlayMusic {
+public class PlayMusic implements A2DPPlayingStateReceiver.PlayingStateCallback {
 
     private static final String TAG = PlayMusic.class.getName();
 
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
+    private BroadcastReceiver mA2DPPlayingStateReceiver;
 
     private Context mContext;
 
@@ -62,9 +65,14 @@ public class PlayMusic {
 
     public synchronized void checkIfPlaying(final int seconds){
         long milliseconds = seconds * 1000;
-        final AudioManager audioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+
+        mA2DPPlayingStateReceiver = new A2DPPlayingStateReceiver(this);
+        IntentFilter intentFilter = new IntentFilter(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED);
+        mContext.getApplicationContext().registerReceiver(mA2DPPlayingStateReceiver, intentFilter);
+
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
+            AudioManager audioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
             @Override
             public void run() {
                 if(!audioManager.isMusicActive()){
@@ -74,9 +82,21 @@ public class PlayMusic {
                 }
                 Log.d(TAG, "Is playing: " + Boolean.toString(audioManager.isMusicActive()));
                 mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());
+                if(mA2DPPlayingStateReceiver != null) {
+                    mContext.getApplicationContext().unregisterReceiver(mA2DPPlayingStateReceiver);
+                    mA2DPPlayingStateReceiver = null;
+                }
             }
         };
         handler.postDelayed(runnable, milliseconds);
+    }
+
+    @Override
+    public void playingState(boolean isPlaying) {
+        if(!isPlaying) {
+            play();
+            Log.d(TAG, "SEND PLAY COMMAND");
+        }
     }
 }
 
