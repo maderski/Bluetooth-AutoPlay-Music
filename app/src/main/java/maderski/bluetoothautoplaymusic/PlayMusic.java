@@ -65,7 +65,7 @@ public class PlayMusic implements A2DPPlayingStateReceiver.PlayingStateCallback 
 
     public synchronized void checkIfPlaying(final int seconds){
         long milliseconds = seconds * 1000;
-
+        
         mA2DPPlayingStateReceiver = new A2DPPlayingStateReceiver(this);
         IntentFilter intentFilter = new IntentFilter(BluetoothA2dp.ACTION_PLAYING_STATE_CHANGED);
         mContext.getApplicationContext().registerReceiver(mA2DPPlayingStateReceiver, intentFilter);
@@ -85,6 +85,7 @@ public class PlayMusic implements A2DPPlayingStateReceiver.PlayingStateCallback 
                 if(mA2DPPlayingStateReceiver != null) {
                     mContext.getApplicationContext().unregisterReceiver(mA2DPPlayingStateReceiver);
                     mA2DPPlayingStateReceiver = null;
+                    Log.d(TAG, "Unregistered PlayingStateReceiver");
                 }
             }
         };
