@@ -43,13 +43,11 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     public void onReceive(Context context, Intent intent) {
         if(intent != null) {
             mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            if (mDevice != null) {
+            if (mDevice != null && intent.getAction() != null) {
                 mIsSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(mDevice.getName());
                 Log.d(TAG, "Connected device: " + mDevice.getName() +
                             "\n" + "is SelectedBTDevice: " + Boolean.toString(mIsSelectedBTDevice));
-            }
 
-            if (intent.getAction() != null) {
                 mAction = intent.getAction();
                 Log.d(TAG, "ACTION: " + mAction);
                 mFirebaseHelper = new FirebaseHelper(context);
