@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +29,15 @@ public class PackageTools {
     //Launches App that is associated with that package that was put into method
     public void launchPackage(Context context, String pkg){
         Log.d("Package intent: ", pkg + " started");
-        Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        context.startActivity(LaunchIntent);
+        if(launchIntent != null) {
+            context.startActivity(launchIntent);
+        } else {
+            String toastMsg = pkg.equals(PackageTools.MAPS) || pkg.equals(PackageTools.WAZE) ?
+                    "Unable to launch MAPS or WAZE" : "Unable to launch Music player";
+            Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show();
+        }
     }
 
     //Returns true if Package is on phone
