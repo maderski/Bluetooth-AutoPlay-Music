@@ -35,22 +35,25 @@ public class Notification {
         //        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         //PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
         //        new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent appLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(mapChoicePkg);
-        appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent mapIntent = PendingIntent.getActivity(context, 0, appLaunchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle(title)//context.getResources().getString(R.string.app_name))
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_notif_icon)
                 .setAutoCancel(false)
-                .setContentIntent(mapIntent)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
                 //.addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
                 //.addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
+        Intent appLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(mapChoicePkg);
+        if(appLaunchIntent != null) {
+            appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent mapIntent = PendingIntent.getActivity(context, 0, appLaunchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(mapIntent);
+            builder.setContentTitle(title);
+        } else {
+            builder.setContentTitle("Bluetooth Autoplay Music");
+        }
         nManager.notify(nTAG, nID, builder.build());
     }
 

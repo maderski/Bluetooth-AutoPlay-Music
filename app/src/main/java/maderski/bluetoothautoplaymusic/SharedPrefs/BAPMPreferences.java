@@ -206,7 +206,7 @@ public class BAPMPreferences {
     }
 
     public static String getMapsChoice(Context context){
-        return reader(context).getString(MAPS_CHOICE_KEY, "com.google.android.apps.maps");
+        return reader(context).getString(MAPS_CHOICE_KEY, PackageTools.MAPS);
     }
 
     public static void setFirstInstall(Context context, boolean isFirstInstall){
