@@ -58,6 +58,9 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener, TimePickerFragment.TimePickerDialogListener {
 
     private static final String TAG = MainActivity.class.getName();
+    private static final String TAG_HOME_FRAGMENT = "home_fragment";
+    private static final String TAG_MAPS_FRAGMENT = "maps_fragment";
+    private static final String TAG_OPTIONS_FRAGMENT = "options_fragment";
 
     private FirebaseHelper mFirebaseHelper;
 
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.container, HomeFragment.newInstance(), "home_fragment")
+                .add(R.id.container, HomeFragment.newInstance(), TAG_HOME_FRAGMENT)
                 .commit();
 
         final BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
@@ -91,15 +94,15 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 int itemId = item.getItemId();
                 if(itemId == R.id.menu_home){
                     Fragment homeFragment = HomeFragment.newInstance();
-                    handleNavigationSelection(homeFragment, "home_fragment");
+                    handleNavigationSelection(homeFragment, TAG_HOME_FRAGMENT);
                     return true;
                 } else if(itemId == R.id.menu_maps){
                   Fragment mapsFragment = MapsFragment.newInstance();
-                    handleNavigationSelection(mapsFragment, "maps_fragment");
+                    handleNavigationSelection(mapsFragment, TAG_MAPS_FRAGMENT);
                     return true;
                 } else if(itemId == R.id.menu_options){
                     Fragment optionsFragment = OptionsFragment.newInstance();
-                    handleNavigationSelection(optionsFragment, "options_fragment");
+                    handleNavigationSelection(optionsFragment, TAG_OPTIONS_FRAGMENT);
                     mFirebaseHelper.selectionMade(FirebaseHelper.Selection.OPTIONS);
                     return true;
                 } else {
@@ -279,6 +282,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         }
 
         BAPMPreferences.setBTDevices(this, headphoneDevices);
+        HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME_FRAGMENT);
+        if(homeFragment != null) {
+            View view = homeFragment.getView();
+            homeFragment.checkboxCreator(view, this);
+        }
     }
 
     @Override

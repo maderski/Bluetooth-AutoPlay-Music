@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment {
     }
 
     //Create Checkboxes
-    private void checkboxCreator(View view, Context context) {
+    public void checkboxCreator(View view, Context context) {
 
         CheckBox checkBox;
         TextView textView;

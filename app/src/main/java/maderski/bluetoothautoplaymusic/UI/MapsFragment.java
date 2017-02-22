@@ -13,11 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.HashSet;
 import java.util.Set;
 
+import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -47,7 +52,7 @@ public class MapsFragment extends Fragment {
         Typeface typeface_bold = Typeface.createFromAsset(getContext().getAssets(), "fonts/TitilliumText600wt.otf");
         TextView textView = (TextView)rootView.findViewById(R.id.daysToLaunchLabel);
         textView.setTypeface(typeface_bold);
-
+        radiobuttonCreator(rootView, getContext());
         setDaysToLaunchLabel(rootView);
         setCheckBoxes(rootView);
         return rootView;
@@ -76,6 +81,55 @@ public class MapsFragment extends Fragment {
 
         TextView textView = (TextView)view.findViewById(R.id.daysToLaunchLabel);
         textView.setText("DAYS to launch " + mapChoice);
+    }
+
+    private void setMapChoice(View view, int index){
+        RadioGroup rdoGroup = (RadioGroup) view.findViewById(R.id.rdo_group_map_app_choice);
+        RadioButton radioButton = (RadioButton) rdoGroup.getChildAt(index);
+        radioButton.setChecked(true);
+    }
+
+    // Create Map app choice Radiobuttons
+    private void radiobuttonCreator(View view, Context context){
+
+        RadioButton rdoButton;
+        ApplicationInfo appInfo;
+        String[] mapAppNamesArray = new String[]{ PackageTools.MAPS, PackageTools.WAZE };
+        String mapAppName = "No Name";
+        PackageManager pm = context.getPackageManager();
+        LaunchApp launchApp = new LaunchApp();
+
+        RadioGroup rdoMPGroup = (RadioGroup) view.findViewById(R.id.rdo_group_map_app_choice);
+        rdoMPGroup.removeAllViews();
+
+        for(String packageName : mapAppNamesArray) {
+            try {
+                appInfo = pm.getApplicationInfo(packageName, 0);
+                mapAppName = pm.getApplicationLabel(appInfo).toString();
+                if(mapAppName.equals("Maps")){
+                    mapAppName = "Google Maps";
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+
+            rdoButton = new RadioButton(context);
+            rdoButton.setText(mapAppName);
+            rdoButton.setTextColor(getResources().getColor(R.color.colorPrimary));
+            rdoButton.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/TitilliumText400wt.otf"));
+            rdoMPGroup.addView(rdoButton);
+        }
+    }
+
+    private void mapsRadioButtonListener(View view, final Context context){
+        RadioGroup group = (RadioGroup) view.findViewById(R.id.rdo_group_map_app_choice);
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+            }
+        });
     }
 
     private void setCheckBoxes(View view){

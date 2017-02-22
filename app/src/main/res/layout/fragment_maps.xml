@@ -20,8 +20,68 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Maps Options"
+                    android:id="@+id/map_options_text"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="24sp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:typeface="monospace" />
+
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:src="@android:drawable/divider_horizontal_bright"
+                    android:background="@color/colorAccent"
+                    android:paddingLeft="150dp"
+                    android:paddingRight="150dp"
+                    android:id="@+id/imageView2" />
+
+                <TextView
+                    android:id="@+id/map_app_choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="20dp"
+                    android:text="Map app choice"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/rdo_group_map_app_choice"
+                    android:paddingTop="10dp">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New RadioButton"
+                        android:id="@+id/radioButton"
+                        android:layout_gravity="center_horizontal" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New RadioButton"
+                        android:id="@+id/radioButton2"
+                        android:layout_gravity="center_horizontal" />
+                </RadioGroup>
 
                 <TextView
                     android:id="@+id/daysToLaunchLabel"
