@@ -53,8 +53,15 @@ public class MapsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
         Typeface typeface_bold = Typeface.createFromAsset(getContext().getAssets(), "fonts/TitilliumText600wt.otf");
-        TextView textView = (TextView)rootView.findViewById(R.id.daysToLaunchLabel);
+        TextView textView = (TextView)rootView.findViewById(R.id.map_options_text);
         textView.setTypeface(typeface_bold);
+
+        textView = (TextView)rootView.findViewById(R.id.daysToLaunchLabel);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)rootView.findViewById(R.id.map_app_choice);
+        textView.setTypeface(typeface_bold);
+
         radiobuttonCreator(rootView, getContext());
         mapsRadioButtonListener(rootView, getContext());
         setMapChoice(rootView, getContext());

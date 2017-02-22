@@ -21,18 +21,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Maps Options"
+                    android:text="Map Options"
                     android:id="@+id/map_options_text"
                     android:layout_gravity="center_horizontal"
                     android:textSize="24sp"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="12dp"
                     android:textColor="@color/colorPrimary"
                     android:typeface="monospace" />
 
@@ -44,8 +45,8 @@
                     android:layout_width="wrap_content"
                     android:src="@android:drawable/divider_horizontal_bright"
                     android:background="@color/colorAccent"
-                    android:paddingLeft="150dp"
-                    android:paddingRight="150dp"
+                    android:paddingLeft="152dp"
+                    android:paddingRight="152dp"
                     android:id="@+id/imageView2" />
 
                 <TextView
@@ -53,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:paddingBottom="7dp"
+                    android:paddingBottom="8dp"
                     android:paddingTop="20dp"
                     android:text="Map app choice"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -66,7 +67,7 @@
                     android:layout_gravity="center_horizontal"
                     android:orientation="vertical"
                     android:id="@+id/rdo_group_map_app_choice"
-                    android:paddingTop="10dp">
+                    android:paddingTop="12dp">
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -88,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:paddingBottom="7dp"
+                    android:paddingBottom="8dp"
                     android:paddingTop="20dp"
                     android:text="DAYS to launch"
                     android:textAppearance="?android:attr/textAppearanceMedium"
