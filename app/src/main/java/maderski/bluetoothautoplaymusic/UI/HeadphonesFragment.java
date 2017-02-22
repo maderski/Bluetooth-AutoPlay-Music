@@ -27,11 +27,6 @@ public class HeadphonesFragment extends DialogFragment{
 
     private static final String TAG = "HeadphonesFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_SAVED_HEADPHONE_DEVICES = "savedHeadphoneDevices";
-
-    private HashSet mSavedHeadphoneDevices;
     private HashSet<String> removedDevices = new HashSet<>();
 
     private OnFragmentInteractionListener mListener;
@@ -40,20 +35,14 @@ public class HeadphonesFragment extends DialogFragment{
         // Required empty public constructor
     }
 
-    public static HeadphonesFragment newInstance(HashSet savedHeadphoneDevices) {
+    public static HeadphonesFragment newInstance() {
         HeadphonesFragment fragment = new HeadphonesFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_SAVED_HEADPHONE_DEVICES, savedHeadphoneDevices);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mSavedHeadphoneDevices = (HashSet<String>) getArguments().getSerializable(ARG_SAVED_HEADPHONE_DEVICES);
-        }
     }
 
     @Override
@@ -128,18 +117,16 @@ public class HeadphonesFragment extends DialogFragment{
     }
 
     //Get Selected Checkboxes
-    private void checkboxListener(Context context, CheckBox checkBox, String BTDevice) {
+    private void checkboxListener(final Context context, CheckBox checkBox, String BTDevice) {
         final CheckBox cb = checkBox;
         final String BTD = BTDevice;
-        final Context ctx = context;
 
-        mSavedHeadphoneDevices = new HashSet<String>(BAPMPreferences.getHeadphoneDevices(context));
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                HashSet<String> savedHeadphoneDevices = new HashSet<>(BAPMPreferences.getHeadphoneDevices(context));
                 if (cb.isChecked()) {
-                    mSavedHeadphoneDevices.add(BTD);
+                    savedHeadphoneDevices.add(BTD);
                     if(removedDevices.contains(BTD)){
                         removedDevices.remove(BTD);
                     }
@@ -148,14 +135,14 @@ public class HeadphonesFragment extends DialogFragment{
                         Log.i(TAG, "SAVED");
                     }
                 } else {
-                    mSavedHeadphoneDevices.remove(BTD);
+                    savedHeadphoneDevices.remove(BTD);
                     removedDevices.add(BTD);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "FALSE" + " " + BTD);
                     if (BuildConfig.DEBUG)
                         Log.i(TAG, "SAVED");
                 }
-                mListener.setHeadphoneDevices(mSavedHeadphoneDevices);
+                mListener.setHeadphoneDevices(savedHeadphoneDevices);
                 mListener.headDeviceSelection(BTD, cb.isChecked());
             }
         });

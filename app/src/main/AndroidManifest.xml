@@ -55,7 +55,7 @@
 
         <service android:name=".Services.BAPMService" />
 
-        <activity android:name=".UI.SettingsActivity" />
+        <activity android:name=".UI.SettingsFragment" />
         <activity
             android:name=".UI.LaunchBAPMActivity"
             android:noHistory="true"

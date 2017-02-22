@@ -37,4 +37,7 @@
     <string name="done_button_text">Done</string>
     <string name="option_set_max_media_volume">Set MAX media volume</string>
     <string name="option_set_max_volume_caption">Set the level for MAX Media Volume</string>
+    <string name="home_menu_title">Home</string>
+    <string name="options_menu_title">Options</string>
+    <string name="maps_menu_text">Maps</string>
 </resources>

@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.SharedPrefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -69,7 +70,7 @@ public class BAPMPreferences {
     }
 
     public static int getUserSetMaxVolume(Context context){
-        return reader(context).getInt(USER_SET_MAX_VOLUME_KEY, 15);
+        return reader(context).getInt(USER_SET_MAX_VOLUME_KEY, getDeviceMaxVolume(context));
     }
 
     public static void setHeadphonePreferredVolume(Context context, int volume){
@@ -197,7 +198,7 @@ public class BAPMPreferences {
     }
 
     public static Set<String> getBTDevices(Context context){
-        return reader(context).getStringSet(BTDEVICES_KEY, null);
+        return reader(context).getStringSet(BTDEVICES_KEY, new HashSet<String>());
     }
 
     public static void setMapsChoice(Context context, String SelectedMapsApp){
@@ -258,5 +259,10 @@ public class BAPMPreferences {
     private static void commit(Context context){
         editor(context).commit();
         _editor = null;
+    }
+
+    private static int getDeviceMaxVolume(Context context) {
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 }
