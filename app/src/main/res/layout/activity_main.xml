@@ -34,7 +34,7 @@
         android:layout_gravity="bottom|end"
         android:layout_alignParentBottom="true"
         app:itemBackground="@color/white"
-        app:itemIconTint="@color/colorPrimary"
-        app:itemTextColor="@color/colorPrimary"
+        app:itemIconTint="@drawable/bottom_nav_colors"
+        app:itemTextColor="@drawable/bottom_nav_colors"
         app:menu="@menu/bottom_navigation" />
 </android.support.design.widget.CoordinatorLayout>
