@@ -270,18 +270,22 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     @Override
     public void headphonesDoneClicked(HashSet<String> removeDevices) {
         Set<String> headphoneDevices = BAPMPreferences.getHeadphoneDevices(this);
+        Set<String> btDevices = BAPMPreferences.getBTDevices(this);
 
         for(String deviceName : removeDevices){
             if(headphoneDevices.contains(deviceName))
                 headphoneDevices.remove(deviceName);
         }
+
         if(BuildConfig.DEBUG) {
             for (String deviceName : headphoneDevices) {
                 Log.d(TAG, "saveBTDevice: " + deviceName);
             }
         }
 
-        BAPMPreferences.setBTDevices(this, headphoneDevices);
+        btDevices.addAll(headphoneDevices);
+        BAPMPreferences.setBTDevices(this, btDevices);
+
         HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME_FRAGMENT);
         if(homeFragment != null) {
             View view = homeFragment.getView();

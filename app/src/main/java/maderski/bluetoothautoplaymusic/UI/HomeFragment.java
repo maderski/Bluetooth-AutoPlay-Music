@@ -164,12 +164,13 @@ public class HomeFragment extends Fragment {
                     int colors[] = {textColor, textColor};
                     CompoundButtonCompat.setButtonTintList(checkBox, new ColorStateList(states, colors));
                     checkBox.setClickable(false);
+                    checkBox.setChecked(true);
+                } else if(BAPMPreferences.getBTDevices(context) != null) {
+                    checkBox.setChecked(BAPMPreferences.getBTDevices(context).contains(BTDevice));
                 }
                 checkBox.setTextColor(getResources().getColor(textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/TitilliumText400wt.otf"));
-                if(BAPMPreferences.getBTDevices(context) != null) {
-                    checkBox.setChecked(BAPMPreferences.getBTDevices(context).contains(BTDevice));
-                }
+
                 if(!BAPMPreferences.getHeadphoneDevices(context).contains(BTDevice)) {
                     checkboxListener(checkBox, BTDevice, context);
                 }

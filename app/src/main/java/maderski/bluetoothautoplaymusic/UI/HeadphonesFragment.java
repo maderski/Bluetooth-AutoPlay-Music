@@ -1,10 +1,12 @@
 package maderski.bluetoothautoplaymusic.UI;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.CompoundButtonCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
@@ -87,6 +90,19 @@ public class HeadphonesFragment extends DialogFragment{
         return rootView;
     }
 
+    private Set<String> getNonHeadphoneDevices(){
+        Set<String> btDevices = BAPMPreferences.getBTDevices(getContext());
+        Set<String> headphoneDevices = BAPMPreferences.getHeadphoneDevices(getContext());
+
+        for(String headphoneDevice : headphoneDevices){
+            if(btDevices.contains(headphoneDevice)){
+                btDevices.remove(headphoneDevice);
+            }
+        }
+
+        return btDevices;
+    }
+
     //Create Checkboxes
     private void checkboxCreator(View view) {
 
@@ -103,13 +119,25 @@ public class HeadphonesFragment extends DialogFragment{
             autoplayCkBoxLL.addView(textView);
         }else{
             for (String BTDevice : listOfBTDevices) {
+                int textColor = R.color.colorPrimary;
                 checkBox = new CheckBox(getActivity());
                 checkBox.setText(BTDevice);
-                checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if(getNonHeadphoneDevices().contains(BTDevice)) {
+                    textColor = R.color.lightGray;
+                    int states[][] = {{android.R.attr.state_checked}};
+                    int colors[] = {textColor, textColor};
+                    CompoundButtonCompat.setButtonTintList(checkBox, new ColorStateList(states, colors));
+                    checkBox.setClickable(false);
+                    checkBox.setChecked(true);
+                } else if(BAPMPreferences.getBTDevices(getActivity()) != null) {
+                    checkBox.setChecked(BAPMPreferences.getHeadphoneDevices(getContext()).contains(BTDevice));
+                }
+                checkBox.setTextColor(getResources().getColor(textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
-                if(BAPMPreferences.getBTDevices(getActivity()) != null)
-                    checkBox.setChecked(BAPMPreferences.getHeadphoneDevices(getActivity()).contains(BTDevice));
-                checkboxListener(view.getContext(), checkBox, BTDevice);
+
+                if(!getNonHeadphoneDevices().contains(BTDevice)) {
+                    checkboxListener(view.getContext(), checkBox, BTDevice);
+                }
                 autoplayCkBoxLL.addView(checkBox);
             }
         }
