@@ -187,12 +187,12 @@ public class BluetoothActions {
                 volumeControl.setOriginalVolume(context);
             }
 
-            if(closeWaze) {
-                launchApp.closeWazeOnDisconnect(context);
-            }
-
             if (sendToBackground) {
                 launchApp.sendEverythingToBackground(context);
+            }
+
+            if(closeWaze) {
+                launchApp.closeWazeOnDisconnect(context);
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);

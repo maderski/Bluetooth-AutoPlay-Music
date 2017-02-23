@@ -90,10 +90,18 @@ public class LaunchApp extends PackageTools {
         return canLaunch;
     }
 
-    public void closeWazeOnDisconnect(Context context){
-        Intent intent = new Intent();
-        intent.setAction("Eliran_Close_Intent");
-        context.sendBroadcast(intent);
+    public void closeWazeOnDisconnect(final Context context){
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent();
+                intent.setAction("Eliran_Close_Intent");
+                context.sendBroadcast(intent);
+            }
+        };
+
+        handler.postDelayed(runnable, 2000);
     }
 }
 
