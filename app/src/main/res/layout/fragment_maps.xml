@@ -53,13 +53,21 @@
                     android:id="@+id/map_app_choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="start"
                     android:paddingBottom="8dp"
                     android:paddingTop="20dp"
                     android:text="Map app choice"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="The map app to launch on bluetooth connect"
+                    android:id="@+id/map_app_choice_desc"
+                    android:textSize="12sp" />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -83,6 +91,7 @@
                         android:id="@+id/radioButton2"
                         android:layout_gravity="center_horizontal" />
                 </RadioGroup>
+
                 <Switch
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,13 +116,21 @@
                     android:id="@+id/daysToLaunchLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="start"
                     android:paddingBottom="8dp"
                     android:paddingTop="20dp"
                     android:text="DAYS to launch"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Choose what days you would like Maps/Waze to launch"
+                    android:id="@+id/days_to_launch_desc"
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:id="@+id/daysChkBoxLL"
