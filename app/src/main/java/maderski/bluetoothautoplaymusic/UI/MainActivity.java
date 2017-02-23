@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
 import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
@@ -55,7 +56,8 @@ import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
-public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener, TimePickerFragment.TimePickerDialogListener {
+public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
+        TimePickerFragment.TimePickerDialogListener {
 
     private static final String TAG = MainActivity.class.getName();
     private static final String TAG_HOME_FRAGMENT = "home_fragment";

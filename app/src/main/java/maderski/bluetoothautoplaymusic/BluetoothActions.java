@@ -11,6 +11,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -26,26 +27,14 @@ public class BluetoothActions {
     private Context context;
     private Notification notification;
     private VolumeControl volumeControl;
+    private PlayMusic mPlayMusic;
 
     public BluetoothActions(Context context){
         this.context = context;
         this.screenONLock = ScreenONLock.getInstance();
         this.notification = new Notification();
         this.volumeControl = new VolumeControl(context);
-    }
-
-    //Return true if Bluetooth Audio is ready
-    public boolean isBTAudioIsReady(Intent intent){
-        boolean ready = false;
-        int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, BluetoothA2dp.STATE_DISCONNECTED);
-        if(state == BluetoothA2dp.STATE_CONNECTED) {
-            Log.d(TAG, "CONNECTED!!! :D");
-            ready = true;
-        }else {
-            Log.d(TAG, "BTAudioIsReady: " + Boolean.toString(ready));
-        }
-
-        return ready;
+        this.mPlayMusic = new PlayMusic(context);
     }
 
     public void OnBTConnect(){
@@ -119,9 +108,8 @@ public class BluetoothActions {
             }
 
             if (playMusic) {
-                PlayMusic music = new PlayMusic(context);
-                music.play();
-                music.checkIfPlaying(15);
+                mPlayMusic.play();
+                mPlayMusic.checkIfPlaying(context, 15);
             }
 
             if (launchMaps) {
@@ -154,14 +142,17 @@ public class BluetoothActions {
     //pauses the music
     public void actionsOnBTDisconnect(){
         synchronized (this) {
+            LaunchApp launchApp = new LaunchApp();
+            RingerControl ringerControl = new RingerControl(context);
+
             boolean screenON = BAPMPreferences.getKeepScreenON(context);
             boolean priorityMode = BAPMPreferences.getPriorityMode(context);
-            boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
+            boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
             boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
             boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
-
-            RingerControl ringerControl = new RingerControl(context);
-            LaunchApp launchApp = new LaunchApp();
+            boolean closeWaze = BAPMPreferences.getCloseWazeOnDisconnect(context)
+                    && launchApp.checkPkgOnPhone(context, PackageTools.WAZE)
+                    && BAPMPreferences.getMapsChoice(context).equals(PackageTools.WAZE);
 
             notification.removeBAPMMessage(context);
 
@@ -188,9 +179,8 @@ public class BluetoothActions {
                 }
             }
 
-            if (launchMusicPlayer) {
-                PlayMusic playMusic = new PlayMusic(context);
-                playMusic.pause();
+            if (playMusic) {
+                mPlayMusic.pause();
             }
 
             if (volumeMAX) {
@@ -199,6 +189,10 @@ public class BluetoothActions {
 
             if (sendToBackground) {
                 launchApp.sendEverythingToBackground(context);
+            }
+
+            if(closeWaze) {
+                launchApp.closeWazeOnDisconnect(context);
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);

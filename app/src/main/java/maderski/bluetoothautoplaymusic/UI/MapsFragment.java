@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,22 +14,25 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class MapsFragment extends Fragment {
     private static final String TAG = "MapsFragment";
 
-    private String[] mMapAppNamesArray = new String[]{ PackageTools.MAPS, PackageTools.WAZE };
+    private List<String> mMapChoicesAvailable = new ArrayList<>();
 
     public MapsFragment() {
         // Required empty public constructor
@@ -62,12 +64,41 @@ public class MapsFragment extends Fragment {
         textView = (TextView)rootView.findViewById(R.id.map_app_choice);
         textView.setTypeface(typeface_bold);
 
-        radiobuttonCreator(rootView, getContext());
+        mMapChoicesAvailable.add(PackageTools.MAPS);
+        LaunchApp launchApp = new LaunchApp();
+        boolean wazeInstalled = launchApp.checkPkgOnPhone(getContext(), PackageTools.WAZE);
+        if(wazeInstalled){
+            mMapChoicesAvailable.add(PackageTools.WAZE);
+        }
+        setupCloseWaze(rootView);
+
+        mapsRadiobuttonCreator(rootView, getContext());
         mapsRadioButtonListener(rootView, getContext());
         setMapChoice(rootView, getContext());
         setDaysToLaunchLabel(rootView);
         setCheckBoxes(rootView);
         return rootView;
+    }
+
+    private void setupCloseWaze(View view){
+        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+        if(mapChoice.equals(PackageTools.WAZE)){
+            Switch closeWazeSwitch = (Switch)view.findViewById(R.id.close_waze);
+            closeWazeSwitch.setChecked(BAPMPreferences.getCloseWazeOnDisconnect(getContext()));
+            closeWazeSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean on = ((Switch) view).isChecked();
+                    if (on) {
+                        BAPMPreferences.setCloseWazeOnDisconnect(getContext(), true);
+                        Log.d(TAG, "CloseWazeSwitch is ON");
+                    } else {
+                        BAPMPreferences.setCloseWazeOnDisconnect(getContext(), false);
+                        Log.d(TAG, "CloseWazeSwitch is OFF");
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -97,31 +128,23 @@ public class MapsFragment extends Fragment {
 
     private void setMapChoice(View view, Context context){
         String mapChoice = BAPMPreferences.getMapsChoice(context);
-        int index = 0;
-        for(int i=0; i < mMapAppNamesArray.length; i++) {
-            if(mMapAppNamesArray[i].equals(mapChoice)) {
-                index = i;
-            }
-        }
-
+        int index = mMapChoicesAvailable.indexOf(mapChoice);
         RadioGroup rdoGroup = (RadioGroup) view.findViewById(R.id.rdo_group_map_app_choice);
         RadioButton radioButton = (RadioButton) rdoGroup.getChildAt(index);
         radioButton.setChecked(true);
     }
 
     // Create Map app choice Radiobuttons
-    private void radiobuttonCreator(View view, Context context){
-
+    private void mapsRadiobuttonCreator(View view, Context context){
         RadioButton rdoButton;
         ApplicationInfo appInfo;
         String mapAppName = "No Name";
         PackageManager pm = context.getPackageManager();
-        LaunchApp launchApp = new LaunchApp();
 
         RadioGroup rdoMPGroup = (RadioGroup) view.findViewById(R.id.rdo_group_map_app_choice);
         rdoMPGroup.removeAllViews();
 
-        for(String packageName : mMapAppNamesArray) {
+        for(String packageName : mMapChoicesAvailable) {
             try {
                 appInfo = pm.getApplicationInfo(packageName, 0);
                 mapAppName = pm.getApplicationLabel(appInfo).toString();
@@ -148,7 +171,7 @@ public class MapsFragment extends Fragment {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 View radioButton = radioGroup.findViewById(i);
                 int index = radioGroup.indexOfChild(radioButton);
-                String packageName = mMapAppNamesArray[index];
+                String packageName = mMapChoicesAvailable.get(index);
                 BAPMPreferences.setMapsChoice(context, packageName);
             }
         });

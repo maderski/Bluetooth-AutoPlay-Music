@@ -362,9 +362,6 @@ public class HomeFragment extends Fragment {
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MAPS, on);
                 if (on) {
                     BAPMPreferences.setLaunchGoogleMaps(context, true);
-//            BAPMPreferences.setUnlockScreen(this, true);
-//            mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
-                    setButtonPreferences(view, context);
                     Log.i(TAG, "MapButton is ON");
                     Log.i(TAG, "Dismiss Keyguard is ON");
                 } else {

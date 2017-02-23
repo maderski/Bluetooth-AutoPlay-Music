@@ -45,6 +45,7 @@ public class BAPMPreferences {
     private static final String HEADPHONE_DEVICES_KEY = "HeadphoneDevices";
     private static final String HEADPHONE_PREFERRED_VOLUME_KEY = "HeadphonePreferredVolumeKey";
     private static final String USER_SET_MAX_VOLUME_KEY = "UserSetMaxVolumeKey";
+    private static final String CLOSE_WAZE_ON_DISCONNECT = "CloseWazeOnDisconnect";
     
 
     //Writes to SharedPreferences, but still need to commit setting to save it
@@ -62,6 +63,15 @@ public class BAPMPreferences {
     private static SharedPreferences reader(Context context){
 
         return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+    }
+
+    public static void setCloseWazeOnDisconnect(Context context, boolean enabled){
+        editor(context).putBoolean(CLOSE_WAZE_ON_DISCONNECT, enabled);
+        commit(context);
+    }
+
+    public static boolean getCloseWazeOnDisconnect(Context context) {
+        return reader(context).getBoolean(CLOSE_WAZE_ON_DISCONNECT, true);
     }
 
     public static void setUserSetMaxVolume(Context context, int volume){

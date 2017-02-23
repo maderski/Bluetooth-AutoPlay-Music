@@ -7,13 +7,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -22,9 +20,7 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.PlayMusic;
 import maderski.bluetoothautoplaymusic.Power;
-import maderski.bluetoothautoplaymusic.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Telephone;
-import maderski.bluetoothautoplaymusic.VolumeControl;
 
 /**
  * Created by Jason on 1/5/16.
@@ -38,6 +34,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private boolean mIsSelectedBTDevice = false;
     private BluetoothActions mBluetoothActions;
     private FirebaseHelper mFirebaseHelper;
+    private Intent mIntent;
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
@@ -49,21 +46,22 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                             "\n" + "is SelectedBTDevice: " + Boolean.toString(mIsSelectedBTDevice));
 
                 mAction = intent.getAction();
+                mIntent = intent;
                 Log.d(TAG, "ACTION: " + mAction);
                 mFirebaseHelper = new FirebaseHelper(context);
-                selectedDevicePrepForActions(context, intent);
+                selectedDevicePrepForActions(context);
             }
         }
     }
 
-    private void selectedDevicePrepForActions(Context context, Intent intent){
+    private void selectedDevicePrepForActions(Context context){
         boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(mDevice.getName());
         Log.d(TAG, "is A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
         if (mIsSelectedBTDevice && !isAHeadphonesBTDevice) {
             if(!BAPMDataPreferences.getIsSelected(context)) {
                 sendIsSelectedBroadcast(context, true);
             }
-            bluetoothConnectDisconnectSwitch(context, intent);
+            bluetoothConnectDisconnectSwitch(context);
         } else if(mIsSelectedBTDevice){
             onHeadphonesConnectSwitch(context);
         }
@@ -82,7 +80,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     public void run() {
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
                         playMusic.play();
-                        playMusic.checkIfPlaying(5);
+                        playMusic.checkIfPlaying(context, 5);
                         BAPMDataPreferences.setIsHeadphonesDevice(context, true);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
@@ -100,7 +98,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         }
     }
 
-    private void bluetoothConnectDisconnectSwitch(Context context, Intent intent){
+    private void bluetoothConnectDisconnectSwitch(Context context){
         boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context);
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if(mBluetoothActions == null) {
@@ -115,7 +113,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
         switch (mAction) {
             case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
-                a2dpAction(context, intent, am);
+                a2dpAction(context, am);
                 break;
 
 //            case BluetoothDevice.ACTION_ACL_CONNECTED:
@@ -142,8 +140,9 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
                 sendIsSelectedBroadcast(context, false);
 
-                if(BAPMDataPreferences.getRanActionsOnBtConnect(context))
+                if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
                     mBluetoothActions.actionsOnBTDisconnect();
+                }
 
                 if(BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)){
                     Notification notification = new Notification();
@@ -153,8 +152,8 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         }
     }
 
-    private void a2dpAction(final Context context, Intent intent, final AudioManager am) {
-        final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
+    private void a2dpAction(final Context context, final AudioManager am) {
+        final int state = mIntent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
         switch (state) {
             case BluetoothProfile.STATE_CONNECTING:
                 Log.d(TAG, "A2DP CONNECTING");
