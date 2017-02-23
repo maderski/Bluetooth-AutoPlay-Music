@@ -21,6 +21,8 @@ public class PlayMusic {
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
 
+    private static CountDownTimer mCountDownTimer;
+
     private Context mContext;
 
     public PlayMusic(Context context){
@@ -59,9 +61,17 @@ public class PlayMusic {
         playerControls.play();
     }
 
+    public static void cancelCheckIfPlaying(){
+        if(mCountDownTimer != null){
+            mCountDownTimer.cancel();
+            Log.d(TAG, "Music Play Check CANCELLED");
+            mCountDownTimer = null;
+        }
+    }
+
     public synchronized void checkIfPlaying(final Context context, final int seconds){
         long milliseconds = seconds * 1000;
-        new CountDownTimer(milliseconds, 1000) {
+        mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             @Override
             public void onTick(long l) {

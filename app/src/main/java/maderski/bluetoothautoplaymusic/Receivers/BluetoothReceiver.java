@@ -62,7 +62,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 sendIsSelectedBroadcast(context, true);
             }
             bluetoothConnectDisconnectSwitch(context);
-        } else if(mIsSelectedBTDevice){
+        } else if(isAHeadphonesBTDevice){
             onHeadphonesConnectSwitch(context);
         }
     }
@@ -89,6 +89,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 handler.postDelayed(runnable, 5000);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+                PlayMusic.cancelCheckIfPlaying();
                 playMusic.pause();
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMDataPreferences.getOriginalMediaVolume(context), 0);
                 BAPMDataPreferences.setIsHeadphonesDevice(context, false);
@@ -141,6 +142,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 sendIsSelectedBroadcast(context, false);
 
                 if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
+                    PlayMusic.cancelCheckIfPlaying();
                     mBluetoothActions.actionsOnBTDisconnect();
                 }
 
