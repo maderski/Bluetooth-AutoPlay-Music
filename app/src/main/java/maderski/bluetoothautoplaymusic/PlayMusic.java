@@ -94,6 +94,7 @@ public class PlayMusic {
                     play();
                 }
                 mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());
+                mCountDownTimer = null;
             }
         }.start();
     }

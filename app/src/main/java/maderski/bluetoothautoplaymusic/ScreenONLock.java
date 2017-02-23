@@ -97,10 +97,11 @@ public class ScreenONLock {
                 " SR: " + Integer.toString(sunriseTime) +
                 " SS: " + Integer.toString(sunsetTime));
 
-        if (currentTime >= sunsetTime || currentTime <= sunriseTime){
-            dark = 6;
-        }else
-            dark = 10;
+        if(currentTime >= 1200){
+            dark = (currentTime >= sunsetTime) ? 6 : 10;
+        } else {
+            dark = (currentTime <= sunriseTime) ? 6 : 10;
+        }
 
         Log.d(TAG, "dark: " + Integer.toString(dark));
         return dark;
