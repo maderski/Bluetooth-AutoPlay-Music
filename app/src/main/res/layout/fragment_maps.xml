@@ -97,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:text="Close Waze"
                     android:id="@+id/close_waze"
+                    android:visibility="gone"
                     android:checked="false"
                     android:paddingTop="20dp"
                     android:textSize="16sp"
@@ -110,6 +111,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Close Waze when Bluetooth Disconnects"
                     android:id="@+id/close_waze_desc"
+                    android:visibility="gone"
                     android:textSize="12sp" />
 
                 <TextView

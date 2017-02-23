@@ -75,16 +75,18 @@ public class MapsFragment extends Fragment {
         mapsRadiobuttonCreator(rootView, getContext());
         mapsRadioButtonListener(rootView, getContext());
         setMapChoice(rootView, getContext());
-        setDaysToLaunchLabel(rootView);
         setCheckBoxes(rootView);
         return rootView;
     }
 
     private void setupCloseWaze(View view){
         String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+        Switch closeWazeSwitch = (Switch)view.findViewById(R.id.close_waze);
+        TextView closeWazeDesc = (TextView)view.findViewById(R.id.close_waze_desc);
         if(mapChoice.equals(PackageTools.WAZE)){
-            Switch closeWazeSwitch = (Switch)view.findViewById(R.id.close_waze);
             closeWazeSwitch.setChecked(BAPMPreferences.getCloseWazeOnDisconnect(getContext()));
+            closeWazeSwitch.setVisibility(View.VISIBLE);
+            closeWazeDesc.setVisibility(View.VISIBLE);
             closeWazeSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -98,6 +100,9 @@ public class MapsFragment extends Fragment {
                     }
                 }
             });
+        } else {
+            closeWazeSwitch.setVisibility(View.GONE);
+            closeWazeDesc.setVisibility(View.GONE);
         }
     }
 
@@ -109,21 +114,6 @@ public class MapsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    private void setDaysToLaunchLabel(View view){
-        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
-        PackageManager packageManager = getActivity().getPackageManager();
-        try {
-            ApplicationInfo appInfo = packageManager.getApplicationInfo(mapChoice, 0);
-            mapChoice = packageManager.getApplicationLabel(appInfo).toString();
-        }catch (Exception e){
-            Log.e(TAG, e.getMessage());
-            mapChoice = "Maps";
-        }
-
-        TextView textView = (TextView)view.findViewById(R.id.daysToLaunchLabel);
-        textView.setText("DAYS to launch " + mapChoice);
     }
 
     private void setMapChoice(View view, Context context){
@@ -173,6 +163,9 @@ public class MapsFragment extends Fragment {
                 int index = radioGroup.indexOfChild(radioButton);
                 String packageName = mMapChoicesAvailable.get(index);
                 BAPMPreferences.setMapsChoice(context, packageName);
+                if(getView() != null){
+                    setupCloseWaze(getView());
+                }
             }
         });
     }
