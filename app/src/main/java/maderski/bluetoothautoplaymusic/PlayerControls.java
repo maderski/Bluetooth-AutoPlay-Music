@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -25,8 +26,14 @@ public abstract class PlayerControls {
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
         audioManager.dispatchMediaKeyEvent(downEvent);
 
-        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
-        audioManager.dispatchMediaKeyEvent(upEvent);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
+                audioManager.dispatchMediaKeyEvent(upEvent);
+            }
+        }, 250);
     }
 }
 
@@ -64,10 +71,16 @@ class Spotify extends PlayerControls{
         i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
 
-        i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName(PackageTools.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-        context.sendOrderedBroadcast(i, null);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                i.setComponent(new ComponentName(PackageTools.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+                i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+                context.sendOrderedBroadcast(i, null);
+            }
+        }, 250);
     }
 }
 
@@ -92,12 +105,10 @@ class GooglePlayMusic extends PlayerControls{
 class OtherMusicPlayer extends PlayerControls{
     private static final String TAG = "OtherMusicPlayer";
     private AudioManager audioManager;
-    private Context mContext;
 
     public OtherMusicPlayer(Context context){
         super(context);
         this.audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        this.mContext = context;
     }
 
     @Override
@@ -107,8 +118,14 @@ class OtherMusicPlayer extends PlayerControls{
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
         audioManager.dispatchMediaKeyEvent(downEvent);
 
-        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
-        audioManager.dispatchMediaKeyEvent(upEvent);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+                audioManager.dispatchMediaKeyEvent(upEvent);
+            }
+        }, 250);
     }
 
 }
