@@ -4,13 +4,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.util.Log;
 import android.view.KeyEvent;
+
+import maderski.bluetoothautoplaymusic.Services.BAPMService;
 
 /**
  * Created by Jason on 8/1/16.
  */
 public abstract class PlayerControls {
-
     private AudioManager audioManager;
 
     public abstract void play();
@@ -29,6 +31,7 @@ public abstract class PlayerControls {
 }
 
 class BeyondPod extends PlayerControls{
+    private static final String TAG = "BeyondPod";
     private Context context;
 
     public BeyondPod(Context context){
@@ -37,6 +40,7 @@ class BeyondPod extends PlayerControls{
     }
     @Override
     public void play() {
+        Log.d(TAG, "Beyond Pod Music");
         Intent intent = new Intent();
         intent.setAction("mobi.beyondpod.command.PLAY");
         context.sendBroadcast(intent);
@@ -44,6 +48,7 @@ class BeyondPod extends PlayerControls{
 }
 
 class Spotify extends PlayerControls{
+    private static final String TAG = "Spotify";
     private Context context;
 
     public Spotify(Context context){
@@ -53,19 +58,21 @@ class Spotify extends PlayerControls{
 
     @Override
     public void play() {
+        Log.d(TAG, "Spotify Play Music");
         Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+        i.setComponent(new ComponentName(PackageTools.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
         i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
 
         i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+        i.setComponent(new ComponentName(PackageTools.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
         i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
     }
 }
 
 class GooglePlayMusic extends PlayerControls{
+    private static final String TAG = "GooglePlayMusic";
     private Context context;
 
     public GooglePlayMusic(Context context){
@@ -75,6 +82,7 @@ class GooglePlayMusic extends PlayerControls{
 
     @Override
     public void play() {
+        Log.d(TAG, "Play Google Play Music");
         Intent intent = new Intent("com.android.music.musicservicecommand");
         intent.putExtra("command", "play");
         context.sendBroadcast(intent);
@@ -82,21 +90,25 @@ class GooglePlayMusic extends PlayerControls{
 }
 
 class OtherMusicPlayer extends PlayerControls{
+    private static final String TAG = "OtherMusicPlayer";
     private AudioManager audioManager;
+    private Context mContext;
 
     public OtherMusicPlayer(Context context){
         super(context);
         this.audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        this.mContext = context;
     }
 
     @Override
     public void play() {
+        Log.d(TAG, "Other Play Music");
+
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
         audioManager.dispatchMediaKeyEvent(downEvent);
 
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
         audioManager.dispatchMediaKeyEvent(upEvent);
-
     }
 
 }

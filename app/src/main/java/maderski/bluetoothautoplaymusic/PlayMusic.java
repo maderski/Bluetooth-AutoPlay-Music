@@ -32,25 +32,21 @@ public class PlayMusic {
     }
 
     private void setPlayerControls(){
-        boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(mContext);
-        if(!launchMusicPlayer){
-            playerControls = new OtherMusicPlayer(mContext);
-        }else {
-            String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
-            switch (pkgName) {
-                case PackageTools.SPOTIFY:
-                    playerControls = new Spotify(mContext);
-                    break;
-                case PackageTools.GOOGLEPLAYMUSIC:
-                    playerControls = new GooglePlayMusic(mContext);
-                    break;
-                case PackageTools.BEYONDPOD:
-                    playerControls = new BeyondPod(mContext);
-                    break;
-                default:
-                    playerControls = new OtherMusicPlayer(mContext);
-                    break;
-            }
+        String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
+        Log.d(TAG, "PLAYER: " + pkgName);
+        switch (pkgName) {
+            case PackageTools.SPOTIFY:
+                playerControls = new Spotify(mContext);
+                break;
+            case PackageTools.GOOGLEPLAYMUSIC:
+                playerControls = new GooglePlayMusic(mContext);
+                break;
+            case PackageTools.BEYONDPOD:
+                playerControls = new BeyondPod(mContext);
+                break;
+            default:
+                playerControls = new OtherMusicPlayer(mContext);
+                break;
         }
     }
 
