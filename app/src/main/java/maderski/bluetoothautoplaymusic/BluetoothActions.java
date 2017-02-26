@@ -95,21 +95,17 @@ public class BluetoothActions {
                 launchApp.launchBAPMActivity(context);
             }
 
+            if (playMusic) {
+                mPlayMusic.play();
+                mPlayMusic.checkIfPlaying(context, 5);
+            }
+
             if (volumeMAX) {
                 volumeControl.checkSetMAXVol(context, 4);
             }
 
             if (launchMusicPlayer && !launchMaps) {
-                try {
-                    launchApp.musicPlayerLaunch(context, 3);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-
-            if (playMusic) {
-                mPlayMusic.play();
-                mPlayMusic.checkIfPlaying(context, 15);
+                launchApp.musicPlayerLaunch(context, 3);
             }
 
             if (launchMaps) {

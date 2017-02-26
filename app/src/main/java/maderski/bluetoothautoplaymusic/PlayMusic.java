@@ -86,8 +86,15 @@ public class PlayMusic {
             @Override
             public void onFinish() {
                 if(!audioManager.isMusicActive()){
-                    pause();
-                    play();
+                    String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+                    if(selectedMusicPlayer.equals(PackageTools.PANDORA)){
+                        LaunchApp launchApp = new LaunchApp();
+                        launchApp.launchPackage(context, PackageTools.PANDORA);
+                        Log.d(TAG, "PANDORA LAUNCHED");
+                    }else {
+                        Log.d(TAG, "PLAY PAUSE USED");
+                        playerControls.play_pause();
+                    }
                 }
                 mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());
                 mCountDownTimer = null;

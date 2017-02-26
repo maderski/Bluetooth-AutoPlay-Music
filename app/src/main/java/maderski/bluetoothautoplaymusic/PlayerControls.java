@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
+import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
  * Created by Jason on 8/1/16.
@@ -31,6 +32,20 @@ public abstract class PlayerControls {
             @Override
             public void run() {
                 KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
+                audioManager.dispatchMediaKeyEvent(upEvent);
+            }
+        }, 125);
+    }
+
+    public void play_pause(){
+        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        audioManager.dispatchMediaKeyEvent(downEvent);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                 audioManager.dispatchMediaKeyEvent(upEvent);
             }
         }, 125);
@@ -105,27 +120,42 @@ class GooglePlayMusic extends PlayerControls{
 class OtherMusicPlayer extends PlayerControls{
     private static final String TAG = "OtherMusicPlayer";
     private AudioManager audioManager;
+    private Context mContext;
 
     public OtherMusicPlayer(Context context){
         super(context);
         this.audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        mContext = context;
     }
 
     @Override
     public void play() {
         Log.d(TAG, "Other Play Music");
+        String packageName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
 
+        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
-        audioManager.dispatchMediaKeyEvent(downEvent);
+        downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+        downIntent.setPackage(packageName);
+        mContext.sendOrderedBroadcast(downIntent, null);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
-                audioManager.dispatchMediaKeyEvent(upEvent);
-            }
-        }, 125);
+        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+        upIntent.setPackage(packageName);
+        mContext.sendOrderedBroadcast(upIntent, null);
+
+//        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+//        audioManager.dispatchMediaKeyEvent(downEvent);
+//
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+//                audioManager.dispatchMediaKeyEvent(upEvent);
+//            }
+//        }, 125);
     }
 
 }
