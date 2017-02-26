@@ -33,7 +33,7 @@ public abstract class PlayerControls {
                 KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
                 audioManager.dispatchMediaKeyEvent(upEvent);
             }
-        }, 250);
+        }, 125);
     }
 }
 
@@ -80,7 +80,7 @@ class Spotify extends PlayerControls{
                 i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
                 context.sendOrderedBroadcast(i, null);
             }
-        }, 250);
+        }, 125);
     }
 }
 
@@ -125,7 +125,7 @@ class OtherMusicPlayer extends PlayerControls{
                 KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
                 audioManager.dispatchMediaKeyEvent(upEvent);
             }
-        }, 250);
+        }, 125);
     }
 
 }

@@ -1,5 +1,7 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -18,7 +20,7 @@ public class PackageTools {
 
     private static final String TAG = PackageTools.class.getName();
 
-    //Package Names
+    // Package Names
     public static final String MAPS = "com.google.android.apps.maps";
     public static final String WAZE = "com.waze";
     public static final String GOOGLEPLAYMUSIC = "com.google.android.music";
@@ -26,7 +28,7 @@ public class PackageTools {
     public static final String PANDORA = "com.pandora.android";
     public static final String BEYONDPOD = "mobi.beyondpod";
 
-    //Launches App that is associated with that package that was put into method
+    // Launches App that is associated with that package that was put into method
     public void launchPackage(Context context, String pkg){
         Log.d("Package intent: ", pkg + " started");
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
@@ -54,7 +56,7 @@ public class PackageTools {
         return false;
     }
 
-    //Returns Map App Name, intentionally only works with Google maps and Waze
+    // Returns Map App Name, intentionally only works with Google maps and Waze
     public String getMapAppName(Context context, String pkg){
         String mapAppName = "Not Found";
         try {
@@ -71,7 +73,7 @@ public class PackageTools {
         return mapAppName;
     }
 
-    //List of Installed Packages on the phone
+    // List of Installed Packages on the phone
     public void listOfPackagesOnPhone(Context context){
         final PackageManager pm = context.getPackageManager();
         List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -79,5 +81,18 @@ public class PackageTools {
         for(ApplicationInfo pkg:appInfo){
             Log.d(TAG, "Installed Pkg: " + pkg.packageName);
         }
+    }
+
+    // Is app running on phone
+    public boolean isAppRunning(Context context, String packageName) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+
+        for(ActivityManager.RunningAppProcessInfo processInfo : processInfos){
+            if(processInfo.processName.equals(packageName)){
+                return true;
+            }
+        }
+        return false;
     }
 }
