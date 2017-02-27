@@ -5,8 +5,6 @@
     <string name="settings_menu">Options</string>
     <string name="link_menu">Rate Me</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="put_phone_in_priority_mode">Put phone in Priority Mode</string>
     <string name="set_media_volume_to_max">Set Media Volume to MAX</string>
     <string name="launch_music_player">Launch Music Player</string>
@@ -47,5 +45,5 @@
     <string name="the_map_app_to_launch_on_bluetooth_connect">The map app to launch on bluetooth connect</string>
     <string name="close_waze_when_bluetooth_disconnects">Close Waze when Bluetooth Disconnects</string>
     <string name="map_options">Map Options</string>
-    <string name="map_app_choice">Map app choice</string>
+    <string name="map_app_choice">Map app CHOICE</string>
 </resources>

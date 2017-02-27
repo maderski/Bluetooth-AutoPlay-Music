@@ -30,7 +30,13 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         dismissKeyGuard(LaunchBAPMActivity.this);
 
         // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
-        sendHomeAppTimer(3);
+        sendHomeAppTimer(3, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
     }
 
     //Dismiss the KeyGuard
@@ -54,7 +60,7 @@ public class LaunchBAPMActivity extends AppCompatActivity {
         }
     }
 
-    private void sendHomeAppTimer(int seconds){
+    private void sendHomeAppTimer(int seconds, final Activity activity){
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(this);
         boolean launchPlayer = BAPMPreferences.getLaunchMusicPlayer(this);
 
@@ -65,6 +71,7 @@ public class LaunchBAPMActivity extends AppCompatActivity {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
+                    activity.finish();
                     LaunchApp launchApp = new LaunchApp();
                     launchApp.sendEverythingToBackground(context);
                 }

@@ -56,7 +56,6 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
     private Set<String> saveBTDevices = new HashSet<>();
-    private boolean isBTConnected = false;
     private LaunchApp launchApp;
     private List<String> installedMediaPlayers = new ArrayList<>();
     private FirebaseHelper mFirebaseHelper;
@@ -111,7 +110,6 @@ public class HomeFragment extends Fragment {
         setupUIElements(getView(), getContext());
         launchApp = new LaunchApp();
         checkIfWazeRemoved(getContext());
-        isBTConnected = BAPMDataPreferences.getRanActionsOnBtConnect(getContext());
 
     }
 
@@ -378,18 +376,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                if(!isBTConnected) {
-                    mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.KEEP_SCREEN_ON, on);
-                    if (on) {
-                        BAPMPreferences.setKeepScreenON(context, true);
-                        Log.d(TAG, "Keep Screen ON Button is ON");
-                    } else {
-                        BAPMPreferences.setKeepScreenON(context, false);
-                        Log.d(TAG, "Keep Screen ON Button is OFF");
-                    }
-                }else {
-                    ((ToggleButton) view).toggle();
-                    Snackbar.make(view, "Button disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
+                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.KEEP_SCREEN_ON, on);
+                if (on) {
+                    BAPMPreferences.setKeepScreenON(context, true);
+                    Log.d(TAG, "Keep Screen ON Button is ON");
+                } else {
+                    BAPMPreferences.setKeepScreenON(context, false);
+                    Log.d(TAG, "Keep Screen ON Button is OFF");
                 }
             }
         });
@@ -401,22 +394,17 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                if(!isBTConnected) {
+                if(on) {
                     mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
-                    if (on) {
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            Permissions permissions = new Permissions();
-                            permissions.checkDoNotDisturbPermission(context, 0);
-                        }
-                        BAPMPreferences.setPriorityMode(context, true);
-                        Log.d(TAG, "Priority Button is ON");
-                    } else {
-                        BAPMPreferences.setPriorityMode(context, false);
-                        Log.d(TAG, "Priority Button is OFF");
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Permissions permissions = new Permissions();
+                        permissions.checkDoNotDisturbPermission(context, 0);
                     }
-                }else {
-                    ((ToggleButton) view).toggle();
-                    Snackbar.make(view, "Button disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
+                    BAPMPreferences.setPriorityMode(context, true);
+                    Log.d(TAG, "Priority Button is ON");
+                } else {
+                    BAPMPreferences.setPriorityMode(context, false);
+                    Log.d(TAG, "Priority Button is OFF");
                 }
             }
         });
@@ -428,18 +416,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                if(!isBTConnected) {
-                    mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.MAX_VOLUME, on);
-                    if (on) {
-                        BAPMPreferences.setMaxVolume(context, true);
-                        Log.d(TAG, "Max Volume Button is ON");
-                    } else {
-                        BAPMPreferences.setMaxVolume(context, false);
+                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.MAX_VOLUME, on);
+                if (on) {
+                    BAPMPreferences.setMaxVolume(context, true);
+                    Log.d(TAG, "Max Volume Button is ON");
+                } else {
+                    BAPMPreferences.setMaxVolume(context, false);
                         Log.d(TAG, "Max Volume Button is OFF");
-                    }
-                }else {
-                    ((ToggleButton) view).toggle();
-                    Snackbar.make(view, "Button disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -451,18 +434,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                if(!isBTConnected) {
-                    mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MUSIC_PLAYER, on);
-                    if (on) {
-                        BAPMPreferences.setLaunchMusicPlayer(context, true);
-                        Log.d(TAG, "Launch Music Player Button is ON");
-                    } else {
-                        BAPMPreferences.setLaunchMusicPlayer(context, false);
-                        Log.d(TAG, "Launch Music Player Button is OFF");
-                    }
-                }else {
-                    ((ToggleButton) view).toggle();
-                    Snackbar.make(view, "Button disabled while connected to Bluetooth Device", Snackbar.LENGTH_LONG).show();
+                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MUSIC_PLAYER, on);
+                if (on) {
+                    BAPMPreferences.setLaunchMusicPlayer(context, true);
+                    Log.d(TAG, "Launch Music Player Button is ON");
+                } else {
+                    BAPMPreferences.setLaunchMusicPlayer(context, false);
+                    Log.d(TAG, "Launch Music Player Button is OFF");
                 }
             }
         });
