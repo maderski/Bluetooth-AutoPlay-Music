@@ -42,4 +42,10 @@
     <string name="maps_menu_text">Maps</string>
     <string name="set_autoplay_only_devices_text">Set Autoplay ONLY Devices</string>
     <string name="wifi_off_caption">Choose which Bluetooth devices turn Wifi OFF when connected and turn Wifi back ON when disconnected</string>
+    <string name="wifi_off">Wifi OFF</string>
+    <string name="close_waze">Close Waze</string>
+    <string name="the_map_app_to_launch_on_bluetooth_connect">The map app to launch on bluetooth connect</string>
+    <string name="close_waze_when_bluetooth_disconnects">Close Waze when Bluetooth Disconnects</string>
+    <string name="map_options">Map Options</string>
+    <string name="map_app_choice">Map app choice</string>
 </resources>

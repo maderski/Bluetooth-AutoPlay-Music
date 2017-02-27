@@ -28,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Map Options"
+                    android:text="@string/map_options"
                     android:id="@+id/map_options_text"
                     android:layout_gravity="center_horizontal"
                     android:textSize="24sp"
@@ -56,8 +56,7 @@
                     android:layout_gravity="start"
                     android:paddingBottom="8dp"
                     android:paddingTop="20dp"
-                    android:text="Map app choice"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/map_app_choice"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
@@ -65,7 +64,7 @@
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="The map app to launch on bluetooth connect"
+                    android:text="@string/the_map_app_to_launch_on_bluetooth_connect"
                     android:id="@+id/map_app_choice_desc"
                     android:textSize="12sp" />
 
@@ -95,7 +94,7 @@
                 <Switch
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Close Waze"
+                    android:text="@string/close_waze"
                     android:id="@+id/close_waze"
                     android:visibility="gone"
                     android:checked="false"
@@ -109,7 +108,7 @@
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Close Waze when Bluetooth Disconnects"
+                    android:text="@string/close_waze_when_bluetooth_disconnects"
                     android:id="@+id/close_waze_desc"
                     android:visibility="gone"
                     android:textSize="12sp" />
@@ -122,9 +121,8 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="20dp"
                     android:text="DAYS to launch"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="246dp"
