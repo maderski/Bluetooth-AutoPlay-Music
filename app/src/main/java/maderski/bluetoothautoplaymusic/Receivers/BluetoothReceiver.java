@@ -87,7 +87,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
                 };
-                handler.postDelayed(runnable, 5000);
+                handler.postDelayed(runnable, 6000);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 PlayMusic.cancelCheckIfPlaying();

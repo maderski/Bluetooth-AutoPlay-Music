@@ -38,9 +38,6 @@ public class PlayMusic {
             case PackageTools.SPOTIFY:
                 playerControls = new Spotify(mContext);
                 break;
-            case PackageTools.GOOGLEPLAYMUSIC:
-                playerControls = new GooglePlayMusic(mContext);
-                break;
             case PackageTools.BEYONDPOD:
                 playerControls = new BeyondPod(mContext);
                 break;
