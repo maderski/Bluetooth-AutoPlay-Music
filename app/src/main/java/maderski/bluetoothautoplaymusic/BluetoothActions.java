@@ -74,6 +74,8 @@ public class BluetoothActions {
             boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
 
+            int checkToPlaySeconds = 5;
+
             String mapChoice = BAPMPreferences.getMapsChoice(context);
 
             RingerControl ringerControl = new RingerControl(context);
@@ -93,9 +95,14 @@ public class BluetoothActions {
                 launchApp.launchBAPMActivity(context);
             }
 
+            if(isWifiOffDevice){
+                WifiControl.wifiON(context, false);
+                checkToPlaySeconds = 10;
+            }
+
             if (playMusic) {
                 mPlayMusic.play();
-                mPlayMusic.checkIfPlaying(context, 5);
+                mPlayMusic.checkIfPlaying(context, checkToPlaySeconds);
             }
 
             if (volumeMAX) {
@@ -126,10 +133,6 @@ public class BluetoothActions {
                     BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
                     ringerControl.soundsOFF();
                 }
-            }
-
-            if(isWifiOffDevice){
-                WifiControl.wifiON(context, false);
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, true);

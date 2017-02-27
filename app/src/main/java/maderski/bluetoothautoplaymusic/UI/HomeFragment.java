@@ -505,13 +505,13 @@ public class HomeFragment extends Fragment {
 
         for(ResolveInfo ri:pkgAppsList){
             String resolveInfo = ri.toString();
-            //Log.i("resolve ", resolveInfo);
             if(resolveInfo.contains("pandora")
                     || resolveInfo.contains(".playback")
                     || resolveInfo.contains("music")
                     || resolveInfo.contains("Music")
                     || resolveInfo.contains("audioplayer")
-                    || resolveInfo.contains("mobi.beyondpod")) {
+                    || resolveInfo.contains("mobi.beyondpod")
+                    || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
                 String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
                 if (!installedMediaPlayers.contains(pkg)) {
