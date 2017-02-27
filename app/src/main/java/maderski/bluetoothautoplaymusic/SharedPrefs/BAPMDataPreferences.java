@@ -17,6 +17,7 @@ public class BAPMDataPreferences{
     private static final String ORIGINAL_MEDIA_VOLUME = "OriginalMediaVolume";
     private static final String LAUNCH_NOTIF_PRESENT = "LaunchNotifPresent";
     private static final String IS_HEADPHONES_DEVICE = "IsHeadphonesDevice";
+    private static final String IS_TURN_OFF_WIFI_DEVICE = "IsTurnOffWifiDevice";
 
     //Writes to SharedPreferences, but still need to commit setting to save it
     private static SharedPreferences.Editor editor(Context context){
@@ -39,6 +40,15 @@ public class BAPMDataPreferences{
     private static void commit(Context context){
         editor(context).commit();
         _editor = null;
+    }
+
+    public static void setIsTurnOffWifiDevice(Context context, boolean isTurnOffWifiDevice){
+        editor(context).putBoolean(IS_TURN_OFF_WIFI_DEVICE, isTurnOffWifiDevice);
+        commit(context);
+    }
+
+    public static boolean getIsTurnOffWifiDevice(Context context){
+        return reader(context).getBoolean(IS_TURN_OFF_WIFI_DEVICE, false);
     }
 
     public static void setIsHeadphonesDevice(Context context, boolean isHeadphones){

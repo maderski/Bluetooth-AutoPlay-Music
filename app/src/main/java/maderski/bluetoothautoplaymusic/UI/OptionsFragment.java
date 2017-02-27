@@ -72,6 +72,8 @@ public class OptionsFragment extends Fragment {
         setButtonPreferences(rootView, getActivity());
         setMaxVolumeSeekBar(rootView);
 
+        wifiOffDeviceButton(rootView);
+
         return rootView;
     }
 
@@ -259,6 +261,18 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+    }
+
+    public void wifiOffDeviceButton(View view){
+        Button wifiOffDeviceButton = (Button)view.findViewById(R.id.wifi_off_button);
+        wifiOffDeviceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mFirebaseHelper.selectionMade(FirebaseHelper.Selection.SET_WIFI_OFF_DEVICE);
+                DialogFragment newFragment = WifiOffFragment.newInstance();
+                newFragment.show(getActivity().getSupportFragmentManager(), "wifiOffFragment");
             }
         });
     }

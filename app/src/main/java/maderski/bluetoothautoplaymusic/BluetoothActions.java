@@ -1,17 +1,14 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.app.NotificationManager;
-import android.bluetooth.BluetoothA2dp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -75,6 +72,7 @@ public class BluetoothActions {
             boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
             boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
             boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+            boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
 
             String mapChoice = BAPMPreferences.getMapsChoice(context);
 
@@ -130,6 +128,10 @@ public class BluetoothActions {
                 }
             }
 
+            if(isWifiOffDevice){
+                WifiControl.wifiON(context, false);
+            }
+
             BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
         }
     }
@@ -149,6 +151,7 @@ public class BluetoothActions {
             boolean closeWaze = BAPMPreferences.getCloseWazeOnDisconnect(context)
                     && launchApp.checkPkgOnPhone(context, PackageTools.WAZE)
                     && BAPMPreferences.getMapsChoice(context).equals(PackageTools.WAZE);
+            boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
 
             notification.removeBAPMMessage(context);
 
@@ -189,6 +192,11 @@ public class BluetoothActions {
 
             if(closeWaze) {
                 launchApp.closeWazeOnDisconnect(context);
+            }
+
+            if(isWifiOffDevice){
+                WifiControl.wifiON(context, true);
+                BAPMDataPreferences.setIsTurnOffWifiDevice(context, false);
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);

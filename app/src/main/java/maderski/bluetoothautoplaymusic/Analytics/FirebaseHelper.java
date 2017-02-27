@@ -68,7 +68,8 @@ public class FirebaseHelper {
             Selection.RATE_ME,
             Selection.SET_AUTOPLAY_ONLY,
             Selection.BLUETOOTH_DEVICE,
-            Selection.HEADPHONE_DEVICE
+            Selection.HEADPHONE_DEVICE,
+            Selection.SET_WIFI_OFF_DEVICE
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Selection {
@@ -81,6 +82,7 @@ public class FirebaseHelper {
         String DIM_TIME = "dim_time";
         String BLUETOOTH_DEVICE = "bluetooth_device";
         String HEADPHONE_DEVICE = "headphone_device";
+        String SET_WIFI_OFF_DEVICE = "set_wifi_off_device";
     }
 
     @StringDef({

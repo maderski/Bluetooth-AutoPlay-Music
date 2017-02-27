@@ -1,0 +1,95 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="24dp"
+    android:layout_gravity="center"
+    tools:context="maderski.bluetoothautoplaymusic.UI.WifiOffFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lightGray"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:text="Turn Wifi Off"
+                android:textAlignment="center"
+                android:textColor="@color/darkGray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorAccent"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="@string/devices_text"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/wifi_off_caption"
+                android:gravity="center_horizontal"
+                android:id="@+id/option_turn_wifi_off_caption"
+                android:textSize="12sp" />
+            <LinearLayout
+                android:id="@+id/wifi_off_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:checked="false"
+                    android:text="New CheckBox" />
+
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="New CheckBox" />
+
+                <CheckBox
+                    android:id="@+id/checkBox3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="New CheckBox" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/wifi_off_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/done_button_text"
+                android:textColor="@color/colorAccent"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="16dp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

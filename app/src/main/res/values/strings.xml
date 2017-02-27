@@ -40,4 +40,6 @@
     <string name="home_menu_title">Home</string>
     <string name="options_menu_title">Options</string>
     <string name="maps_menu_text">Maps</string>
+    <string name="set_autoplay_only_devices_text">Set Autoplay ONLY Devices</string>
+    <string name="wifi_off_caption">Choose which Bluetooth devices turn Wifi OFF when connected and turn Wifi back ON when disconnected</string>
 </resources>

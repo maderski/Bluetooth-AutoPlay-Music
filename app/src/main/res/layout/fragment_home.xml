@@ -301,7 +301,7 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Set Autoplay ONLY Devices"
+                            android:text="@string/set_autoplay_only_devices_text"
                             android:id="@+id/autoplay_only_button"
                             android:background="@color/white"
                             android:textColor="@color/colorAccent"

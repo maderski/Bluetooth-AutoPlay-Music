@@ -21,6 +21,7 @@ import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.PlayMusic;
 import maderski.bluetoothautoplaymusic.Power;
 import maderski.bluetoothautoplaymusic.Telephone;
+import maderski.bluetoothautoplaymusic.WifiControl;
 
 /**
  * Created by Jason on 1/5/16.
@@ -170,6 +171,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 }
 
                 mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
+                checkForWifiTurnOffDevice(context, true);
                 checksBeforeLaunch(context, mIsSelectedBTDevice, am);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
@@ -177,6 +179,9 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 break;
             case BluetoothProfile.STATE_DISCONNECTED:
                 Log.d(TAG, "A2DP DISCONNECTED");
+                if(!BAPMDataPreferences.getRanActionsOnBtConnect(context)){
+                    checkForWifiTurnOffDevice(context, false);
+                }
                 break;
         }
     }
@@ -206,5 +211,14 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     public void adapterOff(Context context) {
         BluetoothActions bluetoothActions = new BluetoothActions(context);
         bluetoothActions.actionsBTStateOff();
+    }
+
+    private void checkForWifiTurnOffDevice(Context context, boolean isConnected){
+        if(mDevice != null) {
+            if (BAPMPreferences.getTurnWifiOffDevices(context).contains(mDevice.getName())) {
+                BAPMDataPreferences.setIsTurnOffWifiDevice(context, isConnected);
+                Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: " + Boolean.toString(isConnected));
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic.Receivers;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +16,8 @@ import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 public class BTStateChangedReceiver extends BroadcastReceiver {
     private static final String TAG = "BTStateChangedReceiver";
 
-    String mAction;
-    BluetoothState mBluetoothState;
+    private String mAction;
+    private BluetoothState mBluetoothState;
 
     @Override
     public void onReceive(Context context, Intent intent) {

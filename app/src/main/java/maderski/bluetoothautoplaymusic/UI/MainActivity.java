@@ -57,7 +57,7 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
-        TimePickerFragment.TimePickerDialogListener {
+        TimePickerFragment.TimePickerDialogListener, WifiOffFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getName();
     private static final String TAG_HOME_FRAGMENT = "home_fragment";
@@ -299,5 +299,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void headDeviceSelection(String deviceName, boolean addDevice) {
         if(mFirebaseHelper != null)
             mFirebaseHelper.deviceAdd(FirebaseHelper.Selection.HEADPHONE_DEVICE, deviceName, addDevice);
+    }
+
+    @Override
+    public void setWifiOffDevices(HashSet<String> wifiOffDevices) {
+        BAPMPreferences.setTurnWifiOffDevices(this, wifiOffDevices);
     }
 }

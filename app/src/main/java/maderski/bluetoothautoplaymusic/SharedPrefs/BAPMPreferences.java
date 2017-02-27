@@ -46,23 +46,16 @@ public class BAPMPreferences {
     private static final String HEADPHONE_PREFERRED_VOLUME_KEY = "HeadphonePreferredVolumeKey";
     private static final String USER_SET_MAX_VOLUME_KEY = "UserSetMaxVolumeKey";
     private static final String CLOSE_WAZE_ON_DISCONNECT = "CloseWazeOnDisconnect";
-    
+    private static final String TURN_WIFI_OFF_DEVICES = "TurnWifiOffDevices";
 
-    //Writes to SharedPreferences, but still need to commit setting to save it
-    private static SharedPreferences.Editor editor(Context context){
 
-        if(_editor == null){
-            _editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
-            _editor.commit();
-        }
-
-        return _editor;
+    public static void setTurnWifiOffDevices(Context context, Set<String> turnWifiOffDevices){
+        editor(context).putStringSet(TURN_WIFI_OFF_DEVICES, turnWifiOffDevices);
+        commit(context);
     }
 
-    //Reads SharedPreferences value
-    private static SharedPreferences reader(Context context){
-
-        return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+    public static Set<String> getTurnWifiOffDevices(Context context){
+        return reader(context).getStringSet(TURN_WIFI_OFF_DEVICES, new HashSet<String>());
     }
 
     public static void setCloseWazeOnDisconnect(Context context, boolean enabled){
@@ -265,14 +258,31 @@ public class BAPMPreferences {
         return reader(context).getBoolean(WAIT_TILL_OFF_PHONE_KEY, true);
     }
 
+    private static int getDeviceMaxVolume(Context context) {
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    }
+
+    //Writes to SharedPreferences, but still need to commit setting to save it
+    private static SharedPreferences.Editor editor(Context context){
+
+        if(_editor == null){
+            _editor = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE).edit();
+            _editor.commit();
+        }
+
+        return _editor;
+    }
+
+    //Reads SharedPreferences value
+    private static SharedPreferences reader(Context context){
+
+        return context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+    }
+
     //Commits write to SharedPreferences
     private static void commit(Context context){
         editor(context).commit();
         _editor = null;
-    }
-
-    private static int getDeviceMaxVolume(Context context) {
-        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 }
