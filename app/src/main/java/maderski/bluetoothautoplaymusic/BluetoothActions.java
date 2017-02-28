@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -92,7 +93,11 @@ public class BluetoothActions {
             }
 
             if (unlockScreen) {
-                launchApp.launchBAPMActivity(context);
+                boolean isKeyguardLocked = ((KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
+                Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
+                if(isKeyguardLocked) {
+                    launchApp.launchBAPMActivity(context);
+                }
             }
 
             if(isWifiOffDevice){
