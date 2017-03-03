@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.AsyncTasks.StartServiceTask;
 import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
 import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
@@ -223,8 +224,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     //Starts BAPMService if it is not running
     private void checkIfBAPMServiceRunning(){
         if(!isServiceRunning(BAPMService.class)){
-            Intent serviceIntent = new Intent(this, BAPMService.class);
-            startService(serviceIntent);
+            new StartServiceTask().execute(this);
         }
     }
 

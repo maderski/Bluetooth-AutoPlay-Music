@@ -1,8 +1,10 @@
 package maderski.bluetoothautoplaymusic.Services;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
@@ -35,17 +37,16 @@ public class BAPMService extends Service {
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
 
-        mBluetoothReceiver = new BluetoothReceiver();
-        mBluetoothReceiver.onReceive(this, intent);
+        ComponentName btReceiver = new ComponentName(this, BluetoothReceiver.class);
+        ComponentName btStateReceiver = new ComponentName(this, BTStateChangedReceiver.class);
+        ComponentName customReceiver = new ComponentName(this, CustomReceiver.class);
+        ComponentName powerReceiver = new ComponentName(this, PowerReceiver.class);
 
-        mBTStateChangedReceiver = new BTStateChangedReceiver();
-        mBTStateChangedReceiver.onReceive(this, intent);
-
-        mCustomReceiver = new CustomReceiver();
-        mCustomReceiver.onReceive(this, intent);
-
-        mPowerReceiver = new PowerReceiver();
-        mPowerReceiver.onReceive(this, intent);
+        PackageManager packageManager = this.getPackageManager();
+        packageManager.setComponentEnabledSetting(btReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        packageManager.setComponentEnabledSetting(btStateReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        packageManager.setComponentEnabledSetting(customReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        packageManager.setComponentEnabledSetting(powerReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
         // Rehold WakeLock due to Service Restart
         reHoldWakeLock();
