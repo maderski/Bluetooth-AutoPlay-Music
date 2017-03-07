@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
+import maderski.bluetoothautoplaymusic.Helpers.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;

@@ -1,27 +1,17 @@
 package maderski.bluetoothautoplaymusic.UI;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
-import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CompoundButtonCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,9 +22,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -43,13 +31,12 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
+import maderski.bluetoothautoplaymusic.Helpers.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.PackageTools;
-import maderski.bluetoothautoplaymusic.Permissions;
+import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class HomeFragment extends Fragment {
@@ -397,8 +384,7 @@ public class HomeFragment extends Fragment {
                 if(on) {
                     mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Permissions permissions = new Permissions();
-                        permissions.checkDoNotDisturbPermission(context, 0);
+                        PermissionHelper.checkDoNotDisturbPermission(context, 0);
                     }
                     BAPMPreferences.setPriorityMode(context, true);
                     Log.d(TAG, "Priority Button is ON");

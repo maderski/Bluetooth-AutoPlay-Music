@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Helpers;
 
 import android.Manifest;
 import android.app.Activity;
@@ -10,29 +10,42 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.support.annotation.StringDef;
 import android.support.v4.app.ActivityCompat;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 
 /**
  * Created by Jason on 9/10/16.
  */
-public class Permissions {
+public class PermissionHelper {
+    @StringDef({
+          Permission.COARSE_LOCATION
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Permission {
+        String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    }
 
-    public void checkLocationPermission(Activity activity) {
+    public static void checkPermission(Activity activity, @Permission String permission) {
         PackageManager packageManager = activity.getPackageManager();
-        int hasPermission = packageManager.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+        int hasPermission = packageManager.checkPermission(permission,
                 activity.getPackageName());
         //Check if Permission is granted
         if(hasPermission != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(
                     activity,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    new String[]{permission},
                     PackageManager.PERMISSION_GRANTED);
         }
     }
 
-    public boolean isLocationPermissionGranted(Context context){
+    public static boolean isPermissionGranted(Context context, @Permission String permission){
         PackageManager packageManager = context.getPackageManager();
-        int hasPermission = packageManager.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+        int hasPermission = packageManager.checkPermission(permission,
                 context.getPackageName());
         //Check if Permission is granted
         return hasPermission == PackageManager.PERMISSION_GRANTED;
@@ -40,7 +53,7 @@ public class Permissions {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public boolean checkDoNotDisturbPermission(final Context context, int seconds){
+    public static boolean checkDoNotDisturbPermission(final Context context, int seconds){
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);

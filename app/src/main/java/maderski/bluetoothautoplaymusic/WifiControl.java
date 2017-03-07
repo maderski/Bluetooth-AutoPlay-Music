@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class WifiControl {
 
     public static void wifiON(Context context, boolean enable) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager.setWifiEnabled(enable);
         String toastMessage = enable ? "Wifi turned ON" : "Wifi turned OFF";
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();

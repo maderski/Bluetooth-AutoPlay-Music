@@ -1,14 +1,9 @@
 package maderski.bluetoothautoplaymusic.UI;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.CompoundButtonCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +15,7 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.List;
 
-import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
-import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.Helpers.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 

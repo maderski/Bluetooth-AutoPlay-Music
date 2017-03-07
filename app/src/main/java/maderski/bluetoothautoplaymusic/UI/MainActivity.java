@@ -6,55 +6,33 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
-import android.graphics.Typeface;
-import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.AsyncTasks.StartServiceTask;
-import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
-import maderski.bluetoothautoplaymusic.BluetoothDeviceHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
-import maderski.bluetoothautoplaymusic.LaunchApp;
-import maderski.bluetoothautoplaymusic.PackageTools;
-import maderski.bluetoothautoplaymusic.Permissions;
+import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
@@ -79,8 +57,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         mFirebaseHelper.activityLaunched(FirebaseHelper.ActivityName.MAIN);
 
         if(BAPMPreferences.getAutoBrightness(this)) {
-            Permissions permissions = new Permissions();
-            permissions.checkLocationPermission(this);
+            PermissionHelper.checkPermission(this, PermissionHelper.Permission.COARSE_LOCATION);
         }
 
         checkIfBAPMServiceRunning();

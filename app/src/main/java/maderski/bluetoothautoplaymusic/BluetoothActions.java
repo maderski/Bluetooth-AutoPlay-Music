@@ -10,6 +10,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -123,8 +124,7 @@ public class BluetoothActions {
             }
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Permissions permissions = new Permissions();
-                boolean hasDoNotDisturbPerm = permissions.checkDoNotDisturbPermission(context, 10);
+                boolean hasDoNotDisturbPerm = PermissionHelper.checkDoNotDisturbPermission(context, 10);
                 if (priorityMode && hasDoNotDisturbPerm) {
                     BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
                     ringerControl.soundsOFF();

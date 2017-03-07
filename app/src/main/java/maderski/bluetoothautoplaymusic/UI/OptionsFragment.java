@@ -1,13 +1,8 @@
 package maderski.bluetoothautoplaymusic.UI;
 
-import android.app.Activity;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -16,18 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.Permissions;
+import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -115,8 +104,7 @@ public class OptionsFragment extends Fragment {
         setting_switch = (Switch) view.findViewById(R.id.wait_till_off_phone);
         setting_switch.setChecked(btnState);
 
-        Permissions permissions = new Permissions();
-        if(!permissions.isLocationPermissionGranted(context))
+        if(!PermissionHelper.isPermissionGranted(context, PermissionHelper.Permission.COARSE_LOCATION))
             BAPMPreferences.setAutoBrightness(context, false);
         btnState = BAPMPreferences.getAutoBrightness(context);
         setting_switch = (Switch) view.findViewById(R.id.auto_brightness);
@@ -204,8 +192,7 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.AUTO_BRIGHTNESS, on);
                 if(on){
-                    Permissions permissions = new Permissions();
-                    permissions.checkLocationPermission(getActivity());
+                    PermissionHelper.checkPermission(getActivity(), PermissionHelper.Permission.COARSE_LOCATION);
 
                     BAPMPreferences.setAutoBrightness(getActivity(), true);
 
