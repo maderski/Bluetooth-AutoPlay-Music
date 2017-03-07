@@ -157,8 +157,8 @@ public class BluetoothActions {
             boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
             boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
             boolean closeWaze = BAPMPreferences.getCloseWazeOnDisconnect(context)
-                    && launchApp.checkPkgOnPhone(context, PackageTools.WAZE)
-                    && BAPMPreferences.getMapsChoice(context).equals(PackageTools.WAZE);
+                    && launchApp.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
+                    && BAPMPreferences.getMapsChoice(context).equals(PackageTools.PackageName.WAZE);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
 
             notification.removeBAPMMessage(context);

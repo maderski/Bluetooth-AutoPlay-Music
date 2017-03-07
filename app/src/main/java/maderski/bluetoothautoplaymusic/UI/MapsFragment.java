@@ -64,11 +64,11 @@ public class MapsFragment extends Fragment {
         textView = (TextView)rootView.findViewById(R.id.map_app_choice);
         textView.setTypeface(typeface_bold);
 
-        mMapChoicesAvailable.add(PackageTools.MAPS);
+        mMapChoicesAvailable.add(PackageTools.PackageName.MAPS);
         LaunchApp launchApp = new LaunchApp();
-        boolean wazeInstalled = launchApp.checkPkgOnPhone(getContext(), PackageTools.WAZE);
+        boolean wazeInstalled = launchApp.checkPkgOnPhone(getContext(), PackageTools.PackageName.WAZE);
         if(wazeInstalled){
-            mMapChoicesAvailable.add(PackageTools.WAZE);
+            mMapChoicesAvailable.add(PackageTools.PackageName.WAZE);
         }
         setupCloseWaze(rootView);
 
@@ -83,7 +83,7 @@ public class MapsFragment extends Fragment {
         String mapChoice = BAPMPreferences.getMapsChoice(getContext());
         Switch closeWazeSwitch = (Switch)view.findViewById(R.id.close_waze);
         TextView closeWazeDesc = (TextView)view.findViewById(R.id.close_waze_desc);
-        if(mapChoice.equals(PackageTools.WAZE)){
+        if(mapChoice.equals(PackageTools.PackageName.WAZE)){
             closeWazeSwitch.setChecked(BAPMPreferences.getCloseWazeOnDisconnect(getContext()));
             closeWazeSwitch.setVisibility(View.VISIBLE);
             closeWazeDesc.setVisibility(View.VISIBLE);

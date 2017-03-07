@@ -35,10 +35,10 @@ public class PlayMusic {
         String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
         Log.d(TAG, "PLAYER: " + pkgName);
         switch (pkgName) {
-            case PackageTools.SPOTIFY:
+            case PackageTools.PackageName.SPOTIFY:
                 playerControls = new Spotify(mContext);
                 break;
-            case PackageTools.BEYONDPOD:
+            case PackageTools.PackageName.BEYONDPOD:
                 playerControls = new BeyondPod(mContext);
                 break;
             default:
@@ -84,9 +84,9 @@ public class PlayMusic {
             public void onFinish() {
                 if(!audioManager.isMusicActive()){
                     String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
-                    if(selectedMusicPlayer.equals(PackageTools.PANDORA)){
+                    if(selectedMusicPlayer.equals(PackageTools.PackageName.PANDORA)){
                         LaunchApp launchApp = new LaunchApp();
-                        launchApp.launchPackage(context, PackageTools.PANDORA);
+                        launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
                         Log.d(TAG, "PANDORA LAUNCHED");
                     }else {
                         Log.d(TAG, "PLAY PAUSE USED");

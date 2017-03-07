@@ -173,7 +173,7 @@ public class BAPMPreferences {
     }
 
     public static String getPkgSelectedMusicPlayer(Context context){
-        return reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageTools.GOOGLEPLAYMUSIC);
+        return reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageTools.PackageName.GOOGLEPLAYMUSIC);
     }
 
 
@@ -210,7 +210,7 @@ public class BAPMPreferences {
     }
 
     public static String getMapsChoice(Context context){
-        return reader(context).getString(MAPS_CHOICE_KEY, PackageTools.MAPS);
+        return reader(context).getString(MAPS_CHOICE_KEY, PackageTools.PackageName.MAPS);
     }
 
     public static void setFirstInstall(Context context, boolean isFirstInstall){

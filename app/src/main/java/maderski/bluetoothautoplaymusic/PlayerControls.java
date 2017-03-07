@@ -82,7 +82,7 @@ class Spotify extends PlayerControls{
     public void play() {
         Log.d(TAG, "Spotify Play Music");
         Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName(PackageTools.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+        i.setComponent(new ComponentName(PackageTools.PackageName.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
         i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
         context.sendOrderedBroadcast(i, null);
 
@@ -91,7 +91,7 @@ class Spotify extends PlayerControls{
             @Override
             public void run() {
                 Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-                i.setComponent(new ComponentName(PackageTools.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+                i.setComponent(new ComponentName(PackageTools.PackageName.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
                 i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
                 context.sendOrderedBroadcast(i, null);
             }

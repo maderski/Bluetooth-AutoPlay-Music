@@ -104,10 +104,10 @@ public class HomeFragment extends Fragment {
     //SharedPrefs to MAPS
     private void checkIfWazeRemoved(Context context){
         String mapAppChoice = BAPMPreferences.getMapsChoice(context);
-        if(mapAppChoice.equalsIgnoreCase(PackageTools.WAZE)) {
-            if (!launchApp.checkPkgOnPhone(context, PackageTools.WAZE)) {
+        if(mapAppChoice.equalsIgnoreCase(PackageTools.PackageName.WAZE)) {
+            if (!launchApp.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)) {
                 Log.d(TAG, "Checked");
-                BAPMPreferences.setMapsChoice(context, PackageTools.MAPS);
+                BAPMPreferences.setMapsChoice(context, PackageTools.PackageName.MAPS);
             }else {
                 Log.d(TAG, "WAZE is installed");
             }

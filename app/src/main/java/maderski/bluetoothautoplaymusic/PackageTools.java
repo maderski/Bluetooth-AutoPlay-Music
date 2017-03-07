@@ -1,17 +1,17 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.StringDef;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Collections;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Jason on 7/28/16.
@@ -21,12 +21,25 @@ public class PackageTools {
     private static final String TAG = PackageTools.class.getName();
 
     // Package Names
-    public static final String MAPS = "com.google.android.apps.maps";
-    public static final String WAZE = "com.waze";
-    public static final String GOOGLEPLAYMUSIC = "com.google.android.music";
-    public static final String SPOTIFY = "com.spotify.music";
-    public static final String PANDORA = "com.pandora.android";
-    public static final String BEYONDPOD = "mobi.beyondpod";
+    @StringDef({
+            PackageName.MAPS,
+            PackageName.WAZE,
+            PackageName.GOOGLEPLAYMUSIC,
+            PackageName.SPOTIFY,
+            PackageName.PANDORA,
+            PackageName.BEYONDPOD,
+            PackageName.APPLEMUSIC
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PackageName {
+        String MAPS = "com.google.android.apps.maps";
+        String WAZE = "com.waze";
+        String GOOGLEPLAYMUSIC = "com.google.android.music";
+        String SPOTIFY = "com.spotify.music";
+        String PANDORA = "com.pandora.android";
+        String BEYONDPOD = "mobi.beyondpod";
+        String APPLEMUSIC = "com.apple.android.music";
+    }
 
     // Launches App that is associated with that package that was put into method
     public void launchPackage(Context context, String pkg){
@@ -36,7 +49,7 @@ public class PackageTools {
         if(launchIntent != null) {
             context.startActivity(launchIntent);
         } else {
-            String toastMsg = pkg.equals(PackageTools.MAPS) || pkg.equals(PackageTools.WAZE) ?
+            String toastMsg = pkg.equals(PackageName.MAPS) || pkg.equals(PackageName.WAZE) ?
                     "Unable to launch MAPS or WAZE" : "Unable to launch Music player";
             Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show();
         }

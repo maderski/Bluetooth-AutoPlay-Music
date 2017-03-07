@@ -24,7 +24,7 @@ public class Notification {
     public void BAPMMessage(Context context, String mapChoicePkg){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String mapAppName = "GOOGLE MAPS";
-        if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(PackageTools.WAZE)){
+        if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(PackageTools.PackageName.WAZE)){
             mapAppName = "WAZE";
         }
 
