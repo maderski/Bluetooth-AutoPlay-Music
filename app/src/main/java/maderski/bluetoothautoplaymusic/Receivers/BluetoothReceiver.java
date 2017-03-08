@@ -21,7 +21,7 @@ import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.PlayMusic;
 import maderski.bluetoothautoplaymusic.Power;
 import maderski.bluetoothautoplaymusic.Telephone;
-import maderski.bluetoothautoplaymusic.WifiControl;
+import maderski.bluetoothautoplaymusic.VolumeControl;
 
 /**
  * Created by Jason on 1/5/16.
@@ -71,23 +71,31 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private void onHeadphonesConnectSwitch(final Context context){
         final AudioManager audioManager  = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         final PlayMusic playMusic = new PlayMusic(context);
-        BAPMDataPreferences.setOriginalMediaVolume(context, audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-        Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+        final VolumeControl volumeControl = new VolumeControl(context);
         switch(mAction) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
+                volumeControl.saveOriginalVolume();
+                Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
                 Handler handler = new Handler();
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMPreferences.getHeadphonePreferredVolume(context), 0);
+                        // Get headphone preferred volume
+                        int preferredVolume = BAPMPreferences.getHeadphonePreferredVolume(context);
+                        // Set headphone preferred volume
+                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, preferredVolume, 0);
+                        // Play music
                         playMusic.play();
+                        // Start checking if music is playing
                         playMusic.checkIfPlaying(context, 5);
+                        Log.d(TAG, "HEADPHONE VOLUME SET TO:" + Integer.toString(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+
                         BAPMDataPreferences.setIsHeadphonesDevice(context, true);
                         if(BuildConfig.DEBUG)
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
                 };
-                handler.postDelayed(runnable, 7000);
+                handler.postDelayed(runnable, 5000);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 playMusic.pause();
@@ -95,7 +103,8 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(audioManager.isMusicActive()) {
                     playMusic.pause();
                 }
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, BAPMDataPreferences.getOriginalMediaVolume(context), 0);
+                volumeControl.checkSetOriginalVolume(4);
+
                 BAPMDataPreferences.setIsHeadphonesDevice(context, false);
                 if(BuildConfig.DEBUG)
                     Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
@@ -120,20 +129,26 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
             case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
                 a2dpAction(context, am);
                 break;
+        }
+    }
 
-//            case BluetoothDevice.ACTION_ACL_CONNECTED:
-//                waitingForBTA2dpOn(context, mIsSelectedBTDevice, bluetoothActions, am);
-//
-//                if(BuildConfig.DEBUG) {
-//                    for (String cd : BAPMPreferences.getBTDevices(context)) {
-//                        Log.i(TAG, "User selected device: " + cd);
-//                    }
-//                    Log.i(TAG, "Connected device: " + mDevice);
-//                    Log.i(TAG, "OnConnect: isAUserSelectedBTDevice: " + mIsSelectedBTDevice);
-//                }
-//                break;
-
-            case BluetoothDevice.ACTION_ACL_DISCONNECTED:
+    private void a2dpAction(final Context context, final AudioManager am) {
+        final int state = mIntent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
+        switch (state) {
+            case BluetoothProfile.STATE_CONNECTING:
+                Log.d(TAG, "A2DP CONNECTING");
+                break;
+            case BluetoothProfile.STATE_CONNECTED:
+                Log.d(TAG, "A2DP CONNECTED");
+                mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
+                checkForWifiTurnOffDevice(context, true);
+                checksBeforeLaunch(context, mIsSelectedBTDevice, am);
+                break;
+            case BluetoothProfile.STATE_DISCONNECTING:
+                Log.d(TAG, "A2DP DISCONNECTING");
+                break;
+            case BluetoothProfile.STATE_DISCONNECTED:
+                Log.d(TAG, "A2DP DISCONNECTED");
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, "Device disconnected: " + mDevice.getName());
 
@@ -154,34 +169,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                     Notification notification = new Notification();
                     notification.removeBAPMMessage(context);
                 }
-                break;
-        }
-    }
 
-    private void a2dpAction(final Context context, final AudioManager am) {
-        final int state = mIntent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
-        switch (state) {
-            case BluetoothProfile.STATE_CONNECTING:
-                Log.d(TAG, "A2DP CONNECTING");
-                break;
-            case BluetoothProfile.STATE_CONNECTED:
-                Log.d(TAG, "A2DP CONNECTED");
-                Telephone telephone = new Telephone(context);
-
-                if(!telephone.isOnCall()){
-                    BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
-                    Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
-                }
-
-                mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
-                checkForWifiTurnOffDevice(context, true);
-                checksBeforeLaunch(context, mIsSelectedBTDevice, am);
-                break;
-            case BluetoothProfile.STATE_DISCONNECTING:
-                Log.d(TAG, "A2DP DISCONNECTING");
-                break;
-            case BluetoothProfile.STATE_DISCONNECTED:
-                Log.d(TAG, "A2DP DISCONNECTED");
                 if(!BAPMDataPreferences.getRanActionsOnBtConnect(context)){
                     checkForWifiTurnOffDevice(context, false);
                 }
@@ -192,6 +180,14 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
     private void checksBeforeLaunch(Context context, Boolean isAUserSelectedBTDevice, AudioManager am){
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
         boolean isBTConnected = am.isBluetoothA2dpOn();
+
+        VolumeControl volumeControl = new VolumeControl(context);
+        Telephone telephone = new Telephone(context);
+
+        if(!telephone.isOnCall()){
+            volumeControl.saveOriginalVolume();
+            Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+        }
 
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {

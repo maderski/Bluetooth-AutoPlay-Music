@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -76,7 +77,7 @@ public class BluetoothActions {
             boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
 
-            int checkToPlaySeconds = 5;
+            int checkToPlaySeconds = 10;
 
             String mapChoice = BAPMPreferences.getMapsChoice(context);
 
@@ -103,7 +104,6 @@ public class BluetoothActions {
 
             if(isWifiOffDevice){
                 WifiControl.wifiON(context, false);
-                checkToPlaySeconds = 10;
             }
 
             if (playMusic) {
@@ -112,7 +112,14 @@ public class BluetoothActions {
             }
 
             if (volumeMAX) {
-                volumeControl.checkSetMAXVol(context, 4);
+                Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        volumeControl.checkSetMAXVol(4);
+                    }
+                };
+                handler.postDelayed(runnable, 2000);
             }
 
             if (launchMusicPlayer && !launchMaps) {
@@ -163,10 +170,6 @@ public class BluetoothActions {
 
             notification.removeBAPMMessage(context);
 
-            if (screenON) {
-                screenONLock.releaseWakeLock();
-            }
-
             if (priorityMode) {
                 int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
                 try {
@@ -190,10 +193,6 @@ public class BluetoothActions {
                 mPlayMusic.pause();
             }
 
-            if (volumeMAX) {
-                volumeControl.setOriginalVolume(context);
-            }
-
             if (sendToBackground) {
                 launchApp.sendEverythingToBackground(context);
             }
@@ -207,6 +206,14 @@ public class BluetoothActions {
                 BAPMDataPreferences.setIsTurnOffWifiDevice(context, false);
             }
 
+            if (screenON) {
+                screenONLock.releaseWakeLock();
+            }
+
+            if (volumeMAX) {
+                volumeControl.checkSetOriginalVolume(4);
+            }
+
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
         }
     }
@@ -217,7 +224,7 @@ public class BluetoothActions {
         playMusic.pause();
 
         // Put music volume back to original volume
-        volumeControl.setOriginalVolume(context);
+        volumeControl.setToOriginalVolume();
 
         if(BuildConfig.DEBUG)
             Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();

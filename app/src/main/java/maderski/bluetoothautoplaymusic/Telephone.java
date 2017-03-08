@@ -34,7 +34,6 @@ public class Telephone {
     }
 
     public void CheckIfOnPhone(VolumeControl volumeControl){
-        final Context ctx = context;
         final VolumeControl vc = volumeControl;
 
         int _seconds = 7200000; //check for 2 hours
@@ -43,14 +42,14 @@ public class Telephone {
         new CountDownTimer(_seconds, _interval)
         {
             public void onTick(long millisUntilFinished) {
-                if(Power.isPluggedIn(ctx)){
+                if(Power.isPluggedIn(context)){
                     if(isOnCall()){
                         Log.d(TAG, "On Call, check again in 3 sec");
                     }else{
                         Log.d(TAG, "Off Call, Launching Bluetooth Autoplay music");
                         cancel();
                         //Get Original Volume and Launch Bluetooth Autoplay Music
-                        vc.delayGetOrigVol(ctx, 3);
+                        vc.delayGetOrigVol(3);
                     }
                 }else{
                     //Bailing cause phone is not plugged in

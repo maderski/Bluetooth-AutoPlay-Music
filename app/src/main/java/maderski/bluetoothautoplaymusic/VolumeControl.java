@@ -3,7 +3,6 @@ package maderski.bluetoothautoplaymusic;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
@@ -18,9 +17,11 @@ public class VolumeControl {
     private static final String TAG = VolumeControl.class.getName();
 
     private AudioManager am;
+    private Context mContext;
 
     public VolumeControl(Context context){
         am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        mContext = context;
     }
 
     //Set Mediavolume to MAX
@@ -30,36 +31,44 @@ public class VolumeControl {
         am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
     }
 
+    public void saveOriginalVolume(){
+        int originalVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        BAPMDataPreferences.setOriginalMediaVolume(mContext, originalVolume);
+    }
+
     //Set original media volume
-    public void setOriginalVolume(Context context){
-        int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(context);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
+    public void setToOriginalVolume(){
+        int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(mContext);
+        int currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if(currentVolume != originalMediaVolume) {
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
+        }
 
         Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
 
     //Wait 3 seconds before getting the Original Volume and return true when done
-    public void delayGetOrigVol(final Context context, int seconds){
+    public void delayGetOrigVol(int seconds){
         int milliseconds = seconds * 1000;
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC));
+                BAPMDataPreferences.setOriginalMediaVolume(mContext, am.getStreamVolume(AudioManager.STREAM_MUSIC));
 
-                Log.d(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+                Log.d(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(mContext)));
 
                 Intent launchIntent = new Intent();
                 launchIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
-                context.sendBroadcast(launchIntent);
+                mContext.sendBroadcast(launchIntent);
             }
         };
 
         handler.postDelayed(runnable, milliseconds);
     }
 
-    private void setMaxVol(Context context){
-        final int maxVolume = BAPMPreferences.getUserSetMaxVolume(context);
+    private void setToMaxVol(){
+        final int maxVolume = BAPMPreferences.getUserSetMaxVolume(mContext);
         if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
             am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
             Log.d(TAG, "Set Volume To MAX");
@@ -68,16 +77,31 @@ public class VolumeControl {
         }
     }
 
-    public void checkSetMAXVol(final Context context, int seconds){
+    public void checkSetMAXVol(int seconds){
         int milliseconds = seconds * 1000;
 
-        setMaxVol(context);
+        setToMaxVol();
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                setMaxVol(context);
+                setToMaxVol();
+            }
+        };
+        handler.postDelayed(runnable, milliseconds);
+    }
+
+    public void checkSetOriginalVolume(int seconds) {
+        int milliseconds = seconds * 1000;
+
+        setToMaxVol();
+
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                setToOriginalVolume();
             }
         };
         handler.postDelayed(runnable, milliseconds);
