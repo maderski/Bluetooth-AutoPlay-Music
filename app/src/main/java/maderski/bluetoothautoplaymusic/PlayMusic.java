@@ -41,6 +41,9 @@ public class PlayMusic {
             case PackageTools.PackageName.BEYONDPOD:
                 playerControls = new BeyondPod(mContext);
                 break;
+            case PackageTools.PackageName.APPLEMUSIC:
+                playerControls = new AppleMusic(mContext);
+                break;
             default:
                 playerControls = new OtherMusicPlayer(mContext);
                 break;
@@ -89,7 +92,7 @@ public class PlayMusic {
                         launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
                         Log.d(TAG, "PANDORA LAUNCHED");
                     }else {
-                        Log.d(TAG, "PLAY PAUSE USED");
+                        Log.d(TAG, "Final attempt to play");
                         playerControls.play_pause();
                     }
                 }
