@@ -1,14 +1,11 @@
 package maderski.bluetoothautoplaymusic;
 
-import android.bluetooth.BluetoothA2dp;
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
@@ -93,7 +90,7 @@ public class PlayMusic {
                         Log.d(TAG, "PANDORA LAUNCHED");
                     }else {
                         Log.d(TAG, "Final attempt to play");
-                        playerControls.play_pause();
+                        playerControls.play_keyEvent();
                     }
                 }
                 mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());

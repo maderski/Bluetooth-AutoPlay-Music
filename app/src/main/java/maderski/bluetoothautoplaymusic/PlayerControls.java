@@ -24,32 +24,28 @@ public abstract class PlayerControls {
         this.mContext = context;
     }
 
-    public void pause(){
+    public synchronized void pause(){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE);
         mAudioManager.dispatchMediaKeyEvent(downEvent);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
-                mAudioManager.dispatchMediaKeyEvent(upEvent);
-            }
-        }, 125);
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE);
+        mAudioManager.dispatchMediaKeyEvent(upEvent);
     }
 
-    public void play_pause(){
+    public synchronized void play_pause(){
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
         mAudioManager.dispatchMediaKeyEvent(downEvent);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-                mAudioManager.dispatchMediaKeyEvent(upEvent);
-            }
-        }, 125);
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        mAudioManager.dispatchMediaKeyEvent(upEvent);
+    }
+
+    public synchronized void play_keyEvent(){
+        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        mAudioManager.dispatchMediaKeyEvent(downEvent);
+
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        mAudioManager.dispatchMediaKeyEvent(upEvent);
     }
 }
 
@@ -105,7 +101,6 @@ class GooglePlayMusic extends PlayerControls{
 
     @Override
     public void play() {
-        Log.d(TAG, "Play Google Play Music");
         Intent intent = new Intent("com.android.music.musicservicecommand");
         intent.putExtra("command", "play");
         mContext.sendBroadcast(intent);
@@ -115,13 +110,28 @@ class GooglePlayMusic extends PlayerControls{
 class AppleMusic extends PlayerControls {
     private static final String TAG = "AppleMusic";
 
+    private boolean handlerStarted = false;
+
     public AppleMusic(Context context){
         super(context);
     }
 
     @Override
     public void play() {
+        if(handlerStarted) {
+            PlayMusic.cancelCheckIfPlaying();
+            return;
+        }
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                play_keyEvent();
+            }
+        }, 6000);
+
+        handlerStarted = true;
     }
 }
 
@@ -133,7 +143,7 @@ class OtherMusicPlayer extends PlayerControls{
     }
 
     @Override
-    public void play() {
+    public synchronized void play() {
         Log.d(TAG, "Other Play Music");
         String packageName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
 

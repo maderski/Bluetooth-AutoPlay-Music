@@ -77,7 +77,7 @@ public class BluetoothActions {
             boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
 
-            int checkToPlaySeconds = 10;
+            int checkToPlaySeconds = 7;
 
             String mapChoice = BAPMPreferences.getMapsChoice(context);
 

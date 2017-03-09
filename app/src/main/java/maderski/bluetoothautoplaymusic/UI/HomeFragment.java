@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -228,7 +229,7 @@ public class HomeFragment extends Fragment {
     }
 
     //Get Selected Radiobutton
-    private void radioButtonListener(View view, final Context context){
+    private void radioButtonListener(final View view, final Context context){
         RadioGroup group = (RadioGroup) view.findViewById(R.id.rdoMusicPlayers);
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -242,6 +243,14 @@ public class HomeFragment extends Fragment {
                         mFirebaseHelper.musicPlayerChoice(packageName, true);
                     } else {
                         mFirebaseHelper.musicPlayerChoice(packageName, false);
+                    }
+                }
+                // Set Launch App to true since it is required by Apple Music to play
+                if(packageName.equals(PackageTools.PackageName.APPLEMUSIC)){
+                    ToggleButton launchMusicPlayerToggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
+                    if(!BAPMPreferences.getLaunchMusicPlayer(context)) {
+                        launchMusicPlayerToggleButton.setChecked(true);
+                        BAPMPreferences.setLaunchMusicPlayer(context, true);
                     }
                 }
 
@@ -330,6 +339,12 @@ public class HomeFragment extends Fragment {
         autoplayOnlyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Display message that Apple Music not supported by autoplay only
+                if(BAPMPreferences.getPkgSelectedMusicPlayer(getContext()).equals(PackageTools.PackageName.APPLEMUSIC)){
+                    Toast.makeText(getContext(), "Apple Music not supported for AUTOPLAY ONLY", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 mFirebaseHelper.selectionMade(FirebaseHelper.Selection.SET_AUTOPLAY_ONLY);
                 DialogFragment newFragment = HeadphonesFragment.newInstance();
                 newFragment.show(getActivity().getSupportFragmentManager(), "autoplayOnlyFragment");
