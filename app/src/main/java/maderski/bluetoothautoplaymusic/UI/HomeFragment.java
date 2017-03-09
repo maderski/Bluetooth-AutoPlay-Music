@@ -247,6 +247,13 @@ public class HomeFragment extends Fragment {
                 }
                 // Set Launch App to true since it is required by Apple Music to play
                 if(packageName.equals(PackageTools.PackageName.APPLEMUSIC)){
+                    Set<String> autoplayOnly = BAPMPreferences.getHeadphoneDevices(context);
+                    if(!autoplayOnly.isEmpty()){
+                        BAPMPreferences.setHeadphoneDevices(context, new HashSet<String>());
+                        checkboxCreator(view, getContext());
+                        Toast.makeText(getContext(), "Apple Music not supported for AUTOPLAY ONLY", Toast.LENGTH_LONG).show();
+                    }
+
                     ToggleButton launchMusicPlayerToggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
                     if(!BAPMPreferences.getLaunchMusicPlayer(context)) {
                         launchMusicPlayerToggleButton.setChecked(true);
