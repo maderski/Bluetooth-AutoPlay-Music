@@ -37,12 +37,10 @@ public class BAPMService extends Service {
         }
 
         ComponentName btReceiver = new ComponentName(this, BluetoothReceiver.class);
-        ComponentName customReceiver = new ComponentName(this, CustomReceiver.class);
         ComponentName powerReceiver = new ComponentName(this, PowerReceiver.class);
 
         PackageManager packageManager = this.getPackageManager();
         packageManager.setComponentEnabledSetting(btReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-        packageManager.setComponentEnabledSetting(customReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         packageManager.setComponentEnabledSetting(powerReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
         // Rehold WakeLock due to Service Restart

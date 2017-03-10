@@ -16,6 +16,8 @@ import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
+import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
+import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -235,6 +237,7 @@ public class BluetoothActions {
 
         if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
             actionsOnBTDisconnect();
+            ReceiverHelper.stopReceiver(context, CustomReceiver.class);
         }
     }
 }

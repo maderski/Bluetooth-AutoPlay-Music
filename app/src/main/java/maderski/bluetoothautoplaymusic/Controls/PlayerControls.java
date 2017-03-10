@@ -17,6 +17,8 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 public abstract class PlayerControls {
     public AudioManager mAudioManager;
     public Context mContext;
+    
+    public boolean mAppleMusicStarted = false;
 
     public abstract void play();
 
@@ -111,15 +113,14 @@ class GooglePlayMusic extends PlayerControls{
 class AppleMusic extends PlayerControls {
     private static final String TAG = "AppleMusic";
 
-    private boolean handlerStarted = false;
-
     public AppleMusic(Context context){
         super(context);
     }
 
     @Override
     public void play() {
-        if(handlerStarted) {
+
+        if(mAppleMusicStarted) {
             PlayMusicControl.cancelCheckIfPlaying();
             return;
         }
@@ -132,7 +133,7 @@ class AppleMusic extends PlayerControls {
             }
         }, 6000);
 
-        handlerStarted = true;
+        mAppleMusicStarted = true;
     }
 }
 

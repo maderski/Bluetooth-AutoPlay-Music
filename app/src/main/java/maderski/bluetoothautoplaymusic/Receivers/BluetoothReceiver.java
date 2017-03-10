@@ -9,11 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.media.tv.TvContract;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -99,7 +101,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 };
                 handler.postDelayed(runnable, 5000);
 
-                startBTStateReceiver(context);
+                ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 playMusicControl.pause();
@@ -113,7 +115,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(BuildConfig.DEBUG)
                     Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
 
-                stopBTStateReceiver(context);
+                ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
                 break;
         }
     }
@@ -149,7 +151,8 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
                 checkForWifiTurnOffDevice(context, true);
                 checksBeforeLaunch(context, mIsSelectedBTDevice, am);
-                startBTStateReceiver(context);
+                ReceiverHelper.startReceiver(context, CustomReceiver.class);
+                ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
                 Log.d(TAG, "A2DP DISCONNECTING");
@@ -180,7 +183,8 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(!BAPMDataPreferences.getRanActionsOnBtConnect(context)){
                     checkForWifiTurnOffDevice(context, false);
                 }
-                stopBTStateReceiver(context);
+                ReceiverHelper.stopReceiver(context, CustomReceiver.class);
+                ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
                 break;
         }
     }
@@ -216,7 +220,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
     @Override
     public void adapterOff(Context context) {
-        stopBTStateReceiver(context);
+        ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
         BluetoothActions bluetoothActions = new BluetoothActions(context);
         bluetoothActions.actionsBTStateOff();
     }
@@ -228,19 +232,5 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: " + Boolean.toString(isConnected));
             }
         }
-    }
-
-    private void startBTStateReceiver(Context context) {
-        Log.d(TAG, "BTStateReceiver STARTED!");
-        ComponentName btStateReceiver = new ComponentName(context, BTStateChangedReceiver.class);
-        PackageManager packageManager = context.getPackageManager();
-        packageManager.setComponentEnabledSetting(btStateReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-    }
-
-    private void stopBTStateReceiver(Context context){
-        Log.d(TAG, "BTStateReceiver STOPPED!");
-        ComponentName btStateReceiver = new ComponentName(context, BTStateChangedReceiver.class);
-        PackageManager packageManager = context.getPackageManager();
-        packageManager.setComponentEnabledSetting(btStateReceiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
     }
 }
