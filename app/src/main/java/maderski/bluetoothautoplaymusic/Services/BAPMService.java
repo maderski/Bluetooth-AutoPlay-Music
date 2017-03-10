@@ -25,7 +25,6 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
  */
 public class BAPMService extends Service {
     BluetoothReceiver mBluetoothReceiver;
-    BTStateChangedReceiver mBTStateChangedReceiver;
     CustomReceiver mCustomReceiver;
     PowerReceiver mPowerReceiver;
 
@@ -38,13 +37,11 @@ public class BAPMService extends Service {
         }
 
         ComponentName btReceiver = new ComponentName(this, BluetoothReceiver.class);
-        ComponentName btStateReceiver = new ComponentName(this, BTStateChangedReceiver.class);
         ComponentName customReceiver = new ComponentName(this, CustomReceiver.class);
         ComponentName powerReceiver = new ComponentName(this, PowerReceiver.class);
 
         PackageManager packageManager = this.getPackageManager();
         packageManager.setComponentEnabledSetting(btReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-        packageManager.setComponentEnabledSetting(btStateReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         packageManager.setComponentEnabledSetting(customReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         packageManager.setComponentEnabledSetting(powerReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
@@ -61,9 +58,6 @@ public class BAPMService extends Service {
             mBluetoothReceiver = null;
         }
 
-        if(mBTStateChangedReceiver != null){
-            mBTStateChangedReceiver = null;
-        }
 
         if(mCustomReceiver != null) {
             mCustomReceiver = null;

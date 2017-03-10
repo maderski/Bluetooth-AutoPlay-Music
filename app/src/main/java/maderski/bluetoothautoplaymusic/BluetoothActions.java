@@ -233,6 +233,8 @@ public class BluetoothActions {
         if(BuildConfig.DEBUG)
             Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
 
-        actionsOnBTDisconnect();
+        if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
+            actionsOnBTDisconnect();
+        }
     }
 }

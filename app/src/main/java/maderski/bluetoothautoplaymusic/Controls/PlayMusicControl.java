@@ -42,7 +42,7 @@ public class PlayMusicControl {
                 playerControls = new BeyondPod(mContext);
                 break;
             case PackageTools.PackageName.APPLEMUSIC:
-                playerControls = new AppleMusicAndroid(mContext);
+                playerControls = new AppleMusic(mContext);
                 break;
             default:
                 playerControls = new OtherMusicPlayer(mContext);
