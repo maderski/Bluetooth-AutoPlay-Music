@@ -18,10 +18,10 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.BluetoothActions;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Notification;
-import maderski.bluetoothautoplaymusic.PlayMusic;
+import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Power;
 import maderski.bluetoothautoplaymusic.Telephone;
-import maderski.bluetoothautoplaymusic.VolumeControl;
+import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 
 /**
  * Created by Jason on 1/5/16.
@@ -70,7 +70,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
     private void onHeadphonesConnectSwitch(final Context context){
         final AudioManager audioManager  = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        final PlayMusic playMusic = new PlayMusic(context);
+        final PlayMusicControl playMusicControl = new PlayMusicControl(context);
         final VolumeControl volumeControl = new VolumeControl(context);
         switch(mAction) {
             case BluetoothDevice.ACTION_ACL_CONNECTED:
@@ -85,9 +85,9 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                         // Set headphone preferred volume
                         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, preferredVolume, 0);
                         // Play music
-                        playMusic.play();
+                        playMusicControl.play();
                         // Start checking if music is playing
-                        playMusic.checkIfPlaying(context, 5);
+                        playMusicControl.checkIfPlaying(context, 5);
                         Log.d(TAG, "HEADPHONE VOLUME SET TO:" + Integer.toString(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
 
                         BAPMDataPreferences.setIsHeadphonesDevice(context, true);
@@ -98,10 +98,10 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 handler.postDelayed(runnable, 5000);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
-                playMusic.pause();
-                PlayMusic.cancelCheckIfPlaying();
+                playMusicControl.pause();
+                PlayMusicControl.cancelCheckIfPlaying();
                 if(audioManager.isMusicActive()) {
-                    playMusic.pause();
+                    playMusicControl.pause();
                 }
                 volumeControl.checkSetOriginalVolume(4);
 
@@ -161,7 +161,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 sendIsSelectedBroadcast(context, false);
 
                 if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
-                    PlayMusic.cancelCheckIfPlaying();
+                    PlayMusicControl.cancelCheckIfPlaying();
                     mBluetoothActions.actionsOnBTDisconnect();
                 }
 

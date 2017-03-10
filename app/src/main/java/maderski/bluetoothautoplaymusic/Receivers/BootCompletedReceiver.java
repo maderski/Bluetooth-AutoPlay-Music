@@ -1,18 +1,18 @@
-package maderski.bluetoothautoplaymusic.Services;
+package maderski.bluetoothautoplaymusic.Receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.Services.BAPMService;
 
 /**
  * Created by Jason on 1/5/16.
  */
-public class AutostartBAPMService extends BroadcastReceiver {
+public class BootCompletedReceiver extends BroadcastReceiver {
 
-    private static final String TAG = AutostartBAPMService.class.getName();
+    private static final String TAG = BootCompletedReceiver.class.getName();
 
     //Start BAPMService on phone boot
     public void onReceive(Context context, Intent intent) {

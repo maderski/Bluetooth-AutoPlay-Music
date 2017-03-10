@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Controls;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;

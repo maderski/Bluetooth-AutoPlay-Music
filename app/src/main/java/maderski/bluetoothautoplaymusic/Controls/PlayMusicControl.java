@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Controls;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -6,14 +6,17 @@ import android.os.CountDownTimer;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
  * Created by Jason on 12/8/15.
  */
-public class PlayMusic {
+public class PlayMusicControl {
 
-    private static final String TAG = PlayMusic.class.getName();
+    private static final String TAG = PlayMusicControl.class.getName();
 
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
@@ -22,7 +25,7 @@ public class PlayMusic {
 
     private Context mContext;
 
-    public PlayMusic(Context context){
+    public PlayMusicControl(Context context){
         mContext = context;
         setPlayerControls();
         mFirebaseHelper = new FirebaseHelper(context);

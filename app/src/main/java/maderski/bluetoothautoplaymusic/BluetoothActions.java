@@ -11,6 +11,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
+import maderski.bluetoothautoplaymusic.Controls.RingerControl;
+import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
+import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
@@ -27,14 +31,14 @@ public class BluetoothActions {
     private Context context;
     private Notification notification;
     private VolumeControl volumeControl;
-    private PlayMusic mPlayMusic;
+    private PlayMusicControl mPlayMusicControl;
 
     public BluetoothActions(Context context){
         this.context = context;
         this.screenONLock = ScreenONLock.getInstance();
         this.notification = new Notification();
         this.volumeControl = new VolumeControl(context);
-        this.mPlayMusic = new PlayMusic(context);
+        this.mPlayMusicControl = new PlayMusicControl(context);
     }
 
     public void OnBTConnect(){
@@ -107,8 +111,8 @@ public class BluetoothActions {
             }
 
             if (playMusic) {
-                mPlayMusic.play();
-                mPlayMusic.checkIfPlaying(context, checkToPlaySeconds);
+                mPlayMusicControl.play();
+                mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
             }
 
             if (volumeMAX) {
@@ -190,7 +194,7 @@ public class BluetoothActions {
             }
 
             if (playMusic) {
-                mPlayMusic.pause();
+                mPlayMusicControl.pause();
             }
 
             if (sendToBackground) {
@@ -220,8 +224,8 @@ public class BluetoothActions {
 
     public void actionsBTStateOff(){
         // Pause music
-        PlayMusic playMusic = new PlayMusic(context);
-        playMusic.pause();
+        PlayMusicControl playMusicControl = new PlayMusicControl(context);
+        playMusicControl.pause();
 
         // Put music volume back to original volume
         volumeControl.setToOriginalVolume();

@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Controls;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
@@ -119,7 +120,7 @@ class AppleMusicAndroid extends PlayerControls {
     @Override
     public void play() {
         if(handlerStarted) {
-            PlayMusic.cancelCheckIfPlaying();
+            PlayMusicControl.cancelCheckIfPlaying();
             return;
         }
 

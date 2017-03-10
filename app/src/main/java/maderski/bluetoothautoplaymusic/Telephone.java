@@ -1,10 +1,11 @@
 package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 
 /**
  * Created by Jason on 6/1/16.

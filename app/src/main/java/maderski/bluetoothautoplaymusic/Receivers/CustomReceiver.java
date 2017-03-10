@@ -3,16 +3,11 @@ package maderski.bluetoothautoplaymusic.Receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.BluetoothActions;
-import maderski.bluetoothautoplaymusic.BuildConfig;
-import maderski.bluetoothautoplaymusic.Notification;
-import maderski.bluetoothautoplaymusic.ScreenONLock;
-import maderski.bluetoothautoplaymusic.VolumeControl;
 
 /**
  * Created by Jason on 7/28/16.
