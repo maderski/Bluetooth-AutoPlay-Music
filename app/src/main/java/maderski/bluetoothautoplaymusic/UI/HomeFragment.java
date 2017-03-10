@@ -245,27 +245,35 @@ public class HomeFragment extends Fragment {
                         mFirebaseHelper.musicPlayerChoice(packageName, false);
                     }
                 }
-                // Set Launch App to true since it is required by Apple Music to play
-                if(packageName.equals(PackageTools.PackageName.APPLEMUSIC)){
-                    Set<String> autoplayOnly = BAPMPreferences.getHeadphoneDevices(context);
-                    if(!autoplayOnly.isEmpty()){
-                        BAPMPreferences.setHeadphoneDevices(context, new HashSet<String>());
-                        checkboxCreator(view, getContext());
-                        Toast.makeText(getContext(), "Apple Music not supported for AUTOPLAY ONLY", Toast.LENGTH_LONG).show();
-                    }
 
-                    ToggleButton launchMusicPlayerToggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
-                    if(!BAPMPreferences.getLaunchMusicPlayer(context)) {
-                        launchMusicPlayerToggleButton.setChecked(true);
-                        BAPMPreferences.setLaunchMusicPlayer(context, true);
-                    }
-                }
+                setAppleMusicRequirements(view, context, packageName);
 
                 Log.d(TAG, Integer.toString(index));
                 Log.d(TAG, BAPMPreferences.getPkgSelectedMusicPlayer(context));
                 Log.d(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
             }
         });
+    }
+
+    private void setAppleMusicRequirements(View view, Context context, String packageName){
+        // Set Launch App and Unlock screen to true since it is required by Apple Music to play
+        if(packageName.equals(PackageTools.PackageName.APPLEMUSIC)){
+            Set<String> autoplayOnly = BAPMPreferences.getHeadphoneDevices(context);
+            if(!autoplayOnly.isEmpty()){
+                BAPMPreferences.setHeadphoneDevices(context, new HashSet<String>());
+                checkboxCreator(view, getContext());
+                Toast.makeText(getContext(), "Apple Music not supported for AUTOPLAY ONLY", Toast.LENGTH_LONG).show();
+            }
+
+            ToggleButton launchMusicPlayerToggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
+            ToggleButton unlockScreenToggleButton = (ToggleButton)view.findViewById(R.id.UnlockToggleButton);
+            if(!BAPMPreferences.getLaunchMusicPlayer(context) || !BAPMPreferences.getUnlockScreen(context)) {
+                launchMusicPlayerToggleButton.setChecked(true);
+                unlockScreenToggleButton.setChecked(true);
+                BAPMPreferences.setLaunchMusicPlayer(context, true);
+                BAPMPreferences.setUnlockScreen(context, true);
+            }
+        }
     }
 
     //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
