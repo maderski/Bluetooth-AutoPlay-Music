@@ -262,16 +262,25 @@ public class HomeFragment extends Fragment {
             if(!autoplayOnly.isEmpty()){
                 BAPMPreferences.setHeadphoneDevices(context, new HashSet<String>());
                 checkboxCreator(view, getContext());
-                Toast.makeText(getContext(), "Apple Music not supported for AUTOPLAY ONLY", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show();
             }
 
             ToggleButton launchMusicPlayerToggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
             ToggleButton unlockScreenToggleButton = (ToggleButton)view.findViewById(R.id.UnlockToggleButton);
-            if(!BAPMPreferences.getLaunchMusicPlayer(context) || !BAPMPreferences.getUnlockScreen(context)) {
+            ToggleButton launchMapsToggleButton = (ToggleButton)view.findViewById(R.id.MapsToggleButton);
+            if(!BAPMPreferences.getLaunchMusicPlayer(context) || !BAPMPreferences.getUnlockScreen(context)
+                    || BAPMPreferences.getLaunchGoogleMaps(context)) {
+
+                if(BAPMPreferences.getLaunchGoogleMaps(context)){
+                    Toast.makeText(context, "Launching of Maps/Waze not supported with Apple music", Toast.LENGTH_LONG).show();
+                }
+
                 launchMusicPlayerToggleButton.setChecked(true);
                 unlockScreenToggleButton.setChecked(true);
+                launchMapsToggleButton.setChecked(false);
                 BAPMPreferences.setLaunchMusicPlayer(context, true);
                 BAPMPreferences.setUnlockScreen(context, true);
+                BAPMPreferences.setLaunchGoogleMaps(context, false);
             }
         }
     }
@@ -356,7 +365,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 // Display message that Apple Music not supported by autoplay only
                 if(BAPMPreferences.getPkgSelectedMusicPlayer(getContext()).equals(PackageTools.PackageName.APPLEMUSIC)){
-                    Toast.makeText(getContext(), "Apple Music not supported for AUTOPLAY ONLY", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show();
                     return;
                 }
 

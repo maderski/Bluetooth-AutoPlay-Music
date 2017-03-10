@@ -107,12 +107,12 @@ class GooglePlayMusic extends PlayerControls{
     }
 }
 
-class AppleMusic extends PlayerControls {
+class AppleMusicAndroid extends PlayerControls {
     private static final String TAG = "AppleMusic";
 
     private boolean handlerStarted = false;
 
-    public AppleMusic(Context context){
+    public AppleMusicAndroid(Context context){
         super(context);
     }
 
