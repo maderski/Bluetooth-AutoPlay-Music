@@ -151,7 +151,6 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
                 checkForWifiTurnOffDevice(context, true);
                 checksBeforeLaunch(context, mIsSelectedBTDevice, am);
-                ReceiverHelper.startReceiver(context, CustomReceiver.class);
                 ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
@@ -183,7 +182,6 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(!BAPMDataPreferences.getRanActionsOnBtConnect(context)){
                     checkForWifiTurnOffDevice(context, false);
                 }
-                ReceiverHelper.stopReceiver(context, CustomReceiver.class);
                 ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
                 break;
         }

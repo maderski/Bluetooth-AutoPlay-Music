@@ -237,7 +237,6 @@ public class BluetoothActions {
 
         if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
             actionsOnBTDisconnect();
-            ReceiverHelper.stopReceiver(context, CustomReceiver.class);
         }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
@@ -36,12 +37,9 @@ public class BAPMService extends Service {
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
 
-        ComponentName btReceiver = new ComponentName(this, BluetoothReceiver.class);
-        ComponentName powerReceiver = new ComponentName(this, PowerReceiver.class);
-
-        PackageManager packageManager = this.getPackageManager();
-        packageManager.setComponentEnabledSetting(btReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-        packageManager.setComponentEnabledSetting(powerReceiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        ReceiverHelper.startReceiver(this, BluetoothReceiver.class);
+        ReceiverHelper.startReceiver(this, PowerReceiver.class);
+        ReceiverHelper.startReceiver(this, CustomReceiver.class);
 
         // Rehold WakeLock due to Service Restart
         reHoldWakeLock();
