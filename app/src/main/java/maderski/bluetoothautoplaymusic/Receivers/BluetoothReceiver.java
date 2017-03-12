@@ -101,7 +101,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 };
                 handler.postDelayed(runnable, 5000);
 
-                ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
+                //ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:
                 playMusicControl.pause();
@@ -115,7 +115,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(BuildConfig.DEBUG)
                     Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
 
-                ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+                //ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
                 break;
         }
     }
@@ -151,7 +151,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 mFirebaseHelper.connectViaA2DP(mDevice.getName(), true);
                 checkForWifiTurnOffDevice(context, true);
                 checksBeforeLaunch(context, mIsSelectedBTDevice, am);
-                ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
+                //ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
                 Log.d(TAG, "A2DP DISCONNECTING");
@@ -182,7 +182,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(!BAPMDataPreferences.getRanActionsOnBtConnect(context)){
                     checkForWifiTurnOffDevice(context, false);
                 }
-                ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+                //ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
                 break;
         }
     }
@@ -218,7 +218,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
 
     @Override
     public void adapterOff(Context context) {
-        ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+        //ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
         BluetoothActions bluetoothActions = new BluetoothActions(context);
         bluetoothActions.actionsBTStateOff();
     }

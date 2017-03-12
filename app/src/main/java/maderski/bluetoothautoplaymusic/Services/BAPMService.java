@@ -40,6 +40,7 @@ public class BAPMService extends Service {
         ReceiverHelper.startReceiver(this, BluetoothReceiver.class);
         ReceiverHelper.startReceiver(this, PowerReceiver.class);
         ReceiverHelper.startReceiver(this, CustomReceiver.class);
+        ReceiverHelper.startReceiver(this, BTStateChangedReceiver.class);
 
         // Rehold WakeLock due to Service Restart
         reHoldWakeLock();
