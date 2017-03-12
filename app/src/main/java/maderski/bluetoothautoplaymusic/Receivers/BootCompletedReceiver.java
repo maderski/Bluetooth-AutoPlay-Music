@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.Receivers;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,16 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent serviceIntent = new Intent(context, BAPMService.class);
         context.startService(serviceIntent);
+        // Check to see Bluetooth is enabled and if not enable it
+        checkIfBluetoothEnabled();
 
         Log.d(TAG, "BAPM Service Started");
+    }
+
+    private void checkIfBluetoothEnabled(){
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!bluetoothAdapter.isEnabled()){
+            bluetoothAdapter.enable();
+        }
     }
 }
