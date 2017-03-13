@@ -99,7 +99,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show();
                     }
                 };
-                handler.postDelayed(runnable, 5000);
+                handler.postDelayed(runnable, 6000);
 
                 ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
                 break;
