@@ -17,8 +17,6 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 public abstract class PlayerControls {
     public AudioManager mAudioManager;
     public Context mContext;
-    
-    public boolean mAppleMusicStarted = false;
 
     public abstract void play();
 
@@ -120,20 +118,16 @@ class AppleMusic extends PlayerControls {
     @Override
     public void play() {
 
-        if(mAppleMusicStarted) {
-            PlayMusicControl.cancelCheckIfPlaying();
-            return;
+        if(PlayMusicControl.cancelCheckIfPlaying()){
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    play_keyEvent();
+                }
+            }, 6000);
         }
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                play_keyEvent();
-            }
-        }, 6000);
-
-        mAppleMusicStarted = true;
     }
 }
 

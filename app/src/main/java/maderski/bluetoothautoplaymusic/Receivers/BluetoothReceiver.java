@@ -191,14 +191,6 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         boolean powerRequired = BAPMPreferences.getPowerConnected(context);
         boolean isBTConnected = am.isBluetoothA2dpOn();
 
-        VolumeControl volumeControl = new VolumeControl(context);
-        Telephone telephone = new Telephone(context);
-
-        if(!telephone.isOnCall()){
-            volumeControl.saveOriginalVolume();
-            Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
-        }
-
         if (powerRequired && isAUserSelectedBTDevice) {
             if (Power.isPluggedIn(context) && isBTConnected) {
                 mBluetoothActions.OnBTConnect();

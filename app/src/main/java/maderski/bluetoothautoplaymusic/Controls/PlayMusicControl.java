@@ -57,12 +57,14 @@ public class PlayMusicControl {
         playerControls.play();
     }
 
-    public static void cancelCheckIfPlaying(){
+    public static boolean cancelCheckIfPlaying(){
         if(mCountDownTimer != null){
             mCountDownTimer.cancel();
             Log.d(TAG, "Music Play Check CANCELLED");
             mCountDownTimer = null;
+            return true;
         }
+        return false;
     }
 
     public synchronized void checkIfPlaying(final Context context, final int seconds){

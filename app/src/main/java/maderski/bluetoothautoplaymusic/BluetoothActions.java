@@ -119,6 +119,9 @@ public class BluetoothActions {
             }
 
             if (volumeMAX) {
+                volumeControl.saveOriginalVolume();
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+
                 Handler handler = new Handler();
                 Runnable runnable = new Runnable() {
                     @Override
@@ -126,7 +129,7 @@ public class BluetoothActions {
                         volumeControl.checkSetMAXVol(4);
                     }
                 };
-                handler.postDelayed(runnable, 2000);
+                handler.postDelayed(runnable, 3000);
             }
 
             if (launchMusicPlayer && !launchMaps) {
