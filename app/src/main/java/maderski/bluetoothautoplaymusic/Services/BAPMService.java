@@ -1,10 +1,8 @@
 package maderski.bluetoothautoplaymusic.Services;
 
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
@@ -13,11 +11,10 @@ import android.widget.Toast;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
-import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
-import maderski.bluetoothautoplaymusic.ScreenONLock;
+import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 

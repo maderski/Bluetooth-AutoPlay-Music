@@ -1,20 +1,13 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Controls.WakeLockControl;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.util.Log;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
+
 /**
  * Created by Jason on 2/7/16.
  */

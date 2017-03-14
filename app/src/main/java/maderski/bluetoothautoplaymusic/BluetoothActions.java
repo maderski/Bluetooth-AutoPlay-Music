@@ -14,11 +14,12 @@ import android.widget.Toast;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
+import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
+import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
-import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -49,7 +50,7 @@ public class BluetoothActions {
 
         if(waitTillOffPhone){
             Telephone telephone = new Telephone(context);
-            if(Power.isPluggedIn(context)){
+            if(PowerHelper.isPluggedIn(context)){
                 if(telephone.isOnCall()) {
                     Log.d(TAG, "ON a call");
                     //Run CheckIfOnPhone
@@ -132,7 +133,8 @@ public class BluetoothActions {
                 handler.postDelayed(runnable, 3000);
             }
 
-            if (launchMusicPlayer && !launchMaps) {
+            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context);
+            if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
                 launchApp.musicPlayerLaunch(context, 3);
             }
 

@@ -50,7 +50,7 @@ public abstract class PlayerControls {
     }
 }
 
-class BeyondPod extends PlayerControls{
+class BeyondPod extends PlayerControls {
     private static final String TAG = "BeyondPod";
 
     public BeyondPod(Context context){
@@ -65,7 +65,7 @@ class BeyondPod extends PlayerControls{
     }
 }
 
-class Spotify extends PlayerControls{
+class Spotify extends PlayerControls {
     private static final String TAG = "Spotify";
 
     public Spotify(Context context){
@@ -131,7 +131,7 @@ class AppleMusic extends PlayerControls {
     }
 }
 
-class OtherMusicPlayer extends PlayerControls{
+class OtherMusicPlayer extends PlayerControls {
     private static final String TAG = "OtherMusicPlayer";
 
     public OtherMusicPlayer(Context context){

@@ -218,22 +218,57 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     }
 
     @Override
-    public void onTimeSet(boolean isDim, TimePicker view, int hourOfDay, int minute) {
+    public void onTimeSet(String typeOfTimeSet, boolean isEndTime, TimePicker view, int hourOfDay, int minute) {
         int timeSet = (hourOfDay * 100) + minute;
-        if(isDim){
-            mFirebaseHelper.manualTimeSet(FirebaseHelper.Selection.DIM_TIME, true);
-            BAPMPreferences.setDimTime(this, timeSet);
-            Log.d("Settings", "Dim brightness");
-        }else{
-            mFirebaseHelper.manualTimeSet(FirebaseHelper.Selection.BRIGHT_TIME, true);
-            BAPMPreferences.setBrightTime(this, timeSet);
-            Log.d("Settings", "Bright brightness");
+
+        switch(typeOfTimeSet) {
+            case TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME:
+                if (isEndTime) {
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.DIM_TIME, true);
+                    BAPMPreferences.setDimTime(this, timeSet);
+                    Log.d("Settings", "Dim brightness");
+                } else {
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.BRIGHT_TIME, true);
+                    BAPMPreferences.setBrightTime(this, timeSet);
+                    Log.d("Settings", "Bright brightness");
+                }
+                break;
+            case TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN:
+                if(isEndTime) {
+                    BAPMPreferences.setMorningEndTime(this, timeSet);
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_END_TIME, true);
+                } else {
+                    BAPMPreferences.setMorningStartTime(this, timeSet);
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_START_TIME, true);
+                }
+                Log.d("Map Options", typeOfTimeSet);
+                break;
+            case TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN:
+                if(isEndTime) {
+                    BAPMPreferences.setEveningEndTime(this, timeSet);
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_END_TIME, true);
+                } else {
+                    BAPMPreferences.setEveningStartTime(this, timeSet);
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_START_TIME, true);
+                }
+                Log.d("Map Options", typeOfTimeSet);
+                break;
         }
     }
 
     @Override
-    public void onTimeCancel(boolean isDim) {
-        mFirebaseHelper.manualTimeSet(isDim ? FirebaseHelper.Selection.DIM_TIME : FirebaseHelper.Selection.BRIGHT_TIME, false);
+    public void onTimeCancel(String typeOfTimeSet, boolean isEndTime) {
+        switch(typeOfTimeSet) {
+            case TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME:
+                mFirebaseHelper.timeSetSelected(isEndTime ? FirebaseHelper.Selection.DIM_TIME : FirebaseHelper.Selection.BRIGHT_TIME, false);
+                break;
+            case TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN:
+
+                break;
+            case TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN:
+
+                break;
+        }
     }
 
     @Override

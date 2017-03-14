@@ -69,7 +69,11 @@ public class FirebaseHelper {
             Selection.SET_AUTOPLAY_ONLY,
             Selection.BLUETOOTH_DEVICE,
             Selection.HEADPHONE_DEVICE,
-            Selection.SET_WIFI_OFF_DEVICE
+            Selection.SET_WIFI_OFF_DEVICE,
+            Selection.MORNING_START_TIME,
+            Selection.MORNING_END_TIME,
+            Selection.EVENING_START_TIME,
+            Selection.EVENING_END_TIME
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Selection {
@@ -83,6 +87,10 @@ public class FirebaseHelper {
         String BLUETOOTH_DEVICE = "bluetooth_device";
         String HEADPHONE_DEVICE = "headphone_device";
         String SET_WIFI_OFF_DEVICE = "set_wifi_off_device";
+        String MORNING_START_TIME = "morning_start_time";
+        String MORNING_END_TIME = "morning_end_time";
+        String EVENING_START_TIME = "evening_start_time";
+        String EVENING_END_TIME = "evening_end_time";
     }
 
     @StringDef({
@@ -135,7 +143,7 @@ public class FirebaseHelper {
         mFirebaseAnalytics.logEvent("waze", null);
     }
 
-    public void manualTimeSet(String selection, boolean wasSet){
+    public void timeSetSelected(@Selection String selection, boolean wasSet){
         Bundle bundle = new Bundle();
         bundle.putInt(FirebaseAnalytics.Param.VALUE, wasSet ? 1 : 0);
         mFirebaseAnalytics.logEvent(selection, bundle);

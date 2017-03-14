@@ -5,11 +5,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -64,6 +66,12 @@ public class MapsFragment extends Fragment {
         textView = (TextView)rootView.findViewById(R.id.map_app_choice);
         textView.setTypeface(typeface_bold);
 
+        textView = (TextView)rootView.findViewById(R.id.morning_timespan_label);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)rootView.findViewById(R.id.evening_timespan_label);
+        textView.setTypeface(typeface_bold);
+
         mMapChoicesAvailable.add(PackageTools.PackageName.MAPS);
         LaunchApp launchApp = new LaunchApp();
         boolean wazeInstalled = launchApp.checkPkgOnPhone(getContext(), PackageTools.PackageName.WAZE);
@@ -72,14 +80,20 @@ public class MapsFragment extends Fragment {
         }
         setupCloseWaze(rootView);
 
+        setupLaunchTimesSwitch(rootView);
         mapsRadiobuttonCreator(rootView, getContext());
         mapsRadioButtonListener(rootView, getContext());
         setMapChoice(rootView, getContext());
         setCheckBoxes(rootView);
+        morningStartButton(rootView);
+        morningEndButton(rootView);
+        eveningStartButton(rootView);
+        eveningEndButton(rootView);
+
         return rootView;
     }
 
-    private void setupCloseWaze(View view){
+    public void setupCloseWaze(View view){
         String mapChoice = BAPMPreferences.getMapsChoice(getContext());
         Switch closeWazeSwitch = (Switch)view.findViewById(R.id.close_waze);
         TextView closeWazeDesc = (TextView)view.findViewById(R.id.close_waze_desc);
@@ -104,6 +118,26 @@ public class MapsFragment extends Fragment {
             closeWazeSwitch.setVisibility(View.GONE);
             closeWazeDesc.setVisibility(View.GONE);
         }
+    }
+
+    public void setupLaunchTimesSwitch(View view){
+        boolean isEnabled = BAPMPreferences.getUseTimesToLaunchMaps(getContext());
+        Switch launchTimesSwitch = (Switch)view.findViewById(R.id.times_to_launch);
+        launchTimesSwitch.setChecked(isEnabled);
+
+        launchTimesSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean on = ((Switch)view).isChecked();
+                if(on) {
+                    BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
+                    Log.d(TAG, "LaunchTimesSwitch is ON");
+                } else {
+                    BAPMPreferences.setUseTimesToLaunchMaps(getContext(), false);
+                    Log.d(TAG, "LaunchTimesSwitch is OFF");
+                }
+            }
+        });
     }
 
     @Override
@@ -205,6 +239,50 @@ public class MapsFragment extends Fragment {
                     daysToLaunch.remove(dn);
                     BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
                 }
+            }
+        });
+    }
+
+    public void morningStartButton(View view){
+        Button morningStartButton = (Button)view.findViewById(R.id.morning_start_button);
+        morningStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN, false, BAPMPreferences.getMorningStartTime(getActivity()), "Set Morning Start Time");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+            }
+        });
+    }
+
+    public void morningEndButton(View view){
+        Button morningEndButton = (Button)view.findViewById(R.id.morning_end_button);
+        morningEndButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN, true, BAPMPreferences.getMorningEndTime(getActivity()), "Set Morning End Time");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+            }
+        });
+    }
+
+    public void eveningStartButton(View view){
+        Button eveningStartButton = (Button)view.findViewById(R.id.evening_start_button);
+        eveningStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN, false, BAPMPreferences.getEveningStartTime(getActivity()), "Set Evening Start Time");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+            }
+        });
+    }
+
+    public void eveningEndButton(View view){
+        Button eveningEndButton = (Button)view.findViewById(R.id.evening_end_button);
+        eveningEndButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN, true, BAPMPreferences.getEveningEndTime(getActivity()), "Set Evening End Time");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });
     }

@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     tools:context="maderski.bluetoothautoplaymusic.UI.MapsFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,33 +20,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="12dp"
-                android:paddingBottom="20dp">
+                android:paddingBottom="20dp"
+                android:paddingTop="12dp">
 
                 <TextView
+                    android:id="@+id/map_options_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/map_options"
-                    android:id="@+id/map_options_text"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="24sp"
                     android:paddingBottom="12dp"
                     android:paddingTop="12dp"
+                    android:text="@string/map_options"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
                     android:typeface="monospace" />
 
                 <ImageView
-                    android:layout_gravity="center_horizontal"
-                    android:paddingTop="1dp"
-                    android:paddingBottom="1dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
-                    android:src="@android:drawable/divider_horizontal_bright"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:background="@color/colorAccent"
+                    android:paddingBottom="1dp"
                     android:paddingLeft="152dp"
                     android:paddingRight="152dp"
-                    android:id="@+id/imageView2" />
+                    android:paddingTop="1dp"
+                    android:src="@android:drawable/divider_horizontal_bright" />
 
                 <TextView
                     android:id="@+id/map_app_choice"
@@ -61,57 +60,161 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/map_app_choice_desc"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/the_map_app_to_launch_on_bluetooth_connect"
-                    android:id="@+id/map_app_choice_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 
                 <RadioGroup
+                    android:id="@+id/rdo_group_map_app_choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:id="@+id/rdo_group_map_app_choice"
                     android:paddingTop="12dp">
 
                     <RadioButton
+                        android:id="@+id/radioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New RadioButton"
-                        android:id="@+id/radioButton"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="New RadioButton" />
 
                     <RadioButton
+                        android:id="@+id/radioButton2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New RadioButton"
-                        android:id="@+id/radioButton2"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="New RadioButton" />
                 </RadioGroup>
 
                 <Switch
+                    android:id="@+id/close_waze"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/close_waze"
-                    android:id="@+id/close_waze"
-                    android:visibility="gone"
                     android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
                     android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary" />
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/close_waze"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <TextView
+                    android:id="@+id/close_waze_desc"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/close_waze_when_bluetooth_disconnects"
-                    android:id="@+id/close_waze_desc"
-                    android:visibility="gone"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <Switch
+                    android:id="@+id/times_to_launch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="Use TIMES to Launch"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/times_to_launch_explaination"
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:text="Set time spans for Maps/Waze to Launch.  Will only launch in between start and end times."
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/morning_timespan_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="20dp"
+                    android:text="Morning Time Span"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:paddingBottom="12dp">
+
+                    <Button
+                        android:id="@+id/morning_start_button"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/on_state"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="Start"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/morning_end_button"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/on_state"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="32dp"
+                        android:text="End"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/evening_timespan_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="20dp"
+                    android:text="Evening Time Span"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:paddingBottom="12dp">
+
+                    <Button
+                        android:id="@+id/evening_start_button"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/on_state"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="Start"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/evening_end_button"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/on_state"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="32dp"
+                        android:text="End"
+                        android:textColor="@color/white" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/daysToLaunchLabel"
@@ -125,11 +228,11 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/days_to_launch_desc"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Choose what days you would like Maps/Waze to launch"
-                    android:id="@+id/days_to_launch_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 
                 <LinearLayout

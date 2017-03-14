@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Helpers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +9,10 @@ import android.util.Log;
 /**
  * Created by Jason on 2/21/16.
  */
-public class Power {
-    private static final String TAG = Power.class.getName();
+public class PowerHelper {
+    private static final String TAG = "PowerHelper";
 
-    private Power(){}
+    private PowerHelper(){}
 
     //Returns true or false depending if battery is plugged in
     public static boolean isPluggedIn(Context context) {

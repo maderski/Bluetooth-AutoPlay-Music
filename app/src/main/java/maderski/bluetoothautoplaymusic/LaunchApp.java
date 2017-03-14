@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -40,16 +39,15 @@ public class LaunchApp extends PackageTools {
 
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
-        boolean canLaunchToday = canLaunchOnThisDay(context);
+        boolean canLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
         if(canLaunchToday) {
-            final Context ctx = context;
             seconds = seconds * 1000;
 
             Handler handler = new Handler();
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    String mapAppName = BAPMPreferences.getMapsChoice(ctx);
+                    String mapAppName = BAPMPreferences.getMapsChoice(context);
                     launchPackage(context, mapAppName);
                     Log.d(TAG, "delayLaunchmaps started");
                 }
@@ -80,7 +78,7 @@ public class LaunchApp extends PackageTools {
         context.startActivity(i);
     }
 
-    private boolean canLaunchOnThisDay(Context context){
+    private boolean canMapsLaunchOnThisDay(Context context){
         Calendar calendar = Calendar.getInstance();
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
@@ -88,6 +86,28 @@ public class LaunchApp extends PackageTools {
         Log.d(TAG, "Can Launch Maps: " + canLaunch);
 
         return canLaunch;
+    }
+
+    public boolean canMapsLaunchDuringThisTime(Context context){
+        boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
+        if(isUseLaunchTimeEnabled) {
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+
+            int currentTime = (hour * 100) + minute;
+
+            int morningStartTime = BAPMPreferences.getMorningStartTime(context);
+            int morningEndTime = BAPMPreferences.getMorningEndTime(context);
+
+            int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
+            int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
+
+            return currentTime >= morningStartTime && currentTime <= morningEndTime
+                    || currentTime >= eveningStartTime && currentTime <= eveningEndTime;
+        }
+
+        return true;
     }
 
     public void closeWazeOnDisconnect(final Context context){

@@ -4,10 +4,12 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
+
 /**
  * Created by Jason on 7/26/16.
  */
-public class PowerAndroidTest extends AndroidTestCase {
+public class PowerHelperAndroidTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -16,7 +18,7 @@ public class PowerAndroidTest extends AndroidTestCase {
     @SmallTest
     public void testIsPluggedIn(){
         Context context = getContext();
-        boolean isPluggedIn = Power.isPluggedIn(context);
+        boolean isPluggedIn = PowerHelper.isPluggedIn(context);
         assertEquals(true, isPluggedIn);
     }
 

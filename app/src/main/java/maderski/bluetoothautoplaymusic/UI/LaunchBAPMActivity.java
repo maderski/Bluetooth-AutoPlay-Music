@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic.UI;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +11,7 @@ import android.view.WindowManager;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.R;
-import maderski.bluetoothautoplaymusic.ScreenONLock;
+import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 public class LaunchBAPMActivity extends AppCompatActivity {

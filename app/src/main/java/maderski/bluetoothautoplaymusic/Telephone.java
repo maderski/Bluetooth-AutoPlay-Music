@@ -6,6 +6,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
+import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 
 /**
  * Created by Jason on 6/1/16.
@@ -25,7 +26,7 @@ public class Telephone {
     public boolean isOnCall(){
         int currentCallState = telephonyManager.getCallState();
 
-        if(currentCallState == telephonyManager.CALL_STATE_OFFHOOK){
+        if(currentCallState == TelephonyManager.CALL_STATE_OFFHOOK){
             Log.d(TAG, "ON CALL!");
             return true;
         }else{
@@ -43,7 +44,7 @@ public class Telephone {
         new CountDownTimer(_seconds, _interval)
         {
             public void onTick(long millisUntilFinished) {
-                if(Power.isPluggedIn(context)){
+                if(PowerHelper.isPluggedIn(context)){
                     if(isOnCall()){
                         Log.d(TAG, "On Call, check again in 3 sec");
                     }else{

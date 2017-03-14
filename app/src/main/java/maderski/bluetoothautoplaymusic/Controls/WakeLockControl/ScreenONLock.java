@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Controls.WakeLockControl;
 
 import android.content.Context;
 import android.os.PowerManager;

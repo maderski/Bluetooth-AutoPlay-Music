@@ -47,7 +47,57 @@ public class BAPMPreferences {
     private static final String USER_SET_MAX_VOLUME_KEY = "UserSetMaxVolumeKey";
     private static final String CLOSE_WAZE_ON_DISCONNECT = "CloseWazeOnDisconnect";
     private static final String TURN_WIFI_OFF_DEVICES = "TurnWifiOffDevices";
+    private static final String USE_TIMES_TO_LAUNCH_MAPS = "UseTimesToLaunchMaps";
+    private static final String MORNING_START_TIME = "MorningStartTime";
+    private static final String MORNING_END_TIME = "MorningEndTime";
+    private static final String EVENING_START_TIME = "EveningStartTime";
+    private static final String EVENING_END_TIME = "EveningEndTime";
 
+
+    public static void setMorningStartTime(Context context, int startTime){
+        editor(context).putInt(MORNING_START_TIME, startTime);
+        commit(context);
+    }
+
+    public static int getMorningStartTime(Context context){
+        return reader(context).getInt(MORNING_START_TIME, 700);
+    }
+
+    public static void setMorningEndTime(Context context, int endTime){
+        editor(context).putInt(MORNING_END_TIME, endTime);
+        commit(context);
+    }
+
+    public static int getMorningEndTime(Context context){
+        return reader(context).getInt(MORNING_END_TIME, 1000);
+    }
+
+    public static void setEveningStartTime(Context context, int startTime){
+        editor(context).putInt(EVENING_START_TIME, startTime);
+        commit(context);
+    }
+
+    public static int getEveningStartTime(Context context){
+        return reader(context).getInt(EVENING_START_TIME, 1600);
+    }
+
+    public static void setEveningEndTime(Context context, int endTime){
+        editor(context).putInt(EVENING_END_TIME, endTime);
+        commit(context);
+    }
+
+    public static int getEveningEndTime(Context context){
+        return reader(context).getInt(EVENING_END_TIME, 1900);
+    }
+
+    public static void setUseTimesToLaunchMaps(Context context, boolean enabled){
+        editor(context).putBoolean(USE_TIMES_TO_LAUNCH_MAPS, enabled);
+        commit(context);
+    }
+
+    public static boolean getUseTimesToLaunchMaps(Context context) {
+        return reader(context).getBoolean(USE_TIMES_TO_LAUNCH_MAPS, false);
+    }
 
     public static void setTurnWifiOffDevices(Context context, Set<String> turnWifiOffDevices){
         editor(context).putStringSet(TURN_WIFI_OFF_DEVICES, turnWifiOffDevices);

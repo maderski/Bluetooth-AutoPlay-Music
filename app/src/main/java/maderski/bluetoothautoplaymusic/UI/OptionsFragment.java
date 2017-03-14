@@ -210,7 +210,7 @@ public class OptionsFragment extends Fragment {
         dimBrightnessButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = TimePickerFragment.newInstance(true, BAPMPreferences.getDimTime(getActivity()), "Set Dim Time");
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME, true, BAPMPreferences.getDimTime(getActivity()), "Set Dim Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });
@@ -221,7 +221,7 @@ public class OptionsFragment extends Fragment {
         brightBrightnessButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = TimePickerFragment.newInstance(false, BAPMPreferences.getBrightTime(getActivity()), "Set Bright Time");
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME, false, BAPMPreferences.getBrightTime(getActivity()), "Set Bright Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });

@@ -8,8 +8,7 @@ import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
-import maderski.bluetoothautoplaymusic.BuildConfig;
-import maderski.bluetoothautoplaymusic.Power;
+import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 
 /**
  * Created by Jason on 7/23/16.
@@ -21,7 +20,7 @@ public class PowerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
 
-        if(BAPMDataPreferences.getIsSelected(context) && Power.isPluggedIn(context)) {
+        if(BAPMDataPreferences.getIsSelected(context) && PowerHelper.isPluggedIn(context)) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
             boolean isBTConnected = audioManager.isBluetoothA2dpOn();
             boolean powerRequired = BAPMPreferences.getPowerConnected(context);

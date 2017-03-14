@@ -4,12 +4,9 @@ import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
-import android.media.tv.TvContract;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,8 +20,7 @@ import maderski.bluetoothautoplaymusic.BluetoothActions;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
-import maderski.bluetoothautoplaymusic.Power;
-import maderski.bluetoothautoplaymusic.Telephone;
+import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 
 /**
@@ -192,7 +188,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         boolean isBTConnected = am.isBluetoothA2dpOn();
 
         if (powerRequired && isAUserSelectedBTDevice) {
-            if (Power.isPluggedIn(context) && isBTConnected) {
+            if (PowerHelper.isPluggedIn(context) && isBTConnected) {
                 mBluetoothActions.OnBTConnect();
             }
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
