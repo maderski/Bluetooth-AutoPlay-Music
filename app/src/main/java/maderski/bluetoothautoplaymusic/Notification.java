@@ -31,10 +31,6 @@ public class Notification {
         String title = "Click to launch " + mapAppName;
         String message = "Bluetooth device connected";
 
-        //PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-        //        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        //PendingIntent mapIntent = PendingIntent.getActivity(context, 0,
-        //        new Intent(context, LaunchMapActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -43,8 +39,6 @@ public class Notification {
                 .setAutoCancel(false)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
-                //.addAction(android.R.drawable.ic_dialog_map, "Map", mapIntent);
-                //.addAction(android.R.drawable.ic_menu_edit, "Option", contentIntent);
         Intent appLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(mapChoicePkg);
         if(appLaunchIntent != null) {
             appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

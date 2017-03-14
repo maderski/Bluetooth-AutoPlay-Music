@@ -84,6 +84,7 @@ public class BluetoothActions {
             boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
             boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
+            boolean canShowNotification = BAPMPreferences.getShowNotification(context);
 
             int checkToPlaySeconds = 7;
 
@@ -92,7 +93,9 @@ public class BluetoothActions {
             RingerControl ringerControl = new RingerControl(context);
             LaunchApp launchApp = new LaunchApp();
 
-            notification.BAPMMessage(context, mapChoice);
+            if(canShowNotification) {
+                notification.BAPMMessage(context, mapChoice);
+            }
 
             if (screenON) {
                 //Try to releaseWakeLock() in case for some reason it was not released on disconnect

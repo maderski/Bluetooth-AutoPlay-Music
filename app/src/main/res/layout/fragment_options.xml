@@ -160,6 +160,26 @@
                 <Switch
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/show_notification"
+                    android:id="@+id/show_notification"
+                    android:checked="false"
+                    android:paddingTop="20dp"
+                    android:textSize="16sp"
+                    android:switchPadding="100dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/show_notification_explanation"
+                    android:id="@+id/show_notification_explanation"
+                    android:textSize="12sp" />
+
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="@string/option_auto_brightness"
                     android:id="@+id/auto_brightness"
                     android:checked="false"

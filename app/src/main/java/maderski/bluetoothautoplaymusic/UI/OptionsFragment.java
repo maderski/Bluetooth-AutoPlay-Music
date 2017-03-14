@@ -54,6 +54,7 @@ public class OptionsFragment extends Fragment {
         powerConnectedSwitch(rootView);
         sendToBackgroundSwitch(rootView);
         waitTillOffPhoneSwitch(rootView);
+        showNotificationSwitch(rootView);
         brightBrightnessButton(rootView);
         dimBrightnessButton(rootView);
 
@@ -102,6 +103,10 @@ public class OptionsFragment extends Fragment {
 
         btnState = BAPMPreferences.getWaitTillOffPhone(context);
         setting_switch = (Switch) view.findViewById(R.id.wait_till_off_phone);
+        setting_switch.setChecked(btnState);
+
+        btnState = BAPMPreferences.getShowNotification(context);
+        setting_switch = (Switch) view.findViewById(R.id.show_notification);
         setting_switch.setChecked(btnState);
 
         if(!PermissionHelper.isPermissionGranted(context, PermissionHelper.Permission.COARSE_LOCATION))
@@ -184,6 +189,24 @@ public class OptionsFragment extends Fragment {
         });
     }
 
+    public void showNotificationSwitch(View view) {
+        Switch autoBrightnessSwitch = (Switch)view.findViewById(R.id.show_notification);
+        autoBrightnessSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean on = ((Switch) view).isChecked();
+                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.SHOW_NOTIFICATION, on);
+                if(on){
+                    BAPMPreferences.setShowNotification(getActivity(), true);
+                    Log.d(TAG, "Show Notification Switch is ON");
+                }else{
+                    BAPMPreferences.setShowNotification(getActivity(), false);
+                    Log.d(TAG, "Show Notification Switch is OFF");
+                }
+            }
+        });
+    }
+
     public void autoBrightnessSwitch(View view){
         Switch autoBrightnessSwitch = (Switch)view.findViewById(R.id.auto_brightness);
         autoBrightnessSwitch.setOnClickListener(new View.OnClickListener() {
@@ -196,10 +219,10 @@ public class OptionsFragment extends Fragment {
 
                     BAPMPreferences.setAutoBrightness(getActivity(), true);
 
-                    Log.d(TAG, "WaitTillOffPhone Switch is ON");
+                    Log.d(TAG, "AutoBrightness Switch is ON");
                 }else{
                     BAPMPreferences.setAutoBrightness(getActivity(), false);
-                    Log.d(TAG, "WaitTillOffPhone Switch is OFF");
+                    Log.d(TAG, "AutoBrightness Switch is OFF");
                 }
             }
         });
@@ -291,5 +314,7 @@ public class OptionsFragment extends Fragment {
         textView = (TextView)view.findViewById(R.id.userSetMaxVolumeLabel);
         textView.setTypeface(typeface_bold);
 
+        textView = (TextView)view.findViewById(R.id.show_notification);
+        textView.setTypeface(typeface_bold);
     }
 }

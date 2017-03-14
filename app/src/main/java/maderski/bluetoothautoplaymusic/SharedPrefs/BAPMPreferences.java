@@ -52,7 +52,17 @@ public class BAPMPreferences {
     private static final String MORNING_END_TIME = "MorningEndTime";
     private static final String EVENING_START_TIME = "EveningStartTime";
     private static final String EVENING_END_TIME = "EveningEndTime";
+    private static final String SHOW_NOTIFICATION = "ShowNotification";
 
+
+    public static void setShowNotification(Context context, boolean enable){
+        editor(context).putBoolean(SHOW_NOTIFICATION, enable);
+        commit(context);
+    }
+
+    public static boolean getShowNotification(Context context){
+        return reader(context).getBoolean(SHOW_NOTIFICATION, true);
+    }
 
     public static void setMorningStartTime(Context context, int startTime){
         editor(context).putInt(MORNING_START_TIME, startTime);

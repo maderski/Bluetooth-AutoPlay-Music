@@ -46,4 +46,6 @@
     <string name="close_waze_when_bluetooth_disconnects">Close Waze when Bluetooth Disconnects</string>
     <string name="map_options">Map Options</string>
     <string name="map_app_choice">Map app CHOICE</string>
+    <string name="show_notification">SHOW Notification</string>
+    <string name="show_notification_explanation">Show a notification when Bluetooth connects.</string>
 </resources>

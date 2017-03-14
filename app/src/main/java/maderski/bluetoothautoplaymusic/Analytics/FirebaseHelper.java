@@ -46,7 +46,8 @@ public class FirebaseHelper {
             Option.PLAY_MUSIC,
             Option.POWER_REQUIRED,
             Option.MAX_VOLUME_SET,
-            Option.HEADPHONE_VOLUME_SET
+            Option.HEADPHONE_VOLUME_SET,
+            Option.SHOW_NOTIFICATION
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Option {
@@ -57,6 +58,7 @@ public class FirebaseHelper {
         String AUTO_BRIGHTNESS = "auto_brightness";
         String MAX_VOLUME_SET = "max_volume_set";
         String HEADPHONE_VOLUME_SET = "headphone_volume_set";
+        String SHOW_NOTIFICATION = "show_notification";
     }
 
     @StringDef({
