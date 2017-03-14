@@ -41,9 +41,6 @@ public class PlayMusicControl {
             case PackageTools.PackageName.BEYONDPOD:
                 playerControls = new BeyondPod(mContext);
                 break;
-            case PackageTools.PackageName.APPLEMUSIC:
-                playerControls = new AppleMusic(mContext);
-                break;
             default:
                 playerControls = new OtherMusicPlayer(mContext);
                 break;

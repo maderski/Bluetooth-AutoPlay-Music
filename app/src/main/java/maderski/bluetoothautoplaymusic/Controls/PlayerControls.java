@@ -108,29 +108,6 @@ class Spotify extends PlayerControls {
 //    }
 //}
 
-class AppleMusic extends PlayerControls {
-    private static final String TAG = "AppleMusic";
-
-    public AppleMusic(Context context){
-        super(context);
-    }
-
-    @Override
-    public void play() {
-
-        if(PlayMusicControl.cancelCheckIfPlaying()){
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    play_keyEvent();
-                }
-            }, 6000);
-        }
-    }
-}
-
 class OtherMusicPlayer extends PlayerControls {
     private static final String TAG = "OtherMusicPlayer";
 
