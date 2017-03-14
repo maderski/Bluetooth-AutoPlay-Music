@@ -161,8 +161,7 @@
                             android:layout_gravity="center_horizontal"
                             android:paddingTop="4dp"
                             android:text="7:00 AM"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorPrimary"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textSize="12sp" />
                         <Button
                             android:id="@+id/morning_start_button"
@@ -187,8 +186,7 @@
                             android:layout_gravity="center_horizontal"
                             android:paddingTop="4dp"
                             android:text="10:00 AM"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorPrimary"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textSize="12sp" />
                         <Button
                             android:id="@+id/morning_end_button"
@@ -233,8 +231,7 @@
                             android:layout_gravity="center_horizontal"
                             android:paddingTop="4dp"
                             android:text="4:00 PM"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorPrimary"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textSize="12sp" />
                         <Button
                             android:id="@+id/evening_start_button"
@@ -259,8 +256,7 @@
                             android:layout_gravity="center_horizontal"
                             android:paddingTop="4dp"
                             android:text="7:00 PM"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorPrimary"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textSize="12sp" />
                         <Button
                             android:id="@+id/evening_end_button"
