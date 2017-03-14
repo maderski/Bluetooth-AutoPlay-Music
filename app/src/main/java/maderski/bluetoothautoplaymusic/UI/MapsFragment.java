@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import maderski.bluetoothautoplaymusic.Helpers.TimeFormatHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
@@ -215,7 +217,7 @@ public class MapsFragment extends Fragment {
         for(String day : entireWeek){
             checkBox = new CheckBox(getActivity());
             checkBox.setText(getNameOfDay(day));
-            checkBox.setTextColor(getResources().getColor(R.color.colorPrimary));
+            checkBox.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
             checkBox.setChecked(daysToLaunchSet.contains(day));
             checkboxListener(checkBox, day);
@@ -244,6 +246,10 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningStartButton(View view){
+        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningStartTime(getContext()));
+        TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_start_time_displayed);
+        timeDisplayed.setText(setTime);
+
         Button morningStartButton = (Button)view.findViewById(R.id.morning_start_button);
         morningStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,6 +261,10 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningEndButton(View view){
+        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningEndTime(getContext()));
+        TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_end_time_displayed);
+        timeDisplayed.setText(setTime);
+
         Button morningEndButton = (Button)view.findViewById(R.id.morning_end_button);
         morningEndButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,6 +276,10 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningStartButton(View view){
+        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningStartTime(getContext()));
+        TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_start_time_displayed);
+        timeDisplayed.setText(setTime);
+
         Button eveningStartButton = (Button)view.findViewById(R.id.evening_start_button);
         eveningStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,6 +291,10 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningEndButton(View view){
+        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningEndTime(getContext()));
+        TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_end_time_displayed);
+        timeDisplayed.setText(setTime);
+
         Button eveningEndButton = (Button)view.findViewById(R.id.evening_end_button);
         eveningEndButton.setOnClickListener(new View.OnClickListener() {
             @Override

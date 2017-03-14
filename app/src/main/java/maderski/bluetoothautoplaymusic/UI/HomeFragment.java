@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.util.Log;
 import android.view.Gravity;
@@ -154,7 +155,7 @@ public class HomeFragment extends Fragment {
                 } else if(BAPMPreferences.getBTDevices(context) != null) {
                     checkBox.setChecked(BAPMPreferences.getBTDevices(context).contains(BTDevice));
                 }
-                checkBox.setTextColor(getResources().getColor(textColor));
+                checkBox.setTextColor(ContextCompat.getColor(getContext(), textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/TitilliumText400wt.otf"));
 
                 if(!BAPMPreferences.getHeadphoneDevices(context).contains(BTDevice)) {

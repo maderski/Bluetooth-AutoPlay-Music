@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -132,7 +133,7 @@ public class HeadphonesFragment extends DialogFragment{
                 } else if(BAPMPreferences.getBTDevices(getActivity()) != null) {
                     checkBox.setChecked(BAPMPreferences.getHeadphoneDevices(getContext()).contains(BTDevice));
                 }
-                checkBox.setTextColor(getResources().getColor(textColor));
+                checkBox.setTextColor(ContextCompat.getColor(getContext(), textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
 
                 if(!getNonHeadphoneDevices().contains(BTDevice)) {

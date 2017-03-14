@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.AsyncTasks.StartServiceTask;
+import maderski.bluetoothautoplaymusic.Helpers.TimeFormatHelper;
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
@@ -236,9 +238,19 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             case TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN:
                 if(isEndTime) {
                     BAPMPreferences.setMorningEndTime(this, timeSet);
+
+                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningEndTime(this));
+                    TextView timeDisplayed = (TextView)findViewById(R.id.morning_end_time_displayed);
+                    timeDisplayed.setText(setTime);
+
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_END_TIME, true);
                 } else {
                     BAPMPreferences.setMorningStartTime(this, timeSet);
+
+                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningStartTime(this));
+                    TextView timeDisplayed = (TextView)findViewById(R.id.morning_start_time_displayed);
+                    timeDisplayed.setText(setTime);
+
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_START_TIME, true);
                 }
                 Log.d("Map Options", typeOfTimeSet);
@@ -246,9 +258,19 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             case TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN:
                 if(isEndTime) {
                     BAPMPreferences.setEveningEndTime(this, timeSet);
+
+                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningEndTime(this));
+                    TextView timeDisplayed = (TextView)findViewById(R.id.evening_end_time_displayed);
+                    timeDisplayed.setText(setTime);
+
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_END_TIME, true);
                 } else {
                     BAPMPreferences.setEveningStartTime(this, timeSet);
+
+                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningStartTime(this));
+                    TextView timeDisplayed = (TextView)findViewById(R.id.evening_start_time_displayed);
+                    timeDisplayed.setText(setTime);
+
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_START_TIME, true);
                 }
                 Log.d("Map Options", typeOfTimeSet);
