@@ -53,7 +53,17 @@ public class BAPMPreferences {
     private static final String EVENING_START_TIME = "EveningStartTime";
     private static final String EVENING_END_TIME = "EveningEndTime";
     private static final String SHOW_NOTIFICATION = "ShowNotification";
+    private static final String LAUNCH_DIRECTIONS = "LaunchDirections";
 
+
+    public static void setCanLaunchDirections(Context context, boolean enable){
+        editor(context).putBoolean(LAUNCH_DIRECTIONS, enable);
+        commit(context);
+    }
+
+    public static boolean getCanLaunchDirections(Context context) {
+        return reader(context).getBoolean(LAUNCH_DIRECTIONS, true);
+    }
 
     public static void setShowNotification(Context context, boolean enable){
         editor(context).putBoolean(SHOW_NOTIFICATION, enable);

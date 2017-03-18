@@ -2,10 +2,15 @@ package maderski.bluetoothautoplaymusic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.StringDef;
 import android.util.Log;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.net.URL;
 import java.util.Calendar;
 
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -18,6 +23,18 @@ import maderski.bluetoothautoplaymusic.UI.MainActivity;
 public class LaunchApp extends PackageTools {
 
     private static final String TAG = LaunchApp.class.getName();
+
+    @StringDef({
+            DirectionLocations.HOME,
+            DirectionLocations.WORK
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface DirectionLocations {
+        String HOME = "Home";
+        String WORK = "Work";
+    }
+
+    private String mDirectionLocation = "None";
 
     public LaunchApp(){
         super();
@@ -39,6 +56,9 @@ public class LaunchApp extends PackageTools {
 
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
+        final boolean canLaunchWazeDirections = BAPMPreferences.getCanLaunchDirections(context)
+                && BAPMPreferences.getMapsChoice(context).equals(PackageName.WAZE);
+
         boolean canLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
         if(canLaunchToday) {
             seconds = seconds * 1000;
@@ -48,7 +68,14 @@ public class LaunchApp extends PackageTools {
                 @Override
                 public void run() {
                     String mapAppName = BAPMPreferences.getMapsChoice(context);
-                    launchPackage(context, mapAppName);
+                    if(canLaunchWazeDirections){
+                        String uri = "waze://?favorite=" + mDirectionLocation + "&navigate=yes";
+                        Log.d(TAG, "DIRECTIONS LOCATION: " + uri);
+                        Uri data = Uri.parse(uri);
+                        launchPackage(context, mapAppName, data, Intent.ACTION_VIEW);
+                    } else {
+                        launchPackage(context, mapAppName);
+                    }
                     Log.d(TAG, "delayLaunchmaps started");
                 }
             };
@@ -103,11 +130,34 @@ public class LaunchApp extends PackageTools {
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
+            if(currentTime >= morningStartTime && currentTime <= morningEndTime){
+                mDirectionLocation = DirectionLocations.HOME;
+            } else if(currentTime >= eveningStartTime && currentTime <= eveningEndTime){
+                mDirectionLocation = DirectionLocations.WORK;
+            }
+
             return currentTime >= morningStartTime && currentTime <= morningEndTime
                     || currentTime >= eveningStartTime && currentTime <= eveningEndTime;
         }
 
         return true;
+    }
+
+    public void launchWazeDirections(final Context context, final String location){
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                String uriString = "waze://?favorite=" + location + "&navigate=yes";
+                Log.d(TAG, "DIRECTIONS LOCATION: " + uriString);
+                Uri uri = Uri.parse(uriString);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(uri);
+                context.sendBroadcast(intent);
+            }
+        };
+
+        handler.postDelayed(runnable, 4000);
     }
 
     public void closeWazeOnDisconnect(final Context context){

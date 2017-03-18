@@ -94,7 +94,6 @@
                     android:id="@+id/close_waze"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checked="false"
                     android:paddingBottom="4dp"
                     android:paddingTop="20dp"
                     android:switchPadding="100dp"
@@ -113,6 +112,27 @@
                     android:visibility="gone" />
 
                 <Switch
+                    android:id="@+id/launch_waze_directions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="Launch with DIRECTIONS"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/launch_waze_directions_desc"
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:text="Launch Waze with Home/Work directions"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <Switch
                     android:id="@+id/times_to_launch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,7 +140,7 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="20dp"
                     android:switchPadding="100dp"
-                    android:text="Use TIMES to Launch"
+                    android:text="@string/use_times_to_launch"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
@@ -128,7 +148,7 @@
                     android:id="@+id/times_to_launch_explaination"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:text="Set time spans for Maps/Waze to Launch.  Will only launch in between start and end times."
+                    android:text="@string/use_times_to_launch_desc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 

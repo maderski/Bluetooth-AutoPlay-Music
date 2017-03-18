@@ -39,15 +39,12 @@ public class VolumeControl {
     //Set original media volume
     public void setToOriginalVolume(){
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(mContext);
-        int currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        if(currentVolume != originalMediaVolume) {
-            am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
-        }
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
 
         Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
 
-    //Wait 3 seconds before getting the Original Volume and return true when done
+    //Wait 3 seconds before getting the Original Volume
     public void delayGetOrigVol(int seconds){
         int milliseconds = seconds * 1000;
         Handler handler = new Handler();
@@ -87,21 +84,6 @@ public class VolumeControl {
             @Override
             public void run() {
                 setToMaxVol();
-            }
-        };
-        handler.postDelayed(runnable, milliseconds);
-    }
-
-    public void checkSetOriginalVolume(int seconds) {
-        int milliseconds = seconds * 1000;
-
-        setToMaxVol();
-
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                setToOriginalVolume();
             }
         };
         handler.postDelayed(runnable, milliseconds);

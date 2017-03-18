@@ -75,7 +75,8 @@ public class FirebaseHelper {
             Selection.MORNING_START_TIME,
             Selection.MORNING_END_TIME,
             Selection.EVENING_START_TIME,
-            Selection.EVENING_END_TIME
+            Selection.EVENING_END_TIME,
+            Selection.LAUNCH_WAZE_DIRECTIONS
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Selection {
@@ -93,6 +94,7 @@ public class FirebaseHelper {
         String MORNING_END_TIME = "morning_end_time";
         String EVENING_START_TIME = "evening_start_time";
         String EVENING_END_TIME = "evening_end_time";
+        String LAUNCH_WAZE_DIRECTIONS = "launch_waze_directions";
     }
 
     @StringDef({
@@ -108,7 +110,9 @@ public class FirebaseHelper {
     }
 
     @StringDef({
-
+            BTActionsLaunch.TELEPHONE,
+            BTActionsLaunch.POWER,
+            BTActionsLaunch.BLUETOOTH
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface BTActionsLaunch {

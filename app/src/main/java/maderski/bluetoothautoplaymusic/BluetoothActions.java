@@ -117,11 +117,6 @@ public class BluetoothActions {
                 WifiControl.wifiON(context, false);
             }
 
-            if (playMusic) {
-                mPlayMusicControl.play();
-                mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
-            }
-
             if (volumeMAX) {
                 volumeControl.saveOriginalVolume();
                 Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
@@ -134,6 +129,11 @@ public class BluetoothActions {
                     }
                 };
                 handler.postDelayed(runnable, 3000);
+            }
+
+            if (playMusic) {
+                mPlayMusicControl.play();
+                mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
             }
 
             boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context);
@@ -182,8 +182,11 @@ public class BluetoothActions {
                     && launchApp.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
                     && BAPMPreferences.getMapsChoice(context).equals(PackageTools.PackageName.WAZE);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
+            boolean canShowNotification = BAPMPreferences.getShowNotification(context);
 
-            notification.removeBAPMMessage(context);
+            if(canShowNotification) {
+                notification.removeBAPMMessage(context);
+            }
 
             if (priorityMode) {
                 int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
@@ -226,7 +229,7 @@ public class BluetoothActions {
             }
 
             if (volumeMAX) {
-                volumeControl.checkSetOriginalVolume(4);
+                volumeControl.setToOriginalVolume();
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);

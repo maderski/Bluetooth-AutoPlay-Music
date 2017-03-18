@@ -81,6 +81,7 @@ public class MapsFragment extends Fragment {
             mMapChoicesAvailable.add(PackageTools.PackageName.WAZE);
         }
         setupCloseWaze(rootView);
+        setupLaunchWazeDirections(rootView);
 
         setupLaunchTimesSwitch(rootView);
         mapsRadiobuttonCreator(rootView, getContext());
@@ -93,6 +94,50 @@ public class MapsFragment extends Fragment {
         eveningEndButton(rootView);
 
         return rootView;
+    }
+
+    public void setupLaunchWazeDirections(View view){
+        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+        boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(getContext());
+
+        Switch launchDirectionsSwitch = (Switch)view.findViewById(R.id.launch_waze_directions);
+        TextView launchDirectionsDesc = (TextView)view.findViewById(R.id.launch_waze_directions_desc);
+
+        final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
+        final TextView eveningTimeSpanText = (TextView)view.findViewById(R.id.evening_timespan_label);
+
+        if(mapChoice.equals(PackageTools.PackageName.WAZE)){
+            if(canLaunchDirections){
+                morningTimeSpanText.setText("HOME Time Span");
+                eveningTimeSpanText.setText("WORK Time Span");
+            }
+
+            launchDirectionsSwitch.setChecked(canLaunchDirections);
+            launchDirectionsSwitch.setVisibility(View.VISIBLE);
+            launchDirectionsDesc.setVisibility(View.VISIBLE);
+            launchDirectionsSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean on = ((Switch) view).isChecked();
+                    if (on) {
+                        BAPMPreferences.setCanLaunchDirections(getContext(), true);
+                        morningTimeSpanText.setText("HOME Time Span");
+                        eveningTimeSpanText.setText("WORK Time Span");
+                        Log.d(TAG, "LaunchDirectionsSwitch is ON");
+                    } else {
+                        BAPMPreferences.setCanLaunchDirections(getContext(), false);
+                        morningTimeSpanText.setText("Morning Time Span");
+                        eveningTimeSpanText.setText("Evening Time Span");
+                        Log.d(TAG, "LaunchDirectionsSwitch is OFF");
+                    }
+                }
+            });
+        } else {
+            launchDirectionsSwitch.setVisibility(View.GONE);
+            launchDirectionsDesc.setVisibility(View.GONE);
+            morningTimeSpanText.setText("Morning Time Span");
+            eveningTimeSpanText.setText("Evening Time Span");
+        }
     }
 
     public void setupCloseWaze(View view){
@@ -201,6 +246,7 @@ public class MapsFragment extends Fragment {
                 BAPMPreferences.setMapsChoice(context, packageName);
                 if(getView() != null){
                     setupCloseWaze(getView());
+                    setupLaunchWazeDirections(getView());
                 }
             }
         });

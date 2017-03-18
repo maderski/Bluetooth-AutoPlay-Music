@@ -105,7 +105,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(audioManager.isMusicActive()) {
                     playMusicControl.pause();
                 }
-                volumeControl.checkSetOriginalVolume(4);
+                volumeControl.setToOriginalVolume();
 
                 BAPMDataPreferences.setIsHeadphonesDevice(context, false);
                 if(BuildConfig.DEBUG)

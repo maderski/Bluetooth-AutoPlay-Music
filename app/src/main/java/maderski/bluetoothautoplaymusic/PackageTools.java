@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.annotation.StringDef;
 import android.util.Log;
 import android.widget.Toast;
@@ -50,6 +51,21 @@ public class PackageTools {
             context.startActivity(launchIntent);
         } else {
             String toastMsg = pkg.equals(PackageName.MAPS) || pkg.equals(PackageName.WAZE) ?
+                    "Unable to launch MAPS or WAZE" : "Unable to launch Music player";
+            Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void launchPackage(Context context, String packageName, Uri data, String action){
+        Log.d("Package intent: ", packageName + " started");
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        launchIntent.setAction(action);
+        launchIntent.setData(data);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if(launchIntent != null) {
+            context.startActivity(launchIntent);
+        } else {
+            String toastMsg = packageName.equals(PackageName.MAPS) || packageName.equals(PackageName.WAZE) ?
                     "Unable to launch MAPS or WAZE" : "Unable to launch Music player";
             Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show();
         }
