@@ -127,7 +127,7 @@
                     android:id="@+id/launch_waze_directions_desc"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:text="Launch Waze with Home/Work directions"
+                    android:text="Launch Waze with Home/Work directions.  Uses Home/Work Time spans that can be set below"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp"
                     android:visibility="gone" />
@@ -182,7 +182,7 @@
                             android:paddingTop="4dp"
                             android:text="7:00 AM"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textSize="12sp" />
+                            android:textSize="16sp" />
                         <Button
                             android:id="@+id/morning_start_button"
                             style="?android:attr/borderlessButtonStyle"
@@ -207,7 +207,7 @@
                             android:paddingTop="4dp"
                             android:text="10:00 AM"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textSize="12sp" />
+                            android:textSize="16sp" />
                         <Button
                             android:id="@+id/morning_end_button"
                             style="?android:attr/borderlessButtonStyle"
@@ -252,7 +252,7 @@
                             android:paddingTop="4dp"
                             android:text="4:00 PM"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textSize="12sp" />
+                            android:textSize="16sp" />
                         <Button
                             android:id="@+id/evening_start_button"
                             style="?android:attr/borderlessButtonStyle"
@@ -277,7 +277,7 @@
                             android:paddingTop="4dp"
                             android:text="7:00 PM"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textSize="12sp" />
+                            android:textSize="16sp" />
                         <Button
                             android:id="@+id/evening_end_button"
                             style="?android:attr/borderlessButtonStyle"
