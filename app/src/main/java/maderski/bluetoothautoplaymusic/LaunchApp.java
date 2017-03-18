@@ -10,7 +10,6 @@ import android.util.Log;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.net.URL;
 import java.util.Calendar;
 
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -129,6 +128,21 @@ public class LaunchApp extends PackageTools {
 
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
+
+            // Check if the EndTime is less than the StartTime, this means end time was set for early morning
+            if (morningEndTime < morningStartTime) {
+                if(currentTime >= 1200){
+                    morningEndTime += 2400;
+                } else {
+                    morningStartTime = 0;
+                }
+            } else if (eveningEndTime < eveningStartTime) {
+                if(currentTime >= 1200){
+                    eveningEndTime += 2400;
+                } else {
+                    eveningStartTime = 0;
+                }
+            }
 
             if(currentTime >= morningStartTime && currentTime <= morningEndTime){
                 mDirectionLocation = DirectionLocations.HOME;
