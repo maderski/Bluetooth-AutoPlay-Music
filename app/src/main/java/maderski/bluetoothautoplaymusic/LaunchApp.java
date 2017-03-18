@@ -144,12 +144,14 @@ public class LaunchApp extends PackageTools {
                 }
             }
 
+            // Set whether to launch HOME or WORK directions
             if(currentTime >= morningStartTime && currentTime <= morningEndTime){
                 mDirectionLocation = DirectionLocations.HOME;
             } else if(currentTime >= eveningStartTime && currentTime <= eveningEndTime){
                 mDirectionLocation = DirectionLocations.WORK;
             }
 
+            // Return result on whether Waze can launch or not
             return currentTime >= morningStartTime && currentTime <= morningEndTime
                     || currentTime >= eveningStartTime && currentTime <= eveningEndTime;
         }

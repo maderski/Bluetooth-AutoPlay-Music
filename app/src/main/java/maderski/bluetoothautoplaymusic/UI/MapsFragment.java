@@ -103,6 +103,8 @@ public class MapsFragment extends Fragment {
         Switch launchDirectionsSwitch = (Switch)view.findViewById(R.id.launch_waze_directions);
         TextView launchDirectionsDesc = (TextView)view.findViewById(R.id.launch_waze_directions_desc);
 
+        final Switch launchTimesSwitch = (Switch)view.findViewById(R.id.times_to_launch);
+
         final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
         final TextView eveningTimeSpanText = (TextView)view.findViewById(R.id.evening_timespan_label);
 
@@ -121,6 +123,8 @@ public class MapsFragment extends Fragment {
                     boolean on = ((Switch) view).isChecked();
                     if (on) {
                         BAPMPreferences.setCanLaunchDirections(getContext(), true);
+                        BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
+                        launchTimesSwitch.setChecked(true);
                         morningTimeSpanText.setText("HOME Time Span");
                         eveningTimeSpanText.setText("WORK Time Span");
                         Log.d(TAG, "LaunchDirectionsSwitch is ON");
@@ -169,6 +173,11 @@ public class MapsFragment extends Fragment {
 
     public void setupLaunchTimesSwitch(View view){
         boolean isEnabled = BAPMPreferences.getUseTimesToLaunchMaps(getContext());
+
+        final Switch launchDirectionsSwitch = (Switch)view.findViewById(R.id.launch_waze_directions);
+        final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
+        final TextView eveningTimeSpanText = (TextView)view.findViewById(R.id.evening_timespan_label);
+
         Switch launchTimesSwitch = (Switch)view.findViewById(R.id.times_to_launch);
         launchTimesSwitch.setChecked(isEnabled);
 
@@ -181,6 +190,12 @@ public class MapsFragment extends Fragment {
                     Log.d(TAG, "LaunchTimesSwitch is ON");
                 } else {
                     BAPMPreferences.setUseTimesToLaunchMaps(getContext(), false);
+                    BAPMPreferences.setCanLaunchDirections(getContext(), false);
+
+                    launchDirectionsSwitch.setChecked(false);
+                    morningTimeSpanText.setText("Morning Time Span");
+                    eveningTimeSpanText.setText("Evening Time Span");
+
                     Log.d(TAG, "LaunchTimesSwitch is OFF");
                 }
             }
