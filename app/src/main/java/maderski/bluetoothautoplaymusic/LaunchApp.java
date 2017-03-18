@@ -104,7 +104,7 @@ public class LaunchApp extends PackageTools {
         context.startActivity(i);
     }
 
-    private boolean canMapsLaunchOnThisDay(Context context){
+    public boolean canMapsLaunchOnThisDay(Context context){
         Calendar calendar = Calendar.getInstance();
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);

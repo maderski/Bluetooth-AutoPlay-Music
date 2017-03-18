@@ -136,7 +136,8 @@ public class BluetoothActions {
                 mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
             }
 
-            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context);
+            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context)
+                    && launchApp.canMapsLaunchOnThisDay(context);
             if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
                 launchApp.musicPlayerLaunch(context, 3);
             }
