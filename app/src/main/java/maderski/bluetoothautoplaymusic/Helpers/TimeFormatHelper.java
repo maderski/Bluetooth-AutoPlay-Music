@@ -11,7 +11,7 @@ public class TimeFormatHelper {
         while(tempToGetMinutes > 60){
             tempToGetMinutes -= 100;
         }
-        String minutes = tempToGetMinutes > 10 ? Integer.toString(tempToGetMinutes) : "0" + Integer.toString(tempToGetMinutes);
+        String minutes = tempToGetMinutes > 9 ? Integer.toString(tempToGetMinutes) : "0" + Integer.toString(tempToGetMinutes);
 
         // Get hour
         int tempToGetHour = (time - tempToGetMinutes)/100;
