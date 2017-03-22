@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
+import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -55,6 +56,7 @@ public class OptionsFragment extends Fragment {
         sendToBackgroundSwitch(rootView);
         waitTillOffPhoneSwitch(rootView);
         showNotificationSwitch(rootView);
+        wifiOffUseTimeSpansSwitch(rootView);
         brightBrightnessButton(rootView);
         dimBrightnessButton(rootView);
 
@@ -63,6 +65,8 @@ public class OptionsFragment extends Fragment {
         setMaxVolumeSeekBar(rootView);
 
         wifiOffDeviceButton(rootView);
+
+        setWifiUseTimeSpansCaption(rootView);
 
         return rootView;
     }
@@ -83,6 +87,18 @@ public class OptionsFragment extends Fragment {
         if(mFirebaseHelper == null){
             mFirebaseHelper = new FirebaseHelper(getActivity());
         }
+    }
+
+    private void setWifiUseTimeSpansCaption(View view){
+        String captionText;
+        TextView wifiUseTimeSpanCaption = (TextView)view.findViewById(R.id.wifi_use_time_spans_desc);
+        if(BAPMPreferences.getCanLaunchDirections(getContext())){
+            captionText = view.getResources().getString(R.string.wifi_use_time_spans_caption_work_home);
+        } else {
+            captionText = view.getResources().getString(R.string.wifi_use_time_spans_caption_morning_evening);
+        }
+
+        wifiUseTimeSpanCaption.setText(captionText);
     }
 
     private void setButtonPreferences(View view, Context context) {
@@ -109,12 +125,34 @@ public class OptionsFragment extends Fragment {
         setting_switch = (Switch) view.findViewById(R.id.show_notification);
         setting_switch.setChecked(btnState);
 
+        btnState = BAPMPreferences.getWifiUseMapTimeSpans(context);
+        setting_switch = (Switch) view.findViewById(R.id.wifi_use_time_spans);
+        setting_switch.setChecked(btnState);
+
         if(!PermissionHelper.isPermissionGranted(context, PermissionHelper.Permission.COARSE_LOCATION))
             BAPMPreferences.setAutoBrightness(context, false);
         btnState = BAPMPreferences.getAutoBrightness(context);
         setting_switch = (Switch) view.findViewById(R.id.auto_brightness);
         setting_switch.setChecked(btnState);
 
+    }
+
+    public void wifiOffUseTimeSpansSwitch(View view){
+        Switch autoPlaySwitch = (Switch)view.findViewById(R.id.wifi_use_time_spans);
+        autoPlaySwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean on = ((Switch) view).isChecked();
+                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.WIFI_OFF_USE_TIME_SPANS, on);
+                if (on) {
+                    BAPMPreferences.setWifiUseMapTimeSpans(getActivity(), true);
+                    Log.d(TAG, "WIFI OFF Use Time Spans Switch is ON");
+                } else {
+                    BAPMPreferences.setWifiUseMapTimeSpans(getActivity(), false);
+                    Log.d(TAG, "WIFI OFF Use Time Spans Switch is OFF");
+                }
+            }
+        });
     }
 
     public void autoPlaySwitch(View view){
@@ -315,6 +353,9 @@ public class OptionsFragment extends Fragment {
         textView.setTypeface(typeface_bold);
 
         textView = (TextView)view.findViewById(R.id.show_notification);
+        textView.setTypeface(typeface_bold);
+
+        textView = (TextView)view.findViewById(R.id.wifi_use_time_spans);
         textView.setTypeface(typeface_bold);
     }
 }

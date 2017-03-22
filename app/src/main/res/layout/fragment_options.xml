@@ -275,6 +275,25 @@
                             android:paddingRight="20dp" />
                     </LinearLayout>
                 </LinearLayout>
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wifi OFF Use Time Spans"
+                    android:id="@+id/wifi_use_time_spans"
+                    android:checked="false"
+                    android:paddingTop="20dp"
+                    android:textSize="16sp"
+                    android:switchPadding="100dp"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/colorPrimary"/>
+
+                <TextView
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/wifi_use_time_spans_caption_morning_evening"
+                    android:id="@+id/wifi_use_time_spans_desc"
+                    android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

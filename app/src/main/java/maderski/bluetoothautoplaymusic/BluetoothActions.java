@@ -19,6 +19,7 @@ import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
+import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
@@ -76,6 +77,9 @@ public class BluetoothActions {
     //Player and Launches Maps
     public void actionsOnBTConnect(){
         synchronized (this) {
+            RingerControl ringerControl = new RingerControl(context);
+            LaunchApp launchApp = new LaunchApp();
+
             boolean screenON = BAPMPreferences.getKeepScreenON(context);
             boolean priorityMode = BAPMPreferences.getPriorityMode(context);
             boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
@@ -85,13 +89,12 @@ public class BluetoothActions {
             boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
             boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
             boolean canShowNotification = BAPMPreferences.getShowNotification(context);
+            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context)
+                    && launchApp.canMapsLaunchOnThisDay(context);
 
             int checkToPlaySeconds = 7;
 
             String mapChoice = BAPMPreferences.getMapsChoice(context);
-
-            RingerControl ringerControl = new RingerControl(context);
-            LaunchApp launchApp = new LaunchApp();
 
             if(canShowNotification) {
                 notification.BAPMMessage(context, mapChoice);
@@ -113,10 +116,6 @@ public class BluetoothActions {
                 }
             }
 
-            if(isWifiOffDevice){
-                WifiControl.wifiON(context, false);
-            }
-
             if (volumeMAX) {
                 volumeControl.saveOriginalVolume();
                 Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
@@ -136,14 +135,29 @@ public class BluetoothActions {
                 mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
             }
 
-            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context)
-                    && launchApp.canMapsLaunchOnThisDay(context);
             if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
                 launchApp.musicPlayerLaunch(context, 3);
             }
 
             if (launchMaps) {
                 launchApp.launchMaps(context, 3);
+            }
+
+            if(isWifiOffDevice){
+                int morningStartTime = BAPMPreferences.getMorningStartTime(context);
+                int morningEndTime = BAPMPreferences.getMorningEndTime(context);
+
+                int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
+                int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
+
+                TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime);
+                boolean isWorkLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.WORK);
+
+                boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
+                        || (isWorkLocation && launchApp.canMapsLaunchOnThisDay(context));
+                if(canChangeWifiState && WifiControl.isWifiON(context)){
+                    WifiControl.wifiON(context, false);
+                }
             }
 
             if (priorityMode) {
@@ -221,7 +235,20 @@ public class BluetoothActions {
             }
 
             if(isWifiOffDevice){
-                WifiControl.wifiON(context, true);
+                int morningStartTime = BAPMPreferences.getMorningStartTime(context);
+                int morningEndTime = BAPMPreferences.getMorningEndTime(context);
+
+                int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
+                int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
+
+                TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime);
+                boolean isHomeLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.HOME);
+
+                boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
+                        || (isHomeLocation && launchApp.canMapsLaunchOnThisDay(context));
+                if(canChangeWifiState && !WifiControl.isWifiON(context)) {
+                    WifiControl.wifiON(context, true);
+                }
                 BAPMDataPreferences.setIsTurnOffWifiDevice(context, false);
             }
 

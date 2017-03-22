@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import maderski.bluetoothautoplaymusic.Helpers.TimeFormatHelper;
+import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
@@ -306,7 +306,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningStartButton(View view){
-        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningStartTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(getContext()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -321,7 +321,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningEndButton(View view){
-        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningEndTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(getContext()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_end_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -336,7 +336,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningStartButton(View view){
-        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningStartTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(getContext()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -351,7 +351,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningEndButton(View view){
-        String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningEndTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(getContext()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_end_time_displayed);
         timeDisplayed.setText(setTime);
 

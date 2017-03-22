@@ -30,7 +30,7 @@ import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.AsyncTasks.StartServiceTask;
-import maderski.bluetoothautoplaymusic.Helpers.TimeFormatHelper;
+import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 if(isEndTime) {
                     BAPMPreferences.setMorningEndTime(this, timeSet);
 
-                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningEndTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 } else {
                     BAPMPreferences.setMorningStartTime(this, timeSet);
 
-                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getMorningStartTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 if(isEndTime) {
                     BAPMPreferences.setEveningEndTime(this, timeSet);
 
-                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningEndTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 } else {
                     BAPMPreferences.setEveningStartTime(this, timeSet);
 
-                    String setTime = TimeFormatHelper.get12hrTime(BAPMPreferences.getEveningStartTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_start_time_displayed);
                     timeDisplayed.setText(setTime);
 

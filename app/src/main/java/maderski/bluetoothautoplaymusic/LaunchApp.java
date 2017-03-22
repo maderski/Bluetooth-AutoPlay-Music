@@ -12,6 +12,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Calendar;
 
+import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.UI.LaunchBAPMActivity;
 import maderski.bluetoothautoplaymusic.UI.MainActivity;
@@ -117,11 +118,6 @@ public class LaunchApp extends PackageTools {
     public boolean canMapsLaunchDuringThisTime(Context context){
         boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
         if(isUseLaunchTimeEnabled) {
-            Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
-
-            int currentTime = (hour * 100) + minute;
 
             int morningStartTime = BAPMPreferences.getMorningStartTime(context);
             int morningEndTime = BAPMPreferences.getMorningEndTime(context);
@@ -129,31 +125,11 @@ public class LaunchApp extends PackageTools {
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
-            // Check if the EndTime is less than the StartTime, this means end time was set for early morning
-            if (morningEndTime < morningStartTime) {
-                if(currentTime >= 1200){
-                    morningEndTime += 2400;
-                } else {
-                    morningStartTime = 0;
-                }
-            } else if (eveningEndTime < eveningStartTime) {
-                if(currentTime >= 1200){
-                    eveningEndTime += 2400;
-                } else {
-                    eveningStartTime = 0;
-                }
-            }
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime,
+                    eveningStartTime, eveningEndTime);
+            mDirectionLocation = timeHelper.getDirectionLocation();
 
-            // Set whether to launch HOME or WORK directions
-            if(currentTime >= morningStartTime && currentTime <= morningEndTime){
-                mDirectionLocation = DirectionLocations.WORK;
-            } else if(currentTime >= eveningStartTime && currentTime <= eveningEndTime){
-                mDirectionLocation = DirectionLocations.HOME;
-            }
-
-            // Return result on whether Waze can launch or not
-            return currentTime >= morningStartTime && currentTime <= morningEndTime
-                    || currentTime >= eveningStartTime && currentTime <= eveningEndTime;
+            return timeHelper.isWithinTimeSpan();
         }
 
         return true;

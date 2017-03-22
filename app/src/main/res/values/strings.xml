@@ -54,4 +54,8 @@
     <string name="work_directions_label">WORK Directions Time Span</string>
     <string name="morning_time_span_label">Morning Time Span</string>
     <string name="evening_time_span_label">Evening Time Span</string>
+    <string name="launch_waze_directions_description">Launch Waze with Home/Work directions. Uses Home/Work Time spans that can be set below</string>
+    <string name="launch_directions_label">Launch with DIRECTIONS</string>
+    <string name="wifi_use_time_spans_caption_morning_evening">Turn WIFI OFF when Bluetooth Connects during the MORNING time span and turn WIFI ON when Bluetooth Disconnects during EVENING time span</string>
+    <string name="wifi_use_time_spans_caption_work_home">Turn WIFI OFF when Bluetooth Connects during the WORK time span and turn WIFI ON when Bluetooth Disconnects during HOME time span</string>
 </resources>

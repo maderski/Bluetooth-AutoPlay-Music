@@ -118,7 +118,7 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="20dp"
                     android:switchPadding="100dp"
-                    android:text="Launch with DIRECTIONS"
+                    android:text="@string/launch_directions_label"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     android:visibility="gone" />
@@ -127,7 +127,7 @@
                     android:id="@+id/launch_waze_directions_desc"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:text="Launch Waze with Home/Work directions.  Uses Home/Work Time spans that can be set below"
+                    android:text="@string/launch_waze_directions_description"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp"
                     android:visibility="gone" />

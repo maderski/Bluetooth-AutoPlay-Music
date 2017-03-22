@@ -54,6 +54,17 @@ public class BAPMPreferences {
     private static final String EVENING_END_TIME = "EveningEndTime";
     private static final String SHOW_NOTIFICATION = "ShowNotification";
     private static final String LAUNCH_DIRECTIONS = "LaunchDirections";
+    private static final String WIFI_USE_MAP_TIME_SPANS = "WifiUseMapTimeSpans";
+
+
+    public static void setWifiUseMapTimeSpans(Context context, boolean enable){
+        editor(context).putBoolean(WIFI_USE_MAP_TIME_SPANS, enable);
+        commit(context);
+    }
+
+    public static boolean getWifiUseMapTimeSpans(Context context) {
+        return reader(context).getBoolean(WIFI_USE_MAP_TIME_SPANS, false);
+    }
 
 
     public static void setCanLaunchDirections(Context context, boolean enable){

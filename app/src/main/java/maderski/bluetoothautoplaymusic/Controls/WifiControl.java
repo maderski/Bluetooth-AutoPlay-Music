@@ -16,4 +16,9 @@ public class WifiControl {
         String toastMessage = enable ? "Wifi turned ON" : "Wifi turned OFF";
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
     }
+
+    public static boolean isWifiON(Context context){
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.isWifiEnabled();
+    }
 }
