@@ -52,4 +52,6 @@
     <string name="use_times_to_launch_desc">Set time spans for Maps/Waze to Launch. Will only launch in between start and end times.</string>
     <string name="home_directions_label">HOME Directions Time Span</string>
     <string name="work_directions_label">WORK Directions Time Span</string>
+    <string name="morning_time_span_label">Morning Time Span</string>
+    <string name="evening_time_span_label">Evening Time Span</string>
 </resources>

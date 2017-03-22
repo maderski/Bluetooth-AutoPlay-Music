@@ -128,8 +128,8 @@ public class MapsFragment extends Fragment {
                         Log.d(TAG, "LaunchDirectionsSwitch is ON");
                     } else {
                         BAPMPreferences.setCanLaunchDirections(getContext(), false);
-                        morningTimeSpanText.setText("Morning Time Span");
-                        eveningTimeSpanText.setText("Evening Time Span");
+                        morningTimeSpanText.setText(R.string.morning_time_span_label);
+                        eveningTimeSpanText.setText(R.string.evening_time_span_label);
                         Log.d(TAG, "LaunchDirectionsSwitch is OFF");
                     }
                 }
@@ -137,8 +137,8 @@ public class MapsFragment extends Fragment {
         } else {
             launchDirectionsSwitch.setVisibility(View.GONE);
             launchDirectionsDesc.setVisibility(View.GONE);
-            morningTimeSpanText.setText("Morning Time Span");
-            eveningTimeSpanText.setText("Evening Time Span");
+            morningTimeSpanText.setText(R.string.morning_time_span_label);
+            eveningTimeSpanText.setText(R.string.evening_time_span_label);
         }
     }
 
@@ -156,6 +156,7 @@ public class MapsFragment extends Fragment {
                     boolean on = ((Switch) view).isChecked();
                     if (on) {
                         BAPMPreferences.setCloseWazeOnDisconnect(getContext(), true);
+                        BAPMPreferences.setSendToBackground(getContext(), true);
                         Log.d(TAG, "CloseWazeSwitch is ON");
                     } else {
                         BAPMPreferences.setCloseWazeOnDisconnect(getContext(), false);
