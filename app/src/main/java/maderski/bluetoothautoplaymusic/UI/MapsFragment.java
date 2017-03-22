@@ -20,8 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -110,8 +108,8 @@ public class MapsFragment extends Fragment {
 
         if(mapChoice.equals(PackageTools.PackageName.WAZE)){
             if(canLaunchDirections){
-                morningTimeSpanText.setText("HOME Time Span");
-                eveningTimeSpanText.setText("WORK Time Span");
+                morningTimeSpanText.setText(R.string.home_directions_label);
+                eveningTimeSpanText.setText(R.string.work_directions_label);
             }
 
             launchDirectionsSwitch.setChecked(canLaunchDirections);
@@ -125,8 +123,8 @@ public class MapsFragment extends Fragment {
                         BAPMPreferences.setCanLaunchDirections(getContext(), true);
                         BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
                         launchTimesSwitch.setChecked(true);
-                        morningTimeSpanText.setText("HOME Time Span");
-                        eveningTimeSpanText.setText("WORK Time Span");
+                        morningTimeSpanText.setText(R.string.work_directions_label);
+                        eveningTimeSpanText.setText(R.string.home_directions_label);
                         Log.d(TAG, "LaunchDirectionsSwitch is ON");
                     } else {
                         BAPMPreferences.setCanLaunchDirections(getContext(), false);

@@ -62,7 +62,7 @@ public class BAPMPreferences {
     }
 
     public static boolean getCanLaunchDirections(Context context) {
-        return reader(context).getBoolean(LAUNCH_DIRECTIONS, true);
+        return reader(context).getBoolean(LAUNCH_DIRECTIONS, false);
     }
 
     public static void setShowNotification(Context context, boolean enable){

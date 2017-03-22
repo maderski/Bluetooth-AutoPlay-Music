@@ -146,18 +146,18 @@ public class BluetoothActions {
                 launchApp.launchMaps(context, 3);
             }
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                boolean hasDoNotDisturbPerm = PermissionHelper.checkDoNotDisturbPermission(context, 10);
-                if (priorityMode && hasDoNotDisturbPerm) {
-                    BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
-                    ringerControl.soundsOFF();
+            if (priorityMode) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    boolean hasDoNotDisturbPerm = PermissionHelper.checkDoNotDisturbPermission(context, 10);
+                    if (hasDoNotDisturbPerm) {
+                        BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                        ringerControl.soundsOFF();
+                    } else {
+                        BroadcastReceiver broadcastReceiver = new NotifPolicyAccessChangedReceiver();
+                        IntentFilter intentFilter = new IntentFilter(NotificationManager.ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED);
+                        context.getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
+                    }
                 } else {
-                    BroadcastReceiver broadcastReceiver = new NotifPolicyAccessChangedReceiver();
-                    IntentFilter intentFilter = new IntentFilter(NotificationManager.ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED);
-                    context.getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
-                }
-            } else {
-                if (priorityMode) {
                     BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
                     ringerControl.soundsOFF();
                 }

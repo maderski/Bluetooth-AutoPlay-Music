@@ -50,4 +50,6 @@
     <string name="show_notification_explanation">Show a notification when Bluetooth connects.</string>
     <string name="use_times_to_launch">Use TIMES to Launch</string>
     <string name="use_times_to_launch_desc">Set time spans for Maps/Waze to Launch. Will only launch in between start and end times.</string>
+    <string name="home_directions_label">HOME Directions Time Span</string>
+    <string name="work_directions_label">WORK Directions Time Span</string>
 </resources>
