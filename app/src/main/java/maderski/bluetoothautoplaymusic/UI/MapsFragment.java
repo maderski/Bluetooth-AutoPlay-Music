@@ -108,8 +108,8 @@ public class MapsFragment extends Fragment {
 
         if(mapChoice.equals(PackageTools.PackageName.WAZE)){
             if(canLaunchDirections){
-                morningTimeSpanText.setText(R.string.home_directions_label);
-                eveningTimeSpanText.setText(R.string.work_directions_label);
+                morningTimeSpanText.setText(R.string.work_directions_label);
+                eveningTimeSpanText.setText(R.string.home_directions_label);
             }
 
             launchDirectionsSwitch.setChecked(canLaunchDirections);
