@@ -32,14 +32,14 @@ public class VolumeControl {
     }
 
     public void saveOriginalVolume(){
-        int originalVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int originalVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
         BAPMDataPreferences.setOriginalMediaVolume(mContext, originalVolume);
     }
 
     //Set original media volume
     public void setToOriginalVolume(){
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(mContext);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, 0);
+        am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, originalMediaVolume, 0);
 
         Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
