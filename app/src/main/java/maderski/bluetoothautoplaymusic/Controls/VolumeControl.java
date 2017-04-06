@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic.Controls;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -18,10 +19,13 @@ public class VolumeControl {
 
     private AudioManager am;
     private Context mContext;
+    private int mStreamType;
 
     public VolumeControl(Context context){
         am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         mContext = context;
+        mStreamType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
+                AudioManager.STREAM_NOTIFICATION : AudioManager.STREAM_MUSIC;
     }
 
     //Set Mediavolume to MAX
@@ -32,14 +36,14 @@ public class VolumeControl {
     }
 
     public void saveOriginalVolume(){
-        int originalVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+        int originalVolume = am.getStreamVolume(mStreamType);
         BAPMDataPreferences.setOriginalMediaVolume(mContext, originalVolume);
     }
 
     //Set original media volume
     public void setToOriginalVolume(){
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(mContext);
-        am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, originalMediaVolume, 0);
+        am.setStreamVolume(mStreamType, originalMediaVolume, 0);
 
         Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
     }
