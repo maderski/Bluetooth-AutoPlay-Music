@@ -257,7 +257,13 @@ public class BluetoothActions {
             }
 
             if (volumeMAX) {
-                volumeControl.setToOriginalVolume();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if(ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
+                        volumeControl.setToOriginalVolume();
+                    }
+                }else {
+                    volumeControl.setToOriginalVolume();
+                }
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
