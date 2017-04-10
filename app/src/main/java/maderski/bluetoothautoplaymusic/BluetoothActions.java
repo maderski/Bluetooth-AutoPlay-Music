@@ -257,13 +257,7 @@ public class BluetoothActions {
             }
 
             if (volumeMAX) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    if(ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
-                        volumeControl.setToOriginalVolume();
-                    }
-                }else {
-                    volumeControl.setToOriginalVolume();
-                }
+                volumeControl.setToOriginalVolume(ringerControl);
             }
 
             BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
@@ -276,7 +270,7 @@ public class BluetoothActions {
         playMusicControl.pause();
 
         // Put music volume back to original volume
-        volumeControl.setToOriginalVolume();
+        volumeControl.setToOriginalVolume(new RingerControl(context));
 
         if(BuildConfig.DEBUG)
             Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();

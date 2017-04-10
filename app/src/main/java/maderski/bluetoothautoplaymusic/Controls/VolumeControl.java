@@ -41,11 +41,20 @@ public class VolumeControl {
     }
 
     //Set original media volume
-    public void setToOriginalVolume(){
+    public void setToOriginalVolume(RingerControl ringerControl){
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(mContext);
-        am.setStreamVolume(mStreamType, originalMediaVolume, 0);
 
-        Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if(ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
+                am.setStreamVolume(mStreamType, originalMediaVolume, 0);
+
+                Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+            }
+        }else {
+            am.setStreamVolume(mStreamType, originalMediaVolume, 0);
+
+            Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+        }
     }
 
     //Wait 3 seconds before getting the Original Volume

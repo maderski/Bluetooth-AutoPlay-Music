@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
@@ -105,7 +106,7 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
                 if(audioManager.isMusicActive()) {
                     playMusicControl.pause();
                 }
-                volumeControl.setToOriginalVolume();
+                volumeControl.setToOriginalVolume(new RingerControl(context));
 
                 BAPMDataPreferences.setIsHeadphonesDevice(context, false);
                 if(BuildConfig.DEBUG)
