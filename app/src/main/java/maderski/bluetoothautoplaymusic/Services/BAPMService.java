@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.Services;
 
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
+import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
@@ -76,9 +78,17 @@ public class BAPMService extends Service {
             boolean isConnectedToBT = audioManager.isBluetoothA2dpOn();
 
             if (ranBAPM && isConnectedToBT) {
+                // Rehold wakelock
                 ScreenONLock screenONLock = ScreenONLock.getInstance();
                 screenONLock.releaseWakeLock();
                 screenONLock.enableWakeLock(this);
+
+                // Check if Keyguard is locked, if so unlock it
+                boolean isKeyguardLocked = ((KeyguardManager)getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
+                LaunchApp launchApp = new LaunchApp();
+                if(isKeyguardLocked) {
+                    launchApp.launchBAPMActivity(this);
+                }
 
                 // Log rehold wakelock event
                 FirebaseHelper firebaseHelper = new FirebaseHelper(this);
