@@ -421,8 +421,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
+                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
                 if(on) {
-                    mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         PermissionHelper.checkDoNotDisturbPermission(context, 0);
                     }
@@ -444,6 +444,9 @@ public class HomeFragment extends Fragment {
                 boolean on = ((ToggleButton) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.MAX_VOLUME, on);
                 if (on) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        PermissionHelper.checkDoNotDisturbPermission(context, 0);
+                    }
                     BAPMPreferences.setMaxVolume(context, true);
                     Log.d(TAG, "Max Volume Button is ON");
                 } else {
