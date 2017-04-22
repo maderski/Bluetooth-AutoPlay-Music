@@ -1,13 +1,13 @@
 package maderski.bluetoothautoplaymusic.Receivers;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
+import maderski.bluetoothautoplaymusic.BluetoothActions;
+import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 
 /**
  * Created by Jason on 1/28/17.
@@ -17,14 +17,12 @@ public class BTStateChangedReceiver extends BroadcastReceiver {
     private static final String TAG = "BTStateChangedReceiver";
 
     private String mAction;
-    private BluetoothState mBluetoothState;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent != null){
             if(intent.getAction() != null) {
                 mAction = intent.getAction();
-                mBluetoothState = new BluetoothReceiver();
                 connectionStateChangedActions(context, intent);
             }
         }
@@ -37,7 +35,9 @@ public class BTStateChangedReceiver extends BroadcastReceiver {
             switch (state) {
                 case BluetoothAdapter.STATE_OFF:
                     Log.d(TAG, "Bluetooth off");
-                    mBluetoothState.adapterOff(context);
+                    ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+                    BluetoothActions bluetoothActions = new BluetoothActions(context);
+                    bluetoothActions.actionsBTStateOff();
                     break;
                 case BluetoothAdapter.STATE_TURNING_OFF:
                     Log.d(TAG, "Turning Bluetooth off...");

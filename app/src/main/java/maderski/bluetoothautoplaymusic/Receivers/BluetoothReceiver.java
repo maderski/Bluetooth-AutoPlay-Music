@@ -14,7 +14,6 @@ import android.widget.Toast;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
-import maderski.bluetoothautoplaymusic.Interfaces.BluetoothState;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.BluetoothActions;
@@ -27,7 +26,7 @@ import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 /**
  * Created by Jason on 1/5/16.
  */
-public class BluetoothReceiver extends BroadcastReceiver implements BluetoothState {
+public class BluetoothReceiver extends BroadcastReceiver {
 
     private static final String TAG = BluetoothReceiver.class.getName();
 
@@ -205,12 +204,12 @@ public class BluetoothReceiver extends BroadcastReceiver implements BluetoothSta
         context.sendBroadcast(isSelectedIntent);
     }
 
-    @Override
-    public void adapterOff(Context context) {
-        ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
-        BluetoothActions bluetoothActions = new BluetoothActions(context);
-        bluetoothActions.actionsBTStateOff();
-    }
+//    @Override
+//    public void adapterOff(Context context) {
+//        ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+//        BluetoothActions bluetoothActions = new BluetoothActions(context);
+//        bluetoothActions.actionsBTStateOff();
+//    }
 
     private void checkForWifiTurnOffDevice(Context context, boolean isConnected){
         if(mDevice != null) {
