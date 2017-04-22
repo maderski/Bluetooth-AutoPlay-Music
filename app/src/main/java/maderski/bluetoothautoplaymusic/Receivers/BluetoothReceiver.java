@@ -148,6 +148,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 checkForWifiTurnOffDevice(context, true);
                 checksBeforeLaunch(context, mIsSelectedBTDevice, am);
                 ReceiverHelper.startReceiver(context, BTStateChangedReceiver.class);
+                ReceiverHelper.startReceiver(context, PowerReceiver.class);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
                 Log.d(TAG, "A2DP DISCONNECTING");
@@ -179,6 +180,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     checkForWifiTurnOffDevice(context, false);
                 }
                 ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+                ReceiverHelper.stopReceiver(context, PowerReceiver.class);
                 break;
         }
     }
@@ -203,13 +205,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
         isSelectedIntent.setAction("maderski.bluetoothautoplaymusic.isselected");
         context.sendBroadcast(isSelectedIntent);
     }
-
-//    @Override
-//    public void adapterOff(Context context) {
-//        ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
-//        BluetoothActions bluetoothActions = new BluetoothActions(context);
-//        bluetoothActions.actionsBTStateOff();
-//    }
 
     private void checkForWifiTurnOffDevice(Context context, boolean isConnected){
         if(mDevice != null) {
