@@ -141,6 +141,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
         switch (state) {
             case BluetoothProfile.STATE_CONNECTING:
                 Log.d(TAG, "A2DP CONNECTING");
+                VolumeControl volumeControl = new VolumeControl(context);
+                volumeControl.saveOriginalVolume();
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
                 break;
             case BluetoothProfile.STATE_CONNECTED:
                 Log.d(TAG, "A2DP CONNECTED");
