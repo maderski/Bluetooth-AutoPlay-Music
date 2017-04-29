@@ -129,10 +129,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "Bluetooth Intent Received: " + mAction);
 
-        switch (mAction) {
-            case BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED:
-                a2dpAction(context, am);
-                break;
+        if(mAction.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)) {
+            a2dpAction(context, am);
         }
     }
 
@@ -199,7 +197,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
         } else if (!powerRequired && isAUserSelectedBTDevice && isBTConnected) {
             mBluetoothActions.OnBTConnect();
         }
-
     }
 
     private void sendIsSelectedBroadcast(Context context, boolean isSelected){
