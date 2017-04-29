@@ -93,6 +93,37 @@ class Spotify extends PlayerControls {
     }
 }
 
+class FMIndia extends PlayerControls {
+    private static final String TAG = "FMIndia";
+
+    public FMIndia(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void play() {
+        Log.d(TAG, "FM India");
+        String packageName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
+
+        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+        downIntent.setPackage(packageName);
+        mContext.sendOrderedBroadcast(downIntent, null);
+
+        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+        upIntent.setPackage(packageName);
+        mContext.sendOrderedBroadcast(upIntent, null);
+    }
+
+    @Override
+    public void pause(){
+        // Do nothing
+    }
+}
+
 //class GooglePlayMusic extends PlayerControls{
 //    private static final String TAG = "GooglePlayMusic";
 //

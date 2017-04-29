@@ -41,6 +41,9 @@ public class PlayMusicControl {
             case PackageTools.PackageName.BEYONDPOD:
                 playerControls = new BeyondPod(mContext);
                 break;
+            case PackageTools.PackageName.FMINDIA:
+                playerControls = new FMIndia(mContext);
+                break;
             default:
                 playerControls = new OtherMusicPlayer(mContext);
                 break;
@@ -94,6 +97,8 @@ public class PlayMusicControl {
                         Log.d(TAG, "Final attempt to play");
                         playerControls.play_keyEvent();
                     }
+                } else {
+                    Log.d(TAG, "onFinish Music is Active");
                 }
                 mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());
                 mCountDownTimer = null;

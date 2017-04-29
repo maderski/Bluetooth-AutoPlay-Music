@@ -29,7 +29,8 @@ public class PackageTools {
             PackageName.SPOTIFY,
             PackageName.PANDORA,
             PackageName.BEYONDPOD,
-            PackageName.APPLEMUSIC
+            PackageName.APPLEMUSIC,
+            PackageName.FMINDIA
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface PackageName {
@@ -40,6 +41,7 @@ public class PackageTools {
         String PANDORA = "com.pandora.android";
         String BEYONDPOD = "mobi.beyondpod";
         String APPLEMUSIC = "com.apple.android.music";
+        String FMINDIA = "com.fmindia.activities";
     }
 
     // Launches App that is associated with that package that was put into method

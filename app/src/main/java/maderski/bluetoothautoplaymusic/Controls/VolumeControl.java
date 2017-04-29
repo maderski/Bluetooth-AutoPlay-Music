@@ -49,6 +49,8 @@ public class VolumeControl {
                 am.setStreamVolume(mStreamType, originalMediaVolume, 0);
 
                 Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
+            }else {
+                Log.d(TAG, "Did NOT set Media Volume");
             }
         }else {
             am.setStreamVolume(mStreamType, originalMediaVolume, 0);
