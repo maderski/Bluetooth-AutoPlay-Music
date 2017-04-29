@@ -47,14 +47,13 @@ public class VolumeControl {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
                 am.setStreamVolume(mStreamType, originalMediaVolume, 0);
-
                 Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
             }else {
                 Log.d(TAG, "Did NOT set Media Volume");
             }
-        }else {
+        } else {
             am.setStreamVolume(mStreamType, originalMediaVolume, 0);
-
+            am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, originalMediaVolume, 0);
             Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
         }
     }

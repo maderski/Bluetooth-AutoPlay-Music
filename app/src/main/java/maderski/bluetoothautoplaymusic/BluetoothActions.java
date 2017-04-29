@@ -77,26 +77,17 @@ public class BluetoothActions {
     //Player and Launches Maps
     public void actionsOnBTConnect(){
         synchronized (this) {
-            RingerControl ringerControl = new RingerControl(context);
-            LaunchApp launchApp = new LaunchApp();
+            final LaunchApp launchApp = new LaunchApp();
 
             boolean screenON = BAPMPreferences.getKeepScreenON(context);
-            boolean priorityMode = BAPMPreferences.getPriorityMode(context);
-            boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
             boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
-            boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
-            boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
-            boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
-            boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
             boolean canShowNotification = BAPMPreferences.getShowNotification(context);
-            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context)
-                    && launchApp.canMapsLaunchOnThisDay(context);
-
-            int checkToPlaySeconds = 7;
-
             String mapChoice = BAPMPreferences.getMapsChoice(context);
 
-            if(canShowNotification) {
+            volumeControl.saveOriginalVolume();
+            Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+
+            if (canShowNotification) {
                 notification.BAPMMessage(context, mapChoice);
             }
 
@@ -109,25 +100,42 @@ public class BluetoothActions {
             }
 
             if (unlockScreen) {
-                boolean isKeyguardLocked = ((KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
+                boolean isKeyguardLocked = ((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
                 Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
-                if(isKeyguardLocked) {
+                if (isKeyguardLocked) {
                     launchApp.launchBAPMActivity(context);
                 }
             }
 
-            if (volumeMAX) {
-                volumeControl.saveOriginalVolume();
-                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    continueOnBTConnectActions(launchApp);
+                }
+            };
+            handler.postDelayed(runnable, 3000);
 
-                Handler handler = new Handler();
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        volumeControl.checkSetMAXVol(4);
-                    }
-                };
-                handler.postDelayed(runnable, 3000);
+        }
+    }
+
+    private void continueOnBTConnectActions(LaunchApp launchApp){
+        synchronized (this) {
+            RingerControl ringerControl = new RingerControl(context);
+
+            boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+            boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
+            boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
+            boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
+            boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+            boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
+            boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context)
+                    && launchApp.canMapsLaunchOnThisDay(context);
+
+            int checkToPlaySeconds = 7;
+
+            if (volumeMAX) {
+                volumeControl.checkSetMAXVol(4);
             }
 
             if (playMusic) {
@@ -143,7 +151,7 @@ public class BluetoothActions {
                 launchApp.launchMaps(context, 3);
             }
 
-            if(isWifiOffDevice){
+            if (isWifiOffDevice) {
                 int morningStartTime = BAPMPreferences.getMorningStartTime(context);
                 int morningEndTime = BAPMPreferences.getMorningEndTime(context);
 
@@ -155,7 +163,7 @@ public class BluetoothActions {
 
                 boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
                         || (isWorkLocation && launchApp.canMapsLaunchOnThisDay(context));
-                if(canChangeWifiState && WifiControl.isWifiON(context)){
+                if (canChangeWifiState && WifiControl.isWifiON(context)) {
                     WifiControl.wifiON(context, false);
                 }
             }
