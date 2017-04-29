@@ -53,7 +53,6 @@ public class VolumeControl {
             }
         } else {
             am.setStreamVolume(mStreamType, originalMediaVolume, 0);
-            am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, originalMediaVolume, 0);
             Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
         }
     }
