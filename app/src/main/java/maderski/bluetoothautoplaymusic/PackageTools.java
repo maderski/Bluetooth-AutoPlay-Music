@@ -30,7 +30,9 @@ public class PackageTools {
             PackageName.PANDORA,
             PackageName.BEYONDPOD,
             PackageName.APPLEMUSIC,
-            PackageName.FMINDIA
+            PackageName.FMINDIA,
+            PackageName.POWERAMP,
+            PackageName.DOUBLETWIST
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface PackageName {
@@ -42,6 +44,8 @@ public class PackageTools {
         String BEYONDPOD = "mobi.beyondpod";
         String APPLEMUSIC = "com.apple.android.music";
         String FMINDIA = "com.fmindia.activities";
+        String POWERAMP = "com.maxmpz.audioplayer";
+        String DOUBLETWIST = "com.doubleTwist.androidPlayer";
     }
 
     // Launches App that is associated with that package that was put into method

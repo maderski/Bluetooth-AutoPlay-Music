@@ -8,8 +8,8 @@ android {
         applicationId "maderski.bluetoothautoplaymusic"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 71
-        versionName "3.18"
+        versionCode 72
+        versionName "3.19"
     }
     buildTypes {
         release {
@@ -36,10 +36,5 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.2.0'
     testCompile 'junit:junit:4.12'
 }
-
-
-
-
-
 
 apply plugin: 'com.google.gms.google-services'
