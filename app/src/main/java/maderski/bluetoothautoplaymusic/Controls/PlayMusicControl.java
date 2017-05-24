@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic.Controls;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
@@ -90,9 +91,21 @@ public class PlayMusicControl {
                 if(!audioManager.isMusicActive()){
                     String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
                     if(selectedMusicPlayer.equals(PackageTools.PackageName.PANDORA)){
-                        LaunchApp launchApp = new LaunchApp();
+                        final LaunchApp launchApp = new LaunchApp();
                         launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
                         Log.d(TAG, "PANDORA LAUNCHED");
+
+                        Handler handler = new Handler();
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                if(BAPMPreferences.getLaunchGoogleMaps(context)){
+                                    String choosenMapApp = BAPMPreferences.getMapsChoice(context);
+                                    launchApp.launchPackage(context, choosenMapApp);
+                                }
+                            }
+                        };
+                        handler.postDelayed(runnable, 3000);
                     }else {
                         Log.d(TAG, "Final attempt to play");
                         playerControls.play_keyEvent();
