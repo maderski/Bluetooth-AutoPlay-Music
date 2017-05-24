@@ -42,15 +42,17 @@ public class BluetoothReceiver extends BroadcastReceiver {
         if(intent != null) {
             mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (mDevice != null && intent.getAction() != null) {
-                mIsSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(mDevice.getName());
-                Log.d(TAG, "Connected device: " + mDevice.getName() +
+                if(mDevice.getName() != null) {
+                    mIsSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(mDevice.getName());
+                    Log.d(TAG, "Connected device: " + mDevice.getName() +
                             "\n" + "is SelectedBTDevice: " + Boolean.toString(mIsSelectedBTDevice));
 
-                mAction = intent.getAction();
-                mIntent = intent;
-                Log.d(TAG, "ACTION: " + mAction);
-                mFirebaseHelper = new FirebaseHelper(context);
-                selectedDevicePrepForActions(context);
+                    mAction = intent.getAction();
+                    mIntent = intent;
+                    Log.d(TAG, "ACTION: " + mAction);
+                    mFirebaseHelper = new FirebaseHelper(context);
+                    selectedDevicePrepForActions(context);
+                }
             }
         }
     }
