@@ -14,6 +14,7 @@ import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
+import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -53,10 +54,7 @@ public class BluetoothLaunchHelper {
 
                 checkForWifiTurnOffDevice(true);
 
-                ReceiverHelper.startReceiver(mContext, BTStateChangedReceiver.class);
-                if(BAPMPreferences.getPowerConnected(mContext)) {
-                    ReceiverHelper.startReceiver(mContext, PowerReceiver.class);
-                }
+                startReceivers();
                 break;
             case BluetoothProfile.STATE_CONNECTED:
                 Log.d(TAG, "A2DP CONNECTED");
@@ -71,7 +69,7 @@ public class BluetoothLaunchHelper {
                 break;
             case BluetoothProfile.STATE_DISCONNECTED:
                 Log.d(TAG, "A2DP DISCONNECTED");
-                
+
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, "Device disconnected: " + mDevice.getName());
                     Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)));
@@ -92,12 +90,33 @@ public class BluetoothLaunchHelper {
                 if(!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)){
                     checkForWifiTurnOffDevice(false);
                 }
-                ReceiverHelper.stopReceiver(mContext, BTStateChangedReceiver.class);
 
-                if(BAPMPreferences.getPowerConnected(mContext)) {
-                    ReceiverHelper.stopReceiver(mContext, PowerReceiver.class);
-                }
+                stopReceivers();
                 break;
+        }
+    }
+
+    private void startReceivers(){
+        ReceiverHelper.startReceiver(mContext, BTStateChangedReceiver.class);
+
+        if(BAPMPreferences.getWaitTillOffPhone(mContext) || BAPMPreferences.getPowerConnected(mContext)){
+            ReceiverHelper.startReceiver(mContext, CustomReceiver.class);
+        }
+
+        if(BAPMPreferences.getPowerConnected(mContext)) {
+            ReceiverHelper.startReceiver(mContext, PowerReceiver.class);
+        }
+    }
+
+    private void stopReceivers(){
+        ReceiverHelper.stopReceiver(mContext, BTStateChangedReceiver.class);
+
+        if(BAPMPreferences.getPowerConnected(mContext)) {
+            ReceiverHelper.stopReceiver(mContext, PowerReceiver.class);
+        }
+
+        if(BAPMPreferences.getWaitTillOffPhone(mContext) || BAPMPreferences.getPowerConnected(mContext)){
+            ReceiverHelper.stopReceiver(mContext, CustomReceiver.class);
         }
     }
 

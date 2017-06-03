@@ -14,8 +14,6 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
-import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
-import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -24,9 +22,6 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
  * Created by Jason on 1/5/16.
  */
 public class BAPMService extends Service {
-    BluetoothReceiver mBluetoothReceiver;
-    CustomReceiver mCustomReceiver;
-    PowerReceiver mPowerReceiver;
 
     //Start the Bluetooth receiver as a service
     @Override
@@ -37,7 +32,6 @@ public class BAPMService extends Service {
         }
 
         ReceiverHelper.startReceiver(this, BluetoothReceiver.class);
-        ReceiverHelper.startReceiver(this, CustomReceiver.class);
 
         // Rehold WakeLock due to Service Restart
         reHoldWakeLock();
@@ -48,18 +42,7 @@ public class BAPMService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mBluetoothReceiver != null){
-            mBluetoothReceiver = null;
-        }
-
-
-        if(mCustomReceiver != null) {
-            mCustomReceiver = null;
-        }
-
-        if(mPowerReceiver != null) {
-            mPowerReceiver = null;
-        }
+        ReceiverHelper.stopReceiver(this, BluetoothReceiver.class);
     }
 
     @Override
