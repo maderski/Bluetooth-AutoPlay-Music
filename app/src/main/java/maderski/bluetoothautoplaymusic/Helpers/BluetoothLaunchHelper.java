@@ -45,6 +45,7 @@ public class BluetoothLaunchHelper {
         switch (mState) {
             case BluetoothProfile.STATE_CONNECTING:
                 Log.d(TAG, "A2DP CONNECTING");
+
                 // Get Original volume
                 VolumeControl volumeControl = new VolumeControl(mContext);
                 volumeControl.saveOriginalVolume();
@@ -70,6 +71,7 @@ public class BluetoothLaunchHelper {
                 break;
             case BluetoothProfile.STATE_DISCONNECTED:
                 Log.d(TAG, "A2DP DISCONNECTED");
+                
                 if(BuildConfig.DEBUG) {
                     Log.i(TAG, "Device disconnected: " + mDevice.getName());
                     Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)));

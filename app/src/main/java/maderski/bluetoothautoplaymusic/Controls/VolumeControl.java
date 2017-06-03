@@ -17,42 +17,49 @@ public class VolumeControl {
 
     private static final String TAG = VolumeControl.class.getName();
 
-    private AudioManager am;
-    private Context mContext;
-    private int mStreamType;
+    private final AudioManager am;
+    private final Context mContext;
+    private final int mStreamType;
 
     public VolumeControl(Context context){
         am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         mContext = context;
-        mStreamType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+        mStreamType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
                 AudioManager.STREAM_NOTIFICATION : AudioManager.STREAM_MUSIC;
     }
 
-    //Set Mediavolume to MAX
+    // Set Mediavolume to MAX
     public void volumeMAX(){
         int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         Log.d(TAG, "Max Media Volume is: " + Integer.toString(maxVolume));
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI);
     }
 
     public void saveOriginalVolume(){
-        int originalVolume = am.getStreamVolume(mStreamType);
+        int originalVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
         BAPMDataPreferences.setOriginalMediaVolume(mContext, originalVolume);
     }
 
-    //Set original media volume
+    // Set to specified media volume
+    public void setSpecifiedVolume(int volumeValue) {
+        am.setStreamVolume(mStreamType, volumeValue, AudioManager.FLAG_SHOW_UI);
+        Log.d(TAG, "SET VOLUME TO: " + String.valueOf(volumeValue)
+        + "MAX VOL: " + String.valueOf(am.getStreamMaxVolume(mStreamType)));
+    }
+
+    // Set original media volume
     public void setToOriginalVolume(RingerControl ringerControl){
         int originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(mContext);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
-                am.setStreamVolume(mStreamType, originalMediaVolume, 0);
+                am.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI);
                 Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
             }else {
                 Log.d(TAG, "Did NOT set Media Volume");
             }
         } else {
-            am.setStreamVolume(mStreamType, originalMediaVolume, 0);
+            am.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI);
             Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume));
         }
     }
@@ -80,7 +87,7 @@ public class VolumeControl {
     private void setToMaxVol(){
         final int maxVolume = BAPMPreferences.getUserSetMaxVolume(mContext);
         if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
-            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, 0);
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI);
             Log.d(TAG, "Set Volume To MAX");
         } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
             Log.d(TAG, "Volume is at MAX!");

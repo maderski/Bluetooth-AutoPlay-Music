@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic.BluetoothActions;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Handler;
@@ -46,7 +45,7 @@ public class BTHeadphonesActions {
                 // Get headphone preferred volume
                 int preferredVolume = BAPMPreferences.getHeadphonePreferredVolume(mContext);
                 // Set headphone preferred volume
-                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, preferredVolume, 0);
+                mVolumeControl.setSpecifiedVolume(preferredVolume);
                 // Play music
                 mPlayMusicControl.play();
                 // Start checking if music is playing
