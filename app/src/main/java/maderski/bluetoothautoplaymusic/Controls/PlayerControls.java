@@ -124,6 +124,20 @@ class FMIndia extends PlayerControls {
     }
 }
 
+class GooglePlayMusic extends PlayerControls {
+
+    public GooglePlayMusic(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void play() {
+        Intent intent = new Intent("com.android.music.musicservicecommand");
+        intent.putExtra("command", "play");
+        mContext.sendBroadcast(intent);
+    }
+}
+
 class OtherMusicPlayer extends PlayerControls {
     private static final String TAG = "OtherMusicPlayer";
 

@@ -1,15 +1,13 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.BluetoothActions;
 
 import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
@@ -18,27 +16,28 @@ import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
-import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
-import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
+import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.Telephone;
 
 /**
- * Created by Jason on 2/22/16.
+ * Created by Jason on 6/3/17.
  */
-public class BluetoothActions {
 
-    private static final String TAG = BluetoothActions.class.getName();
+public class BTConnectActions {
+    private static final String TAG = "BTConnectActions";
 
-    private ScreenONLock mScreenONLock;
-    private Context context;
-    private Notification mNotification;
-    private VolumeControl mVolumeControl;
-    private PlayMusicControl mPlayMusicControl;
+    private final ScreenONLock mScreenONLock;
+    private final Context context;
+    private final Notification mNotification;
+    private final VolumeControl mVolumeControl;
+    private final PlayMusicControl mPlayMusicControl;
 
-    public BluetoothActions(Context context){
+    public BTConnectActions(Context context){
         this.context = context;
         this.mScreenONLock = ScreenONLock.getInstance();
         this.mNotification = new Notification();
@@ -76,20 +75,18 @@ public class BluetoothActions {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     public void actionsOnBTConnect(){
-        synchronized (this) {
-            LaunchApp launchApp = new LaunchApp();
+        LaunchApp launchApp = new LaunchApp();
 
-            showBTAMNotification();
-            turnTheScreenOn();
-            unlockTheScreen(launchApp);
-            setVolumeToMax();
-            autoPlayMusic(7);
-            launchMusicMapApp(launchApp);
-            setWifiOff(launchApp);
-            putPhoneInDoNotDistrub();
+        setVolumeToMax();
+        autoPlayMusic(6);
+        showBTAMNotification();
+        turnTheScreenOn();
+        unlockTheScreen(launchApp);
+        launchMusicMapApp(launchApp);
+        setWifiOff(launchApp);
+        putPhoneInDoNotDisturb();
 
-            BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
-        }
+        BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
     }
 
     private void showBTAMNotification(){
@@ -181,7 +178,7 @@ public class BluetoothActions {
         }
     }
 
-    private void putPhoneInDoNotDistrub(){
+    private void putPhoneInDoNotDisturb(){
         RingerControl ringerControl = new RingerControl(context);
         boolean priorityMode = BAPMPreferences.getPriorityMode(context);
 
@@ -201,131 +198,5 @@ public class BluetoothActions {
                 ringerControl.soundsOFF();
             }
         }
-    }
-
-    //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
-    //pauses the music
-    public void actionsOnBTDisconnect(){
-        synchronized (this) {
-            LaunchApp launchApp = new LaunchApp();
-            RingerControl ringerControl = new RingerControl(context);
-
-            removeBAPMNotification();
-            pauseMusic();
-            turnOffPriorityMode(ringerControl);
-            sendAppToBackground(launchApp);
-            closeWaze(launchApp);
-            setWifiOn(launchApp);
-            stopKeepingScreenOn();
-            setVolumeBack(ringerControl);
-
-            BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
-        }
-    }
-
-    private void removeBAPMNotification(){
-        boolean canShowNotification = BAPMPreferences.getShowNotification(context);
-
-        if(canShowNotification) {
-            mNotification.removeBAPMMessage(context);
-        }
-    }
-
-    private void pauseMusic(){
-        boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
-        if (playMusic) {
-            mPlayMusicControl.pause();
-        }
-    }
-
-    private void sendAppToBackground(LaunchApp launchApp){
-        boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
-        if (sendToBackground) {
-            launchApp.sendEverythingToBackground(context);
-        }
-    }
-
-    private void turnOffPriorityMode(RingerControl ringerControl){
-
-        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
-        if (priorityMode) {
-            int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
-            try {
-                switch (currentRinger) {
-                    case AudioManager.RINGER_MODE_SILENT:
-                        Log.d(TAG, "Phone is on Silent");
-                        break;
-                    case AudioManager.RINGER_MODE_VIBRATE:
-                        ringerControl.vibrateOnly();
-                        break;
-                    case AudioManager.RINGER_MODE_NORMAL:
-                        ringerControl.soundsON();
-                        break;
-                }
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
-    }
-
-    private void closeWaze(LaunchApp launchApp){
-        boolean closeWaze = BAPMPreferences.getCloseWazeOnDisconnect(context)
-                && launchApp.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
-                && BAPMPreferences.getMapsChoice(context).equals(PackageTools.PackageName.WAZE);
-        if(closeWaze) {
-            launchApp.closeWazeOnDisconnect(context);
-        }
-    }
-
-    private void setWifiOn(LaunchApp launchApp){
-        boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
-        if(isWifiOffDevice){
-            int morningStartTime = BAPMPreferences.getMorningStartTime(context);
-            int morningEndTime = BAPMPreferences.getMorningEndTime(context);
-
-            int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
-            int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
-
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime);
-            boolean isHomeLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.HOME);
-
-            boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isHomeLocation && launchApp.canMapsLaunchOnThisDay(context));
-            if(canChangeWifiState && !WifiControl.isWifiON(context)) {
-                WifiControl.wifiON(context, true);
-            }
-            BAPMDataPreferences.setIsTurnOffWifiDevice(context, false);
-        }
-    }
-
-    private void stopKeepingScreenOn(){
-        boolean screenON = BAPMPreferences.getKeepScreenON(context);
-        if (screenON) {
-            mScreenONLock.releaseWakeLock();
-        }
-    }
-
-    private void setVolumeBack(RingerControl ringerControl){
-        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
-        if (volumeMAX) {
-            mVolumeControl.setToOriginalVolume(ringerControl);
-        }
-    }
-
-    public void actionsBTStateOff(){
-        // Pause music
-        PlayMusicControl playMusicControl = new PlayMusicControl(context);
-        playMusicControl.pause();
-
-        // Put music volume back to original volume
-        mVolumeControl.setToOriginalVolume(new RingerControl(context));
-
-        if(BuildConfig.DEBUG)
-            Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
-
-        if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
-            actionsOnBTDisconnect();
-        }
-        ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
     }
 }

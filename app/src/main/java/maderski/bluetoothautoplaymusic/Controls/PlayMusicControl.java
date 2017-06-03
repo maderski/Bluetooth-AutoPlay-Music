@@ -24,29 +24,29 @@ public class PlayMusicControl {
 
     private static CountDownTimer mCountDownTimer;
 
-    private Context mContext;
-
     public PlayMusicControl(Context context){
-        mContext = context;
-        setPlayerControls();
+        setPlayerControls(context);
         mFirebaseHelper = new FirebaseHelper(context);
     }
 
-    private void setPlayerControls(){
-        String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
+    private void setPlayerControls(Context context){
+        String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
         Log.d(TAG, "PLAYER: " + pkgName);
         switch (pkgName) {
             case PackageTools.PackageName.SPOTIFY:
-                playerControls = new Spotify(mContext);
+                playerControls = new Spotify(context);
                 break;
             case PackageTools.PackageName.BEYONDPOD:
-                playerControls = new BeyondPod(mContext);
+                playerControls = new BeyondPod(context);
                 break;
             case PackageTools.PackageName.FMINDIA:
-                playerControls = new FMIndia(mContext);
+                playerControls = new FMIndia(context);
+                break;
+            case PackageTools.PackageName.GOOGLEPLAYMUSIC:
+                playerControls = new GooglePlayMusic(context);
                 break;
             default:
-                playerControls = new OtherMusicPlayer(mContext);
+                playerControls = new OtherMusicPlayer(context);
                 break;
         }
     }
@@ -69,20 +69,19 @@ public class PlayMusicControl {
     }
 
     public synchronized void checkIfPlaying(final Context context, final int seconds){
-        long milliseconds = seconds * 1000;
-        mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+            long milliseconds = seconds * 1000;
+            mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
             @Override
             public void onTick(long l) {
-                if(BuildConfig.DEBUG){
-                    Log.d(TAG, "millsUntilFinished: " + Long.toString(l));
-                    Log.d(TAG, "isMusicPlaying: " + Boolean.toString(audioManager.isMusicActive()));
+                if(!audioManager.isMusicActive()){
+                    play();
                 }
 
-                if(audioManager.isMusicActive()){
-                    Log.d(TAG, "Music is playing");
-                }else{
-                    play();
+                if(BuildConfig.DEBUG){
+                    Log.d(TAG, "millsUntilFinished: " + Long.toString(l) +
+                            "isMusicPlaying: " + Boolean.toString(audioManager.isMusicActive()));
                 }
             }
 
@@ -90,6 +89,7 @@ public class PlayMusicControl {
             public void onFinish() {
                 if(!audioManager.isMusicActive()){
                     String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+
                     if(selectedMusicPlayer.equals(PackageTools.PackageName.PANDORA)){
                         final LaunchApp launchApp = new LaunchApp();
                         launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
@@ -106,9 +106,9 @@ public class PlayMusicControl {
                             }
                         };
                         handler.postDelayed(runnable, 3000);
-                    }else {
-                        Log.d(TAG, "Final attempt to play");
-                        playerControls.play_keyEvent();
+                    } else if(!selectedMusicPlayer.equals(PackageTools.PackageName.GOOGLEPLAYMUSIC)) {
+                            Log.d(TAG, "Final attempt to play");
+                            playerControls.play_keyEvent();
                     }
                 } else {
                     Log.d(TAG, "onFinish Music is Active");

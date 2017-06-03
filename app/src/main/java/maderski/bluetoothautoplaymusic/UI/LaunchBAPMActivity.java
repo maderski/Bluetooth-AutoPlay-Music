@@ -34,22 +34,16 @@ public class LaunchBAPMActivity extends AppCompatActivity {
 
     //Dismiss the KeyGuard
     private void dismissKeyGuard(Context context){
-
+        Window window = getWindow();
         if (!BAPMPreferences.getKeepScreenON(context)){
             ScreenONLock screenONLock = ScreenONLock.getInstance();
             screenONLock.enableWakeLock(context);
-            Window window = ((Activity) context).getWindow();
-            //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-            //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             screenONLock.releaseWakeLock();
         }else{
-            Window window = ((Activity) context).getWindow();
-            //window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
             window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-            //window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 

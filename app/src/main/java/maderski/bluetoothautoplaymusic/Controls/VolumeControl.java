@@ -24,7 +24,7 @@ public class VolumeControl {
     public VolumeControl(Context context){
         am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         mContext = context;
-        mStreamType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
+        mStreamType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
                 AudioManager.STREAM_NOTIFICATION : AudioManager.STREAM_MUSIC;
     }
 
