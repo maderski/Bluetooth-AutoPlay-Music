@@ -29,7 +29,7 @@
     <string name="dim_time_button_text">Dim Time</string>
     <string name="autoplay_only">Autoplay Only</string>
     <string name="volume_text">Volume</string>
-    <string name="volume_caption">Volume set here ONlY effects autoplay devices.</string>
+    <string name="volume_caption">Volume set here ONLY effects autoplay devices.</string>
     <string name="devices_text">Devices</string>
     <string name="device_text_caption">For headphones or a speaker that you just want to play music when connected</string>
     <string name="done_button_text">Done</string>

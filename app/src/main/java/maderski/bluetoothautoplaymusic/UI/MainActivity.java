@@ -128,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         final View bottomNavBar = findViewById(R.id.bottom_navigation);
         bottomNavBar.animate().alpha(0).start();
         final View view = findViewById(R.id.toolbar);
-        Snackbar snackbar = Snackbar.make(view, "Created by: Jason Maderski" + "\n" + "Version: " + showVersion(), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view, "Created by: Jason Maderski" + "\n" +
+                "Version: " + getVersion(), Snackbar.LENGTH_LONG);
         snackbar.getView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {}
@@ -186,8 +187,8 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 Toast.LENGTH_LONG).show();
     }
 
-    //Show Version of the BAPM App
-    private String showVersion(){
+    // Show version of the BAPM App
+    private String getVersion(){
         String version = "none";
 
         try {
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         return version;
     }
 
-    //Starts BAPMService if it is not running
+    // Starts BAPMService if it is not running
     private void checkIfBAPMServiceRunning(){
         if(!isServiceRunning(BAPMService.class)){
             new StartServiceTask().execute(this);
