@@ -9,6 +9,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
@@ -30,6 +33,8 @@ public class BAPMService extends Service {
             Log.d("BAPMService: ", "started");
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
+
+        Fabric.with(this, new Crashlytics());
 
         ReceiverHelper.startReceiver(this, BluetoothReceiver.class);
 
