@@ -6,6 +6,8 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.Arrays;
+
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.LaunchApp;
@@ -88,7 +90,10 @@ public class PlayMusicControl {
             @Override
             public void onFinish() {
                 if(!audioManager.isMusicActive()){
+                    String[] nonKeyEventPlayers = { PackageTools.PackageName.GOOGLEPLAYMUSIC,
+                            PackageTools.PackageName.SPOTIFY};
                     String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+                    boolean shouldTryKeyEvent = !Arrays.asList(nonKeyEventPlayers).contains(selectedMusicPlayer);
 
                     if(selectedMusicPlayer.equals(PackageTools.PackageName.PANDORA)){
                         final LaunchApp launchApp = new LaunchApp();
@@ -105,10 +110,13 @@ public class PlayMusicControl {
                                 }
                             }
                         };
-                        handler.postDelayed(runnable, 3000);
-                    } else if(!selectedMusicPlayer.equals(PackageTools.PackageName.GOOGLEPLAYMUSIC)) {
+                        handler.postDelayed(runnable, 4000);
+                    } else if(shouldTryKeyEvent) {
                             Log.d(TAG, "Final attempt to play");
                             playerControls.play_keyEvent();
+                    } else {
+                        Log.d(TAG, "Play media Button");
+                        playerControls.play_mediaButton();
                     }
                 } else {
                     Log.d(TAG, "onFinish Music is Active");
