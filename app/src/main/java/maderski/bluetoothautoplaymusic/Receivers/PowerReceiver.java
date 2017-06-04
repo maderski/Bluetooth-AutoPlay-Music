@@ -18,24 +18,20 @@ public class PowerReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Toast.makeText(context, "BAPM Power Connected", Toast.LENGTH_SHORT).show();
 
-        if(BAPMDataPreferences.getIsSelected(context) && PowerHelper.isPluggedIn(context)) {
-            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-            boolean isBTConnected = audioManager.isBluetoothA2dpOn();
-            boolean powerRequired = BAPMPreferences.getPowerConnected(context);
-            boolean ranActionsOnBtConnect = BAPMDataPreferences.getRanActionsOnBtConnect(context);
-            boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context);
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        boolean isBTConnected = audioManager.isBluetoothA2dpOn();
+        boolean powerRequired = BAPMPreferences.getPowerConnected(context);
+        boolean ranActionsOnBtConnect = BAPMDataPreferences.getRanActionsOnBtConnect(context);
+        boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context);
 
-            Log.d(TAG, "Power Connected to a Selected BTDevice");
-            Log.d(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
+        Log.d(TAG, "Power Connected to a Selected BTDevice");
+        Log.d(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));
 
-            if (powerRequired && isBTConnected && !ranActionsOnBtConnect && !isHeadphones) {
-                //Toast.makeText(context, "BTAudioPWR Launch", Toast.LENGTH_SHORT).show();
-                Intent launchIntent = new Intent();
-                launchIntent.setAction("maderski.bluetoothautoplaymusic.pluggedinlaunch");
-                context.sendBroadcast(launchIntent);
-            }
+        if (powerRequired && isBTConnected && !ranActionsOnBtConnect && !isHeadphones) {
+            Intent launchIntent = new Intent();
+            launchIntent.setAction("maderski.bluetoothautoplaymusic.pluggedinlaunch");
+            context.sendBroadcast(launchIntent);
         }
     }
 

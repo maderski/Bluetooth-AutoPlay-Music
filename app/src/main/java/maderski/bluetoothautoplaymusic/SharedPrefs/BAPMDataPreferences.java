@@ -11,7 +11,6 @@ public class BAPMDataPreferences{
 
     private static String MY_PREFS_NAME = "BAPMDataPreference";
 
-    private static final String IS_SELECTED_KEY = "IsSelectedDevice";
     private static final String RAN_ACTIONS_ON_BT_CONNECT_KEY = "RanActionsOnBTConnect";
     private static final String CURRENT_RINGER_SET = "CurrentRingerSet";
     private static final String ORIGINAL_MEDIA_VOLUME = "OriginalMediaVolume";
@@ -85,15 +84,6 @@ public class BAPMDataPreferences{
 
     public static int getCurrentRingerSet(Context context){
         return reader(context).getInt(CURRENT_RINGER_SET, 2);
-    }
-
-    public static void setIsSelected(Context context, boolean enabled){
-        editor(context).putBoolean(IS_SELECTED_KEY, enabled);
-        commit(context);
-    }
-
-    public static boolean getIsSelected(Context context){
-        return reader(context).getBoolean(IS_SELECTED_KEY, false);
     }
 
     public static void setRanActionsOnBtConnect(Context context, boolean enabled){

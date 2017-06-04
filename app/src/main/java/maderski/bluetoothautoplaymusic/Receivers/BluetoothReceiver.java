@@ -32,7 +32,6 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
                 boolean isASelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(btDeviceName);
                 boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(btDeviceName);
-                BAPMDataPreferences.setIsSelected(context, isASelectedBTDevice);
                 Log.d(TAG, "Device: " + btDeviceName +
                         "\nis SelectedBTDevice: " + Boolean.toString(isASelectedBTDevice) +
                         "\nis A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
