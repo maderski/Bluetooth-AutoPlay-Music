@@ -5,12 +5,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTHeadphonesActions;
 import maderski.bluetoothautoplaymusic.Helpers.BluetoothLaunchHelper;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
