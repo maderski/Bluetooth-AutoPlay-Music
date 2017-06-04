@@ -38,10 +38,8 @@ public class BluetoothReceiver extends BroadcastReceiver {
                         "\nis A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
 
                 if(isASelectedBTDevice || isAHeadphonesBTDevice) {
-                    AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-
                     if(isAHeadphonesBTDevice){
-                        BTHeadphonesActions btHeadphonesActions = new BTHeadphonesActions(context, audioManager);
+                        BTHeadphonesActions btHeadphonesActions = new BTHeadphonesActions(context);
                         switch (action) {
                             case BluetoothDevice.ACTION_ACL_CONNECTED:
                                 btHeadphonesActions.connectActions();

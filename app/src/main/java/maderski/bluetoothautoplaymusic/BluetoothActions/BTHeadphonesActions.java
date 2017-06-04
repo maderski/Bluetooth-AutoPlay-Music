@@ -27,9 +27,10 @@ public class BTHeadphonesActions {
     private final VolumeControl mVolumeControl;
     private final AudioManager mAudioManager;
 
-    public BTHeadphonesActions(Context context, AudioManager audioManager){
+    public BTHeadphonesActions(Context context){
         mContext = context;
-        mAudioManager = audioManager;
+
+        mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
         mPlayMusicControl = new PlayMusicControl(context);
         mVolumeControl = new VolumeControl(context);
