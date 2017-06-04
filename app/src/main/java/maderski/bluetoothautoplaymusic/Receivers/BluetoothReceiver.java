@@ -18,22 +18,22 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
  */
 public class BluetoothReceiver extends BroadcastReceiver {
 
-    private static final String TAG = BluetoothReceiver.class.getName();
+    private static final String TAG = "BluetoothReceiver";
 
     //On receive of Broadcast
     public void onReceive(Context context, Intent intent) {
         if(intent != null) {
             BluetoothDevice btDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (btDevice != null && intent.getAction() != null) {
-                final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
-
                 final String action = intent.getAction();
                 Log.d(TAG, "ACTION: " + action);
 
-                boolean isASelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(btDevice.getName());
-                boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(btDevice.getName());
+                final String btDeviceName = btDevice.getName() != null ? btDevice.getName() : "None";
+
+                boolean isASelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(btDeviceName);
+                boolean isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(btDeviceName);
                 BAPMDataPreferences.setIsSelected(context, isASelectedBTDevice);
-                Log.d(TAG, "Device: " + btDevice.getName() +
+                Log.d(TAG, "Device: " + btDeviceName +
                         "\nis SelectedBTDevice: " + Boolean.toString(isASelectedBTDevice) +
                         "\nis A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
 
@@ -51,9 +51,12 @@ public class BluetoothReceiver extends BroadcastReceiver {
                                 break;
                         }
                     } else if(action.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)){
+                        final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
+                        
                         BluetoothLaunchHelper bluetoothLaunchHelper =
                                 new BluetoothLaunchHelper(context,
-                                        btDevice, state);
+                                        btDeviceName, state);
+
                         bluetoothLaunchHelper.a2dpAction();
                     }
                 }

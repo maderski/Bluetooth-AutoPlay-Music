@@ -3,8 +3,9 @@ package maderski.bluetoothautoplaymusic.Helpers;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.media.AudioManager;
 import android.util.Log;
+
+import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTConnectActions;
@@ -27,12 +28,12 @@ public class BluetoothLaunchHelper {
     private static final String TAG = "BluetoothLaunchHelper";
 
     private final Context mContext;
-    private final BluetoothDevice mDevice;
+    private final String mDeviceName;
     private final int mState;
 
-    public BluetoothLaunchHelper(Context context, BluetoothDevice btDevice, int state){
+    public BluetoothLaunchHelper(Context context, String btDeviceName, int state){
         mContext = context;
-        mDevice = btDevice;
+        mDeviceName = btDeviceName;
         mState = state;
     }
 
@@ -62,7 +63,7 @@ public class BluetoothLaunchHelper {
                 checksBeforeLaunch();
 
                 FirebaseHelper firebaseHelper = new FirebaseHelper(mContext);
-                firebaseHelper.connectViaA2DP(mDevice.getName(), true);
+                firebaseHelper.connectViaA2DP(mDeviceName, true);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
                 Log.d(TAG, "A2DP DISCONNECTING");
@@ -71,7 +72,7 @@ public class BluetoothLaunchHelper {
                 Log.d(TAG, "A2DP DISCONNECTED");
 
                 if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "Device disconnected: " + mDevice.getName());
+                    Log.i(TAG, "Device disconnected: " + mDeviceName);
                     Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)));
                     Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(mContext)));
                 }
@@ -135,8 +136,9 @@ public class BluetoothLaunchHelper {
     }
 
     private void checkForWifiTurnOffDevice(boolean isConnected){
-        if(mDevice != null) {
-            if (BAPMPreferences.getTurnWifiOffDevices(mContext).contains(mDevice.getName())) {
+        Set<String> turnOffWifiDevices = BAPMPreferences.getTurnWifiOffDevices(mContext);
+        if(turnOffWifiDevices.size() > 0) {
+            if (turnOffWifiDevices.contains(mDeviceName)) {
                 BAPMDataPreferences.setIsTurnOffWifiDevice(mContext, isConnected);
                 Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: " + Boolean.toString(isConnected));
             }
