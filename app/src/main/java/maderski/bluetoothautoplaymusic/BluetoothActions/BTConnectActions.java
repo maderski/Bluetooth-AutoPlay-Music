@@ -138,7 +138,6 @@ public class BTConnectActions {
     private void autoPlayMusic(int checkToPlaySeconds){
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
         if (playMusic) {
-            mPlayMusicControl.play();
             mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
         }
     }

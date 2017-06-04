@@ -70,7 +70,7 @@ public class PlayMusicControl {
 
     public synchronized void checkIfPlaying(final Context context, final int seconds){
             long milliseconds = seconds * 1000;
-            mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+            mCountDownTimer = new CountDownTimer(milliseconds, 2000) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
             @Override
