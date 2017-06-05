@@ -42,7 +42,7 @@ public class VolumeControl {
 
     // Set to specified media volume
     public void setSpecifiedVolume(int volumeValue) {
-        am.setStreamVolume(mStreamType, volumeValue, AudioManager.FLAG_SHOW_UI);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, volumeValue, AudioManager.FLAG_SHOW_UI);
         Log.d(TAG, "SET VOLUME TO: " + String.valueOf(volumeValue)
         + "MAX VOL: " + String.valueOf(am.getStreamMaxVolume(mStreamType)));
     }
