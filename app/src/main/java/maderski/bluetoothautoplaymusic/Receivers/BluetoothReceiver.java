@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTHeadphonesActions;
-import maderski.bluetoothautoplaymusic.Helpers.BluetoothLaunchHelper;
+import maderski.bluetoothautoplaymusic.Helpers.BluetoothConnectHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
@@ -46,16 +46,13 @@ public class BluetoothReceiver extends BroadcastReceiver {
                                 break;
                         }
                     } else if(action.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)){
-                        final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
-                        
-                        BluetoothLaunchHelper bluetoothLaunchHelper =
-                                new BluetoothLaunchHelper(context,
-                                        btDeviceName, state);
+                        final BluetoothConnectHelper bluetoothConnectHelper =
+                                new BluetoothConnectHelper(context, btDeviceName);
 
-                        bluetoothLaunchHelper.a2dpAction();
+                        final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
+                        bluetoothConnectHelper.a2dpActions(state);
                     }
                 }
-
             }
         }
     }

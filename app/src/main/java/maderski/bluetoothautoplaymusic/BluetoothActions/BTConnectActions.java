@@ -19,10 +19,16 @@ import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Notification;
+import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
+import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.Telephone;
+import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 6/3/17.
@@ -78,15 +84,16 @@ public class BTConnectActions {
         LaunchApp launchApp = new LaunchApp();
 
         setVolumeToMax();
-        autoPlayMusic(6);
         showBTAMNotification();
         turnTheScreenOn();
         unlockTheScreen(launchApp);
         launchMusicMapApp(launchApp);
         setWifiOff(launchApp);
         putPhoneInDoNotDisturb();
+        autoPlayMusic(6);
 
         BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
+        ServiceUtils.stopService(context, OnBTConnectService.class, OnBTConnectService.TAG);
     }
 
     private void showBTAMNotification(){

@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.Helpers;
+package maderski.bluetoothautoplaymusic.Utils;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by Jason on 3/10/17.
  */
 
-public class ReceiverHelper {
+public class ReceiverUtils {
     private static final String TAG = "ReceiverHelper";
 
     // Start a receiver

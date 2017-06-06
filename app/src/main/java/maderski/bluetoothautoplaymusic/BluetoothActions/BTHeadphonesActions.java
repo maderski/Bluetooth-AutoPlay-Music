@@ -10,10 +10,13 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
-import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
+import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 6/3/17.
@@ -60,7 +63,7 @@ public class BTHeadphonesActions {
         };
         handler.postDelayed(runnable, 6000);
 
-        ReceiverHelper.startReceiver(mContext, BTStateChangedReceiver.class);
+        ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 
     public void disconnectActions(){
@@ -75,6 +78,6 @@ public class BTHeadphonesActions {
         if(BuildConfig.DEBUG)
             Toast.makeText(mContext, "Music Paused", Toast.LENGTH_SHORT).show();
 
-        ReceiverHelper.stopReceiver(mContext, BTStateChangedReceiver.class);
+        ServiceUtils.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 }

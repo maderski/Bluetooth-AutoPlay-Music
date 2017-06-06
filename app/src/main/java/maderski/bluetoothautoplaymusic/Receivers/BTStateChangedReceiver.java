@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTDisconnectActions;
-import maderski.bluetoothautoplaymusic.Helpers.ReceiverHelper;
+import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
 
 /**
  * Created by Jason on 1/28/17.
@@ -35,7 +35,7 @@ public class BTStateChangedReceiver extends BroadcastReceiver {
             switch (state) {
                 case BluetoothAdapter.STATE_OFF:
                     Log.d(TAG, "Bluetooth off");
-                    ReceiverHelper.stopReceiver(context, BTStateChangedReceiver.class);
+                    ReceiverUtils.stopReceiver(context, BTStateChangedReceiver.class);
                     BTDisconnectActions btDisconnectActions = new BTDisconnectActions(context);
                     btDisconnectActions.actionsBTStateOff();
                     break;

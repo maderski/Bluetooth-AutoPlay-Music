@@ -13,37 +13,35 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Notification;
-import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
-import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
-import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 6/1/17.
  */
 
-public class BluetoothLaunchHelper {
+public class BluetoothConnectHelper {
     private static final String TAG = "BluetoothLaunchHelper";
 
     private final Context mContext;
     private final String mDeviceName;
-    private final int mState;
 
-    public BluetoothLaunchHelper(Context context, String btDeviceName, int state){
+    public BluetoothConnectHelper(Context context, String btDeviceName){
         mContext = context;
         mDeviceName = btDeviceName;
-        mState = state;
     }
 
-    public void a2dpAction() {
+    public void a2dpActions(int state) {
         boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(mContext);
 
         if(isHeadphones){
             BAPMDataPreferences.setIsHeadphonesDevice(mContext, false);
         }
 
-        switch (mState) {
+        switch (state) {
             case BluetoothProfile.STATE_CONNECTING:
                 Log.d(TAG, "A2DP CONNECTING");
 
@@ -54,7 +52,7 @@ public class BluetoothLaunchHelper {
 
                 checkForWifiTurnOffDevice(true);
 
-                startReceivers();
+                startAdditionalServices();
                 break;
             case BluetoothProfile.STATE_CONNECTED:
                 Log.d(TAG, "A2DP CONNECTED");
@@ -69,54 +67,48 @@ public class BluetoothLaunchHelper {
                 break;
             case BluetoothProfile.STATE_DISCONNECTED:
                 Log.d(TAG, "A2DP DISCONNECTED");
-
-                if(BuildConfig.DEBUG) {
-                    Log.i(TAG, "Device disconnected: " + mDeviceName);
-                    Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)));
-                    Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(mContext)));
-                }
-
-                if(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
-                    PlayMusicControl.cancelCheckIfPlaying();
-                    BTDisconnectActions btDisconnectActions = new BTDisconnectActions(mContext);
-                    btDisconnectActions.actionsOnBTDisconnect();
-                }
-
-                if(BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)){
-                    Notification notification = new Notification();
-                    notification.removeBAPMMessage(mContext);
-                }
-
-                if(!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)){
-                    checkForWifiTurnOffDevice(false);
-                }
-
-                stopReceivers();
+                btDisconnectActions();
                 break;
         }
     }
 
-    private void startReceivers(){
-        ReceiverHelper.startReceiver(mContext, BTStateChangedReceiver.class);
-
-        if(BAPMPreferences.getWaitTillOffPhone(mContext) || BAPMPreferences.getPowerConnected(mContext)){
-            ReceiverHelper.startReceiver(mContext, CustomReceiver.class);
+    public void btDisconnectActions(){
+        if(BuildConfig.DEBUG) {
+            Log.i(TAG, "Device disconnected: " + mDeviceName);
+            Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)));
+            Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(mContext)));
         }
 
-        if(BAPMPreferences.getPowerConnected(mContext)) {
-            ReceiverHelper.startReceiver(mContext, PowerReceiver.class);
+        stopAdditionalServices();
+
+        if(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
+            PlayMusicControl.cancelCheckIfPlaying();
+            BTDisconnectActions btDisconnectActions = new BTDisconnectActions(mContext);
+            btDisconnectActions.actionsOnBTDisconnect();
+        }
+
+        if(BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)){
+            Notification notification = new Notification();
+            notification.removeBAPMMessage(mContext);
+        }
+
+        if(!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)){
+            checkForWifiTurnOffDevice(false);
         }
     }
 
-    private void stopReceivers(){
-        ReceiverHelper.stopReceiver(mContext, BTStateChangedReceiver.class);
+    private void startAdditionalServices(){
+        ServiceUtils.startService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
+        ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+    }
 
-        if(BAPMPreferences.getPowerConnected(mContext)) {
-            ReceiverHelper.stopReceiver(mContext, PowerReceiver.class);
-        }
+    private void stopAdditionalServices(){
+        boolean didNotLaunchBAPM = !BAPMDataPreferences.getRanActionsOnBtConnect(mContext);
+        Log.d(TAG, "Did not launch BAPM: " + String.valueOf(didNotLaunchBAPM));
 
-        if(BAPMPreferences.getWaitTillOffPhone(mContext) || BAPMPreferences.getPowerConnected(mContext)){
-            ReceiverHelper.stopReceiver(mContext, CustomReceiver.class);
+        if(didNotLaunchBAPM) {
+            ServiceUtils.stopService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
+            ServiceUtils.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
         }
     }
 
