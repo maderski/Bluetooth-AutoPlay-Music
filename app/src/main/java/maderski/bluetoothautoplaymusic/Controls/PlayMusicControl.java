@@ -31,7 +31,7 @@ public class PlayMusicControl {
         mFirebaseHelper = new FirebaseHelper(context);
     }
 
-    private void setPlayerControls(Context context){
+    private void setPlayerControls(final Context context){
         String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
         Log.d(TAG, "PLAYER: " + pkgName);
         switch (pkgName) {
@@ -72,7 +72,7 @@ public class PlayMusicControl {
 
     public synchronized void checkIfPlaying(final Context context, final int seconds){
             long milliseconds = seconds * 1000;
-            mCountDownTimer = new CountDownTimer(milliseconds, 2000) {
+            mCountDownTimer = new CountDownTimer(milliseconds, 3000) {
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
             @Override
@@ -90,10 +90,10 @@ public class PlayMusicControl {
             @Override
             public void onFinish() {
                 if(!audioManager.isMusicActive()){
-                    String[] nonKeyEventPlayers = { PackageTools.PackageName.GOOGLEPLAYMUSIC,
-                            PackageTools.PackageName.SPOTIFY};
+                    // String[] nonKeyEventPlayers = { PackageTools.PackageName.GOOGLEPLAYMUSIC };
                     String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
-                    boolean shouldTryKeyEvent = !Arrays.asList(nonKeyEventPlayers).contains(selectedMusicPlayer);
+                    // boolean shouldTryKeyEvent = !Arrays.asList(nonKeyEventPlayers).contains(selectedMusicPlayer);
+                    boolean shouldTryKeyEvent = !selectedMusicPlayer.equals(PackageTools.PackageName.GOOGLEPLAYMUSIC);
 
                     if(selectedMusicPlayer.equals(PackageTools.PackageName.PANDORA)){
                         final LaunchApp launchApp = new LaunchApp();

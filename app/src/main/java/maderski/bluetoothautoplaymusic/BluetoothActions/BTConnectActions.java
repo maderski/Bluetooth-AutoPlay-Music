@@ -6,7 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
@@ -81,19 +84,50 @@ public class BTConnectActions {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     public void actionsOnBTConnect(){
-        LaunchApp launchApp = new LaunchApp();
+        final LaunchApp launchApp = new LaunchApp();
+        final boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
 
-        setVolumeToMax();
         showBTAMNotification();
+        setVolumeToMax();
         turnTheScreenOn();
-        unlockTheScreen(launchApp);
-        launchMusicMapApp(launchApp);
-        setWifiOff(launchApp);
-        putPhoneInDoNotDisturb();
-        autoPlayMusic(6);
+
+        if(unlockScreen){
+            performActionsDelay(launchApp, unlockScreen);
+        } else {
+            launchMusicMapApp(launchApp);
+            autoPlayMusic(6);
+            setWifiOff(launchApp);
+            putPhoneInDoNotDisturb();
+        }
 
         BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
         ServiceUtils.stopService(context, OnBTConnectService.class, OnBTConnectService.TAG);
+    }
+
+    private void performActionsDelay(final LaunchApp launchApp, final boolean unlockScreen){
+        int seconds = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30000 : 8000;
+
+        new CountDownTimer(seconds, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 &&
+                        !((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isDeviceLocked()) {
+                    cancel();
+                    onFinish();
+                }
+                Log.d(TAG, "LOCKED mills left to check: " + String.valueOf(millisUntilFinished));
+            }
+
+            @Override
+            public void onFinish() {
+                unlockTheScreen(launchApp, unlockScreen);
+                launchMusicMapApp(launchApp);
+                autoPlayMusic(6);
+                setWifiOff(launchApp);
+                putPhoneInDoNotDisturb();
+            }
+        }.start();
     }
 
     private void showBTAMNotification(){
@@ -115,8 +149,7 @@ public class BTConnectActions {
         }
     }
 
-    private void unlockTheScreen(LaunchApp launchApp){
-        boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
+    private void unlockTheScreen(LaunchApp launchApp, boolean unlockScreen){
         if (unlockScreen) {
             boolean isKeyguardLocked = ((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
             Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
@@ -142,7 +175,7 @@ public class BTConnectActions {
         }
     }
 
-    private void autoPlayMusic(int checkToPlaySeconds){
+    private void autoPlayMusic(final int checkToPlaySeconds){
         boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
         if (playMusic) {
             mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
