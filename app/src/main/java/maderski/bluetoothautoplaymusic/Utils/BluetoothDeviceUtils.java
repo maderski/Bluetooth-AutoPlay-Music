@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.Helpers;
+package maderski.bluetoothautoplaymusic.Utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,7 +11,7 @@ import java.util.Set;
  * Created by Jason on 1/14/17.
  */
 
-public class BluetoothDeviceHelper {
+public class BluetoothDeviceUtils {
     //List of bluetooth devices on the phone
     public static List<String> listOfBluetoothDevices(){
         List<String> btDevices = new ArrayList<String>();

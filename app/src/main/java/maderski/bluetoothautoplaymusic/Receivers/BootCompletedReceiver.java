@@ -27,8 +27,10 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     private void checkIfBluetoothEnabled(){
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(!bluetoothAdapter.isEnabled()){
-            bluetoothAdapter.enable();
+        if(bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                bluetoothAdapter.enable();
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import maderski.bluetoothautoplaymusic.Helpers.BluetoothDeviceHelper;
+import maderski.bluetoothautoplaymusic.Utils.BluetoothDeviceUtils;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -112,7 +112,7 @@ public class HeadphonesFragment extends DialogFragment{
 
         LinearLayout autoplayCkBoxLL = (LinearLayout) view.findViewById(R.id.autoplay_only_ll);
         autoplayCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothDeviceHelper.listOfBluetoothDevices();
+        List<String> listOfBTDevices = BluetoothDeviceUtils.listOfBluetoothDevices();
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(getActivity());

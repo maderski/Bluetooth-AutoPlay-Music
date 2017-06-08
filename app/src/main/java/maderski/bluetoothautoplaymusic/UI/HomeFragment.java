@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.Helpers.BluetoothDeviceHelper;
+import maderski.bluetoothautoplaymusic.Utils.BluetoothDeviceUtils;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.PackageTools;
@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment {
 
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) view.findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothDeviceHelper.listOfBluetoothDevices();
+        List<String> listOfBTDevices = BluetoothDeviceUtils.listOfBluetoothDevices();
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(context);
