@@ -87,7 +87,13 @@ public class PlayMusicControl {
             boolean isGooglePlayMusic = selectedMusicPlayer.equals(PackageTools.PackageName.GOOGLEPLAYMUSIC);
 
             if(isGooglePlayMusic){
-                play();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        play();
+                    }
+                }, 2000);
+
 
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "isMusicPlaying: " + Boolean.toString(audioManager.isMusicActive()));
@@ -107,7 +113,7 @@ public class PlayMusicControl {
                         }
                     }
                 };
-                mHandler.postDelayed(mRunnable, 6000);
+                mHandler.postDelayed(mRunnable, 8000);
             } else {
                 final long milliseconds = seconds * 1000;
                 mCountDownTimer = new CountDownTimer(milliseconds, 3000) {
