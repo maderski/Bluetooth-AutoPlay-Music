@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -49,17 +50,17 @@ public abstract class PlayerControls {
         mAudioManager.dispatchMediaKeyEvent(upEvent);
     }
 
-    public synchronized void play_mediaButton(){
-        String packageName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext);
-
-        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+    public void play_mediaButton(final String packageName){
+        final Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        final KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        downIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
         downIntent.setPackage(packageName);
         mContext.sendOrderedBroadcast(downIntent, null);
 
-        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        final Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        final KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        upIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
         upIntent.setPackage(packageName);
         mContext.sendOrderedBroadcast(upIntent, null);
@@ -91,21 +92,18 @@ class Spotify extends PlayerControls {
     @Override
     public void play() {
         Log.d(TAG, "Spotify Play Music");
-        Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        i.setComponent(new ComponentName(PackageTools.PackageName.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
-        i.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
-        mContext.sendOrderedBroadcast(i, null);
+        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        downIntent.setComponent(new ComponentName(PackageTools.PackageName.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+        downIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        downIntent.putExtra(Intent.EXTRA_KEY_EVENT,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
+        mContext.sendOrderedBroadcast(downIntent, null);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-                i.setComponent(new ComponentName(PackageTools.PackageName.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
-                i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
-                mContext.sendOrderedBroadcast(i, null);
-            }
-        }, 125);
+        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        upIntent.setComponent(new ComponentName(PackageTools.PackageName.SPOTIFY, "com.spotify.music.internal.receiver.MediaButtonReceiver"));
+        upIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+        mContext.sendOrderedBroadcast(upIntent, null);
+
     }
 }
 

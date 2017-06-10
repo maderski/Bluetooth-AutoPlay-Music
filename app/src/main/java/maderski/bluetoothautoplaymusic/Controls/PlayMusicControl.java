@@ -80,87 +80,56 @@ public class PlayMusicControl {
     }
 
     public synchronized void checkIfPlaying(final Context context, final int seconds){
-            final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-            // String[] nonKeyEventPlayers = { PackageTools.PackageName.GOOGLEPLAYMUSIC };
-            final String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
-            // boolean shouldTryKeyEvent = !Arrays.asList(nonKeyEventPlayers).contains(selectedMusicPlayer);
-            boolean isGooglePlayMusic = selectedMusicPlayer.equals(PackageTools.PackageName.GOOGLEPLAYMUSIC);
+        final int milliSeconds = seconds * 1000;
+        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        final String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                play();
+            }
+        }, 3000);
 
-            if(isGooglePlayMusic){
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        play();
-                    }
-                }, 2000);
-
-
+        mHandler = new Handler();
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "isMusicPlaying: " + Boolean.toString(audioManager.isMusicActive()));
                 }
 
-                mHandler = new Handler();
-                mRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (BuildConfig.DEBUG) {
-                            Log.d(TAG, "isMusicPlaying: " + Boolean.toString(audioManager.isMusicActive()));
-                        }
-
-                        if(!audioManager.isMusicActive()){
+                if(!audioManager.isMusicActive()){
+                    switch (selectedMusicPlayer){
+                        case PackageTools.PackageName.PANDORA:
+                            finalAttemptToPlayPandora(context, audioManager);
+                            break;
+                        default:
                             Log.d(TAG, "Play media Button");
-                            playerControls.play_mediaButton();
-                        }
+                            playerControls.play_mediaButton(selectedMusicPlayer);
+                            break;
                     }
-                };
-                mHandler.postDelayed(mRunnable, 8000);
-            } else {
-                final long milliseconds = seconds * 1000;
-                mCountDownTimer = new CountDownTimer(milliseconds, 3000) {
-
-                    @Override
-                    public void onTick(long l) {
-                        if (!audioManager.isMusicActive()) {
-                            play();
-                        }
-
-                        if (BuildConfig.DEBUG) {
-                            Log.d(TAG, "millsUntilFinished: " + Long.toString(l) +
-                                    "isMusicPlaying: " + Boolean.toString(audioManager.isMusicActive()));
-                        }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        if (!audioManager.isMusicActive()) {
-                            if (selectedMusicPlayer.equals(PackageTools.PackageName.PANDORA)) {
-                                final LaunchApp launchApp = new LaunchApp();
-                                launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
-                                Log.d(TAG, "PANDORA LAUNCHED");
-
-                                Handler handler = new Handler();
-                                Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (BAPMPreferences.getLaunchGoogleMaps(context)) {
-                                            String choosenMapApp = BAPMPreferences.getMapsChoice(context);
-                                            launchApp.launchPackage(context, choosenMapApp);
-                                        }
-                                    }
-                                };
-                                handler.postDelayed(runnable, 4000);
-                            } else {
-                                Log.d(TAG, "Final attempt to play");
-                                playerControls.play_keyEvent();
-                            }
-                        } else {
-                            Log.d(TAG, "onFinish Music is Active");
-                        }
-                        mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());
-                        mCountDownTimer = null;
-                    }
-                }.start();
+                }
             }
+        };
+        mHandler.postDelayed(mRunnable, milliSeconds);
+    }
+
+    private void finalAttemptToPlayPandora(final Context context, final AudioManager audioManager){
+        final LaunchApp launchApp = new LaunchApp();
+        launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
+        Log.d(TAG, "PANDORA LAUNCHED");
+
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (BAPMPreferences.getLaunchGoogleMaps(context)) {
+                    String choosenMapApp = BAPMPreferences.getMapsChoice(context);
+                    launchApp.launchPackage(context, choosenMapApp);
+                }
+            }
+        };
+        handler.postDelayed(runnable, 4000);
     }
 }
 
