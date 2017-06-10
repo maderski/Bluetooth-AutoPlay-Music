@@ -90,6 +90,7 @@ class BeyondPod extends PlayerControls {
     public void play() {
         Log.d(TAG, "Beyond Pod Music");
         Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.setAction("mobi.beyondpod.command.PLAY");
         mContext.sendBroadcast(intent);
     }
