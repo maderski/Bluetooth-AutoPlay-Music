@@ -24,7 +24,6 @@ public class PlayMusicControl {
     private PlayerControls playerControls;
     private FirebaseHelper mFirebaseHelper;
 
-    private static CountDownTimer mCountDownTimer;
     private static Handler mHandler;
     private static Runnable mRunnable;
 
@@ -63,13 +62,6 @@ public class PlayMusicControl {
     }
 
     public static boolean cancelCheckIfPlaying(){
-        if(mCountDownTimer != null){
-            mCountDownTimer.cancel();
-            Log.d(TAG, "Music Play Check CANCELLED");
-            mCountDownTimer = null;
-            return true;
-        }
-
         if(mHandler != null && mRunnable != null){
             mHandler.removeCallbacks(mRunnable);
             Log.d(TAG, "Music Play Check CANCELLED");
