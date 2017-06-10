@@ -21,11 +21,11 @@ public class PlayMusicControl {
 
     private static final String TAG = PlayMusicControl.class.getName();
 
-    private PlayerControls playerControls;
-    private FirebaseHelper mFirebaseHelper;
-
     private static Handler mHandler;
     private static Runnable mRunnable;
+
+    private PlayerControls playerControls;
+    private FirebaseHelper mFirebaseHelper;
 
     public PlayMusicControl(Context context){
         setPlayerControls(context);
@@ -47,6 +47,9 @@ public class PlayMusicControl {
                 break;
             case PackageTools.PackageName.GOOGLEPLAYMUSIC:
                 playerControls = new GooglePlayMusic(context);
+                break;
+            case PackageTools.PackageName.PANDORA:
+                playerControls = new Pandora(context);
                 break;
             default:
                 playerControls = new OtherMusicPlayer(context);
@@ -101,6 +104,8 @@ public class PlayMusicControl {
                             break;
                     }
                 }
+
+                mFirebaseHelper.musicAutoPlay(audioManager.isMusicActive());
             }
         };
         mHandler.postDelayed(mRunnable, milliSeconds);

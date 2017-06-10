@@ -67,6 +67,19 @@ public abstract class PlayerControls {
     }
 }
 
+class Pandora extends PlayerControls {
+
+    public Pandora(Context context) {
+        super(context);
+    }
+
+    @Override
+    public void play() {
+        play_mediaButton(PackageTools.PackageName.PANDORA);
+        play_keyEvent();
+    }
+}
+
 class BeyondPod extends PlayerControls {
     private static final String TAG = "BeyondPod";
 
@@ -121,12 +134,14 @@ class FMIndia extends PlayerControls {
 
         Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        downIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
         downIntent.setPackage(packageName);
         mContext.sendOrderedBroadcast(downIntent, null);
 
         Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY);
+        upIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
         upIntent.setPackage(packageName);
         mContext.sendOrderedBroadcast(upIntent, null);
@@ -147,7 +162,9 @@ class GooglePlayMusic extends PlayerControls {
     @Override
     public void play() {
         Intent intent = new Intent("com.android.music.musicservicecommand");
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.putExtra("command", "play");
+        intent.setPackage(PackageTools.PackageName.GOOGLEPLAYMUSIC);
         mContext.sendBroadcast(intent);
     }
 }
