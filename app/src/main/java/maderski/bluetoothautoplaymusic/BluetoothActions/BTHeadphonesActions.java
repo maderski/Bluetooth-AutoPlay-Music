@@ -50,10 +50,8 @@ public class BTHeadphonesActions {
                 int preferredVolume = BAPMPreferences.getHeadphonePreferredVolume(mContext);
                 // Set headphone preferred volume
                 mVolumeControl.setSpecifiedVolume(preferredVolume);
-                // Play music
-                mPlayMusicControl.play();
                 // Start checking if music is playing
-                mPlayMusicControl.checkIfPlaying(mContext, 5);
+                mPlayMusicControl.checkIfPlaying(mContext, 8);
                 Log.d(TAG, "HEADPHONE VOLUME SET TO:" + Integer.toString(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
 
                 BAPMDataPreferences.setIsHeadphonesDevice(mContext, true);
@@ -61,7 +59,7 @@ public class BTHeadphonesActions {
                     Toast.makeText(mContext, "Music Playing", Toast.LENGTH_SHORT).show();
             }
         };
-        handler.postDelayed(runnable, 6000);
+        handler.postDelayed(runnable, 4000);
 
         ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
