@@ -58,15 +58,14 @@ public class ServiceRestartUtils {
         A2DPHelper a2dpHelper = new A2DPHelper(new A2DPHelper.A2DPCallbacks() {
             @Override
             public void connectedDeviceNames(Set<String> deviceNames) {
-                Set<String> connectedBTDevices = deviceNames;
                 Set<String> selectedBTDevices = BAPMPreferences.getBTDevices(context);
 
                 boolean isBTConnected = audioManager.isBluetoothA2dpOn();
                 boolean isOnBTConnectServiceRunning = ServiceUtils.isServiceRunning(context, OnBTConnectService.class);
                 boolean isBTStateChangedServiceRunning = ServiceUtils.isServiceRunning(context, BTStateChangedService.class);
-                boolean isASelectedBTDevice = !Collections.disjoint(selectedBTDevices, connectedBTDevices);
+                boolean isASelectedBTDevice = !Collections.disjoint(selectedBTDevices, deviceNames);
                 Log.d(TAG, "CONNECTED DEVICE IS SELECTED: " + String.valueOf(isASelectedBTDevice)
-                        + " " + String.valueOf(connectedBTDevices.size()));
+                        + " " + String.valueOf(deviceNames.size()));
                 boolean shouldStartServices = isBTConnected && isASelectedBTDevice &&
                         !isBTStateChangedServiceRunning && !isOnBTConnectServiceRunning;
                 Log.d(TAG, "SHOULD START SERVICES: " + String.valueOf(shouldStartServices));
