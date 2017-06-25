@@ -1,11 +1,8 @@
 package maderski.bluetoothautoplaymusic.Services;
 
-import android.app.KeyguardManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,15 +10,9 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
-import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
-import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
-import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
-import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
-import maderski.bluetoothautoplaymusic.Utils.WakeLockUtils;
+import maderski.bluetoothautoplaymusic.Utils.ServiceRestartUtils;
 
 /**
  * Created by Jason on 1/5/16.
@@ -38,8 +29,10 @@ public class BAPMService extends Service {
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show();
         }
 
+        // Initalize and start Crashlytics
         Fabric.with(this, new Crashlytics());
 
+        // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.bluetooth.device.action.ACL_CONNECTED");
         filter.addAction("android.bluetooth.device.action.ACL_DISCONNECTED");
@@ -47,7 +40,10 @@ public class BAPMService extends Service {
         registerReceiver(mBluetoothReceiver, filter);
 
         // Rehold WakeLock due to Service Restart
-        WakeLockUtils.reHoldWakeLock(this);
+        ServiceRestartUtils.reHoldWakeLock(this);
+
+        // Restart additional services due to Service Restart
+        ServiceRestartUtils.restartAdditionServices(this);
 
         return Service.START_STICKY;
     }
@@ -55,6 +51,8 @@ public class BAPMService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         unregisterReceiver(mBluetoothReceiver);
     }
 

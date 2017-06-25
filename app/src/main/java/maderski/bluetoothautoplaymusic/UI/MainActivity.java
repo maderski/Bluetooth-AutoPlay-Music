@@ -36,6 +36,7 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener, WifiOffFragment.OnFragmentInteractionListener {
@@ -203,21 +204,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     // Starts BAPMService if it is not running
     private void checkIfBAPMServiceRunning(){
-        if(!isServiceRunning(BAPMService.class)){
+        boolean isServiceRunning = ServiceUtils.isServiceRunning(this, BAPMService.class);
+        if(!isServiceRunning){
             new StartServiceTask().execute(this);
         }
-    }
-
-    private boolean isServiceRunning(Class<?> serviceClass){
-        ActivityManager activityManager = (ActivityManager)this.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
-
-        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
-            if (runningServiceInfo.service.getClassName().equals(serviceClass.getName())){
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

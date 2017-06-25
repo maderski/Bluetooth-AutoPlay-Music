@@ -7,6 +7,8 @@ import android.media.AudioManager;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -14,7 +16,7 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
  * Created by Jason on 6/25/17.
  */
 
-public class WakeLockUtils {
+public class ServiceRestartUtils {
     public static void reHoldWakeLock(Context context){
         boolean shouldKeepScreenOn = BAPMPreferences.getKeepScreenON(context);
 
@@ -41,5 +43,19 @@ public class WakeLockUtils {
                 firebaseHelper.wakelockRehold();
             }
         }
+    }
+
+    public static void restartAdditionServices(Context context){
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        boolean isBTConnected = audioManager.isBluetoothA2dpOn();
+        boolean isOnBTConnectServiceRunning = ServiceUtils.isServiceRunning(context, OnBTConnectService.class);
+        boolean isBTStateChangedServiceRunning = ServiceUtils.isServiceRunning(context, BTStateChangedService.class);
+        boolean shouldStartServices = isBTConnected && !isBTStateChangedServiceRunning && !isOnBTConnectServiceRunning;
+
+        if(shouldStartServices){
+            ServiceUtils.startService(context, OnBTConnectService.class, OnBTConnectService.TAG);
+            ServiceUtils.startService(context, BTStateChangedService.class, BTStateChangedService.TAG);
+        }
+
     }
 }
