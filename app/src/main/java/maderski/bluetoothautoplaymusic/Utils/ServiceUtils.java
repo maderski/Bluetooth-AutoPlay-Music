@@ -16,20 +16,12 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 
 public class ServiceUtils {
     public static void startService(Context context, Class<?> serviceClass, String tag) {
-        if(BuildConfig.DEBUG){
-            Toast.makeText(context, serviceClass.getName() + "STARTED", Toast.LENGTH_LONG).show();
-        }
-
         Intent intent = new Intent(context, serviceClass);
         intent.addCategory(tag);
         context.startService(intent);
     }
 
     public static void stopService(Context context, Class<?> serviceClass, String tag) {
-        if(BuildConfig.DEBUG){
-            Toast.makeText(context, serviceClass.getName() + "STOPPED", Toast.LENGTH_LONG).show();
-        }
-
         Intent intent = new Intent(context, serviceClass);
         intent.addCategory(tag);
         context.stopService(intent);

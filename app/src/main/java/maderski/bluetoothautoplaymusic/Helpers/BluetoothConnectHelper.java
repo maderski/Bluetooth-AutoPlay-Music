@@ -1,9 +1,13 @@
 package maderski.bluetoothautoplaymusic.Helpers;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.support.v4.util.ArraySet;
 import android.util.Log;
 
+import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;

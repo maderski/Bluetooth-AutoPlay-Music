@@ -2,6 +2,10 @@ package maderski.bluetoothautoplaymusic.Utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
+import android.content.Context;
+import android.support.v4.util.ArraySet;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +16,16 @@ import java.util.Set;
  */
 
 public class BluetoothDeviceUtils {
-    //List of bluetooth devices on the phone
+    private static final String TAG = "BluetoothDeviceUtils";
+
+    // List of bluetooth devices on the phone
     public static List<String> listOfBluetoothDevices(){
         List<String> btDevices = new ArrayList<String>();
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if(mBluetoothAdapter != null) {
-            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if(bluetoothAdapter != null) {
+            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
             for(BluetoothDevice bt : pairedDevices)
                 btDevices.add(bt.getName());

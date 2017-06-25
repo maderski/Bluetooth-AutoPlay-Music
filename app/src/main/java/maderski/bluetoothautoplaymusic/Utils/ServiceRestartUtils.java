@@ -3,9 +3,15 @@ package maderski.bluetoothautoplaymusic.Utils;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.media.AudioManager;
+import android.util.Log;
+
+import java.util.Collections;
+import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
+import maderski.bluetoothautoplaymusic.Helpers.A2DPHelper;
+import maderski.bluetoothautoplaymusic.Helpers.BluetoothConnectHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
@@ -17,6 +23,8 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
  */
 
 public class ServiceRestartUtils {
+    private static final String TAG = "ServiceRestartUtils";
+
     public static void reHoldWakeLock(Context context){
         boolean shouldKeepScreenOn = BAPMPreferences.getKeepScreenON(context);
 
@@ -45,17 +53,31 @@ public class ServiceRestartUtils {
         }
     }
 
-    public static void restartAdditionServices(Context context){
-        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        boolean isBTConnected = audioManager.isBluetoothA2dpOn();
-        boolean isOnBTConnectServiceRunning = ServiceUtils.isServiceRunning(context, OnBTConnectService.class);
-        boolean isBTStateChangedServiceRunning = ServiceUtils.isServiceRunning(context, BTStateChangedService.class);
-        boolean shouldStartServices = isBTConnected && !isBTStateChangedServiceRunning && !isOnBTConnectServiceRunning;
+    public static void restartAdditionServices(final Context context){
+        final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        A2DPHelper a2dpHelper = new A2DPHelper(new A2DPHelper.A2DPCallbacks() {
+            @Override
+            public void connectedDeviceNames(Set<String> deviceNames) {
+                Set<String> connectedBTDevices = deviceNames;
+                Set<String> selectedBTDevices = BAPMPreferences.getBTDevices(context);
 
-        if(shouldStartServices){
-            ServiceUtils.startService(context, OnBTConnectService.class, OnBTConnectService.TAG);
-            ServiceUtils.startService(context, BTStateChangedService.class, BTStateChangedService.TAG);
-        }
+                boolean isBTConnected = audioManager.isBluetoothA2dpOn();
+                boolean isOnBTConnectServiceRunning = ServiceUtils.isServiceRunning(context, OnBTConnectService.class);
+                boolean isBTStateChangedServiceRunning = ServiceUtils.isServiceRunning(context, BTStateChangedService.class);
+                boolean isASelectedBTDevice = !Collections.disjoint(selectedBTDevices, connectedBTDevices);
+                Log.d(TAG, "CONNECTED DEVICE IS SELECTED: " + String.valueOf(isASelectedBTDevice)
+                        + " " + String.valueOf(connectedBTDevices.size()));
+                boolean shouldStartServices = isBTConnected && isASelectedBTDevice &&
+                        !isBTStateChangedServiceRunning && !isOnBTConnectServiceRunning;
+                Log.d(TAG, "SHOULD START SERVICES: " + String.valueOf(shouldStartServices));
+                if(shouldStartServices){
+                    ServiceUtils.startService(context, OnBTConnectService.class, OnBTConnectService.TAG);
+                    ServiceUtils.startService(context, BTStateChangedService.class, BTStateChangedService.TAG);
+                }
+            }
+        });
+
+        a2dpHelper.getConnectedA2DPDevices(context);
 
     }
 }
