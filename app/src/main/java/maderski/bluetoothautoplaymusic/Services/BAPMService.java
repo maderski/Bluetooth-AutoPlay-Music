@@ -21,6 +21,7 @@ import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.Utils.WakeLockUtils;
 
 /**
  * Created by Jason on 1/5/16.
@@ -46,7 +47,7 @@ public class BAPMService extends Service {
         registerReceiver(mBluetoothReceiver, filter);
 
         // Rehold WakeLock due to Service Restart
-        reHoldWakeLock();
+        WakeLockUtils.reHoldWakeLock(this);
 
         return Service.START_STICKY;
     }
@@ -61,33 +62,5 @@ public class BAPMService extends Service {
     public IBinder onBind(Intent intent) {
         //TODO for communication return IBinder implementation
         return null;
-    }
-
-    private void reHoldWakeLock(){
-        boolean shouldKeepScreenOn = BAPMPreferences.getKeepScreenON(this);
-
-        if(shouldKeepScreenOn) {
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            boolean ranBAPM = BAPMDataPreferences.getRanActionsOnBtConnect(this);
-            boolean isConnectedToBT = audioManager.isBluetoothA2dpOn();
-
-            if (ranBAPM && isConnectedToBT) {
-                // Rehold wakelock
-                ScreenONLock screenONLock = ScreenONLock.getInstance();
-                screenONLock.releaseWakeLock();
-                screenONLock.enableWakeLock(this);
-
-                // Check if Keyguard is locked, if so unlock it
-                boolean isKeyguardLocked = ((KeyguardManager)getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
-                LaunchApp launchApp = new LaunchApp();
-                if(isKeyguardLocked) {
-                    launchApp.launchBAPMActivity(this);
-                }
-
-                // Log rehold wakelock event
-                FirebaseHelper firebaseHelper = new FirebaseHelper(this);
-                firebaseHelper.wakelockRehold();
-            }
-        }
     }
 }
