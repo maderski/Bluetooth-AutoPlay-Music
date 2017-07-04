@@ -112,8 +112,9 @@ public class BluetoothConnectHelper {
 
         if(didNotLaunchBAPM) {
             ServiceUtils.stopService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
-            ServiceUtils.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
         }
+
+        ServiceUtils.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 
     private void checksBeforeLaunch(){

@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.Receivers;
 
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +8,9 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTDisconnectActions;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 1/28/17.
@@ -35,7 +38,7 @@ public class BTStateChangedReceiver extends BroadcastReceiver {
             switch (state) {
                 case BluetoothAdapter.STATE_OFF:
                     Log.d(TAG, "Bluetooth off");
-                    ReceiverUtils.stopReceiver(context, BTStateChangedReceiver.class);
+                    ServiceUtils.stopService(context, BTStateChangedService.class, BTStateChangedService.TAG);
                     BTDisconnectActions btDisconnectActions = new BTDisconnectActions(context);
                     btDisconnectActions.actionsBTStateOff();
                     break;

@@ -34,24 +34,14 @@ public class BAPMService extends Service {
 
         // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         IntentFilter filter = new IntentFilter();
-        filter.addAction("android.bluetooth.device.action.ACL_CONNECTED");
-        filter.addAction("android.bluetooth.device.action.ACL_DISCONNECTED");
-        filter.addAction("android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED");
         registerReceiver(mBluetoothReceiver, filter);
 
-        // Rehold WakeLock due to Service Restart
-        ServiceRestartUtils.reHoldWakeLock(this);
-
-        // Restart additional services due to Service Restart
-        ServiceRestartUtils.restartAdditionServices(this);
-
-        return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         unregisterReceiver(mBluetoothReceiver);
     }

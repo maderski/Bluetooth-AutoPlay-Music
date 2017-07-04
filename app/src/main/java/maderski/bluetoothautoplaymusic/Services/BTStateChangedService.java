@@ -23,7 +23,7 @@ public class BTStateChangedService extends Service {
         Log.d(TAG, "START BT STATE CHANGED RECEIVER");
         IntentFilter btStateChangedFilter = new IntentFilter("android.bluetooth.adapter.action.STATE_CHANGED");
         registerReceiver(mBtStateChangedReceiver, btStateChangedFilter);
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Nullable

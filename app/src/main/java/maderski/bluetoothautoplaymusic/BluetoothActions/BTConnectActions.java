@@ -28,6 +28,7 @@ import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceive
 import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
 import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
+import maderski.bluetoothautoplaymusic.Services.WakeLockService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.Telephone;
@@ -41,7 +42,6 @@ import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 public class BTConnectActions {
     private static final String TAG = "BTConnectActions";
 
-    private final ScreenONLock mScreenONLock;
     private final Context context;
     private final Notification mNotification;
     private final VolumeControl mVolumeControl;
@@ -49,7 +49,6 @@ public class BTConnectActions {
 
     public BTConnectActions(Context context){
         this.context = context;
-        this.mScreenONLock = ScreenONLock.getInstance();
         this.mNotification = new Notification();
         this.mVolumeControl = new VolumeControl(context);
         this.mPlayMusicControl = new PlayMusicControl(context);
@@ -142,11 +141,7 @@ public class BTConnectActions {
     private void turnTheScreenOn(){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         if (screenON) {
-            //Try to releaseWakeLock() in case for some reason it was not released on disconnect
-            if (mScreenONLock.wakeLockHeld()) {
-                mScreenONLock.releaseWakeLock();
-            }
-            mScreenONLock.enableWakeLock(context);
+            ServiceUtils.startService(context, WakeLockService.class, WakeLockService.TAG);
         }
     }
 

@@ -11,6 +11,8 @@ import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.WakeLockService;
 import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
@@ -19,6 +21,7 @@ import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 6/3/17.
@@ -27,7 +30,6 @@ import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 public class BTDisconnectActions {
     private static final String TAG = "BTDisconnectActions";
 
-    private final ScreenONLock mScreenONLock;
     private final Context context;
     private final Notification mNotification;
     private final VolumeControl mVolumeControl;
@@ -35,7 +37,6 @@ public class BTDisconnectActions {
 
     public BTDisconnectActions(Context context){
         this.context = context;
-        this.mScreenONLock = ScreenONLock.getInstance();
         this.mNotification = new Notification();
         this.mVolumeControl = new VolumeControl(context);
         this.mPlayMusicControl = new PlayMusicControl(context);
@@ -137,7 +138,7 @@ public class BTDisconnectActions {
     private void stopKeepingScreenOn(){
         boolean screenON = BAPMPreferences.getKeepScreenON(context);
         if (screenON) {
-            mScreenONLock.releaseWakeLock();
+            ServiceUtils.stopService(context, WakeLockService.class, WakeLockService.TAG);
         }
     }
 
@@ -162,6 +163,6 @@ public class BTDisconnectActions {
         if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
             actionsOnBTDisconnect();
         }
-        ReceiverUtils.stopReceiver(context, BTStateChangedReceiver.class);
+        ServiceUtils.stopService(context, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 }

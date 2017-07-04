@@ -39,7 +39,7 @@ public class OnBTConnectService extends Service {
             registerReceiver(mCustomReceiver, customFilter);
         }
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Nullable
