@@ -44,6 +44,12 @@ public class BAPMService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if(BuildConfig.DEBUG) {
+            Log.d("BAPMService: ", "stopped");
+            Toast.makeText(this, "BAPMService stopped", Toast.LENGTH_LONG).show();
+        }
+
         // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         unregisterReceiver(mBluetoothReceiver);
     }
