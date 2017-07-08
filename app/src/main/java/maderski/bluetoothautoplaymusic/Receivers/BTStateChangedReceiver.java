@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTDisconnectActions;
+import maderski.bluetoothautoplaymusic.Services.BTDisconnectService;
 import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
@@ -39,8 +40,7 @@ public class BTStateChangedReceiver extends BroadcastReceiver {
                 case BluetoothAdapter.STATE_OFF:
                     Log.d(TAG, "Bluetooth off");
                     ServiceUtils.stopService(context, BTStateChangedService.class, BTStateChangedService.TAG);
-                    BTDisconnectActions btDisconnectActions = new BTDisconnectActions(context);
-                    btDisconnectActions.actionsBTStateOff();
+                    ServiceUtils.startService(context, BTDisconnectService.class, BTDisconnectService.TAG);
                     break;
                 case BluetoothAdapter.STATE_TURNING_OFF:
                     Log.d(TAG, "Turning Bluetooth off...");
