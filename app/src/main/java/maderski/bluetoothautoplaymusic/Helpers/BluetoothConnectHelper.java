@@ -1,23 +1,19 @@
 package maderski.bluetoothautoplaymusic.Helpers;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.support.v4.util.ArraySet;
 import android.util.Log;
 
-import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTConnectActions;
-import maderski.bluetoothautoplaymusic.BluetoothActions.BTDisconnectActions;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.BTDisconnectService;
 import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -87,8 +83,7 @@ public class BluetoothConnectHelper {
 
         if(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
             PlayMusicControl.cancelCheckIfPlaying();
-            BTDisconnectActions btDisconnectActions = new BTDisconnectActions(mContext);
-            btDisconnectActions.actionsOnBTDisconnect();
+            ServiceUtils.startService(mContext, BTDisconnectService.class, BTDisconnectService.TAG);
         }
 
         if(BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)){

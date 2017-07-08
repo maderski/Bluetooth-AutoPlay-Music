@@ -11,6 +11,7 @@ import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
+import maderski.bluetoothautoplaymusic.Services.BTDisconnectService;
 import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Services.WakeLockService;
 import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
@@ -58,6 +59,7 @@ public class BTDisconnectActions {
         setVolumeBack(ringerControl);
 
         BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
+        ServiceUtils.stopService(context, BTDisconnectService.class, BTDisconnectService.TAG);
     }
 
     private void removeBAPMNotification(){

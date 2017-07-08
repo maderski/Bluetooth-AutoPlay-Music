@@ -36,6 +36,8 @@ public class BAPMService extends Service {
         IntentFilter filter = new IntentFilter();
         registerReceiver(mBluetoothReceiver, filter);
 
+        stopSelf();
+
         return Service.START_NOT_STICKY;
     }
 
