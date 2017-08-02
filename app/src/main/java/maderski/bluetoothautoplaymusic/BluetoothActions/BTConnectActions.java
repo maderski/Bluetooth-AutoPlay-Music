@@ -157,9 +157,6 @@ public class BTConnectActions {
     private void setVolumeToMax(){
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
         if (volumeMAX) {
-//            mVolumeControl.saveOriginalVolume();
-//            Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)));
-
             Handler handler = new Handler();
             Runnable runnable = new Runnable() {
                 @Override

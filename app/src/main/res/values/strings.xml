@@ -5,7 +5,7 @@
     <string name="settings_menu">Options</string>
     <string name="link_menu">Rate Me</string>
 
-    <string name="put_phone_in_priority_mode">Put phone in Priority Mode</string>
+    <string name="put_phone_in_priority_mode">Do Not Disturb ON</string>
     <string name="set_media_volume_to_max">Set Media Volume to MAX</string>
     <string name="launch_music_player">Launch Music Player</string>
     <string name="dismiss_keyguard">Dismiss KeyGuard</string>
@@ -58,4 +58,5 @@
     <string name="launch_directions_label">Launch with DIRECTIONS</string>
     <string name="wifi_use_time_spans_caption_morning_evening">Turn WIFI OFF when Bluetooth Connects during the MORNING time span and turn WIFI ON when Bluetooth Disconnects during EVENING time span</string>
     <string name="wifi_use_time_spans_caption_work_home">Turn WIFI OFF when Bluetooth Connects during the WORK time span and turn WIFI ON when Bluetooth Disconnects during HOME time span</string>
+    <string name="restore_the_original_volume_on_disconnect">Restore the original volume on disconnect</string>
 </resources>

@@ -11,13 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
-import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -63,6 +64,7 @@ public class OptionsFragment extends Fragment {
         setFonts(rootView, getContext());
         setButtonPreferences(rootView, getActivity());
         setMaxVolumeSeekBar(rootView);
+        setupRestoreOriginalVolumeCheckBox(rootView);
 
         wifiOffDeviceButton(rootView);
 
@@ -309,6 +311,21 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+    }
+
+    public void setupRestoreOriginalVolumeCheckBox(View view){
+        final Context context = view.getContext();
+        boolean isEnabled = BAPMPreferences.getRestoreNotificationVolume(context);
+        CheckBox restoreVolumeCheckBox = (CheckBox)view.findViewById(R.id.cb_restore_original_volume);
+
+        restoreVolumeCheckBox.setChecked(isEnabled);
+
+        restoreVolumeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                BAPMPreferences.setRestoreNotificationVolume(context, isChecked);
             }
         });
     }

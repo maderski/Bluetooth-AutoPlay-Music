@@ -146,7 +146,8 @@ public class BTDisconnectActions {
 
     private void setVolumeBack(RingerControl ringerControl){
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
-        if (volumeMAX) {
+        boolean setOriginalVolume = BAPMPreferences.getRestoreNotificationVolume(context);
+        if (volumeMAX && setOriginalVolume) {
             mVolumeControl.setToOriginalVolume(ringerControl);
         }
     }

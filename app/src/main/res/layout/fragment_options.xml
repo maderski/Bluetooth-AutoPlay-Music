@@ -4,246 +4,254 @@
     android:layout_height="match_parent"
     tools:context="maderski.bluetoothautoplaymusic.UI.OptionsFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        tools:context="maderski.bluetoothautoplaymusic.UI.OptionsFragment"
-        android:orientation="vertical">
+        tools:context="maderski.bluetoothautoplaymusic.UI.OptionsFragment">
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollView" >
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="20dp">
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingTop="12dp">
 
                 <TextView
+                    android:id="@+id/settingsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/settings_menu"
-                    android:id="@+id/settingsText"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="24sp"
                     android:paddingBottom="12dp"
                     android:paddingTop="12dp"
+                    android:text="@string/settings_menu"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
                     android:typeface="monospace" />
 
                 <ImageView
-                    android:layout_gravity="center_horizontal"
-                    android:paddingTop="1dp"
-                    android:paddingBottom="1dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
-                    android:src="@android:drawable/divider_horizontal_bright"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:background="@color/colorAccent"
+                    android:paddingBottom="1dp"
                     android:paddingLeft="152dp"
                     android:paddingRight="152dp"
-                    android:id="@+id/imageView2" />
+                    android:paddingTop="1dp"
+                    android:src="@android:drawable/divider_horizontal_bright" />
 
                 <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/option_play_music"
                     android:id="@+id/auto_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:checked="false"
-                    android:switchPadding="100dp"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
                     android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/option_play_music"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/option_play_music_caption"
                     android:id="@+id/playMusicExplaination"
-                    android:textSize="12sp" />
-
-                <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/option_power_required"
-                    android:id="@+id/power_connected"
-                    android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
-                    android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary"/>
-
-                <TextView
-                    android:layout_width="264dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/option_power_required_caption"
-                    android:id="@+id/powerRequiredExplaination"
-                    android:textSize="12sp" />
-
-                <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/option_go_home"
-                    android:id="@+id/send_to_background"
-                    android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
-                    android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary"/>
-
-                <TextView
-                    android:layout_width="264dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/option_go_home_caption"
-                    android:id="@+id/GoHomeExplaination"
-                    android:textSize="12sp" />
-
-                <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/option_call_completed"
-                    android:id="@+id/wait_till_off_phone"
-                    android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
-                    android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary"/>
-
-                <TextView
-                    android:layout_width="264dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/option_call_completed_caption"
-                    android:id="@+id/CallCompletedExplaination"
-                    android:textSize="12sp" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/option_set_max_media_volume"
+                    android:text="@string/option_play_music_caption"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp" />
+
+                <Switch
+                    android:id="@+id/power_connected"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/option_power_required"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/powerRequiredExplaination"
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/option_power_required_caption"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp" />
+
+                <Switch
+                    android:id="@+id/send_to_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/option_go_home"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/GoHomeExplaination"
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/option_go_home_caption"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp" />
+
+                <Switch
+                    android:id="@+id/wait_till_off_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/option_call_completed"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/CallCompletedExplaination"
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/option_call_completed_caption"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp" />
+
+                <TextView
                     android:id="@+id/userSetMaxVolumeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:paddingBottom="2dp"
+                    android:paddingTop="20dp"
+                    android:text="@string/option_set_max_media_volume"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:paddingTop="20dp" />
+                    android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/option_set_max_volume_caption"
                     android:layout_width="264dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/option_set_max_volume_caption"
-                    android:id="@+id/option_set_max_volume_caption"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 
                 <SeekBar
                     android:id="@+id/max_volume_seekBar"
-                    android:layout_gravity="center_horizontal"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:paddingTop="16dp" />
 
-                <Switch
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/cb_restore_original_volume"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/show_notification"
-                    android:id="@+id/show_notification"
-                    android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
-                    android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary"/>
-
-                <TextView
-                    android:layout_width="264dp"
-                    android:layout_height="wrap_content"
+                    android:text="@string/restore_the_original_volume_on_disconnect"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/show_notification_explanation"
-                    android:id="@+id/show_notification_explanation"
                     android:textSize="12sp" />
 
                 <Switch
+                    android:id="@+id/show_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/option_auto_brightness"
-                    android:id="@+id/auto_brightness"
                     android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
                     android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary" />
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/show_notification"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/show_notification_explanation"
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_notification_explanation"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp" />
+
+                <Switch
+                    android:id="@+id/auto_brightness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/option_auto_brightness"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/autoBrightnessExplaination"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/option_auto_brightness_caption"
-                    android:id="@+id/autoBrightnessExplaination"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/manualBrtLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/option_manual_brightness"
-                        android:id="@+id/manualBrtLabel"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="8dp"
+                        android:paddingTop="20dp"
+                        android:text="@string/option_manual_brightness"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
-                        android:paddingTop="20dp" />
+                        android:textSize="16sp" />
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="12dp"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:paddingBottom="12dp">
 
                         <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/bright_time_button_text"
                             android:id="@+id/brighttimebutton"
-                            android:background="@drawable/on_state"
-                            android:textColor="@color/white"
                             style="?android:attr/borderlessButtonStyle"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp" />
-
-                        <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/dim_time_button_text"
-                            android:id="@+id/dimtimebutton"
                             android:background="@drawable/on_state"
-                            android:textColor="@color/white"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:text="@string/bright_time_button_text"
+                            android:textColor="@color/white" />
+
+                        <Button
+                            android:id="@+id/dimtimebutton"
                             style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/on_state"
                             android:paddingLeft="36dp"
-                            android:paddingRight="36dp" />
+                            android:paddingRight="36dp"
+                            android:text="@string/dim_time_button_text"
+                            android:textColor="@color/white" />
                     </LinearLayout>
+
                     <TextView
                         android:id="@+id/wifi_off_Label"
                         android:layout_width="wrap_content"
@@ -254,45 +262,49 @@
                         android:text="@string/wifi_off"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp" />
+
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal">
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_wifi"/>
+                            android:src="@drawable/ic_wifi" />
+
                         <Button
+                            android:id="@+id/wifi_off_button"
+                            style="?android:attr/borderlessButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Set Devices to Turn Wifi OFF"
-                            android:id="@+id/wifi_off_button"
                             android:background="@color/white"
-                            android:textColor="@color/colorAccent"
-                            style="?android:attr/borderlessButtonStyle"
                             android:paddingLeft="20dp"
-                            android:paddingRight="20dp" />
+                            android:paddingRight="20dp"
+                            android:text="Set Devices to Turn Wifi OFF"
+                            android:textColor="@color/colorAccent" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <Switch
+                    android:id="@+id/wifi_use_time_spans"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Wifi OFF Use Time Spans"
-                    android:id="@+id/wifi_use_time_spans"
                     android:checked="false"
-                    android:paddingTop="20dp"
-                    android:textSize="16sp"
-                    android:switchPadding="100dp"
                     android:paddingBottom="4dp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="Wifi OFF Use Time Spans"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/wifi_use_time_spans_desc"
                     android:layout_width="264dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/wifi_use_time_spans_caption_morning_evening"
-                    android:id="@+id/wifi_use_time_spans_desc"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
