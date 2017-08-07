@@ -154,7 +154,8 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:paddingTop="16dp" />
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"/>
 
                 <CheckBox
                     android:id="@+id/cb_restore_original_volume"
@@ -162,6 +163,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/restore_the_original_volume_on_disconnect"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/gray"
                     android:textSize="12sp" />
 
                 <Switch
