@@ -81,7 +81,9 @@ public class PlayMusicControl {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                play();
+                if(!audioManager.isMusicActive()) {
+                    play();
+                }
             }
         }, 3000);
 

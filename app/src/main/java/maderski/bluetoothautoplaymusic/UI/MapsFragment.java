@@ -106,40 +106,33 @@ public class MapsFragment extends Fragment {
         final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
         final TextView eveningTimeSpanText = (TextView)view.findViewById(R.id.evening_timespan_label);
 
-        if(mapChoice.equals(PackageTools.PackageName.WAZE)){
-            if(canLaunchDirections){
-                morningTimeSpanText.setText(R.string.work_directions_label);
-                eveningTimeSpanText.setText(R.string.home_directions_label);
-            }
-
-            launchDirectionsSwitch.setChecked(canLaunchDirections);
-            launchDirectionsSwitch.setVisibility(View.VISIBLE);
-            launchDirectionsDesc.setVisibility(View.VISIBLE);
-            launchDirectionsSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    boolean on = ((Switch) view).isChecked();
-                    if (on) {
-                        BAPMPreferences.setCanLaunchDirections(getContext(), true);
-                        BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
-                        launchTimesSwitch.setChecked(true);
-                        morningTimeSpanText.setText(R.string.work_directions_label);
-                        eveningTimeSpanText.setText(R.string.home_directions_label);
-                        Log.d(TAG, "LaunchDirectionsSwitch is ON");
-                    } else {
-                        BAPMPreferences.setCanLaunchDirections(getContext(), false);
-                        morningTimeSpanText.setText(R.string.morning_time_span_label);
-                        eveningTimeSpanText.setText(R.string.evening_time_span_label);
-                        Log.d(TAG, "LaunchDirectionsSwitch is OFF");
-                    }
-                }
-            });
-        } else {
-            launchDirectionsSwitch.setVisibility(View.GONE);
-            launchDirectionsDesc.setVisibility(View.GONE);
-            morningTimeSpanText.setText(R.string.morning_time_span_label);
-            eveningTimeSpanText.setText(R.string.evening_time_span_label);
+        if(canLaunchDirections){
+            morningTimeSpanText.setText(R.string.work_directions_label);
+            eveningTimeSpanText.setText(R.string.home_directions_label);
         }
+
+        launchDirectionsSwitch.setChecked(canLaunchDirections);
+        launchDirectionsSwitch.setVisibility(View.VISIBLE);
+        launchDirectionsDesc.setVisibility(View.VISIBLE);
+        launchDirectionsSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean on = ((Switch) view).isChecked();
+                if (on) {
+                    BAPMPreferences.setCanLaunchDirections(getContext(), true);
+                    BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
+                    launchTimesSwitch.setChecked(true);
+                    morningTimeSpanText.setText(R.string.work_directions_label);
+                    eveningTimeSpanText.setText(R.string.home_directions_label);
+                    Log.d(TAG, "LaunchDirectionsSwitch is ON");
+                } else {
+                    BAPMPreferences.setCanLaunchDirections(getContext(), false);
+                    morningTimeSpanText.setText(R.string.morning_time_span_label);
+                    eveningTimeSpanText.setText(R.string.evening_time_span_label);
+                    Log.d(TAG, "LaunchDirectionsSwitch is OFF");
+                }
+            }
+        });
     }
 
     public void setupCloseWaze(View view){

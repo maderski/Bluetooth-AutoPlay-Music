@@ -56,8 +56,7 @@ public class LaunchApp extends PackageTools {
 
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
-        final boolean canLaunchWazeDirections = BAPMPreferences.getCanLaunchDirections(context)
-                && BAPMPreferences.getMapsChoice(context).equals(PackageName.WAZE);
+        final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
 
         boolean canLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
         if(canLaunchToday) {
@@ -68,10 +67,8 @@ public class LaunchApp extends PackageTools {
                 @Override
                 public void run() {
                     String mapAppName = BAPMPreferences.getMapsChoice(context);
-                    if(canLaunchWazeDirections){
-                        String uri = "waze://?favorite=" + mDirectionLocation + "&navigate=yes";
-                        Log.d(TAG, "DIRECTIONS LOCATION: " + uri);
-                        Uri data = Uri.parse(uri);
+                    if(canLaunchDirections){
+                        Uri data = getMapsChoiceUri(context);
                         launchPackage(context, mapAppName, data, Intent.ACTION_VIEW);
                     } else {
                         launchPackage(context, mapAppName);
@@ -81,6 +78,19 @@ public class LaunchApp extends PackageTools {
             };
             handler.postDelayed(runnable, seconds);
         }
+    }
+
+    private Uri getMapsChoiceUri(Context context){
+        Uri uri;
+        if(BAPMPreferences.getMapsChoice(context).equals(PackageName.WAZE)){
+            String wazeUri = "waze://?favorite=" + mDirectionLocation + "&navigate=yes";
+            uri = Uri.parse(wazeUri);
+        } else {
+            String mapsUri = "google.navigation:q="+mDirectionLocation;
+            uri = Uri.parse(mapsUri);
+        }
+
+        return uri;
     }
 
     public void launchBAPMActivity(final Context context){
