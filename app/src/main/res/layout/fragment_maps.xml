@@ -91,6 +91,27 @@
                 </RadioGroup>
 
                 <Switch
+                    android:id="@+id/sw_driving_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/driving_mode"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_driving_mode_desc"
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/driving_mode_description"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <Switch
                     android:id="@+id/close_waze"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

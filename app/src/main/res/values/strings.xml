@@ -59,4 +59,6 @@
     <string name="wifi_use_time_spans_caption_morning_evening">Turn WIFI OFF when Bluetooth Connects during the MORNING time span and turn WIFI ON when Bluetooth Disconnects during EVENING time span</string>
     <string name="wifi_use_time_spans_caption_work_home">Turn WIFI OFF when Bluetooth Connects during the WORK time span and turn WIFI ON when Bluetooth Disconnects during HOME time span</string>
     <string name="restore_the_original_volume_on_disconnect">Restore the original volume on disconnect, otherwise Android will handle it</string>
+    <string name="driving_mode">Driving Mode</string>
+    <string name="driving_mode_description">Will launch Google Maps in Driving Mode</string>
 </resources>

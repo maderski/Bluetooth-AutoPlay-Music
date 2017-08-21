@@ -79,6 +79,7 @@ public class MapsFragment extends Fragment {
             mMapChoicesAvailable.add(PackageTools.PackageName.WAZE);
         }
         setupCloseWaze(rootView);
+        setupDrivingModeMaps(rootView);
         setupLaunchWazeDirections(rootView);
 
         setupLaunchTimesSwitch(rootView);
@@ -95,7 +96,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void setupLaunchWazeDirections(View view){
-        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+
         boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(getContext());
 
         Switch launchDirectionsSwitch = (Switch)view.findViewById(R.id.launch_waze_directions);
@@ -133,6 +134,34 @@ public class MapsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void setupDrivingModeMaps(View view) {
+        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+        Switch drivingModeSwitch = (Switch)view.findViewById(R.id.sw_driving_mode);
+        TextView drivingModeDesc = (TextView)view.findViewById(R.id.tv_driving_mode_desc);
+
+        if(mapChoice.equals(PackageTools.PackageName.MAPS)) {
+            drivingModeSwitch.setChecked(BAPMPreferences.getLaunchMapsDrivingMode(getContext()));
+            drivingModeSwitch.setVisibility(View.VISIBLE);
+            drivingModeDesc.setVisibility(View.VISIBLE);
+            drivingModeSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean on = ((Switch) view).isChecked();
+                    if (on) {
+                        BAPMPreferences.setLaunchMapsDrivingMode(getContext(), true);
+                        Log.d(TAG, "DrivingModeSwitch is ON");
+                    } else {
+                        BAPMPreferences.setLaunchMapsDrivingMode(getContext(), false);
+                        Log.d(TAG, "DrivingModeSwitch is OFF");
+                    }
+                }
+            });
+        } else {
+            drivingModeSwitch.setVisibility(View.GONE);
+            drivingModeDesc.setVisibility(View.GONE);
+        }
     }
 
     public void setupCloseWaze(View view){
@@ -253,6 +282,7 @@ public class MapsFragment extends Fragment {
                 BAPMPreferences.setMapsChoice(context, packageName);
                 if(getView() != null){
                     setupCloseWaze(getView());
+                    setupDrivingModeMaps(getView());
                     setupLaunchWazeDirections(getView());
                 }
             }

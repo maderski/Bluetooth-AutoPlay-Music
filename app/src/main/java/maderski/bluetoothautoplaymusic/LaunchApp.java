@@ -71,12 +71,25 @@ public class LaunchApp extends PackageTools {
                         Uri data = getMapsChoiceUri(context);
                         launchPackage(context, mapAppName, data, Intent.ACTION_VIEW);
                     } else {
-                        launchPackage(context, mapAppName);
+                        determineIfLaunchWithDrivingMode(context, mapAppName);
                     }
                     Log.d(TAG, "delayLaunchmaps started");
                 }
             };
             handler.postDelayed(runnable, seconds);
+        }
+    }
+
+    // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
+    private void determineIfLaunchWithDrivingMode(final Context context, final String mapAppName) {
+        boolean canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
+                mapAppName.equals(PackageName.MAPS);
+        if(canLaunchDrivingMode){
+            Log.d(TAG, "LAUNCH DRIVING MODE");
+            Uri data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls");
+            launchPackage(context, mapAppName, data, Intent.ACTION_VIEW);
+        } else {
+            launchPackage(context, mapAppName);
         }
     }
 
