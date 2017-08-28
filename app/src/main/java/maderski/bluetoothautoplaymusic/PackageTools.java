@@ -32,7 +32,8 @@ public class PackageTools {
             PackageName.APPLEMUSIC,
             PackageName.FMINDIA,
             PackageName.POWERAMP,
-            PackageName.DOUBLETWIST
+            PackageName.DOUBLETWIST,
+            PackageName.LISTENAUDIOBOOK
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface PackageName {
@@ -46,6 +47,7 @@ public class PackageTools {
         String FMINDIA = "com.fmindia.activities";
         String POWERAMP = "com.maxmpz.audioplayer";
         String DOUBLETWIST = "com.doubleTwist.androidPlayer";
+        String LISTENAUDIOBOOK = "com.acmeandroid.listen";
     }
 
     // Launches App that is associated with that package that was put into method
