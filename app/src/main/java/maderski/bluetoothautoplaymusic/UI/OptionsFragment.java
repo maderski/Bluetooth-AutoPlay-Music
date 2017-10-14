@@ -1,8 +1,10 @@
 package maderski.bluetoothautoplaymusic.UI;
 
+import android.Manifest;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -60,6 +62,7 @@ public class OptionsFragment extends Fragment {
         wifiOffUseTimeSpansSwitch(rootView);
         brightBrightnessButton(rootView);
         dimBrightnessButton(rootView);
+        usePriorityModeSwitch(rootView);
 
         setFonts(rootView, getContext());
         setButtonPreferences(rootView, getActivity());
@@ -136,6 +139,17 @@ public class OptionsFragment extends Fragment {
         btnState = BAPMPreferences.getAutoBrightness(context);
         setting_switch = (Switch) view.findViewById(R.id.auto_brightness);
         setting_switch.setChecked(btnState);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            btnState = BAPMPreferences.getUsePriorityMode(context);
+            setting_switch = (Switch) view.findViewById(R.id.sw_priority_mode);
+            TextView switch_explaination = (TextView) view.findViewById(R.id.tv_priority_mode_explaination);
+
+            setting_switch.setVisibility(View.VISIBLE);
+            setting_switch.setChecked(btnState);
+
+            switch_explaination.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -266,6 +280,30 @@ public class OptionsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void usePriorityModeSwitch(View view) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Switch priorityModeSwitch = (Switch)view.findViewById(R.id.sw_priority_mode);
+            priorityModeSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boolean on = ((Switch) view).isChecked();
+                    mFirebaseHelper.featureEnabled(FirebaseHelper.Option.PRIORITY_MODE, on);
+                    if(on){
+                        String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
+                        PermissionHelper.checkPermission(getActivity(), permission);
+
+                        BAPMPreferences.setUsePriorityMode(getActivity(), true);
+
+                        Log.d(TAG, "AutoBrightness Switch is ON");
+                    }else{
+                        BAPMPreferences.setUsePriorityMode(getActivity(), false);
+                        Log.d(TAG, "AutoBrightness Switch is OFF");
+                    }
+                }
+            });
+        }
     }
 
     public void dimBrightnessButton(View view){

@@ -48,7 +48,8 @@ public class FirebaseHelper {
             Option.MAX_VOLUME_SET,
             Option.HEADPHONE_VOLUME_SET,
             Option.SHOW_NOTIFICATION,
-            Option.WIFI_OFF_USE_TIME_SPANS
+            Option.WIFI_OFF_USE_TIME_SPANS,
+            Option.PRIORITY_MODE
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Option {
@@ -61,6 +62,7 @@ public class FirebaseHelper {
         String HEADPHONE_VOLUME_SET = "headphone_volume_set";
         String SHOW_NOTIFICATION = "show_notification";
         String WIFI_OFF_USE_TIME_SPANS = "wifi_off_use_time_spans";
+        String PRIORITY_MODE = "priority_mode";
     }
 
     @StringDef({

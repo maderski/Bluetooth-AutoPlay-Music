@@ -30,7 +30,9 @@ public class BAPMService extends Service {
         }
 
         // Initalize and start Crashlytics
-        Fabric.with(this, new Crashlytics());
+        if(!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
 
         // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         IntentFilter filter = new IntentFilter();

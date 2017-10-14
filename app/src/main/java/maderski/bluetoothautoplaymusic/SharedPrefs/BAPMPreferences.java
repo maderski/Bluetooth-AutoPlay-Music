@@ -57,6 +57,16 @@ public class BAPMPreferences {
     private static final String WIFI_USE_MAP_TIME_SPANS = "WifiUseMapTimeSpans";
     private static final String RESTORE_NOTIFICATION_VOLUME_KEY = "RestoreNotificationVoluemKey";
     private static final String LAUNCH_MAPS_DRIVING_MODE = "LaunchMapsDrivingMode";
+    private static final String USE_PRIORITY_MODE = "UsePriorityMode";
+
+    public static void setUsePriorityMode(Context context, boolean enable){
+        editor(context).putBoolean(USE_PRIORITY_MODE, enable);
+        commit(context);
+    }
+
+    public static boolean getUsePriorityMode(Context context){
+        return reader(context).getBoolean(USE_PRIORITY_MODE, false);
+    }
 
     public static void setLaunchMapsDrivingMode(Context context, boolean enable){
         editor(context).putBoolean(LAUNCH_MAPS_DRIVING_MODE, enable);

@@ -23,14 +23,14 @@ import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
  */
 public class PermissionHelper {
     @StringDef({
-          Permission.COARSE_LOCATION
+            Permission.COARSE_LOCATION
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface Permission {
         String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     }
 
-    public static void checkPermission(Activity activity, @Permission String permission) {
+    public static void checkPermission(Activity activity, String permission) {
         PackageManager packageManager = activity.getPackageManager();
         int hasPermission = packageManager.checkPermission(permission,
                 activity.getPackageName());
@@ -43,7 +43,7 @@ public class PermissionHelper {
         }
     }
 
-    public static boolean isPermissionGranted(Context context, @Permission String permission){
+    public static boolean isPermissionGranted(Context context, String permission){
         PackageManager packageManager = context.getPackageManager();
         int hasPermission = packageManager.checkPermission(permission,
                 context.getPackageName());

@@ -129,6 +129,28 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 
+                <Switch
+                    android:id="@+id/sw_priority_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:switchPadding="100dp"
+                    android:text="@string/use_priority_mode"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tv_priority_mode_explaination"
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/priority_mode_explained"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
                 <TextView
                     android:id="@+id/userSetMaxVolumeLabel"
                     android:layout_width="wrap_content"

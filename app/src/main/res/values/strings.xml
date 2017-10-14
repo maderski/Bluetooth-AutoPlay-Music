@@ -61,4 +61,6 @@
     <string name="restore_the_original_volume_on_disconnect">Restore the original volume on disconnect, otherwise Android will handle it</string>
     <string name="driving_mode">Driving Mode</string>
     <string name="driving_mode_description">Will launch Google Maps in Driving Mode</string>
+    <string name="priority_mode_explained">If Do NOT Disturb is ON put phone in Priority Mode instead of Silent Mode</string>
+    <string name="use_priority_mode">Use Priority Mode</string>
 </resources>
