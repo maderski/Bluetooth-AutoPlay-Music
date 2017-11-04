@@ -1,6 +1,5 @@
-package maderski.bluetoothautoplaymusic.UI;
+package maderski.bluetoothautoplaymusic.UI.activities;
 
-import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -25,7 +24,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
@@ -36,6 +34,12 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.UI.fragments.MapsFragment;
+import maderski.bluetoothautoplaymusic.UI.fragments.OptionsFragment;
+import maderski.bluetoothautoplaymusic.UI.fragments.TimePickerFragment;
+import maderski.bluetoothautoplaymusic.UI.fragments.WifiOffFragment;
+import maderski.bluetoothautoplaymusic.UI.fragments.HeadphonesFragment;
+import maderski.bluetoothautoplaymusic.UI.fragments.HomeFragment;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,

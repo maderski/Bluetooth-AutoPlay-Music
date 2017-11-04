@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="maderski.bluetoothautoplaymusic.UI.MainActivity">
+    tools:context="maderski.bluetoothautoplaymusic.UI.activities.MainActivity">
     <item
         android:id="@+id/link_menu"
         android:orderInCategory="1"

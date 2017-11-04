@@ -14,8 +14,8 @@ import java.util.Calendar;
 
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
-import maderski.bluetoothautoplaymusic.UI.LaunchBAPMActivity;
-import maderski.bluetoothautoplaymusic.UI.MainActivity;
+import maderski.bluetoothautoplaymusic.UI.activities.LaunchBAPMActivity;
+import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
 
 /**
  * Created by Jason on 12/8/15.

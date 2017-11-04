@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="maderski.bluetoothautoplaymusic.UI.LaunchBAPMActivity"
+    tools:context="maderski.bluetoothautoplaymusic.UI.activities.LaunchBAPMActivity"
     android:background="@color/colorPrimaryDark">
 
     <ImageView

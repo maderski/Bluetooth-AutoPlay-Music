@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.UI;
+package maderski.bluetoothautoplaymusic.UI.fragments;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;

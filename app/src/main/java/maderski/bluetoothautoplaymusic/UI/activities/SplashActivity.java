@@ -1,8 +1,10 @@
-package maderski.bluetoothautoplaymusic.UI;
+package maderski.bluetoothautoplaymusic.UI.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
 
 /**
  * Created by Jason on 8/28/16.

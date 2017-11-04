@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.UI;
+package maderski.bluetoothautoplaymusic.UI.fragments;
 
 import android.Manifest;
 import android.content.Context;

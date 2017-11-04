@@ -1,6 +1,5 @@
-package maderski.bluetoothautoplaymusic.UI;
+package maderski.bluetoothautoplaymusic.UI.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
