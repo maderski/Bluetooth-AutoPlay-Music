@@ -39,29 +39,31 @@ public class BTHeadphonesActions {
         mVolumeControl = new VolumeControl(context);
     }
 
-    public void connectActions(){
-        mVolumeControl.saveOriginalVolume();
-        Log.d(TAG, "Original Volume: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(mContext)));
+    public void connectActionsWithDelay(){
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                // Get headphone preferred volume
-                int preferredVolume = BAPMPreferences.getHeadphonePreferredVolume(mContext);
-                // Set headphone preferred volume
-                mVolumeControl.setSpecifiedVolume(preferredVolume);
-                // Start checking if music is playing
-                mPlayMusicControl.checkIfPlaying(mContext, 8);
-                Log.d(TAG, "HEADPHONE VOLUME SET TO:" + Integer.toString(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
-
-                BAPMDataPreferences.setIsHeadphonesDevice(mContext, true);
-                if(BuildConfig.DEBUG)
-                    Toast.makeText(mContext, "Music Playing", Toast.LENGTH_SHORT).show();
+            connectActions();
             }
         };
         handler.postDelayed(runnable, 4000);
 
         ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+    }
+
+    public void connectActions() {
+        // Get headphone preferred volume
+        int preferredVolume = BAPMPreferences.getHeadphonePreferredVolume(mContext);
+        // Set headphone preferred volume
+        mVolumeControl.setSpecifiedVolume(preferredVolume);
+        // Start checking if music is playing
+        mPlayMusicControl.checkIfPlaying(mContext, 8);
+        Log.d(TAG, "HEADPHONE VOLUME SET TO:" + Integer.toString(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+
+        BAPMDataPreferences.setIsHeadphonesDevice(mContext, true);
+        if(BuildConfig.DEBUG)
+            Toast.makeText(mContext, "Music Playing", Toast.LENGTH_SHORT).show();
     }
 
     public void disconnectActions(){

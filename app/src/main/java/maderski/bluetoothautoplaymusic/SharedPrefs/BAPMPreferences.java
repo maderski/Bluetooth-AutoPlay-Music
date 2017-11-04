@@ -58,6 +58,16 @@ public class BAPMPreferences {
     private static final String RESTORE_NOTIFICATION_VOLUME_KEY = "RestoreNotificationVoluemKey";
     private static final String LAUNCH_MAPS_DRIVING_MODE = "LaunchMapsDrivingMode";
     private static final String USE_PRIORITY_MODE = "UsePriorityMode";
+    private static final String USE_A2DP_HEADPHONES = "UseA2DPHeadphones";
+
+    public static void setUseA2dpHeadphones(Context context, boolean enable){
+        editor(context).putBoolean(USE_A2DP_HEADPHONES, enable);
+        commit(context);
+    }
+
+    public static boolean getUseA2dpHeadphones(Context context){
+        return reader(context).getBoolean(USE_A2DP_HEADPHONES, false);
+    }
 
     public static void setUsePriorityMode(Context context, boolean enable){
         editor(context).putBoolean(USE_PRIORITY_MODE, enable);

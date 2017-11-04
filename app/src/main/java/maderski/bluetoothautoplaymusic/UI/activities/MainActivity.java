@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,6 +43,8 @@ import maderski.bluetoothautoplaymusic.UI.fragments.WifiOffFragment;
 import maderski.bluetoothautoplaymusic.UI.fragments.HeadphonesFragment;
 import maderski.bluetoothautoplaymusic.UI.fragments.HomeFragment;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
+import maderski.bluetoothautoplaymusic.bus.BusProvider;
+import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener, WifiOffFragment.OnFragmentInteractionListener {
@@ -126,6 +130,18 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        BusProvider.getBusInstance().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BusProvider.getBusInstance().unregister(this);
     }
 
     //Launches the AboutActivity when about is selected
@@ -333,5 +349,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     @Override
     public void setWifiOffDevices(HashSet<String> wifiOffDevices) {
         BAPMPreferences.setTurnWifiOffDevices(this, wifiOffDevices);
+    }
+
+    @Subscribe
+    public void onUseHeadphonesA2DP(A2DPSetSwitchEvent a2DPSetSwitchEvent) {
+        BAPMPreferences.setUseA2dpHeadphones(this, a2DPSetSwitchEvent.isUsingA2DP());
     }
 }

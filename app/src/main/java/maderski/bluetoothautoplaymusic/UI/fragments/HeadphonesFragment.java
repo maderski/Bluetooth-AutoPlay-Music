@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.HashSet;
@@ -26,6 +28,8 @@ import maderski.bluetoothautoplaymusic.Utils.BluetoothDeviceUtils;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.bus.BusProvider;
+import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent;
 
 public class HeadphonesFragment extends DialogFragment{
 
@@ -86,6 +90,17 @@ public class HeadphonesFragment extends DialogFragment{
                 dismiss();
             }
         });
+
+        Switch a2dpSwitch = (Switch)rootView.findViewById(R.id.sw_headphones_a2dp);
+        boolean useA2dp = BAPMPreferences.getUseA2dpHeadphones(getActivity());
+        a2dpSwitch.setChecked(useA2dp);
+        a2dpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                BusProvider.getBusInstance().post(new A2DPSetSwitchEvent(isChecked));
+            }
+        });
+
         if(removedDevices != null)
             removedDevices.clear();
         return rootView;

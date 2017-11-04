@@ -9,6 +9,7 @@ import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.BluetoothActions.BTHeadphonesActions;
 import maderski.bluetoothautoplaymusic.Helpers.BluetoothConnectHelper;
+import maderski.bluetoothautoplaymusic.Helpers.HeadphonesConnectHelper;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
 /**
@@ -35,21 +36,17 @@ public class BluetoothReceiver extends BroadcastReceiver {
                         "\nis A Headphone device: " + Boolean.toString(isAHeadphonesBTDevice));
 
                 if(isASelectedBTDevice || isAHeadphonesBTDevice) {
+                    final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
+
                     if(isAHeadphonesBTDevice){
-                        BTHeadphonesActions btHeadphonesActions = new BTHeadphonesActions(context);
-                        switch (action) {
-                            case BluetoothDevice.ACTION_ACL_CONNECTED:
-                                btHeadphonesActions.connectActions();
-                                break;
-                            case BluetoothDevice.ACTION_ACL_DISCONNECTED:
-                                btHeadphonesActions.disconnectActions();
-                                break;
-                        }
+                        final HeadphonesConnectHelper headphonesConnectHelper =
+                                new HeadphonesConnectHelper(context, action, state);
+
+                        headphonesConnectHelper.performActions();
                     } else if(action.equals(BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED)){
                         final BluetoothConnectHelper bluetoothConnectHelper =
                                 new BluetoothConnectHelper(context, btDeviceName);
 
-                        final int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0);
                         bluetoothConnectHelper.a2dpActions(state);
                     }
                 }
