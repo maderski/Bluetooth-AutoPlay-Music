@@ -145,7 +145,7 @@ public class BTConnectActions {
         }
     }
 
-    private void unlockTheScreen(LaunchApp launchApp, boolean unlockScreen){
+    private void unlockTheScreen(final LaunchApp launchApp, boolean unlockScreen){
         if (unlockScreen) {
             boolean isKeyguardLocked = ((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
             Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
@@ -154,6 +154,7 @@ public class BTConnectActions {
             }
         }
     }
+
     private void setVolumeToMax(){
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
         if (volumeMAX) {

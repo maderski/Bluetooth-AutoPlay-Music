@@ -16,13 +16,13 @@ repositories {
 
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "maderski.bluetoothautoplaymusic"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 84
         versionName "3.31"
     }
