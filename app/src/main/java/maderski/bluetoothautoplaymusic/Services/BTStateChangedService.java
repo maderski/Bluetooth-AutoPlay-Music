@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
@@ -36,9 +37,11 @@ public class BTStateChangedService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        String title = "Listening for a Bluetooth State Change";
-        String message = "Bluetooth Autoplay Music";
-        ServiceUtils.createServiceNotification(3452, title, message, this);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String title = "Listening for Phone Bluetooth state OFF";
+            String message = "Bluetooth Autoplay Music";
+            ServiceUtils.createServiceNotification(3452, title, message, this);
+        }
     }
 
     @Nullable
@@ -54,6 +57,8 @@ public class BTStateChangedService extends Service {
         Log.d(TAG, "STOP BT STATE CHANGED RECEIVER");
         unregisterReceiver(mBtStateChangedReceiver);
 
-        stopForeground(true);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            stopForeground(true);
+        }
     }
 }
