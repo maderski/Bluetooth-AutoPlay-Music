@@ -1,13 +1,20 @@
 package maderski.bluetoothautoplaymusic.Services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
+import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 6/6/17.
@@ -26,6 +33,14 @@ public class BTStateChangedService extends Service {
         return START_STICKY;
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        String title = "Listening for a Bluetooth State Change";
+        String message = "Bluetooth Autoplay Music";
+        ServiceUtils.createServiceNotification(3452, title, message, this);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,5 +53,7 @@ public class BTStateChangedService extends Service {
         // Stop receivers
         Log.d(TAG, "STOP BT STATE CHANGED RECEIVER");
         unregisterReceiver(mBtStateChangedReceiver);
+
+        stopForeground(true);
     }
 }

@@ -1,14 +1,21 @@
 package maderski.bluetoothautoplaymusic.Services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
+import maderski.bluetoothautoplaymusic.R;
+import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 7/4/17.
@@ -38,6 +45,14 @@ public class WakeLockService extends Service {
         return START_STICKY;
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        String title = "Keeping Screen ON";
+        String message = "Bluetooth Autoplay Music";
+        ServiceUtils.createServiceNotification(3453, title, message, this);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -57,5 +72,7 @@ public class WakeLockService extends Service {
                 }
             }
         }
+
+        stopForeground(true);
     }
 }

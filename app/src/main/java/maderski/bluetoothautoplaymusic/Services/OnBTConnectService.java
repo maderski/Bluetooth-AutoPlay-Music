@@ -1,17 +1,24 @@
 package maderski.bluetoothautoplaymusic.Services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 6/6/17.
@@ -42,6 +49,14 @@ public class OnBTConnectService extends Service {
         return START_STICKY;
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        String title = "Getting stuff ready :D";
+        String message = "Bluetooth Autoplay Music";
+        ServiceUtils.createServiceNotification(3451, title, message, this);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -61,5 +76,7 @@ public class OnBTConnectService extends Service {
             Log.d(TAG, "STOP CUSTOM RECEIVER");
             unregisterReceiver(mCustomReceiver);
         }
+
+        stopForeground(true);
     }
 }
