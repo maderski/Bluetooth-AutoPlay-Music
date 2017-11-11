@@ -13,6 +13,7 @@ import io.fabric.sdk.android.Fabric;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Utils.ServiceRestartUtils;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 1/5/16.
@@ -44,6 +45,14 @@ public class BAPMService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        String title = "Initializing...";
+        String message = "Bluetooth Autoplay Music";
+        ServiceUtils.createServiceNotification(3455, title, message, this);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -54,6 +63,8 @@ public class BAPMService extends Service {
 
         // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         unregisterReceiver(mBluetoothReceiver);
+
+        stopForeground(true);
     }
 
     @Override
