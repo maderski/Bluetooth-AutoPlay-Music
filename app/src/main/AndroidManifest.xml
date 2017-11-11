@@ -25,7 +25,20 @@
             android:name=".UI.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.activities.LaunchBAPMActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".UI.activities.SplashActivity"
+            android:noHistory="true"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <receiver android:name=".Receivers.BootCompletedReceiver">
@@ -54,21 +67,10 @@
         <service android:name=".Services.BTStateChangedService" />
         <service android:name=".Services.WakeLockService" />
         <service android:name=".Services.BTDisconnectService" />
+        <service
+            android:name=".Services.jobservices.OnBootCompletedJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <activity
-            android:name=".UI.activities.LaunchBAPMActivity"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".UI.activities.SplashActivity"
-            android:noHistory="true"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e566223fc86888153c9df6a37b823a8a3c1510e9" />

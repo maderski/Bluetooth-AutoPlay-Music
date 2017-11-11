@@ -5,6 +5,9 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -69,5 +72,18 @@ public class ServiceUtils {
                 .build();
 
         service.startForeground(id, notification);
+    }
+
+    public static void scheduleJob(Context context, Class<?> jobServiceClass) {
+        ComponentName jobServiceComponent = new ComponentName(context, jobServiceClass);
+        JobInfo.Builder builder = new JobInfo.Builder(0, jobServiceComponent);
+        builder.setMinimumLatency(1000);
+        builder.setOverrideDeadline(10000);
+
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+        if (jobScheduler != null) {
+            jobScheduler.schedule(builder.build());
+        }
     }
 }

@@ -19,6 +19,7 @@ import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
  * Created by Jason on 1/5/16.
  */
 public class BAPMService extends Service {
+    public static final String TAG = "BAPMService";
 
     private final BluetoothReceiver mBluetoothReceiver = new BluetoothReceiver();
 

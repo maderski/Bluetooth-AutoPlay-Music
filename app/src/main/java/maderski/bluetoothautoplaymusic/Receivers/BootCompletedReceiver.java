@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Services.BAPMService;
+import maderski.bluetoothautoplaymusic.Services.jobservices.OnBootCompletedJobService;
+import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
  * Created by Jason on 1/5/16.
@@ -17,8 +19,9 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     //Start BAPMService on phone boot
     public void onReceive(Context context, Intent intent) {
-        Intent serviceIntent = new Intent(context, BAPMService.class);
-        context.startService(serviceIntent);
+        // Schedule Job to run on boot
+        ServiceUtils.scheduleJob(context, OnBootCompletedJobService.class);
+
         // Check to see Bluetooth is enabled and if not enable it
         checkIfBluetoothEnabled();
 
