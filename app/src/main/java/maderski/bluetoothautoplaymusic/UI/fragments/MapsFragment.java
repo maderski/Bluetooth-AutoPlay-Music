@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -164,6 +163,8 @@ public class MapsFragment extends Fragment {
         String mapChoice = BAPMPreferences.getMapsChoice(getActivity());
         Switch drivingModeSwitch = (Switch)view.findViewById(R.id.sw_driving_mode);
         TextView drivingModeDesc = (TextView)view.findViewById(R.id.tv_driving_mode_desc);
+        TextView locationNameExplaination = (TextView) view.findViewById(R.id.tv_location_name_explaination);
+        EditText locationNameEditText = (EditText) view.findViewById(R.id.et_custom_location_name);
 
         if(mapChoice.equals(PackageTools.PackageName.MAPS)) {
             drivingModeSwitch.setChecked(BAPMPreferences.getLaunchMapsDrivingMode(getActivity()));
@@ -182,15 +183,15 @@ public class MapsFragment extends Fragment {
                     }
                 }
             });
+
+            locationNameExplaination.setText(R.string.enter_address_here);
+            locationNameEditText.setHint(R.string.location_address);
         } else {
             drivingModeSwitch.setVisibility(View.GONE);
             drivingModeDesc.setVisibility(View.GONE);
 
-            TextView locationNameExplaination = (TextView) view.findViewById(R.id.tv_location_name_explaination);
-            locationNameExplaination.setText("Please enter the name of a favorite from Waze");
-
-            EditText locationNameEditText = (EditText) view.findViewById(R.id.et_custom_location_name);
-            locationNameEditText.setHint("Name of Favorite");
+            locationNameExplaination.setText(R.string.enter_favorite_from_waze);
+            locationNameEditText.setHint(R.string.waze_favorite_name);
         }
     }
 

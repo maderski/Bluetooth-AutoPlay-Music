@@ -63,4 +63,8 @@
     <string name="driving_mode_description">Will launch Google Maps in Driving Mode</string>
     <string name="priority_mode_explained">If Do NOT Disturb is ON put phone in Priority Mode instead of Silent Mode</string>
     <string name="use_priority_mode">Use Priority Mode</string>
+    <string name="enter_address_here">Put the address of the location you would like to launch in Maps/Waze here</string>
+    <string name="location_address">Location Address</string>
+    <string name="enter_favorite_from_waze">Enter the name of a favorite from Waze here</string>
+    <string name="waze_favorite_name">Favorite Name</string>
 </resources>

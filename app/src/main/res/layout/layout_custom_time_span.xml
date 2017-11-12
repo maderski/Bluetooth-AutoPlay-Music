@@ -20,7 +20,7 @@
         android:id="@+id/tv_location_name_explaination"
         android:layout_width="246dp"
         android:layout_height="wrap_content"
-        android:text="Put the address of the location you would like to launch in Maps/Waze here"
+        android:text="@string/enter_address_here"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="12sp" />
@@ -30,8 +30,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp">
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,9 +39,9 @@
             android:src="@drawable/ic_location_name"/>
         <EditText
             android:id="@+id/et_custom_location_name"
-            android:layout_width="match_parent"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:hint="Location Address"
+            android:hint="@string/location_address"
             android:inputType="text"
             android:imeOptions="actionDone"/>
     </LinearLayout>
