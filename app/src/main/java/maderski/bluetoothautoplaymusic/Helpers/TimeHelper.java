@@ -32,10 +32,26 @@ public class TimeHelper {
     private int mMorningEndTime;
     private int mEveningStartTime;
     private int mEveningEndTime;
+    private int mCustomStartTime;
+    private int mCustomEndTime;
     private int mCurrentTime;
+
+    private boolean mIsCustomTime = false;
+
+    public TimeHelper(int startTime, int endTime) {
+        int currentTime = getCurrent24hrTime();
+        mIsCustomTime = true;
+
+        if(currentTime >= 1200){
+            mCustomEndTime += 2400;
+        } else {
+            mCustomStartTime = 0;
+        }
+    }
 
     public TimeHelper(int morningStartTime, int morningEndTime, int eveningStartTime, int eveningEndTime){
         int currentTime = getCurrent24hrTime();
+        mIsCustomTime = false;
 
         // Check if the EndTime is less than the StartTime, this means end time was set for early morning
         if (morningEndTime < morningStartTime) {
@@ -60,10 +76,13 @@ public class TimeHelper {
     }
 
     public boolean isWithinTimeSpan(){
-
-        // Return result on whether Waze can launch or not
-        return mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime
-                || mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime;
+        // Return result on whether Maps/Waze can launch or not
+        if(!mIsCustomTime) {
+            return mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime
+                    || mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime;
+        } else {
+            return mCurrentTime >= mCustomStartTime && mCurrentTime <= mCustomEndTime;
+        }
     }
 
     public int getCurrent24hrTime(){
@@ -75,10 +94,12 @@ public class TimeHelper {
     }
 
     public String getDirectionLocation(){
-        if(mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime){
+        if(mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime && !mIsCustomTime){
             return LaunchApp.DirectionLocations.WORK;
-        } else if(mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime){
+        } else if(mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime && !mIsCustomTime){
             return LaunchApp.DirectionLocations.HOME;
+        } else if(mCurrentTime >= mCustomStartTime && mCurrentTime <= mCustomEndTime){
+            return LaunchApp.DirectionLocations.CUSTOM;
         } else {
             return "None";
         }

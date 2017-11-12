@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +46,7 @@ import maderski.bluetoothautoplaymusic.UI.fragments.HomeFragment;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 import maderski.bluetoothautoplaymusic.bus.BusProvider;
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent;
+import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener, WifiOffFragment.OnFragmentInteractionListener {
@@ -286,6 +288,26 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 }
                 Log.d("Map Options", typeOfTimeSet);
                 break;
+            case TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN:
+                if(isEndTime) {
+                    BAPMPreferences.setCustomEndTime(this, timeSet);
+
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomEndTime(this));
+                    TextView timeDisplayed = (TextView)findViewById(R.id.custom_end_time_displayed);
+                    timeDisplayed.setText(setTime);
+
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.CUSTOM_END_TIME, true);
+                } else {
+                    BAPMPreferences.setCustomStartTime(this, timeSet);
+
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomStartTime(this));
+                    TextView timeDisplayed = (TextView)findViewById(R.id.custom_start_time_displayed);
+                    timeDisplayed.setText(setTime);
+
+                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.CUSTOM_START_TIME, true);
+                }
+                Log.d("Map Options", typeOfTimeSet);
+                break;
         }
     }
 
@@ -296,10 +318,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 mFirebaseHelper.timeSetSelected(isEndTime ? FirebaseHelper.Selection.DIM_TIME : FirebaseHelper.Selection.BRIGHT_TIME, false);
                 break;
             case TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN:
-
                 break;
             case TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN:
-
+                break;
+            case TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN:
                 break;
         }
     }
@@ -354,5 +376,10 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     @Subscribe
     public void onUseHeadphonesA2DP(A2DPSetSwitchEvent a2DPSetSwitchEvent) {
         BAPMPreferences.setUseA2dpHeadphones(this, a2DPSetSwitchEvent.isUsingA2DP());
+    }
+
+    @Subscribe
+    public void onLocationNameSet(LocationNameSetEvent locationNameSetEvent) {
+        BAPMPreferences.setCustomLocationName(this, locationNameSetEvent.getLocationName());
     }
 }

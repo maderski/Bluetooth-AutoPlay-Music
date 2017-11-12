@@ -5,15 +5,22 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.IdRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,11 +37,14 @@ import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.bus.BusProvider;
+import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent;
 
 public class MapsFragment extends Fragment {
     private static final String TAG = "MapsFragment";
 
     private List<String> mMapChoicesAvailable = new ArrayList<>();
+    private boolean mCanLaunchDirections = false;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -56,7 +66,7 @@ public class MapsFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        Typeface typeface_bold = Typeface.createFromAsset(getContext().getAssets(), "fonts/TitilliumText600wt.otf");
+        Typeface typeface_bold = Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText600wt.otf");
         TextView textView = (TextView)rootView.findViewById(R.id.map_options_text);
         textView.setTypeface(typeface_bold);
 
@@ -74,7 +84,7 @@ public class MapsFragment extends Fragment {
 
         mMapChoicesAvailable.add(PackageTools.PackageName.MAPS);
         LaunchApp launchApp = new LaunchApp();
-        boolean wazeInstalled = launchApp.checkPkgOnPhone(getContext(), PackageTools.PackageName.WAZE);
+        boolean wazeInstalled = launchApp.checkPkgOnPhone(getActivity(), PackageTools.PackageName.WAZE);
         if(wazeInstalled){
             mMapChoicesAvailable.add(PackageTools.PackageName.WAZE);
         }
@@ -83,21 +93,29 @@ public class MapsFragment extends Fragment {
         setupLaunchWazeDirections(rootView);
 
         setupLaunchTimesSwitch(rootView);
-        mapsRadiobuttonCreator(rootView, getContext());
-        mapsRadioButtonListener(rootView, getContext());
-        setMapChoice(rootView, getContext());
-        setCheckBoxes(rootView);
+
+        mapsRadiobuttonCreator(rootView, getActivity());
+        mapsRadioButtonListener(rootView, getActivity());
+
+        setMapChoice(rootView, getActivity());
+        setCheckBoxes(rootView, R.id.ll_morning_evening_chk_boxes);
+        setCheckBoxes(rootView, R.id.ll_custom_days_chk_boxes);
+
         morningStartButton(rootView);
         morningEndButton(rootView);
         eveningStartButton(rootView);
         eveningEndButton(rootView);
+        customStartButton(rootView);
+        customEndButton(rootView);
+
+        customLocationName(rootView);
 
         return rootView;
     }
 
     public void setupLaunchWazeDirections(View view){
 
-        boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(getContext());
+        mCanLaunchDirections = BAPMPreferences.getCanLaunchDirections(getActivity());
 
         Switch launchDirectionsSwitch = (Switch)view.findViewById(R.id.launch_waze_directions);
         TextView launchDirectionsDesc = (TextView)view.findViewById(R.id.launch_waze_directions_desc);
@@ -107,12 +125,14 @@ public class MapsFragment extends Fragment {
         final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
         final TextView eveningTimeSpanText = (TextView)view.findViewById(R.id.evening_timespan_label);
 
-        if(canLaunchDirections){
+        final TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_morning_evening_location_label);
+
+        if(mCanLaunchDirections){
             morningTimeSpanText.setText(R.string.work_directions_label);
             eveningTimeSpanText.setText(R.string.home_directions_label);
         }
 
-        launchDirectionsSwitch.setChecked(canLaunchDirections);
+        launchDirectionsSwitch.setChecked(mCanLaunchDirections);
         launchDirectionsSwitch.setVisibility(View.VISIBLE);
         launchDirectionsDesc.setVisibility(View.VISIBLE);
         launchDirectionsSwitch.setOnClickListener(new View.OnClickListener() {
@@ -120,16 +140,20 @@ public class MapsFragment extends Fragment {
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
                 if (on) {
-                    BAPMPreferences.setCanLaunchDirections(getContext(), true);
-                    BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
+                    BAPMPreferences.setCanLaunchDirections(getActivity(), true);
+                    BAPMPreferences.setUseTimesToLaunchMaps(getActivity(), true);
                     launchTimesSwitch.setChecked(true);
                     morningTimeSpanText.setText(R.string.work_directions_label);
                     eveningTimeSpanText.setText(R.string.home_directions_label);
+
+                    checkboxLabel.setText("Work/Home");
                     Log.d(TAG, "LaunchDirectionsSwitch is ON");
                 } else {
                     BAPMPreferences.setCanLaunchDirections(getContext(), false);
                     morningTimeSpanText.setText(R.string.morning_time_span_label);
                     eveningTimeSpanText.setText(R.string.evening_time_span_label);
+
+                    checkboxLabel.setText("Morn/Eve");
                     Log.d(TAG, "LaunchDirectionsSwitch is OFF");
                 }
             }
@@ -137,12 +161,12 @@ public class MapsFragment extends Fragment {
     }
 
     public void setupDrivingModeMaps(View view) {
-        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+        String mapChoice = BAPMPreferences.getMapsChoice(getActivity());
         Switch drivingModeSwitch = (Switch)view.findViewById(R.id.sw_driving_mode);
         TextView drivingModeDesc = (TextView)view.findViewById(R.id.tv_driving_mode_desc);
 
         if(mapChoice.equals(PackageTools.PackageName.MAPS)) {
-            drivingModeSwitch.setChecked(BAPMPreferences.getLaunchMapsDrivingMode(getContext()));
+            drivingModeSwitch.setChecked(BAPMPreferences.getLaunchMapsDrivingMode(getActivity()));
             drivingModeSwitch.setVisibility(View.VISIBLE);
             drivingModeDesc.setVisibility(View.VISIBLE);
             drivingModeSwitch.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +174,10 @@ public class MapsFragment extends Fragment {
                 public void onClick(View view) {
                     boolean on = ((Switch) view).isChecked();
                     if (on) {
-                        BAPMPreferences.setLaunchMapsDrivingMode(getContext(), true);
+                        BAPMPreferences.setLaunchMapsDrivingMode(getActivity(), true);
                         Log.d(TAG, "DrivingModeSwitch is ON");
                     } else {
-                        BAPMPreferences.setLaunchMapsDrivingMode(getContext(), false);
+                        BAPMPreferences.setLaunchMapsDrivingMode(getActivity(), false);
                         Log.d(TAG, "DrivingModeSwitch is OFF");
                     }
                 }
@@ -161,15 +185,21 @@ public class MapsFragment extends Fragment {
         } else {
             drivingModeSwitch.setVisibility(View.GONE);
             drivingModeDesc.setVisibility(View.GONE);
+
+            TextView locationNameExplaination = (TextView) view.findViewById(R.id.tv_location_name_explaination);
+            locationNameExplaination.setText("Please enter the name of a favorite from Waze");
+
+            EditText locationNameEditText = (EditText) view.findViewById(R.id.et_custom_location_name);
+            locationNameEditText.setHint("Name of Favorite");
         }
     }
 
     public void setupCloseWaze(View view){
-        String mapChoice = BAPMPreferences.getMapsChoice(getContext());
+        String mapChoice = BAPMPreferences.getMapsChoice(getActivity());
         Switch closeWazeSwitch = (Switch)view.findViewById(R.id.close_waze);
         TextView closeWazeDesc = (TextView)view.findViewById(R.id.close_waze_desc);
         if(mapChoice.equals(PackageTools.PackageName.WAZE)){
-            closeWazeSwitch.setChecked(BAPMPreferences.getCloseWazeOnDisconnect(getContext()));
+            closeWazeSwitch.setChecked(BAPMPreferences.getCloseWazeOnDisconnect(getActivity()));
             closeWazeSwitch.setVisibility(View.VISIBLE);
             closeWazeDesc.setVisibility(View.VISIBLE);
             closeWazeSwitch.setOnClickListener(new View.OnClickListener() {
@@ -177,11 +207,11 @@ public class MapsFragment extends Fragment {
                 public void onClick(View view) {
                     boolean on = ((Switch) view).isChecked();
                     if (on) {
-                        BAPMPreferences.setCloseWazeOnDisconnect(getContext(), true);
-                        BAPMPreferences.setSendToBackground(getContext(), true);
+                        BAPMPreferences.setCloseWazeOnDisconnect(getActivity(), true);
+                        BAPMPreferences.setSendToBackground(getActivity(), true);
                         Log.d(TAG, "CloseWazeSwitch is ON");
                     } else {
-                        BAPMPreferences.setCloseWazeOnDisconnect(getContext(), false);
+                        BAPMPreferences.setCloseWazeOnDisconnect(getActivity(), false);
                         Log.d(TAG, "CloseWazeSwitch is OFF");
                     }
                 }
@@ -193,7 +223,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void setupLaunchTimesSwitch(View view){
-        boolean isEnabled = BAPMPreferences.getUseTimesToLaunchMaps(getContext());
+        boolean isEnabled = BAPMPreferences.getUseTimesToLaunchMaps(getActivity());
 
         final Switch launchDirectionsSwitch = (Switch)view.findViewById(R.id.launch_waze_directions);
         final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
@@ -207,11 +237,11 @@ public class MapsFragment extends Fragment {
             public void onClick(View view) {
                 boolean on = ((Switch)view).isChecked();
                 if(on) {
-                    BAPMPreferences.setUseTimesToLaunchMaps(getContext(), true);
+                    BAPMPreferences.setUseTimesToLaunchMaps(getActivity(), true);
                     Log.d(TAG, "LaunchTimesSwitch is ON");
                 } else {
-                    BAPMPreferences.setUseTimesToLaunchMaps(getContext(), false);
-                    BAPMPreferences.setCanLaunchDirections(getContext(), false);
+                    BAPMPreferences.setUseTimesToLaunchMaps(getActivity(), false);
+                    BAPMPreferences.setCanLaunchDirections(getActivity(), false);
 
                     launchDirectionsSwitch.setChecked(false);
                     morningTimeSpanText.setText("Morning Time Span");
@@ -289,26 +319,44 @@ public class MapsFragment extends Fragment {
         });
     }
 
-    private void setCheckBoxes(View view){
+    private void setCheckBoxes(View view, @IdRes int linearLayoutId){
         CheckBox checkBox;
         String[] entireWeek = {"1", "2", "3", "4", "5", "6", "7"};
-        Set<String> daysToLaunchSet = BAPMPreferences.getDaysToLaunchMaps(getActivity());
+        Set<String> daysToLaunchSet;
 
-        LinearLayout daysToLaunchChkBoxLL = (LinearLayout) view.findViewById(R.id.daysChkBoxLL);
+        LinearLayout daysToLaunchChkBoxLL = (LinearLayout) view.findViewById(linearLayoutId);
         daysToLaunchChkBoxLL.removeAllViews();
 
+        if(linearLayoutId == R.id.ll_morning_evening_chk_boxes) {
+            daysToLaunchSet = BAPMPreferences.getDaysToLaunchMaps(getActivity());
+
+            String checkboxLabelText = mCanLaunchDirections ? "Work/Home" : "Morn/Eve";
+            TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_morning_evening_location_label);
+            checkboxLabel.setText(checkboxLabelText);
+        } else {
+            daysToLaunchSet = BAPMPreferences.getCustomDaysToLaunchMaps(getActivity());
+        }
+
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         for(String day : entireWeek){
             checkBox = new CheckBox(getActivity());
-            checkBox.setText(getNameOfDay(day));
-            checkBox.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-            checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
             checkBox.setChecked(daysToLaunchSet.contains(day));
-            checkboxListener(checkBox, day);
+
+            if(linearLayoutId == R.id.ll_morning_evening_chk_boxes) {
+                checkBox.setText(getNameOfDay(day));
+                checkBox.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
+                morningEveningCheckboxListener(checkBox, day);
+            } else {
+                checkBox.setLayoutParams(params);
+                customCheckboxListener(checkBox, day);
+            }
+
             daysToLaunchChkBoxLL.addView(checkBox);
         }
     }
 
-    private void checkboxListener(CheckBox checkBox, String dayNumber){
+    private void morningEveningCheckboxListener(CheckBox checkBox, String dayNumber){
         final Context ctx = getActivity();
         final CheckBox cb = checkBox;
         final String dn = dayNumber;
@@ -328,8 +376,28 @@ public class MapsFragment extends Fragment {
         });
     }
 
+    private void customCheckboxListener(CheckBox checkBox, String dayNumber){
+        final Context ctx = getActivity();
+        final CheckBox cb = checkBox;
+        final String dn = dayNumber;
+
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getCustomDaysToLaunchMaps(ctx));
+                if(cb.isChecked()){
+                    daysToLaunch.add(dn);
+                    BAPMPreferences.setCustomDaysToLaunchMaps(ctx, daysToLaunch);
+                }else{
+                    daysToLaunch.remove(dn);
+                    BAPMPreferences.setCustomDaysToLaunchMaps(ctx, daysToLaunch);
+                }
+            }
+        });
+    }
+
     public void morningStartButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -344,7 +412,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningEndButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_end_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -359,7 +427,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningStartButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -374,7 +442,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningEndButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(getContext()));
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_end_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -384,6 +452,74 @@ public class MapsFragment extends Fragment {
             public void onClick(View view) {
                 DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN, true, BAPMPreferences.getEveningEndTime(getActivity()), "Set Evening End Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+            }
+        });
+    }
+
+    public void customStartButton(View view){
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomStartTime(getActivity()));
+        TextView timeDisplayed = (TextView)view.findViewById(R.id.custom_start_time_displayed);
+        timeDisplayed.setText(setTime);
+
+        Button eveningStartButton = (Button)view.findViewById(R.id.custom_start_button);
+        eveningStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN, false, BAPMPreferences.getEveningStartTime(getActivity()), "Set Evening Start Time");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+            }
+        });
+    }
+
+    public void customEndButton(View view){
+        String setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomEndTime(getActivity()));
+        TextView timeDisplayed = (TextView)view.findViewById(R.id.custom_end_time_displayed);
+        timeDisplayed.setText(setTime);
+
+        Button eveningEndButton = (Button)view.findViewById(R.id.custom_end_button);
+        eveningEndButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN, true, BAPMPreferences.getEveningEndTime(getActivity()), "Set Evening End Time");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+            }
+        });
+    }
+
+    private EditText mLocationNameEditText;
+    private Handler mTextChangeHandler = new Handler(Looper.getMainLooper());
+    private Runnable mTextChangeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            String enteredText = mLocationNameEditText.getText().toString();
+            BusProvider.getBusInstance().post(new LocationNameSetEvent(enteredText));
+        }
+    };
+    public void customLocationName(View view) {
+        String locationName = BAPMPreferences.getCustomLocationName(getActivity());
+        mLocationNameEditText = (EditText) view.findViewById(R.id.et_custom_location_name);
+
+        if(!locationName.isEmpty()) {
+            mLocationNameEditText.setText(locationName);
+        }
+
+        mLocationNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(mTextChangeRunnable != null) {
+                    mTextChangeHandler.removeCallbacks(mTextChangeRunnable);
+                }
+                mTextChangeHandler.postDelayed(mTextChangeRunnable, 250);
             }
         });
     }

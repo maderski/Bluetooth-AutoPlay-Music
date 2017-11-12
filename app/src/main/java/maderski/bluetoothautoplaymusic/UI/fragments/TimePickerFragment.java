@@ -25,13 +25,15 @@ public class TimePickerFragment extends DialogFragment
     @StringDef({
             TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME,
             TypeOfTimeSet.MORNING_TIMESPAN,
-            TypeOfTimeSet.EVENING_TIMESPAN
+            TypeOfTimeSet.EVENING_TIMESPAN,
+            TypeOfTimeSet.CUSTOM_TIMESPAN
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface TypeOfTimeSet {
         String SCREEN_BRIGHTNESS_TIME = "screen_brightness_time";
         String MORNING_TIMESPAN = "morning_time_span";
         String EVENING_TIMESPAN = "evening_time_span";
+        String CUSTOM_TIMESPAN = "custom_time_span";
     }
 
     private boolean mIsEndTime;

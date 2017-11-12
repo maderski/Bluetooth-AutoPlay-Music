@@ -80,6 +80,8 @@ public class FirebaseHelper {
             Selection.MORNING_END_TIME,
             Selection.EVENING_START_TIME,
             Selection.EVENING_END_TIME,
+            Selection.CUSTOM_START_TIME,
+            Selection.CUSTOM_END_TIME,
             Selection.LAUNCH_WAZE_DIRECTIONS
     })
     @Retention(RetentionPolicy.SOURCE)
@@ -98,6 +100,8 @@ public class FirebaseHelper {
         String MORNING_END_TIME = "morning_end_time";
         String EVENING_START_TIME = "evening_start_time";
         String EVENING_END_TIME = "evening_end_time";
+        String CUSTOM_START_TIME = "custom_start_time";
+        String CUSTOM_END_TIME = "custom_end_time";
         String LAUNCH_WAZE_DIRECTIONS = "launch_waze_directions";
     }
 

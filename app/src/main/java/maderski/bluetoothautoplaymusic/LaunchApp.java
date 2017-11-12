@@ -26,12 +26,14 @@ public class LaunchApp extends PackageTools {
 
     @StringDef({
             DirectionLocations.HOME,
-            DirectionLocations.WORK
+            DirectionLocations.WORK,
+            DirectionLocations.CUSTOM
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface DirectionLocations {
         String HOME = "Home";
         String WORK = "Work";
+        String CUSTOM = "Custom";
     }
 
     private String mDirectionLocation = "None";
@@ -59,7 +61,8 @@ public class LaunchApp extends PackageTools {
         final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
 
         boolean canLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
-        if(canLaunchToday) {
+        boolean canCustomLaunchToday = canCustomLaunchOnThisDay(context) && canCustomLocationLaunchDuringThisTime(context);
+        if(canLaunchToday || canCustomLaunchToday) {
             seconds = seconds * 1000;
 
             Handler handler = new Handler();
@@ -94,6 +97,9 @@ public class LaunchApp extends PackageTools {
     }
 
     private Uri getMapsChoiceUri(Context context){
+        mDirectionLocation = mDirectionLocation.equals(DirectionLocations.CUSTOM)
+                ? BAPMPreferences.getCustomLocationName(context) : mDirectionLocation;
+
         Uri uri;
         if(BAPMPreferences.getMapsChoice(context).equals(PackageName.WAZE)){
             String wazeUri = "waze://?favorite=" + mDirectionLocation + "&navigate=yes";
@@ -138,6 +144,16 @@ public class LaunchApp extends PackageTools {
         return canLaunch;
     }
 
+    public boolean canCustomLaunchOnThisDay(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
+        boolean canLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(context).contains(today);
+        Log.d(TAG, "Day of the week: " + today);
+        Log.d(TAG, "Can Launch Custom: " + canLaunch);
+
+        return canLaunch;
+    }
+
     public boolean canMapsLaunchDuringThisTime(Context context){
         boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
         if(isUseLaunchTimeEnabled) {
@@ -156,6 +172,21 @@ public class LaunchApp extends PackageTools {
         }
 
         return true;
+    }
+
+    public boolean canCustomLocationLaunchDuringThisTime(Context context) {
+        boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
+        if(isUseLaunchTimeEnabled) {
+            int customStartTime = BAPMPreferences.getCustomStartTime(context);
+            int customEndTime = BAPMPreferences.getCustomEndTime(context);
+
+            TimeHelper timeHelper = new TimeHelper(customStartTime, customEndTime);
+            mDirectionLocation = timeHelper.getDirectionLocation();
+
+            return timeHelper.isWithinTimeSpan();
+        }
+
+        return false;
     }
 
     public void launchWazeDirections(final Context context, final String location){

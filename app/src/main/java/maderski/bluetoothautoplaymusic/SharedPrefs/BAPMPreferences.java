@@ -21,6 +21,7 @@ public class BAPMPreferences {
 
     private static String[] setValues = new String[]{"1", "2", "3", "4", "5", "6", "7"};
     private static Set<String> launchDays = new HashSet<>(Arrays.asList(setValues));
+    private static Set<String> customLaunchDays = new HashSet<>();
     private static String MY_PREFS_NAME = "BAPMPreference";
 
     //Keys for enabling/disabling things
@@ -40,6 +41,7 @@ public class BAPMPreferences {
     private static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
     private static final String AUTO_BRIGHTNESS_KEY = "AutoBrightness";
     private static final String DAYS_TO_LAUNCH_MAPS_KEY = "DaysToLaunchMaps";
+    private static final String CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY = "CustomDaysToLaunchMaps";
     private static final String DIM_TIME_KEY = "DimTime";
     private static final String BRIGHT_TIME_KEY = "BrightTime";
     private static final String HEADPHONE_DEVICES_KEY = "HeadphoneDevices";
@@ -52,6 +54,9 @@ public class BAPMPreferences {
     private static final String MORNING_END_TIME = "MorningEndTime";
     private static final String EVENING_START_TIME = "EveningStartTime";
     private static final String EVENING_END_TIME = "EveningEndTime";
+    private static final String CUSTOM_START_TIME = "CustomStartTime";
+    private static final String CUSTOM_END_TIME = "CustomEndTime";
+    private static final String CUSTOM_LOCATION_NAME = "CustomLocationName";
     private static final String SHOW_NOTIFICATION = "ShowNotification";
     private static final String LAUNCH_DIRECTIONS = "LaunchDirections";
     private static final String WIFI_USE_MAP_TIME_SPANS = "WifiUseMapTimeSpans";
@@ -160,6 +165,33 @@ public class BAPMPreferences {
         return reader(context).getInt(EVENING_END_TIME, 1900);
     }
 
+    public static void setCustomStartTime(Context context, int startTime) {
+        editor(context).putInt(CUSTOM_START_TIME, startTime);
+        commit(context);
+    }
+
+    public static int getCustomStartTime(Context context) {
+        return reader(context).getInt(CUSTOM_START_TIME, 1100);
+    }
+
+    public static void setCustomEndTime(Context context, int endTime) {
+        editor(context).putInt(CUSTOM_END_TIME, endTime);
+        commit(context);
+    }
+
+    public static int getCustomEndTime(Context context) {
+        return reader(context).getInt(CUSTOM_END_TIME, 1300);
+    }
+
+    public static void setCustomLocationName(Context context, String locationName) {
+        editor(context).putString(CUSTOM_LOCATION_NAME, locationName);
+        commit(context);
+    }
+
+    public static String getCustomLocationName(Context context) {
+        return reader(context).getString(CUSTOM_LOCATION_NAME, "");
+    }
+
     public static void setUseTimesToLaunchMaps(Context context, boolean enabled){
         editor(context).putBoolean(USE_TIMES_TO_LAUNCH_MAPS, enabled);
         commit(context);
@@ -222,6 +254,15 @@ public class BAPMPreferences {
 
     public static int getDimTime(Context context){
         return reader(context).getInt(DIM_TIME_KEY, 2000);
+    }
+
+    public static void setCustomDaysToLaunchMaps(Context context, Set<String> customDays) {
+        editor(context).putStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, customDays);
+        commit(context);
+    }
+
+    public static Set<String> getCustomDaysToLaunchMaps(Context context) {
+        return reader(context).getStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, customLaunchDays);
     }
 
     public static void setDaysToLaunchMaps(Context context, Set<String> _stringSet){
