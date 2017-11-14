@@ -9,30 +9,23 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
-import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Notification;
-import maderski.bluetoothautoplaymusic.PackageTools;
-import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
-import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
-import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.Services.WakeLockService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.Telephone;
-import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
@@ -46,12 +39,14 @@ public class BTConnectActions {
     private final Notification mNotification;
     private final VolumeControl mVolumeControl;
     private final PlayMusicControl mPlayMusicControl;
+    private final LaunchApp mLaunchApp;
 
     public BTConnectActions(Context context){
         this.context = context;
-        this.mNotification = new Notification();
-        this.mVolumeControl = new VolumeControl(context);
-        this.mPlayMusicControl = new PlayMusicControl(context);
+        mNotification = new Notification();
+        mVolumeControl = new VolumeControl(context);
+        mPlayMusicControl = new PlayMusicControl(context);
+        mLaunchApp = new LaunchApp();
     }
 
     public void OnBTConnect(){
@@ -84,7 +79,6 @@ public class BTConnectActions {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     public void actionsOnBTConnect(){
-        final LaunchApp launchApp = new LaunchApp();
         final boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
 
         showBTAMNotification();
@@ -92,11 +86,11 @@ public class BTConnectActions {
         turnTheScreenOn();
 
         if(unlockScreen){
-            performActionsDelay(launchApp, unlockScreen);
+            performActionsDelay();
         } else {
-            launchMusicMapApp(launchApp);
+            launchMusicMapApp();
             autoPlayMusic(6);
-            setWifiOff(launchApp);
+            setWifiOff();
             putPhoneInDoNotDisturb();
         }
 
@@ -104,15 +98,14 @@ public class BTConnectActions {
         ServiceUtils.stopService(context, OnBTConnectService.class, OnBTConnectService.TAG);
     }
 
-    private void performActionsDelay(final LaunchApp launchApp, final boolean unlockScreen){
-        int seconds = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30000 : 8000;
+    private void performActionsDelay(){
+        int seconds = 30000;
 
         new CountDownTimer(seconds, 1000){
 
             @Override
             public void onTick(long millisUntilFinished) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 &&
-                        !((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isDeviceLocked()) {
+                if (!((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isDeviceLocked()) {
                     cancel();
                     onFinish();
                 }
@@ -121,10 +114,10 @@ public class BTConnectActions {
 
             @Override
             public void onFinish() {
-                unlockTheScreen(launchApp, unlockScreen);
-                launchMusicMapApp(launchApp);
+                unlockTheScreen();
+                launchMusicMapApp();
                 autoPlayMusic(6);
-                setWifiOff(launchApp);
+                setWifiOff();
                 putPhoneInDoNotDisturb();
             }
         }.start();
@@ -145,13 +138,11 @@ public class BTConnectActions {
         }
     }
 
-    private void unlockTheScreen(final LaunchApp launchApp, boolean unlockScreen){
-        if (unlockScreen) {
-            boolean isKeyguardLocked = ((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
-            Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
-            if (isKeyguardLocked) {
-                launchApp.launchBAPMActivity(context);
-            }
+    private void unlockTheScreen(){
+        boolean isKeyguardLocked = ((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
+        Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
+        if (isKeyguardLocked) {
+            mLaunchApp.launchBAPMActivity(context);
         }
     }
 
@@ -176,22 +167,22 @@ public class BTConnectActions {
         }
     }
 
-    private void launchMusicMapApp(LaunchApp launchApp){
+    private void launchMusicMapApp(){
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
-        boolean mapsCanLaunch = launchApp.canMapsLaunchDuringThisTime(context)
-                && launchApp.canMapsLaunchOnThisDay(context);
+        boolean mapsCanLaunch = mLaunchApp.canMapsLaunchDuringThisTime(context)
+                && mLaunchApp.canMapsLaunchOnThisDay(context);
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
-            launchApp.musicPlayerLaunch(context, 3);
+            mLaunchApp.musicPlayerLaunch(context, 3);
         }
 
         if (launchMaps) {
-            launchApp.launchMaps(context, 3);
+            mLaunchApp.launchMaps(context, 3);
         }
     }
 
-    private void setWifiOff(LaunchApp launchApp){
+    private void setWifiOff(){
         boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
         if (isWifiOffDevice) {
             int morningStartTime = BAPMPreferences.getMorningStartTime(context);
@@ -204,7 +195,7 @@ public class BTConnectActions {
             boolean isWorkLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.WORK);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isWorkLocation && launchApp.canMapsLaunchOnThisDay(context));
+                    || (isWorkLocation && mLaunchApp.canMapsLaunchOnThisDay(context));
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false);
             }
