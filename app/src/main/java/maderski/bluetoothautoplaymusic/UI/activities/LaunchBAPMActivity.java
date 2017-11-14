@@ -37,7 +37,7 @@ public class LaunchBAPMActivity extends AppCompatActivity{
                 // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
                 sendHomeAppTimer(3);
             }
-        }, 250);
+        }, 1000);
     }
 
     //Dismiss the KeyGuard
