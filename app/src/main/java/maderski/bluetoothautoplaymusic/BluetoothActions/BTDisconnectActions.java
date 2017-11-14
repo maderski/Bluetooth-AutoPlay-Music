@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.BluetoothActions;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,17 +10,14 @@ import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
-import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
-import maderski.bluetoothautoplaymusic.Services.BTDisconnectService;
-import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
-import maderski.bluetoothautoplaymusic.Services.WakeLockService;
-import maderski.bluetoothautoplaymusic.Utils.ReceiverUtils;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.LaunchApp;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.PackageTools;
-import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
+import maderski.bluetoothautoplaymusic.Services.BTDisconnectService;
+import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
+import maderski.bluetoothautoplaymusic.Services.WakeLockService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
@@ -58,8 +56,17 @@ public class BTDisconnectActions {
         stopKeepingScreenOn();
         setVolumeBack(ringerControl);
 
+        stopService();
+    }
+
+    private void stopService() {
         BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
-        ServiceUtils.stopService(context, BTDisconnectService.class, BTDisconnectService.TAG);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ServiceUtils.stopService(context, BTDisconnectService.class, BTDisconnectService.TAG);
+            }
+        }, 1000);
     }
 
     private void removeBAPMNotification(){
