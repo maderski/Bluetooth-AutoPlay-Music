@@ -59,11 +59,12 @@ public class LaunchApp extends PackageTools {
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
         final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
-        final boolean canLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
+        final boolean canHomeLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
         final boolean canWorkLaunchToday = canWorkLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
         final boolean canCustomLaunchToday = canCustomLaunchOnThisDay(context) && canCustomLocationLaunchDuringThisTime(context);
+        final boolean canLaunchMapsNow = canHomeLaunchToday || canWorkLaunchToday || canCustomLaunchToday;
 
-        if(canLaunchToday || canWorkLaunchToday || canCustomLaunchToday) {
+        if(canLaunchMapsNow) {
             seconds = seconds * 1000;
 
             Handler handler = new Handler();
@@ -180,9 +181,9 @@ public class LaunchApp extends PackageTools {
             mDirectionLocation = timeHelper.getDirectionLocation();
 
             return timeHelper.isWithinTimeSpan();
+        } else {
+            return true;
         }
-
-        return true;
     }
 
     public boolean canCustomLocationLaunchDuringThisTime(Context context) {
@@ -195,9 +196,9 @@ public class LaunchApp extends PackageTools {
             mDirectionLocation = timeHelper.getDirectionLocation();
 
             return timeHelper.isWithinTimeSpan();
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     public void launchWazeDirections(final Context context, final String location){

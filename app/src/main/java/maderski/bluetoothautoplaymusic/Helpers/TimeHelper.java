@@ -44,11 +44,15 @@ public class TimeHelper {
 
         if(endTime < startTime) {
             if (currentTime >= 1200) {
-                mCustomEndTime += 2400;
+                endTime += 2400;
             } else {
-                mCustomStartTime = 0;
+                startTime = 0;
             }
         }
+
+        mCustomEndTime = endTime;
+        mCustomStartTime = startTime;
+
     }
 
     public TimeHelper(int morningStartTime, int morningEndTime, int eveningStartTime, int eveningEndTime){
