@@ -31,16 +31,11 @@ public class OnAppUpdateReceiver extends BroadcastReceiver {
     }
 
     private void syncHomeWorkCheckboxes(Context context) {
-        int versionCode = 84;
-        try {
-            PackageInfo pkgInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            versionCode = pkgInfo.versionCode;
-        }catch(Exception e){
-            Log.e(TAG, e.getMessage());
-        }
+        Set<String> workDaysSet = BAPMPreferences.getWorkDaysToLaunchMaps(context);
 
+        boolean isSetWorkDayEmpty = workDaysSet.isEmpty();
         boolean hasRan = BAPMPreferences.getUpdateHomeWorkDaysSync(context);
-        if(versionCode < 85 && !hasRan) {
+        if(isSetWorkDayEmpty && !hasRan) {
             Set<String> daysHomeWorkRan = BAPMPreferences.getDaysToLaunchMaps(context);
             BAPMPreferences.setWorkDaysToLaunchMaps(context, daysHomeWorkRan);
             BAPMPreferences.setUpdateHomeWorkDaysSync(context, true);
