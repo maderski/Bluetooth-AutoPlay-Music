@@ -42,10 +42,12 @@ public class TimeHelper {
         int currentTime = getCurrent24hrTime();
         mIsCustomTime = true;
 
-        if(currentTime >= 1200){
-            mCustomEndTime += 2400;
-        } else {
-            mCustomStartTime = 0;
+        if(endTime < startTime) {
+            if (currentTime >= 1200) {
+                mCustomEndTime += 2400;
+            } else {
+                mCustomStartTime = 0;
+            }
         }
     }
 

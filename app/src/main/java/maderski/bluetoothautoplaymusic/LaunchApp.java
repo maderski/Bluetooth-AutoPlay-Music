@@ -60,9 +60,10 @@ public class LaunchApp extends PackageTools {
     public void launchMaps(final Context context, int seconds){
         final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
         final boolean canLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
+        final boolean canWorkLaunchToday = canWorkLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
         final boolean canCustomLaunchToday = canCustomLaunchOnThisDay(context) && canCustomLocationLaunchDuringThisTime(context);
 
-        if(canLaunchToday || canCustomLaunchToday) {
+        if(canLaunchToday || canWorkLaunchToday || canCustomLaunchToday) {
             seconds = seconds * 1000;
 
             Handler handler = new Handler();
@@ -140,6 +141,16 @@ public class LaunchApp extends PackageTools {
         boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
         Log.d(TAG, "Day of the week: " + today);
         Log.d(TAG, "Can Launch Maps: " + canLaunch);
+
+        return canLaunch;
+    }
+
+    public boolean canWorkLaunchOnThisDay(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
+        boolean canLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(context).contains(today);
+        Log.d(TAG, "Day of the week: " + today);
+        Log.d(TAG, "Can Launch Custom: " + canLaunch);
 
         return canLaunch;
     }

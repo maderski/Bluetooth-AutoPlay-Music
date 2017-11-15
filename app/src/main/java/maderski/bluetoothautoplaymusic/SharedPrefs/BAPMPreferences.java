@@ -41,6 +41,7 @@ public class BAPMPreferences {
     private static final String WAIT_TILL_OFF_PHONE_KEY = "WaitTillOffPhone";
     private static final String AUTO_BRIGHTNESS_KEY = "AutoBrightness";
     private static final String DAYS_TO_LAUNCH_MAPS_KEY = "DaysToLaunchMaps";
+    private static final String WORK_DAYS_TO_LAUNCH_MAPS_KEY = "WorkDaysToLaunchMaps";
     private static final String CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY = "CustomDaysToLaunchMaps";
     private static final String DIM_TIME_KEY = "DimTime";
     private static final String BRIGHT_TIME_KEY = "BrightTime";
@@ -64,6 +65,16 @@ public class BAPMPreferences {
     private static final String LAUNCH_MAPS_DRIVING_MODE = "LaunchMapsDrivingMode";
     private static final String USE_PRIORITY_MODE = "UsePriorityMode";
     private static final String USE_A2DP_HEADPHONES = "UseA2DPHeadphones";
+    private static final String UPDATE_HOME_WORK_DAYS_SYNC = "updateHomeDaysSync";
+
+    public static void setUpdateHomeWorkDaysSync(Context context, boolean hasRan){
+        editor(context).putBoolean(UPDATE_HOME_WORK_DAYS_SYNC, hasRan);
+        commit(context);
+    }
+
+    public static boolean getUpdateHomeWorkDaysSync(Context context){
+        return reader(context).getBoolean(UPDATE_HOME_WORK_DAYS_SYNC, false);
+    }
 
     public static void setUseA2dpHeadphones(Context context, boolean enable){
         editor(context).putBoolean(USE_A2DP_HEADPHONES, enable);
@@ -264,6 +275,17 @@ public class BAPMPreferences {
     public static Set<String> getCustomDaysToLaunchMaps(Context context) {
         return reader(context).getStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, customLaunchDays);
     }
+
+    public static void setWorkDaysToLaunchMaps(Context context, Set<String> _stringSet){
+        editor(context).putStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, _stringSet);
+        commit(context);
+    }
+
+    public static Set<String> getWorkDaysToLaunchMaps(Context context){
+        return reader(context).getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, launchDays);
+    }
+
+
 
     public static void setDaysToLaunchMaps(Context context, Set<String> _stringSet){
         editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet);

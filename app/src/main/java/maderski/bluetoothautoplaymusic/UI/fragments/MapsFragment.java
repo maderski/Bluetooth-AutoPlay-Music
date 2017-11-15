@@ -97,7 +97,8 @@ public class MapsFragment extends Fragment {
         mapsRadioButtonListener(rootView, getActivity());
 
         setMapChoice(rootView, getActivity());
-        setCheckBoxes(rootView, R.id.ll_morning_evening_chk_boxes);
+        setCheckBoxes(rootView, R.id.ll_home_chk_boxes);
+        setCheckBoxes(rootView, R.id.ll_work_days_chk_boxes);
         setCheckBoxes(rootView, R.id.ll_custom_days_chk_boxes);
 
         morningStartButton(rootView);
@@ -124,7 +125,8 @@ public class MapsFragment extends Fragment {
         final TextView morningTimeSpanText = (TextView)view.findViewById(R.id.morning_timespan_label);
         final TextView eveningTimeSpanText = (TextView)view.findViewById(R.id.evening_timespan_label);
 
-        final TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_morning_evening_location_label);
+        final TextView homeCheckboxLabel = (TextView) view.findViewById(R.id.tv_home_location_label);
+        final TextView workCheckboxLabel = (TextView) view.findViewById(R.id.tv_work_location_label);
 
         if(mCanLaunchDirections){
             morningTimeSpanText.setText(R.string.work_directions_label);
@@ -145,14 +147,16 @@ public class MapsFragment extends Fragment {
                     morningTimeSpanText.setText(R.string.work_directions_label);
                     eveningTimeSpanText.setText(R.string.home_directions_label);
 
-                    checkboxLabel.setText("Work/Home");
+                    homeCheckboxLabel.setText("Home");
+                    workCheckboxLabel.setText("Work");
                     Log.d(TAG, "LaunchDirectionsSwitch is ON");
                 } else {
                     BAPMPreferences.setCanLaunchDirections(getContext(), false);
                     morningTimeSpanText.setText(R.string.morning_time_span_label);
                     eveningTimeSpanText.setText(R.string.evening_time_span_label);
 
-                    checkboxLabel.setText("Morn/Eve");
+                    homeCheckboxLabel.setText("Evening");
+                    workCheckboxLabel.setText("Morning");
                     Log.d(TAG, "LaunchDirectionsSwitch is OFF");
                 }
             }
@@ -328,11 +332,17 @@ public class MapsFragment extends Fragment {
         LinearLayout daysToLaunchChkBoxLL = (LinearLayout) view.findViewById(linearLayoutId);
         daysToLaunchChkBoxLL.removeAllViews();
 
-        if(linearLayoutId == R.id.ll_morning_evening_chk_boxes) {
+        if(linearLayoutId == R.id.ll_home_chk_boxes) {
             daysToLaunchSet = BAPMPreferences.getDaysToLaunchMaps(getActivity());
 
-            String checkboxLabelText = mCanLaunchDirections ? "Work/Home" : "Morn/Eve";
-            TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_morning_evening_location_label);
+            String checkboxLabelText = mCanLaunchDirections ? "Home" : "Evening";
+            TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_home_location_label);
+            checkboxLabel.setText(checkboxLabelText);
+        } else if(linearLayoutId == R.id.ll_work_days_chk_boxes) {
+            daysToLaunchSet = BAPMPreferences.getWorkDaysToLaunchMaps(getActivity());
+
+            String checkboxLabelText = mCanLaunchDirections ? "Work" : "Morning";
+            TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_work_location_label);
             checkboxLabel.setText(checkboxLabelText);
         } else {
             daysToLaunchSet = BAPMPreferences.getCustomDaysToLaunchMaps(getActivity());
@@ -343,11 +353,14 @@ public class MapsFragment extends Fragment {
             checkBox = new CheckBox(getActivity());
             checkBox.setChecked(daysToLaunchSet.contains(day));
 
-            if(linearLayoutId == R.id.ll_morning_evening_chk_boxes) {
+            if(linearLayoutId == R.id.ll_home_chk_boxes) {
                 checkBox.setText(getNameOfDay(day));
                 checkBox.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
                 checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
-                morningEveningCheckboxListener(checkBox, day);
+                homeCheckboxListener(checkBox, day);
+            } else if(linearLayoutId == R.id.ll_work_days_chk_boxes) {
+                checkBox.setLayoutParams(params);
+                workCheckboxListener(checkBox, day);
             } else {
                 checkBox.setLayoutParams(params);
                 customCheckboxListener(checkBox, day);
@@ -357,7 +370,7 @@ public class MapsFragment extends Fragment {
         }
     }
 
-    private void morningEveningCheckboxListener(CheckBox checkBox, String dayNumber){
+    private void homeCheckboxListener(CheckBox checkBox, String dayNumber){
         final Context ctx = getActivity();
         final CheckBox cb = checkBox;
         final String dn = dayNumber;
@@ -372,6 +385,26 @@ public class MapsFragment extends Fragment {
                 }else{
                     daysToLaunch.remove(dn);
                     BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
+                }
+            }
+        });
+    }
+
+    private void workCheckboxListener(CheckBox checkBox, String dayNumber){
+        final Context ctx = getActivity();
+        final CheckBox cb = checkBox;
+        final String dn = dayNumber;
+
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getWorkDaysToLaunchMaps(ctx));
+                if(cb.isChecked()){
+                    daysToLaunch.add(dn);
+                    BAPMPreferences.setWorkDaysToLaunchMaps(ctx, daysToLaunch);
+                }else{
+                    daysToLaunch.remove(dn);
+                    BAPMPreferences.setWorkDaysToLaunchMaps(ctx, daysToLaunch);
                 }
             }
         });
