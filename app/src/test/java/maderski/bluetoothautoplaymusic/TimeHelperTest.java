@@ -260,4 +260,45 @@ public class TimeHelperTest {
             }
         }
     }
+
+    @Test
+    public void testGetDirectionsLocationCustom() {
+        int currentTime = 1400;
+        int startTime = 1300;
+        int endTime = 1500;
+
+        TimeHelper timeHelper = new TimeHelper(startTime, endTime, currentTime);
+        String directionLocation = timeHelper.getDirectionLocation();
+
+        assertEquals(directionLocation, LaunchApp.DirectionLocations.CUSTOM);
+    }
+
+    @Test
+    public void testGetDirectionsLocationWork() {
+        int currentTime = 930;
+        int morningStart = 800;
+        int morningEnd = 1000;
+        int eveningStart = 1600;
+        int eveningEnd = 1800;
+
+        TimeHelper timeHelper = new TimeHelper(morningStart, morningEnd, eveningStart, eveningEnd, currentTime);
+        String directionLocation = timeHelper.getDirectionLocation();
+
+        assertEquals(directionLocation, LaunchApp.DirectionLocations.WORK);
+    }
+
+    @Test
+    public void testGetDirectionsLocationHome() {
+        int currentTime = 1630;
+        int morningStart = 800;
+        int morningEnd = 1000;
+        int eveningStart = 1600;
+        int eveningEnd = 1800;
+
+        TimeHelper timeHelper = new TimeHelper(morningStart, morningEnd, eveningStart, eveningEnd, currentTime);
+        String directionLocation = timeHelper.getDirectionLocation();
+
+        assertEquals(directionLocation, LaunchApp.DirectionLocations.HOME);
+    }
+
 }
