@@ -176,8 +176,10 @@ public class LaunchApp extends PackageTools {
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
+            int current24hrTime = TimeHelper.getCurrent24hrTime();
+
             TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime,
-                    eveningStartTime, eveningEndTime);
+                    eveningStartTime, eveningEndTime, current24hrTime);
             mDirectionLocation = timeHelper.getDirectionLocation();
 
             return timeHelper.isWithinTimeSpan();
@@ -191,8 +193,9 @@ public class LaunchApp extends PackageTools {
         if(isUseLaunchTimeEnabled) {
             int customStartTime = BAPMPreferences.getCustomStartTime(context);
             int customEndTime = BAPMPreferences.getCustomEndTime(context);
+            int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            TimeHelper timeHelper = new TimeHelper(customStartTime, customEndTime);
+            TimeHelper timeHelper = new TimeHelper(customStartTime, customEndTime, current24hrTime);
             mDirectionLocation = timeHelper.getDirectionLocation();
 
             return timeHelper.isWithinTimeSpan();

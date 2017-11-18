@@ -28,6 +28,14 @@ public class TimeHelper {
         return hour + ":" + minutes + " " + AMPM;
     }
 
+    public static int getCurrent24hrTime(){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        return (hour * 100) + minute;
+    }
+
     private int mMorningStartTime;
     private int mMorningEndTime;
     private int mEveningStartTime;
@@ -38,12 +46,11 @@ public class TimeHelper {
 
     private boolean mIsCustomTime = false;
 
-    public TimeHelper(int startTime, int endTime) {
-        int currentTime = getCurrent24hrTime();
+    public TimeHelper(int startTime, int endTime, int current24hrTime) {
         mIsCustomTime = true;
 
         if(endTime < startTime) {
-            if (currentTime >= 1200) {
+            if (current24hrTime >= 1200) {
                 endTime += 2400;
             } else {
                 startTime = 0;
@@ -52,22 +59,22 @@ public class TimeHelper {
 
         mCustomEndTime = endTime;
         mCustomStartTime = startTime;
+        mCurrentTime = current24hrTime;
 
     }
 
-    public TimeHelper(int morningStartTime, int morningEndTime, int eveningStartTime, int eveningEndTime){
-        int currentTime = getCurrent24hrTime();
+    public TimeHelper(int morningStartTime, int morningEndTime, int eveningStartTime, int eveningEndTime, int current24hrTime){
         mIsCustomTime = false;
 
         // Check if the EndTime is less than the StartTime, this means end time was set for early morning
         if (morningEndTime < morningStartTime) {
-            if(currentTime >= 1200){
+            if(current24hrTime >= 1200){
                 morningEndTime += 2400;
             } else {
                 morningStartTime = 0;
             }
         } else if (eveningEndTime < eveningStartTime) {
-            if(currentTime >= 1200){
+            if(current24hrTime >= 1200){
                 eveningEndTime += 2400;
             } else {
                 eveningStartTime = 0;
@@ -78,7 +85,7 @@ public class TimeHelper {
         mMorningEndTime = morningEndTime;
         mEveningStartTime = eveningStartTime;
         mEveningEndTime = eveningEndTime;
-        mCurrentTime = currentTime;
+        mCurrentTime = current24hrTime;
     }
 
     public boolean isWithinTimeSpan(){
@@ -89,14 +96,6 @@ public class TimeHelper {
         } else {
             return mCurrentTime >= mCustomStartTime && mCurrentTime <= mCustomEndTime;
         }
-    }
-
-    public int getCurrent24hrTime(){
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        return (hour * 100) + minute;
     }
 
     public String getDirectionLocation(){

@@ -191,7 +191,9 @@ public class BTConnectActions {
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime);
+            int current24hrTime = TimeHelper.getCurrent24hrTime();
+
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime, current24hrTime);
             boolean isWorkLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.WORK);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)

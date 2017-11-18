@@ -132,7 +132,9 @@ public class BTDisconnectActions {
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime);
+            int current24hrTime = TimeHelper.getCurrent24hrTime();
+
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime, current24hrTime);
             boolean isHomeLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.HOME);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
