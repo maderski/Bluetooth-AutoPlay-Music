@@ -105,7 +105,10 @@ public class BTConnectActions {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                if (!((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isDeviceLocked()) {
+                KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+                boolean isDeviceLocked = keyguardManager.isDeviceLocked();
+                Log.d(TAG, "IS DEVICE LOCKED: " + String.valueOf(isDeviceLocked));
+                if (!isDeviceLocked) {
                     cancel();
                     onFinish();
                 }
@@ -139,7 +142,8 @@ public class BTConnectActions {
     }
 
     private void unlockTheScreen(){
-        boolean isKeyguardLocked = ((KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
+        KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        boolean isKeyguardLocked = keyguardManager.isKeyguardLocked();
         Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
         if (isKeyguardLocked) {
             mLaunchApp.launchBAPMActivity(context);

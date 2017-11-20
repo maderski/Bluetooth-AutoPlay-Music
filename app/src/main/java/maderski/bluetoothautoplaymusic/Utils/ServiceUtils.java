@@ -11,6 +11,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.view.View;
 
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class ServiceUtils {
             CharSequence channelName = "Bluetooth Autoplay Music";
 
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_MIN);
+            channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
             builder = new Notification.Builder(service, channelId);
         }

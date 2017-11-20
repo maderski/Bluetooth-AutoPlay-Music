@@ -28,16 +28,11 @@ public class LaunchBAPMActivity extends AppCompatActivity{
         FirebaseHelper firebaseHelper = new FirebaseHelper(this);
         firebaseHelper.activityLaunched(FirebaseHelper.ActivityName.LAUNCH_BAPM);
 
-        new Handler(getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Dismiss the keyguard
-                dismissKeyGuard();
+        // Dismiss the keyguard
+        dismissKeyGuard();
 
-                // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
-                sendHomeAppTimer(3);
-            }
-        }, 1000);
+        // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
+        sendHomeAppTimer(3);
     }
 
     //Dismiss the KeyGuard
