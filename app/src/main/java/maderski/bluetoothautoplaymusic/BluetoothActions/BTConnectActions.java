@@ -108,7 +108,7 @@ public class BTConnectActions {
                 KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
                 boolean isDeviceLocked = keyguardManager.isDeviceLocked();
                 Log.d(TAG, "IS DEVICE LOCKED: " + String.valueOf(isDeviceLocked));
-                if (!isDeviceLocked) {
+                if (!isDeviceLocked && millisUntilFinished < 28000) {
                     cancel();
                     onFinish();
                 }

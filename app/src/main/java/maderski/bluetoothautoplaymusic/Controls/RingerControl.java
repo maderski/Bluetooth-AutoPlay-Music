@@ -52,8 +52,21 @@ public class RingerControl {
 
     //turns phone sounds ON
     public void soundsON(){
-        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        Log.d(TAG, "RingerControl: " + "Normal");
+        boolean usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
+            boolean hasNAPPermission = PermissionHelper.isPermissionGranted(mContext, permission);
+            if(usePriorityMode && hasNAPPermission) {
+                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+                Log.d(TAG, "RingerControl: " + "Normal");
+            } else {
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                Log.d(TAG, "RingerControl: " + "Normal");
+            }
+        } else {
+            am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            Log.d(TAG, "RingerControl: " + "Normal");
+        }
     }
 
     public void vibrateOnly(){
