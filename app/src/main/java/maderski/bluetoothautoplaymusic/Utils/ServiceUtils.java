@@ -62,7 +62,6 @@ public class ServiceUtils {
             CharSequence channelName = "Bluetooth Autoplay Music";
 
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_MIN);
-            channel.setSound(null, null);
             notificationManager.createNotificationChannel(channel);
             builder = new Notification.Builder(service, channelId);
         }
