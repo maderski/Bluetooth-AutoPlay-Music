@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
@@ -174,8 +173,8 @@ public class BTConnectActions {
     private void launchMusicMapApp(){
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
-        boolean mapsCanLaunch = mLaunchApp.canMapsLaunchDuringThisTime(context)
-                && mLaunchApp.canMapsLaunchOnThisDay(context);
+        boolean mapsCanLaunch = mLaunchApp.canHomeLaunchDuringThisTime(context)
+                && mLaunchApp.canHomeLaunchOnThisDay(context);
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
             mLaunchApp.musicPlayerLaunch(context, 3);
@@ -201,7 +200,7 @@ public class BTConnectActions {
             boolean isWorkLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.WORK);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isWorkLocation && mLaunchApp.canMapsLaunchOnThisDay(context));
+                    || (isWorkLocation && mLaunchApp.canHomeLaunchOnThisDay(context));
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false);
             }

@@ -99,14 +99,17 @@ public class TimeHelper {
     }
 
     public String getDirectionLocation(){
+        String directionLocation;
         if(mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime && !mIsCustomTime){
-            return LaunchApp.DirectionLocations.WORK;
+            directionLocation = LaunchApp.DirectionLocations.WORK;
         } else if(mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime && !mIsCustomTime){
-            return LaunchApp.DirectionLocations.HOME;
+            directionLocation = LaunchApp.DirectionLocations.HOME;
         } else if(mCurrentTime >= mCustomStartTime && mCurrentTime <= mCustomEndTime){
-            return LaunchApp.DirectionLocations.CUSTOM;
+            directionLocation =LaunchApp.DirectionLocations.CUSTOM;
         } else {
-            return "None";
+            directionLocation = "None";
         }
+
+        return directionLocation;
     }
 }

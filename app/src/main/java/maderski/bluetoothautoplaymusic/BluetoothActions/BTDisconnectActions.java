@@ -138,7 +138,7 @@ public class BTDisconnectActions {
             boolean isHomeLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.HOME);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isHomeLocation && launchApp.canMapsLaunchOnThisDay(context));
+                    || (isHomeLocation && launchApp.canHomeLaunchOnThisDay(context));
             if(canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true);
             }

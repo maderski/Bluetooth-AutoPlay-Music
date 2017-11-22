@@ -36,7 +36,7 @@ public class LaunchApp extends PackageTools {
         String CUSTOM = "Custom";
     }
 
-    private String mDirectionLocation = "None";
+    private String mDirectionLocation;
 
     public LaunchApp(){
         super();
@@ -59,8 +59,8 @@ public class LaunchApp extends PackageTools {
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
         final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
-        final boolean canHomeLaunchToday = canMapsLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
-        final boolean canWorkLaunchToday = canWorkLaunchOnThisDay(context) && canMapsLaunchDuringThisTime(context);
+        final boolean canHomeLaunchToday = canHomeLaunchOnThisDay(context) && canHomeLaunchDuringThisTime(context);
+        final boolean canWorkLaunchToday = canWorkLaunchOnThisDay(context) && canHomeLaunchDuringThisTime(context);
         final boolean canCustomLaunchToday = canCustomLaunchOnThisDay(context) && canCustomLocationLaunchDuringThisTime(context);
         final boolean canLaunchMapsNow = canHomeLaunchToday || canWorkLaunchToday || canCustomLaunchToday;
 
@@ -99,8 +99,12 @@ public class LaunchApp extends PackageTools {
     }
 
     private Uri getMapsChoiceUri(Context context){
-        mDirectionLocation = mDirectionLocation.equals(DirectionLocations.CUSTOM)
-                ? BAPMPreferences.getCustomLocationName(context) : mDirectionLocation;
+        if(mDirectionLocation != null) {
+            mDirectionLocation = mDirectionLocation.equals(DirectionLocations.CUSTOM)
+                    ? BAPMPreferences.getCustomLocationName(context) : mDirectionLocation;
+        } else {
+            mDirectionLocation = "None";
+        }
 
         Uri uri;
         if(BAPMPreferences.getMapsChoice(context).equals(PackageName.WAZE)){
@@ -136,12 +140,12 @@ public class LaunchApp extends PackageTools {
         context.startActivity(i);
     }
 
-    public boolean canMapsLaunchOnThisDay(Context context){
+    public boolean canHomeLaunchOnThisDay(Context context){
         Calendar calendar = Calendar.getInstance();
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
         Log.d(TAG, "Day of the week: " + today);
-        Log.d(TAG, "Can Launch Maps: " + canLaunch);
+        Log.d(TAG, "Can Launch HOME: " + canLaunch);
 
         return canLaunch;
     }
@@ -151,7 +155,7 @@ public class LaunchApp extends PackageTools {
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(context).contains(today);
         Log.d(TAG, "Day of the week: " + today);
-        Log.d(TAG, "Can Launch Custom: " + canLaunch);
+        Log.d(TAG, "Can Launch WORK: " + canLaunch);
 
         return canLaunch;
     }
@@ -161,12 +165,12 @@ public class LaunchApp extends PackageTools {
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
         boolean canLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(context).contains(today);
         Log.d(TAG, "Day of the week: " + today);
-        Log.d(TAG, "Can Launch Custom: " + canLaunch);
+        Log.d(TAG, "Can Launch CUSTOM: " + canLaunch);
 
         return canLaunch;
     }
 
-    public boolean canMapsLaunchDuringThisTime(Context context){
+    public boolean canHomeLaunchDuringThisTime(Context context){
         boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
         if(isUseLaunchTimeEnabled) {
 
@@ -180,7 +184,9 @@ public class LaunchApp extends PackageTools {
 
             TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime,
                     eveningStartTime, eveningEndTime, current24hrTime);
-            mDirectionLocation = timeHelper.getDirectionLocation();
+            if(mDirectionLocation == null) {
+                mDirectionLocation = timeHelper.getDirectionLocation();
+            }
 
             return timeHelper.isWithinTimeSpan();
         } else {
@@ -196,7 +202,9 @@ public class LaunchApp extends PackageTools {
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
             TimeHelper timeHelper = new TimeHelper(customStartTime, customEndTime, current24hrTime);
-            mDirectionLocation = timeHelper.getDirectionLocation();
+            if(mDirectionLocation == null) {
+                mDirectionLocation = timeHelper.getDirectionLocation();
+            }
 
             return timeHelper.isWithinTimeSpan();
         } else {
