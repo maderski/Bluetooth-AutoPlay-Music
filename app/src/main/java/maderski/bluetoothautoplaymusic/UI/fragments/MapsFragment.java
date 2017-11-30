@@ -333,7 +333,7 @@ public class MapsFragment extends Fragment {
         daysToLaunchChkBoxLL.removeAllViews();
 
         if(linearLayoutId == R.id.ll_home_chk_boxes) {
-            daysToLaunchSet = BAPMPreferences.getDaysToLaunchMaps(getActivity());
+            daysToLaunchSet = BAPMPreferences.getHomeDaysToLaunchMaps(getActivity());
 
             String checkboxLabelText = mCanLaunchDirections ? "Home" : "Evening";
             TextView checkboxLabel = (TextView) view.findViewById(R.id.tv_home_location_label);
@@ -378,13 +378,13 @@ public class MapsFragment extends Fragment {
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getDaysToLaunchMaps(ctx));
+                Set<String> daysToLaunch = new HashSet<>(BAPMPreferences.getHomeDaysToLaunchMaps(ctx));
                 if(cb.isChecked()){
                     daysToLaunch.add(dn);
-                    BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
+                    BAPMPreferences.setHomeDaysToLaunchMaps(ctx, daysToLaunch);
                 }else{
                     daysToLaunch.remove(dn);
-                    BAPMPreferences.setDaysToLaunchMaps(ctx, daysToLaunch);
+                    BAPMPreferences.setHomeDaysToLaunchMaps(ctx, daysToLaunch);
                 }
             }
         });
@@ -499,7 +499,7 @@ public class MapsFragment extends Fragment {
         eveningStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN, false, BAPMPreferences.getEveningStartTime(getActivity()), "Set Evening Start Time");
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN, false, BAPMPreferences.getCustomStartTime(getActivity()), "Set Custom Start Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });
@@ -514,7 +514,7 @@ public class MapsFragment extends Fragment {
         eveningEndButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN, true, BAPMPreferences.getEveningEndTime(getActivity()), "Set Evening End Time");
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN, true, BAPMPreferences.getCustomEndTime(getActivity()), "Set Custom End Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });

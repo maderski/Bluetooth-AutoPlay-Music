@@ -173,8 +173,13 @@ public class BTConnectActions {
     private void launchMusicMapApp(){
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
-        boolean mapsCanLaunch = mLaunchApp.canHomeLaunchDuringThisTime(context)
-                && mLaunchApp.canHomeLaunchOnThisDay(context);
+        boolean canLaunchDuringThisTime = mLaunchApp.canLaunchDuringThisTime(context);
+        boolean mapsCanLaunch = false;
+
+        if(canLaunchDuringThisTime) {
+            String directionLocation = mLaunchApp.getDirectionLocation();
+            mapsCanLaunch = mLaunchApp.canLaunchOnThisDay(context, directionLocation);
+        }
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
             mLaunchApp.musicPlayerLaunch(context, 3);
@@ -196,11 +201,20 @@ public class BTConnectActions {
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime, current24hrTime);
-            boolean isWorkLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.WORK);
+            boolean canLaunch = false;
+            TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
+            canLaunch = timeHelperMorning.isWithinTimeSpan();
+            String directionLocation = LaunchApp.DirectionLocations.WORK;
+
+            if(canLaunch) {
+                TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
+                directionLocation = LaunchApp.DirectionLocations.HOME;
+            }
+
+            boolean isWorkLocation = directionLocation.equals(LaunchApp.DirectionLocations.WORK);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isWorkLocation && mLaunchApp.canHomeLaunchOnThisDay(context));
+                    || (isWorkLocation && mLaunchApp.canLaunchOnThisDay(context, directionLocation));
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false);
             }

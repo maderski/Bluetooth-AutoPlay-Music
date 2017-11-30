@@ -59,10 +59,12 @@ public class LaunchApp extends PackageTools {
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
         final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
-        final boolean canHomeLaunchToday = canHomeLaunchOnThisDay(context) && canHomeLaunchDuringThisTime(context);
-        final boolean canWorkLaunchToday = canWorkLaunchOnThisDay(context) && canHomeLaunchDuringThisTime(context);
-        final boolean canCustomLaunchToday = canCustomLaunchOnThisDay(context) && canCustomLocationLaunchDuringThisTime(context);
-        final boolean canLaunchMapsNow = canHomeLaunchToday || canWorkLaunchToday || canCustomLaunchToday;
+        final boolean canLaunchDuringThisTime = canLaunchDuringThisTime(context);
+
+        boolean canLaunchMapsNow = false;
+        if(canLaunchDuringThisTime) {
+            canLaunchMapsNow = canLaunchOnThisDay(context, mDirectionLocation);
+        }
 
         if(canLaunchMapsNow) {
             seconds = seconds * 1000;
@@ -140,37 +142,31 @@ public class LaunchApp extends PackageTools {
         context.startActivity(i);
     }
 
-    public boolean canHomeLaunchOnThisDay(Context context){
+    public boolean canLaunchOnThisDay(Context context, @DirectionLocations String directionLocation) {
         Calendar calendar = Calendar.getInstance();
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
-        boolean canLaunch = BAPMPreferences.getDaysToLaunchMaps(context).contains(today);
+        boolean canLaunch = false;
+
+        switch(directionLocation) {
+            case DirectionLocations.HOME:
+                canLaunch = BAPMPreferences.getHomeDaysToLaunchMaps(context).contains(today);
+                break;
+            case DirectionLocations.WORK:
+                canLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(context).contains(today);
+                break;
+            case DirectionLocations.CUSTOM:
+                canLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(context).contains(today);
+                break;
+        }
+
         Log.d(TAG, "Day of the week: " + today);
         Log.d(TAG, "Can Launch HOME: " + canLaunch);
+        Log.d(TAG, "Direction Location: " + directionLocation);
 
         return canLaunch;
     }
 
-    public boolean canWorkLaunchOnThisDay(Context context) {
-        Calendar calendar = Calendar.getInstance();
-        String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
-        boolean canLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(context).contains(today);
-        Log.d(TAG, "Day of the week: " + today);
-        Log.d(TAG, "Can Launch WORK: " + canLaunch);
-
-        return canLaunch;
-    }
-
-    public boolean canCustomLaunchOnThisDay(Context context) {
-        Calendar calendar = Calendar.getInstance();
-        String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
-        boolean canLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(context).contains(today);
-        Log.d(TAG, "Day of the week: " + today);
-        Log.d(TAG, "Can Launch CUSTOM: " + canLaunch);
-
-        return canLaunch;
-    }
-
-    public boolean canHomeLaunchDuringThisTime(Context context){
+    public boolean canLaunchDuringThisTime(Context context){
         boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
         if(isUseLaunchTimeEnabled) {
 
@@ -180,35 +176,32 @@ public class LaunchApp extends PackageTools {
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
-            int current24hrTime = TimeHelper.getCurrent24hrTime();
-
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime,
-                    eveningStartTime, eveningEndTime, current24hrTime);
-            if(mDirectionLocation == null) {
-                mDirectionLocation = timeHelper.getDirectionLocation();
-            }
-
-            return timeHelper.isWithinTimeSpan();
-        } else {
-            return true;
-        }
-    }
-
-    public boolean canCustomLocationLaunchDuringThisTime(Context context) {
-        boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
-        if(isUseLaunchTimeEnabled) {
             int customStartTime = BAPMPreferences.getCustomStartTime(context);
             int customEndTime = BAPMPreferences.getCustomEndTime(context);
+
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            TimeHelper timeHelper = new TimeHelper(customStartTime, customEndTime, current24hrTime);
-            if(mDirectionLocation == null) {
-                mDirectionLocation = timeHelper.getDirectionLocation();
+            boolean canLaunch;
+
+            TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
+            canLaunch = timeHelperMorning.isWithinTimeSpan();
+            mDirectionLocation = DirectionLocations.WORK;
+
+            if(!canLaunch) {
+                TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
+                canLaunch = timeHelperEvening.isWithinTimeSpan();
+                mDirectionLocation = DirectionLocations.HOME;
             }
 
-            return timeHelper.isWithinTimeSpan();
+            if(!canLaunch) {
+                TimeHelper timeHelperCustom = new TimeHelper(customStartTime, customEndTime, current24hrTime);
+                canLaunch = timeHelperCustom.isWithinTimeSpan();
+                mDirectionLocation = DirectionLocations.CUSTOM;
+            }
+
+            return canLaunch;
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -241,6 +234,10 @@ public class LaunchApp extends PackageTools {
         };
 
         handler.postDelayed(runnable, 2000);
+    }
+
+    public String getDirectionLocation() {
+        return mDirectionLocation;
     }
 }
 

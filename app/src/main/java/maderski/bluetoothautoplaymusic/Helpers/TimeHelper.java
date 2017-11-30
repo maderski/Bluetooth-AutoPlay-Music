@@ -36,19 +36,11 @@ public class TimeHelper {
         return (hour * 100) + minute;
     }
 
-    private int mMorningStartTime;
-    private int mMorningEndTime;
-    private int mEveningStartTime;
-    private int mEveningEndTime;
-    private int mCustomStartTime;
-    private int mCustomEndTime;
+    private int mStartTime;
+    private int mEndTime;
     private int mCurrentTime;
 
-    private boolean mIsCustomTime = false;
-
     public TimeHelper(int startTime, int endTime, int current24hrTime) {
-        mIsCustomTime = true;
-
         if(endTime < startTime) {
             if (current24hrTime >= 1200) {
                 endTime += 2400;
@@ -57,59 +49,14 @@ public class TimeHelper {
             }
         }
 
-        mCustomEndTime = endTime;
-        mCustomStartTime = startTime;
+        mEndTime = endTime;
+        mStartTime = startTime;
         mCurrentTime = current24hrTime;
 
     }
 
-    public TimeHelper(int morningStartTime, int morningEndTime, int eveningStartTime, int eveningEndTime, int current24hrTime){
-        mIsCustomTime = false;
-
-        // Check if the EndTime is less than the StartTime, this means end time was set for early morning
-        if (morningEndTime < morningStartTime) {
-            if(current24hrTime >= 1200){
-                morningEndTime += 2400;
-            } else {
-                morningStartTime = 0;
-            }
-        } else if (eveningEndTime < eveningStartTime) {
-            if(current24hrTime >= 1200){
-                eveningEndTime += 2400;
-            } else {
-                eveningStartTime = 0;
-            }
-        }
-
-        mMorningStartTime = morningStartTime;
-        mMorningEndTime = morningEndTime;
-        mEveningStartTime = eveningStartTime;
-        mEveningEndTime = eveningEndTime;
-        mCurrentTime = current24hrTime;
-    }
-
+    // Return result on whether Maps/Waze can launch or not
     public boolean isWithinTimeSpan(){
-        // Return result on whether Maps/Waze can launch or not
-        if(!mIsCustomTime) {
-            return mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime
-                    || mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime;
-        } else {
-            return mCurrentTime >= mCustomStartTime && mCurrentTime <= mCustomEndTime;
-        }
-    }
-
-    public String getDirectionLocation(){
-        String directionLocation;
-        if(mCurrentTime >= mMorningStartTime && mCurrentTime <= mMorningEndTime && !mIsCustomTime){
-            directionLocation = LaunchApp.DirectionLocations.WORK;
-        } else if(mCurrentTime >= mEveningStartTime && mCurrentTime <= mEveningEndTime && !mIsCustomTime){
-            directionLocation = LaunchApp.DirectionLocations.HOME;
-        } else if(mCurrentTime >= mCustomStartTime && mCurrentTime <= mCustomEndTime){
-            directionLocation =LaunchApp.DirectionLocations.CUSTOM;
-        } else {
-            directionLocation = "None";
-        }
-
-        return directionLocation;
+        return mCurrentTime >= mStartTime && mCurrentTime <= mEndTime;
     }
 }

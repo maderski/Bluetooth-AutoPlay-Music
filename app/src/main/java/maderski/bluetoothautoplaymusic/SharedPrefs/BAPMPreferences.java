@@ -287,12 +287,12 @@ public class BAPMPreferences {
 
 
 
-    public static void setDaysToLaunchMaps(Context context, Set<String> _stringSet){
+    public static void setHomeDaysToLaunchMaps(Context context, Set<String> _stringSet){
         editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet);
         commit(context);
     }
 
-    public static Set<String> getDaysToLaunchMaps(Context context){
+    public static Set<String> getHomeDaysToLaunchMaps(Context context){
         return reader(context).getStringSet(DAYS_TO_LAUNCH_MAPS_KEY, launchDays);
     }
 

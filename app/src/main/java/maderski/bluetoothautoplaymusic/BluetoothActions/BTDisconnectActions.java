@@ -134,11 +134,20 @@ public class BTDisconnectActions {
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, eveningStartTime, eveningEndTime, current24hrTime);
-            boolean isHomeLocation = timeHelper.getDirectionLocation().equals(LaunchApp.DirectionLocations.HOME);
+            boolean canLaunch = false;
+            TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
+            canLaunch = timeHelperMorning.isWithinTimeSpan();
+            String directionLocation = LaunchApp.DirectionLocations.WORK;
+
+            if(canLaunch) {
+                TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
+                directionLocation = LaunchApp.DirectionLocations.HOME;
+            }
+
+            boolean isHomeLocation = directionLocation.equals(LaunchApp.DirectionLocations.HOME);
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isHomeLocation && launchApp.canHomeLaunchOnThisDay(context));
+                    || (isHomeLocation && launchApp.canLaunchOnThisDay(context, directionLocation));
             if(canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true);
             }
