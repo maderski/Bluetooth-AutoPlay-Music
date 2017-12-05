@@ -160,13 +160,4 @@ public class BTDisconnectActions {
             mVolumeControl.setToOriginalVolume(ringerControl);
         }
     }
-
-    private void muteOrUnMuteNotifications(boolean isMute){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Mute or UnMute notifications
-            int index = isMute ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE;
-            AudioManager audioManager = mVolumeControl.getAudioManager();
-            audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, index, 0);
-        }
-    }
 }
