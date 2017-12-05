@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             PermissionHelper.checkPermission(this, PermissionHelper.Permission.COARSE_LOCATION);
         }
 
-        checkIfBAPMServiceRunning();
-
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container, HomeFragment.newInstance(), TAG_HOME_FRAGMENT)
@@ -138,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     protected void onStart() {
         super.onStart();
         BusProvider.getBusInstance().register(this);
+        checkIfBAPMServiceRunning();
     }
 
     @Override
