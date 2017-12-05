@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.BluetoothActions;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -66,7 +67,7 @@ public class BTDisconnectActions {
             public void run() {
                 ServiceUtils.stopService(context, BTDisconnectService.class, BTDisconnectService.TAG);
             }
-        }, 1000);
+        }, 5000);
     }
 
     private void removeBAPMNotification(){
@@ -126,28 +127,17 @@ public class BTDisconnectActions {
     private void setWifiOn(LaunchApp launchApp){
         boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
         if(isWifiOffDevice){
-            int morningStartTime = BAPMPreferences.getMorningStartTime(context);
-            int morningEndTime = BAPMPreferences.getMorningEndTime(context);
-
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
             int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            boolean canLaunch = false;
-            TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
-            canLaunch = timeHelperMorning.isWithinTimeSpan();
-            String directionLocation = LaunchApp.DirectionLocations.WORK;
-
-            if(canLaunch) {
-                TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
-                directionLocation = LaunchApp.DirectionLocations.HOME;
-            }
-
-            boolean isHomeLocation = directionLocation.equals(LaunchApp.DirectionLocations.HOME);
+            TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
+            boolean canLaunch = timeHelperEvening.isWithinTimeSpan();
+            String directionLocation = canLaunch ? LaunchApp.DirectionLocations.HOME : LaunchApp.DirectionLocations.WORK;
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isHomeLocation && launchApp.canLaunchOnThisDay(context, directionLocation));
+                    || (canLaunch && launchApp.canLaunchOnThisDay(context, directionLocation));
             if(canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true);
             }
@@ -165,25 +155,18 @@ public class BTDisconnectActions {
     private void setVolumeBack(RingerControl ringerControl){
         boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
         boolean setOriginalVolume = BAPMPreferences.getRestoreNotificationVolume(context);
+
         if (volumeMAX && setOriginalVolume) {
             mVolumeControl.setToOriginalVolume(ringerControl);
         }
     }
 
-    public void actionsBTStateOff(){
-        // Pause music
-        PlayMusicControl playMusicControl = new PlayMusicControl(context);
-        playMusicControl.pause();
-
-        // Put music volume back to original volume
-        mVolumeControl.setToOriginalVolume(new RingerControl(context));
-
-        if(BuildConfig.DEBUG)
-            Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show();
-
-        if(BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
-            actionsOnBTDisconnect();
+    private void muteOrUnMuteNotifications(boolean isMute){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Mute or UnMute notifications
+            int index = isMute ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE;
+            AudioManager audioManager = mVolumeControl.getAudioManager();
+            audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, index, 0);
         }
-        ServiceUtils.stopService(context, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 }

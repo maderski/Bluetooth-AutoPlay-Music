@@ -196,25 +196,14 @@ public class BTConnectActions {
             int morningStartTime = BAPMPreferences.getMorningStartTime(context);
             int morningEndTime = BAPMPreferences.getMorningEndTime(context);
 
-            int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
-            int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
-
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            boolean canLaunch = false;
             TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
-            canLaunch = timeHelperMorning.isWithinTimeSpan();
-            String directionLocation = LaunchApp.DirectionLocations.WORK;
-
-            if(canLaunch) {
-                TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
-                directionLocation = LaunchApp.DirectionLocations.HOME;
-            }
-
-            boolean isWorkLocation = directionLocation.equals(LaunchApp.DirectionLocations.WORK);
+            boolean canLaunch = timeHelperMorning.isWithinTimeSpan();
+            String directionLocation = canLaunch ? LaunchApp.DirectionLocations.WORK : LaunchApp.DirectionLocations.HOME;
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (isWorkLocation && mLaunchApp.canLaunchOnThisDay(context, directionLocation));
+                    || (canLaunch && mLaunchApp.canLaunchOnThisDay(context, directionLocation));
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false);
             }

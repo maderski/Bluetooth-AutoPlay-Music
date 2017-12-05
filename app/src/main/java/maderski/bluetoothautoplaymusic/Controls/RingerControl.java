@@ -3,10 +3,8 @@ package maderski.bluetoothautoplaymusic.Controls;
 import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
@@ -38,14 +36,14 @@ public class RingerControl {
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
                 Log.d(TAG, "RingerControl: " + "Priority");
             } else {
-                putPhoneInSiletMode();
+                putPhoneInSilentMode();
             }
         } else {
-            putPhoneInSiletMode();
+            putPhoneInSilentMode();
         }
     }
 
-    private void putPhoneInSiletMode() {
+    private void putPhoneInSilentMode() {
         am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         Log.d(TAG, "RingerControl: " + "Silent");
     }
