@@ -67,4 +67,10 @@
     <string name="location_address">Location Address</string>
     <string name="enter_favorite_from_waze">Enter the name of a favorite from Waze here</string>
     <string name="waze_favorite_name">Favorite Name</string>
+    <string name="listening_if_the_phones_BT_off">Listening if the Phone\'s Bluetooth is turned OFF</string>
+    <string name="app_name">Bluetooth Autoplay Music</string>
+    <string name="initializing">Initializing...</string>
+    <string name="disconnect_message">Putting stuff back :)</string>
+    <string name="connect_message">Getting stuff ready :D</string>
+    <string name="wakelock_messge">Keeping Screen ON</string>
 </resources>

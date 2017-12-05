@@ -36,8 +36,8 @@ public class BTDisconnectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        String title = "Putting stuff back :)";
-        String message = "Bluetooth Autoplay Music";
+        String title = getString(R.string.disconnect_message);
+        String message = getString(R.string.app_name);
         ServiceUtils.createServiceNotification(3454, title, message, this);
     }
 

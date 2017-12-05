@@ -52,8 +52,8 @@ public class OnBTConnectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        String title = "Getting stuff ready :D";
-        String message = "Bluetooth Autoplay Music";
+        String title = getString(R.string.connect_message);
+        String message = getString(R.string.app_name);
         ServiceUtils.createServiceNotification(3451, title, message, this);
     }
 

@@ -48,8 +48,8 @@ public class WakeLockService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        String title = "Keeping Screen ON";
-        String message = "Bluetooth Autoplay Music";
+        String title = getString(R.string.wakelock_messge);
+        String message = getString(R.string.app_name);
         ServiceUtils.createServiceNotification(3453, title, message, this);
     }
 

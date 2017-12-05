@@ -11,6 +11,7 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.Receivers.BluetoothReceiver;
 import maderski.bluetoothautoplaymusic.Utils.ServiceRestartUtils;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
@@ -48,8 +49,8 @@ public class BAPMService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        String title = "Initializing...";
-        String message = "Bluetooth Autoplay Music";
+        String title = getString(R.string.initializing);
+        String message = getString(R.string.app_name);
         ServiceUtils.createServiceNotification(3455, title, message, this);
     }
 

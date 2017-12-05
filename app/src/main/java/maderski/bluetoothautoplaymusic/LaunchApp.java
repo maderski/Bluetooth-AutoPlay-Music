@@ -36,7 +36,7 @@ public class LaunchApp extends PackageTools {
         String CUSTOM = "Custom";
     }
 
-    private String mDirectionLocation;
+    private String mDirectionLocation = "None";
 
     public LaunchApp(){
         super();
