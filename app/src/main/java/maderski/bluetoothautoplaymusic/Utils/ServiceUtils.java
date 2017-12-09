@@ -51,18 +51,18 @@ public class ServiceUtils {
         return false;
     }
 
-    public static void createServiceNotification(int id, String title, String message, Service service) {
+    public static void createServiceNotification(int id, String title, String message, Service service, NotificationChannel channel) {
         Notification.Builder builder;
 
         if(Build.VERSION.SDK_INT < 26) {
             builder = new android.app.Notification.Builder(service);
         } else {
-            NotificationManager notificationManager = (NotificationManager) service.getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
             String channelId = "BTAPMChannelID";
-            CharSequence channelName = "Bluetooth Autoplay Music";
 
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_MIN);
-            notificationManager.createNotificationChannel(channel);
+            if (notificationManager != null && channel != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
             builder = new Notification.Builder(service, channelId);
         }
 

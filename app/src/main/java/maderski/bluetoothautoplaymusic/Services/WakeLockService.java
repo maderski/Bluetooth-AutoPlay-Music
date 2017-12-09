@@ -1,6 +1,8 @@
 package maderski.bluetoothautoplaymusic.Services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -50,7 +52,16 @@ public class WakeLockService extends Service {
         super.onCreate();
         String title = getString(R.string.wakelock_messge);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3453, title, message, this);
+
+//        NotificationChannel channel = null;
+
+//        if(Build.VERSION.SDK_INT > 25) {
+//            String channelId = "BTAPMChannelID";
+//            CharSequence channelName = "Bluetooth Autoplay Music";
+//            channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW);
+//        }
+
+        ServiceUtils.createServiceNotification(3453, title, message, this, null);
     }
 
     @Nullable

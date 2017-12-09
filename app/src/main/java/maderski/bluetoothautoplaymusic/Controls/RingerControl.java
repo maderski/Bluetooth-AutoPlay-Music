@@ -30,8 +30,7 @@ public class RingerControl {
     public void soundsOFF(){
         boolean usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
-            boolean hasNAPPermission = PermissionHelper.isPermissionGranted(mContext, permission);
+            boolean hasNAPPermission = mNotificationManager.isNotificationPolicyAccessGranted();
             if(usePriorityMode && hasNAPPermission) {
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
                 Log.d(TAG, "RingerControl: " + "Priority");

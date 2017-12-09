@@ -54,7 +54,7 @@ public class OnBTConnectService extends Service {
         super.onCreate();
         String title = getString(R.string.connect_message);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3451, title, message, this);
+        ServiceUtils.createServiceNotification(3451, title, message, this, null);
     }
 
     @Nullable

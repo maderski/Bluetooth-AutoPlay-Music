@@ -40,7 +40,7 @@ public class BTStateChangedService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             String title = getString(R.string.listening_if_the_phones_BT_off);
             String message = getString(R.string.app_name);
-            ServiceUtils.createServiceNotification(3452, title, message, this);
+            ServiceUtils.createServiceNotification(3452, title, message, this, null);
         }
     }
 

@@ -1,8 +1,10 @@
 package maderski.bluetoothautoplaymusic.Services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -38,7 +40,7 @@ public class BTDisconnectService extends Service {
         super.onCreate();
         String title = getString(R.string.disconnect_message);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3454, title, message, this);
+        ServiceUtils.createServiceNotification(3454, title, message, this, null);
     }
 
     @Nullable

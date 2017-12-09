@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.BluetoothActions;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
@@ -55,6 +56,7 @@ public class BTDisconnectActions {
         closeWaze(launchApp);
         setWifiOn(launchApp);
         stopKeepingScreenOn();
+
         setVolumeBack(ringerControl);
 
         stopService();
