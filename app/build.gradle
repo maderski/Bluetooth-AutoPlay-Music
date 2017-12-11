@@ -24,7 +24,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 84
-        versionName "3.31"
+        versionName "3.40"
     }
     buildTypes {
         release {
