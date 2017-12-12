@@ -11,8 +11,7 @@ import java.util.Set;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.Helpers.A2DPHelper;
-import maderski.bluetoothautoplaymusic.Helpers.BluetoothConnectHelper;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
@@ -41,9 +40,9 @@ public class ServiceRestartUtils {
 
                 // Check if Keyguard is locked, if so unlock it
                 boolean isKeyguardLocked = ((KeyguardManager)context.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked();
-                LaunchApp launchApp = new LaunchApp();
+                LaunchAppHelper launchAppHelper = new LaunchAppHelper();
                 if(isKeyguardLocked) {
-                    launchApp.launchBAPMActivity(context);
+                    launchAppHelper.launchBAPMActivity(context);
                 }
 
                 // Log rehold wakelock event

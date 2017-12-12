@@ -35,7 +35,7 @@ import java.util.Set;
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.Utils.BluetoothDeviceUtils;
 import maderski.bluetoothautoplaymusic.BuildConfig;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
     private Set<String> saveBTDevices = new HashSet<>();
-    private LaunchApp launchApp;
+    private LaunchAppHelper launchAppHelper;
     private List<String> installedMediaPlayers = new ArrayList<>();
     private FirebaseHelper mFirebaseHelper;
 
@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment {
         installedMediaPlayers = listOfInstalledMediaPlayers();
 
         setupUIElements(getView(), getContext());
-        launchApp = new LaunchApp();
+        launchAppHelper = new LaunchAppHelper();
         checkIfWazeRemoved(getContext());
 
     }
@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment {
     private void checkIfWazeRemoved(Context context){
         String mapAppChoice = BAPMPreferences.getMapsChoice(context);
         if(mapAppChoice.equalsIgnoreCase(PackageTools.PackageName.WAZE)) {
-            if (!launchApp.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)) {
+            if (!launchAppHelper.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)) {
                 Log.d(TAG, "Checked");
                 BAPMPreferences.setMapsChoice(context, PackageTools.PackageName.MAPS);
             }else {

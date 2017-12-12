@@ -2,8 +2,6 @@ package maderski.bluetoothautoplaymusic.Helpers;
 
 import java.util.Calendar;
 
-import maderski.bluetoothautoplaymusic.LaunchApp;
-
 /**
  * Created by Jason on 3/14/17.
  */

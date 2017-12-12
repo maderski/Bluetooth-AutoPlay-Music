@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -82,8 +82,8 @@ public class MapsFragment extends Fragment {
         textView.setTypeface(typeface_bold);
 
         mMapChoicesAvailable.add(PackageTools.PackageName.MAPS);
-        LaunchApp launchApp = new LaunchApp();
-        boolean wazeInstalled = launchApp.checkPkgOnPhone(getActivity(), PackageTools.PackageName.WAZE);
+        LaunchAppHelper launchAppHelper = new LaunchAppHelper();
+        boolean wazeInstalled = launchAppHelper.checkPkgOnPhone(getActivity(), PackageTools.PackageName.WAZE);
         if(wazeInstalled){
             mMapChoicesAvailable.add(PackageTools.PackageName.WAZE);
         }

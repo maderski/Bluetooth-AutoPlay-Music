@@ -2,15 +2,12 @@ package maderski.bluetoothautoplaymusic.Controls;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
-import java.util.Arrays;
-
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 
@@ -114,8 +111,8 @@ public class PlayMusicControl {
     }
 
     private void finalAttemptToPlayPandora(final Context context, final AudioManager audioManager){
-        final LaunchApp launchApp = new LaunchApp();
-        launchApp.launchPackage(context, PackageTools.PackageName.PANDORA);
+        final LaunchAppHelper launchAppHelper = new LaunchAppHelper();
+        launchAppHelper.launchPackage(context, PackageTools.PackageName.PANDORA);
         Log.d(TAG, "PANDORA LAUNCHED");
 
         Handler handler = new Handler();
@@ -124,7 +121,7 @@ public class PlayMusicControl {
             public void run() {
                 if (BAPMPreferences.getLaunchGoogleMaps(context)) {
                     String choosenMapApp = BAPMPreferences.getMapsChoice(context);
-                    launchApp.launchPackage(context, choosenMapApp);
+                    launchAppHelper.launchPackage(context, choosenMapApp);
                 }
             }
         };

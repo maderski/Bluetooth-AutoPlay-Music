@@ -17,7 +17,7 @@ import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.Receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.Services.OnBTConnectService;
@@ -38,14 +38,14 @@ public class BTConnectActions {
     private final Notification mNotification;
     private final VolumeControl mVolumeControl;
     private final PlayMusicControl mPlayMusicControl;
-    private final LaunchApp mLaunchApp;
+    private final LaunchAppHelper mLaunchAppHelper;
 
     public BTConnectActions(Context context){
         this.context = context;
         mNotification = new Notification();
         mVolumeControl = new VolumeControl(context);
         mPlayMusicControl = new PlayMusicControl(context);
-        mLaunchApp = new LaunchApp();
+        mLaunchAppHelper = new LaunchAppHelper();
     }
 
     public void OnBTConnect(){
@@ -145,7 +145,7 @@ public class BTConnectActions {
         boolean isKeyguardLocked = keyguardManager.isKeyguardLocked();
         Log.d(TAG, "Is keyguard locked: " + Boolean.toString(isKeyguardLocked));
         if (isKeyguardLocked) {
-            mLaunchApp.launchBAPMActivity(context);
+            mLaunchAppHelper.launchBAPMActivity(context);
         }
     }
 
@@ -173,20 +173,14 @@ public class BTConnectActions {
     private void launchMusicMapApp(){
         boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
         boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
-        boolean canLaunchDuringThisTime = mLaunchApp.canLaunchDuringThisTime(context);
-        boolean mapsCanLaunch = false;
-
-        if(canLaunchDuringThisTime) {
-            String directionLocation = mLaunchApp.getDirectionLocation();
-            mapsCanLaunch = mLaunchApp.canLaunchOnThisDay(context, directionLocation);
-        }
+        boolean mapsCanLaunch = mLaunchAppHelper.canMapsLaunchNow(context);
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
-            mLaunchApp.musicPlayerLaunch(context, 3);
+            mLaunchAppHelper.musicPlayerLaunch(context, 3);
         }
 
         if (launchMaps) {
-            mLaunchApp.launchMaps(context, 3);
+            mLaunchAppHelper.launchMaps(context, 3);
         }
     }
 
@@ -200,10 +194,10 @@ public class BTConnectActions {
 
             TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
             boolean canLaunch = timeHelperMorning.isWithinTimeSpan();
-            String directionLocation = canLaunch ? LaunchApp.DirectionLocations.WORK : LaunchApp.DirectionLocations.HOME;
+            String directionLocation = canLaunch ? LaunchAppHelper.DirectionLocations.WORK : LaunchAppHelper.DirectionLocations.HOME;
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (canLaunch && mLaunchApp.canLaunchOnThisDay(context, directionLocation));
+                    || (canLaunch && mLaunchAppHelper.canLaunchOnThisDay(context, directionLocation));
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false);
             }

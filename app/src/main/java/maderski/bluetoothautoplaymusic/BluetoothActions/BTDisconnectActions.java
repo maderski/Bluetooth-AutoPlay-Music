@@ -1,24 +1,19 @@
 package maderski.bluetoothautoplaymusic.BluetoothActions;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
-import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.Controls.RingerControl;
 import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.Controls.WifiControl;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.Notification;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.Services.BTDisconnectService;
-import maderski.bluetoothautoplaymusic.Services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.Services.WakeLockService;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -46,15 +41,15 @@ public class BTDisconnectActions {
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     public void actionsOnBTDisconnect(){
-        LaunchApp launchApp = new LaunchApp();
+        LaunchAppHelper launchAppHelper = new LaunchAppHelper();
         RingerControl ringerControl = new RingerControl(context);
 
         removeBAPMNotification();
         pauseMusic();
         turnOffPriorityMode(ringerControl);
-        sendAppToBackground(launchApp);
-        closeWaze(launchApp);
-        setWifiOn(launchApp);
+        sendAppToBackground(launchAppHelper);
+        closeWaze(launchAppHelper);
+        setWifiOn(launchAppHelper);
         stopKeepingScreenOn();
 
         setVolumeBack(ringerControl);
@@ -87,10 +82,10 @@ public class BTDisconnectActions {
         }
     }
 
-    private void sendAppToBackground(LaunchApp launchApp){
+    private void sendAppToBackground(LaunchAppHelper launchAppHelper){
         boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
         if (sendToBackground) {
-            launchApp.sendEverythingToBackground(context);
+            launchAppHelper.sendEverythingToBackground(context);
         }
     }
 
@@ -117,16 +112,16 @@ public class BTDisconnectActions {
         }
     }
 
-    private void closeWaze(LaunchApp launchApp){
+    private void closeWaze(LaunchAppHelper launchAppHelper){
         boolean closeWaze = BAPMPreferences.getCloseWazeOnDisconnect(context)
-                && launchApp.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
+                && launchAppHelper.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
                 && BAPMPreferences.getMapsChoice(context).equals(PackageTools.PackageName.WAZE);
         if(closeWaze) {
-            launchApp.closeWazeOnDisconnect(context);
+            launchAppHelper.closeWazeOnDisconnect(context);
         }
     }
 
-    private void setWifiOn(LaunchApp launchApp){
+    private void setWifiOn(LaunchAppHelper launchAppHelper){
         boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
         if(isWifiOffDevice){
             int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
@@ -136,10 +131,10 @@ public class BTDisconnectActions {
 
             TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
             boolean canLaunch = timeHelperEvening.isWithinTimeSpan();
-            String directionLocation = canLaunch ? LaunchApp.DirectionLocations.HOME : LaunchApp.DirectionLocations.WORK;
+            String directionLocation = canLaunch ? LaunchAppHelper.DirectionLocations.HOME : LaunchAppHelper.DirectionLocations.WORK;
 
             boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
-                    || (canLaunch && launchApp.canLaunchOnThisDay(context, directionLocation));
+                    || (canLaunch && launchAppHelper.canLaunchOnThisDay(context, directionLocation));
             if(canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true);
             }

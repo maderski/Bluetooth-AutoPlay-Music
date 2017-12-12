@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.Helpers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,11 @@ import android.util.Log;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
+import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.UI.activities.LaunchBAPMActivity;
 import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
@@ -20,9 +22,9 @@ import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
 /**
  * Created by Jason on 12/8/15.
  */
-public class LaunchApp extends PackageTools {
+public class LaunchAppHelper extends PackageTools {
 
-    private static final String TAG = LaunchApp.class.getName();
+    private static final String TAG = LaunchAppHelper.class.getName();
 
     @StringDef({
             DirectionLocations.HOME,
@@ -36,9 +38,10 @@ public class LaunchApp extends PackageTools {
         String CUSTOM = "Custom";
     }
 
-    private String mDirectionLocation = "None";
+    private String mDirectionLocation;
+    private List<String> mCanLaunchThisTimeLocations = new ArrayList<>();
 
-    public LaunchApp(){
+    public LaunchAppHelper(){
         super();
     }
 
@@ -59,12 +62,7 @@ public class LaunchApp extends PackageTools {
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
         final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
-        final boolean canLaunchDuringThisTime = canLaunchDuringThisTime(context);
-
-        boolean canLaunchMapsNow = false;
-        if(canLaunchDuringThisTime) {
-            canLaunchMapsNow = canLaunchOnThisDay(context, mDirectionLocation);
-        }
+        boolean canLaunchMapsNow = canMapsLaunchNow(context);
 
         if(canLaunchMapsNow) {
             seconds = seconds * 1000;
@@ -104,8 +102,6 @@ public class LaunchApp extends PackageTools {
         if(mDirectionLocation != null) {
             mDirectionLocation = mDirectionLocation.equals(DirectionLocations.CUSTOM)
                     ? BAPMPreferences.getCustomLocationName(context) : mDirectionLocation;
-        } else {
-            mDirectionLocation = "None";
         }
 
         Uri uri;
@@ -117,6 +113,7 @@ public class LaunchApp extends PackageTools {
             uri = Uri.parse(mapsUri);
         }
 
+        Log.d(TAG, "MAPS CHOICE URI:" + uri.toString());
         return uri;
     }
 
@@ -142,6 +139,24 @@ public class LaunchApp extends PackageTools {
         context.startActivity(i);
     }
 
+    public boolean canMapsLaunchNow(Context context) {
+        final boolean canLaunchDuringThisTime = canLaunchDuringThisTime(context);
+
+        boolean canLaunchMapsNow = false;
+        if(canLaunchDuringThisTime) {
+            for(String location : mCanLaunchThisTimeLocations) {
+                canLaunchMapsNow = canLaunchOnThisDay(context, location);
+                if(canLaunchMapsNow) {
+                    mDirectionLocation = location;
+                    break;
+                }
+            }
+        }
+        mCanLaunchThisTimeLocations.clear();
+
+        return canLaunchMapsNow;
+    }
+
     public boolean canLaunchOnThisDay(Context context, @DirectionLocations String directionLocation) {
         Calendar calendar = Calendar.getInstance();
         String today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK));
@@ -160,7 +175,7 @@ public class LaunchApp extends PackageTools {
         }
 
         Log.d(TAG, "Day of the week: " + today);
-        Log.d(TAG, "Can Launch HOME: " + canLaunch);
+        Log.d(TAG, "Can Launch: " + canLaunch);
         Log.d(TAG, "Direction Location: " + directionLocation);
 
         return canLaunch;
@@ -181,25 +196,25 @@ public class LaunchApp extends PackageTools {
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
-            boolean canLaunch;
-
             TimeHelper timeHelperMorning = new TimeHelper(morningStartTime, morningEndTime, current24hrTime);
-            canLaunch = timeHelperMorning.isWithinTimeSpan();
-            mDirectionLocation = DirectionLocations.WORK;
-
-            if(!canLaunch) {
-                TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
-                canLaunch = timeHelperEvening.isWithinTimeSpan();
-                mDirectionLocation = DirectionLocations.HOME;
+            boolean canLaunchWork = timeHelperMorning.isWithinTimeSpan();
+            if(canLaunchWork) {
+                mCanLaunchThisTimeLocations.add(DirectionLocations.WORK);
             }
 
-            if(!canLaunch) {
-                TimeHelper timeHelperCustom = new TimeHelper(customStartTime, customEndTime, current24hrTime);
-                canLaunch = timeHelperCustom.isWithinTimeSpan();
-                mDirectionLocation = DirectionLocations.CUSTOM;
+            TimeHelper timeHelperEvening = new TimeHelper(eveningStartTime, eveningEndTime, current24hrTime);
+            boolean canLaunchHome = timeHelperEvening.isWithinTimeSpan();
+            if(canLaunchHome) {
+                mCanLaunchThisTimeLocations.add(DirectionLocations.HOME);
             }
 
-            return canLaunch;
+            TimeHelper timeHelperCustom = new TimeHelper(customStartTime, customEndTime, current24hrTime);
+            boolean canLaunchCustom = timeHelperCustom.isWithinTimeSpan();
+            if(canLaunchCustom) {
+                mCanLaunchThisTimeLocations.add(DirectionLocations.CUSTOM);
+            }
+
+            return canLaunchWork || canLaunchHome || canLaunchCustom;
         } else {
             return true;
         }
@@ -234,10 +249,6 @@ public class LaunchApp extends PackageTools {
         };
 
         handler.postDelayed(runnable, 2000);
-    }
-
-    public String getDirectionLocation() {
-        return mDirectionLocation;
     }
 }
 

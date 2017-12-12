@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.LaunchApp;
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
@@ -72,8 +72,8 @@ public class LaunchBAPMActivity extends AppCompatActivity{
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    LaunchApp launchApp = new LaunchApp();
-                    launchApp.sendEverythingToBackground(context);
+                    LaunchAppHelper launchAppHelper = new LaunchAppHelper();
+                    launchAppHelper.sendEverythingToBackground(context);
                 }
             };
             handler.postDelayed(runnable, milliSeconds);

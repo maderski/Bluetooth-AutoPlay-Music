@@ -282,10 +282,8 @@ public class BAPMPreferences {
     }
 
     public static Set<String> getWorkDaysToLaunchMaps(Context context){
-        return reader(context).getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, customLaunchDays);
+        return reader(context).getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, launchDays);
     }
-
-
 
     public static void setHomeDaysToLaunchMaps(Context context, Set<String> _stringSet){
         editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet);

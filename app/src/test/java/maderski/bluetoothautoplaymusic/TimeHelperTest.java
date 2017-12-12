@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic;
 
 import org.junit.Test;
 
+import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 
 import static org.junit.Assert.assertEquals;
@@ -270,7 +271,7 @@ public class TimeHelperTest {
         TimeHelper timeHelper = new TimeHelper(startTime, endTime, currentTime);
         String directionLocation = timeHelper.getDirectionLocation();
 
-        assertEquals(directionLocation, LaunchApp.DirectionLocations.CUSTOM);
+        assertEquals(directionLocation, LaunchAppHelper.DirectionLocations.CUSTOM);
     }
 
     @Test
@@ -284,7 +285,7 @@ public class TimeHelperTest {
         TimeHelper timeHelper = new TimeHelper(morningStart, morningEnd, eveningStart, eveningEnd, currentTime);
         String directionLocation = timeHelper.getDirectionLocation();
 
-        assertEquals(directionLocation, LaunchApp.DirectionLocations.WORK);
+        assertEquals(directionLocation, LaunchAppHelper.DirectionLocations.WORK);
     }
 
     @Test
@@ -298,7 +299,7 @@ public class TimeHelperTest {
         TimeHelper timeHelper = new TimeHelper(morningStart, morningEnd, eveningStart, eveningEnd, currentTime);
         String directionLocation = timeHelper.getDirectionLocation();
 
-        assertEquals(directionLocation, LaunchApp.DirectionLocations.HOME);
+        assertEquals(directionLocation, LaunchAppHelper.DirectionLocations.HOME);
     }
 
 }
