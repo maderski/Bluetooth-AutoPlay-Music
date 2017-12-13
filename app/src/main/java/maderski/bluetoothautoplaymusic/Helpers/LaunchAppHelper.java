@@ -140,19 +140,25 @@ public class LaunchAppHelper extends PackageTools {
     }
 
     public boolean canMapsLaunchNow(Context context) {
+        final boolean isLaunchingWithDirections = BAPMPreferences.getCanLaunchDirections(context);
+        final boolean isUsingTimesToLaunch = BAPMPreferences.getUseTimesToLaunchMaps(context);
         final boolean canLaunchDuringThisTime = canLaunchDuringThisTime(context);
 
         boolean canLaunchMapsNow = false;
-        if(canLaunchDuringThisTime) {
-            for(String location : mCanLaunchThisTimeLocations) {
-                canLaunchMapsNow = canLaunchOnThisDay(context, location);
-                if(canLaunchMapsNow) {
-                    mDirectionLocation = location;
-                    break;
+        if(isLaunchingWithDirections || isUsingTimesToLaunch) {
+            if (canLaunchDuringThisTime) {
+                for (String location : mCanLaunchThisTimeLocations) {
+                    canLaunchMapsNow = canLaunchOnThisDay(context, location);
+                    if (canLaunchMapsNow) {
+                        mDirectionLocation = location;
+                        break;
+                    }
                 }
             }
+            mCanLaunchThisTimeLocations.clear();
+        } else {
+            canLaunchMapsNow = true;
         }
-        mCanLaunchThisTimeLocations.clear();
 
         return canLaunchMapsNow;
     }
