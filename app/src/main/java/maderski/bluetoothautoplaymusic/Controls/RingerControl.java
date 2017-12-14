@@ -28,17 +28,22 @@ public class RingerControl {
 
     //turns phone sounds OFF & initialize AudioManager
     public void soundsOFF(){
-        boolean usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            boolean hasNAPPermission = mNotificationManager.isNotificationPolicyAccessGranted();
-            if(usePriorityMode && hasNAPPermission) {
-                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
-                Log.d(TAG, "RingerControl: " + "Priority");
+        boolean isAlreadySilent = am.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
+        if(!isAlreadySilent) {
+            boolean usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                boolean hasNAPPermission = mNotificationManager.isNotificationPolicyAccessGranted();
+                if (usePriorityMode && hasNAPPermission) {
+                    mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                    Log.d(TAG, "RingerControl: " + "Priority");
+                } else {
+                    putPhoneInSilentMode();
+                }
             } else {
                 putPhoneInSilentMode();
             }
         } else {
-            putPhoneInSilentMode();
+            Log.d(TAG, "Ringer is Already silent");
         }
     }
 
