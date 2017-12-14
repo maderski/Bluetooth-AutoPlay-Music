@@ -72,6 +72,7 @@ public class LaunchBAPMActivity extends AppCompatActivity{
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
+                    finish();
                     LaunchAppHelper launchAppHelper = new LaunchAppHelper();
                     launchAppHelper.sendEverythingToBackground(context);
                 }
