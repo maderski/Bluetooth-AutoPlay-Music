@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 }
             }
         });
+
+//        new StartServiceTask().execute(this);
     }
 
     @Override
@@ -136,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     protected void onStart() {
         super.onStart();
         BusProvider.getBusInstance().register(this);
-        checkIfBAPMServiceRunning();
     }
 
     @Override
@@ -221,14 +222,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         }
 
         return version;
-    }
-
-    // Starts BAPMService if it is not running
-    private void checkIfBAPMServiceRunning(){
-        boolean isServiceRunning = ServiceUtils.isServiceRunning(this, BAPMService.class);
-        if(!isServiceRunning){
-            new StartServiceTask().execute(this);
-        }
     }
 
     @Override

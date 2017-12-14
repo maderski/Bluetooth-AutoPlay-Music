@@ -61,6 +61,12 @@
         <receiver android:name=".Receivers.BTStateChangedReceiver" />
         <receiver android:name=".Receivers.PowerReceiver" />
         <receiver android:name=".Receivers.CustomReceiver" />
+        <receiver android:name=".Receivers.InstallReferrerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <service android:name=".Services.BAPMService" />
         <service android:name=".Services.OnBTConnectService" />
