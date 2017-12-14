@@ -35,12 +35,6 @@ public class LaunchBAPMActivity extends AppCompatActivity{
         sendHomeAppTimer(3);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
-
     //Dismiss the KeyGuard
     private void dismissKeyGuard(){
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
