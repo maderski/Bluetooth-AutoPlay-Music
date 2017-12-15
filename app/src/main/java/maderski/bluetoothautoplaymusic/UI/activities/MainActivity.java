@@ -16,10 +16,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -30,20 +29,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.Analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.AsyncTasks.StartServiceTask;
-import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
-import maderski.bluetoothautoplaymusic.Services.BAPMService;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.Helpers.PermissionHelper;
+import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.UI.fragments.HeadphonesFragment;
+import maderski.bluetoothautoplaymusic.UI.fragments.HomeFragment;
 import maderski.bluetoothautoplaymusic.UI.fragments.MapsFragment;
 import maderski.bluetoothautoplaymusic.UI.fragments.OptionsFragment;
 import maderski.bluetoothautoplaymusic.UI.fragments.TimePickerFragment;
 import maderski.bluetoothautoplaymusic.UI.fragments.WifiOffFragment;
-import maderski.bluetoothautoplaymusic.UI.fragments.HeadphonesFragment;
-import maderski.bluetoothautoplaymusic.UI.fragments.HomeFragment;
-import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 import maderski.bluetoothautoplaymusic.bus.BusProvider;
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent;
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent;
@@ -101,8 +97,6 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 }
             }
         });
-
-//        new StartServiceTask().execute(this);
     }
 
     @Override

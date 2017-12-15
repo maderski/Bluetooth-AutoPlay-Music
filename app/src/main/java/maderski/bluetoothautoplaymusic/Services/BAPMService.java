@@ -1,6 +1,8 @@
 package maderski.bluetoothautoplaymusic.Services;
 
 import android.app.Service;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
@@ -65,6 +67,12 @@ public class BAPMService extends Service {
 
         // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         unregisterReceiver(mBluetoothReceiver);
+
+        // Cancel the JobScheduler that was used to start the BTAPMService
+        JobScheduler jobScheduler = (JobScheduler)this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        if (jobScheduler != null) {
+            jobScheduler.cancelAll();
+        }
 
         stopForeground(true);
     }
