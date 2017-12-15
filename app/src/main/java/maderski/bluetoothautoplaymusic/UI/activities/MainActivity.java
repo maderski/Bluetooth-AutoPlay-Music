@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             }
         });
 
-//        new StartServiceTask().execute(this);
+        new StartServiceTask().execute(this);
     }
 
     @Override
