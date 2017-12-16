@@ -135,7 +135,7 @@ public class TimeHelperTest {
 
         System.out.println("Morning START AT NIGHT END AT MORNING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, 0, 0, currentTime);
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -151,7 +151,7 @@ public class TimeHelperTest {
 
         System.out.println("Morning START AT MORNING END AT MORNING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, 2500, 2500, currentTime);
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -167,7 +167,7 @@ public class TimeHelperTest {
 
         System.out.println("Morning START AT MORNING END AT EVENING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, 2500, 2500, currentTime);
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -183,7 +183,7 @@ public class TimeHelperTest {
 
         System.out.println("Morning START AT EVENING END AT NIGHT");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, 2500, 2500, currentTime);
+            TimeHelper timeHelper = new TimeHelper(morningStartTime, morningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -202,7 +202,7 @@ public class TimeHelperTest {
 
         System.out.println("Evening START AT NIGHT END AT MORNING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(0, 0, eveningStartTime, eveningEndTime, currentTime);
+            TimeHelper timeHelper = new TimeHelper(eveningStartTime, eveningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -218,7 +218,7 @@ public class TimeHelperTest {
 
         System.out.println("Evening START AT MORNING END AT MORNING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(2500, 2500, eveningStartTime, eveningEndTime, currentTime);
+            TimeHelper timeHelper = new TimeHelper(eveningStartTime, eveningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -234,7 +234,7 @@ public class TimeHelperTest {
 
         System.out.println("Evening START AT MORNING END AT EVENING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(2500, 2500, eveningStartTime, eveningEndTime, currentTime);
+            TimeHelper timeHelper = new TimeHelper(eveningStartTime, eveningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -250,7 +250,7 @@ public class TimeHelperTest {
 
         System.out.println("Evening START AT MORNING END AT EVENING");
         for(int currentTime = 0; currentTime < 2500; currentTime += 100) {
-            TimeHelper timeHelper = new TimeHelper(2500, 2500, eveningStartTime, eveningEndTime, currentTime);
+            TimeHelper timeHelper = new TimeHelper(eveningStartTime, eveningEndTime, currentTime);
             boolean isWithInTimeSpan = timeHelper.isWithinTimeSpan();
             System.out.println(String.valueOf(currentTime) + " " + String.valueOf(isWithInTimeSpan));
 
@@ -261,45 +261,4 @@ public class TimeHelperTest {
             }
         }
     }
-
-    @Test
-    public void testGetDirectionsLocationCustom() {
-        int currentTime = 1400;
-        int startTime = 1300;
-        int endTime = 1500;
-
-        TimeHelper timeHelper = new TimeHelper(startTime, endTime, currentTime);
-        String directionLocation = timeHelper.getDirectionLocation();
-
-        assertEquals(directionLocation, LaunchAppHelper.DirectionLocations.CUSTOM);
-    }
-
-    @Test
-    public void testGetDirectionsLocationWork() {
-        int currentTime = 930;
-        int morningStart = 800;
-        int morningEnd = 1000;
-        int eveningStart = 1600;
-        int eveningEnd = 1800;
-
-        TimeHelper timeHelper = new TimeHelper(morningStart, morningEnd, eveningStart, eveningEnd, currentTime);
-        String directionLocation = timeHelper.getDirectionLocation();
-
-        assertEquals(directionLocation, LaunchAppHelper.DirectionLocations.WORK);
-    }
-
-    @Test
-    public void testGetDirectionsLocationHome() {
-        int currentTime = 1630;
-        int morningStart = 800;
-        int morningEnd = 1000;
-        int eveningStart = 1600;
-        int eveningEnd = 1800;
-
-        TimeHelper timeHelper = new TimeHelper(morningStart, morningEnd, eveningStart, eveningEnd, currentTime);
-        String directionLocation = timeHelper.getDirectionLocation();
-
-        assertEquals(directionLocation, LaunchAppHelper.DirectionLocations.HOME);
-    }
-
 }

@@ -1,23 +1,16 @@
 package maderski.bluetoothautoplaymusic.Services;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.R;
-import maderski.bluetoothautoplaymusic.Receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.Receivers.PowerReceiver;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
-import maderski.bluetoothautoplaymusic.UI.activities.MainActivity;
 import maderski.bluetoothautoplaymusic.Utils.ServiceUtils;
 
 /**
@@ -29,16 +22,20 @@ public class OnBTConnectService extends Service {
 
     private final PowerReceiver mPowerReceiver = new PowerReceiver();
     private final CustomReceiver mCustomReceiver = new CustomReceiver();
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean waitTillPowerConnected = BAPMPreferences.getPowerConnected(this);
+        boolean waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(this);
+
         // Start receivers
-        if(BAPMPreferences.getPowerConnected(this)) {
+        if(waitTillPowerConnected) {
             Log.d(TAG, "START POWER RECEIVER");
             IntentFilter powerFilter = new IntentFilter("android.intent.action.ACTION_POWER_CONNECTED");
             registerReceiver(mPowerReceiver, powerFilter);
         }
 
-        if(BAPMPreferences.getWaitTillOffPhone(this) || BAPMPreferences.getPowerConnected(this)) {
+        if(waitTillOffPhone || waitTillPowerConnected) {
             Log.d(TAG, "START CUSTOM RECEIVER");
             IntentFilter customFilter = new IntentFilter();
             customFilter.addAction("maderski.bluetoothautoplaymusic.pluggedinlaunch");
@@ -52,7 +49,9 @@ public class OnBTConnectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        String title = getString(R.string.connect_message);
+        boolean waitTillPowerConnected = BAPMPreferences.getPowerConnected(this);
+
+        String title = getString(waitTillPowerConnected ? R.string.connect_to_power_msg : R.string.connect_message);
         String message = getString(R.string.app_name);
         ServiceUtils.createServiceNotification(3451, title, message, this, null);
     }
