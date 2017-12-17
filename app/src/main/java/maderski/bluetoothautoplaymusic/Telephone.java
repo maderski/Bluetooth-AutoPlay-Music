@@ -5,8 +5,8 @@ import android.os.CountDownTimer;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import maderski.bluetoothautoplaymusic.Controls.VolumeControl;
-import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
+import maderski.bluetoothautoplaymusic.controls.VolumeControl;
+import maderski.bluetoothautoplaymusic.helpers.PowerHelper;
 
 /**
  * Created by Jason on 6/1/16.

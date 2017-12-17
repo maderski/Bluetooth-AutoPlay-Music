@@ -3,7 +3,7 @@ package maderski.bluetoothautoplaymusic;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import maderski.bluetoothautoplaymusic.Controls.WakeLockControl.ScreenONLock;
+import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock;
 
 /**
  * Created by Jason on 8/3/16.

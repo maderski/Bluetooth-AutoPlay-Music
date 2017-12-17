@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="maderski.bluetoothautoplaymusic.UI.fragments.OptionsFragment">
+    tools:context="maderski.bluetoothautoplaymusic.ui.fragments.OptionsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        tools:context="maderski.bluetoothautoplaymusic.UI.fragments.OptionsFragment">
+        tools:context="maderski.bluetoothautoplaymusic.ui.fragments.OptionsFragment">
 
         <ScrollView
             android:id="@+id/scrollView"

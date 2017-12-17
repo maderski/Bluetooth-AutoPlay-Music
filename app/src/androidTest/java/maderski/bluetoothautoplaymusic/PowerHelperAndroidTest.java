@@ -4,7 +4,7 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import maderski.bluetoothautoplaymusic.Helpers.PowerHelper;
+import maderski.bluetoothautoplaymusic.helpers.PowerHelper;
 
 /**
  * Created by Jason on 7/26/16.

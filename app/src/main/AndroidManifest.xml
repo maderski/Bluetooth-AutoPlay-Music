@@ -22,16 +22,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.activities.LaunchBAPMActivity"
+            android:name=".ui.activities.LaunchBAPMActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".UI.activities.SplashActivity"
+            android:name=".ui.activities.SplashActivity"
             android:noHistory="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -41,40 +41,40 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Receivers.BootCompletedReceiver">
+        <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Receivers.OnAppUpdateReceiver">
+        <receiver android:name=".receivers.OnAppUpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Receivers.BluetoothReceiver">
+        <receiver android:name=".receivers.BluetoothReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
                 <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Receivers.BTStateChangedReceiver" />
-        <receiver android:name=".Receivers.PowerReceiver" />
-        <receiver android:name=".Receivers.CustomReceiver" />
-        <receiver android:name=".Receivers.InstallReferrerReceiver"
+        <receiver android:name=".receivers.BTStateChangedReceiver" />
+        <receiver android:name=".receivers.PowerReceiver" />
+        <receiver android:name=".receivers.CustomReceiver" />
+        <receiver android:name=".receivers.InstallReferrerReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".Services.BAPMService" />
-        <service android:name=".Services.OnBTConnectService" />
-        <service android:name=".Services.BTStateChangedService" />
-        <service android:name=".Services.WakeLockService" />
-        <service android:name=".Services.BTDisconnectService" />
+        <service android:name=".services.BAPMService" />
+        <service android:name=".services.OnBTConnectService" />
+        <service android:name=".services.BTStateChangedService" />
+        <service android:name=".services.WakeLockService" />
+        <service android:name=".services.BTDisconnectService" />
         <service
-            android:name=".Services.jobservices.StartBAPMServiceJobService"
+            android:name=".services.jobservices.StartBAPMServiceJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <meta-data

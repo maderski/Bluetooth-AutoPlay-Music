@@ -2,8 +2,7 @@ package maderski.bluetoothautoplaymusic;
 
 import org.junit.Test;
 
-import maderski.bluetoothautoplaymusic.Helpers.LaunchAppHelper;
-import maderski.bluetoothautoplaymusic.Helpers.TimeHelper;
+import maderski.bluetoothautoplaymusic.helpers.TimeHelper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

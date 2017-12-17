@@ -2,15 +2,14 @@ package maderski.bluetoothautoplaymusic;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMDataPreferences;
-import maderski.bluetoothautoplaymusic.SharedPrefs.BAPMPreferences;
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences;
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
 
 
 /**
