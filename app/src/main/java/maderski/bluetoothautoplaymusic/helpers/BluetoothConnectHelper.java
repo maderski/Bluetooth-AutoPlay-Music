@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.helpers;
 
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.Set;
@@ -44,6 +45,9 @@ public class BluetoothConnectHelper {
         switch (state) {
             case BluetoothProfile.STATE_CONNECTING:
                 Log.d(TAG, "A2DP CONNECTING");
+                break;
+            case BluetoothProfile.STATE_CONNECTED:
+                Log.d(TAG, "A2DP CONNECTED");
 
                 // Get Original volume
                 VolumeControl volumeControl = new VolumeControl(mContext);
@@ -53,14 +57,16 @@ public class BluetoothConnectHelper {
                 checkForWifiTurnOffDevice(true);
 
                 startAdditionalServices();
-                break;
-            case BluetoothProfile.STATE_CONNECTED:
-                Log.d(TAG, "A2DP CONNECTED");
 
-                checksBeforeLaunch();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        checksBeforeLaunch();
 
-                FirebaseHelper firebaseHelper = new FirebaseHelper(mContext);
-                firebaseHelper.connectViaA2DP(mDeviceName, true);
+                        FirebaseHelper firebaseHelper = new FirebaseHelper(mContext);
+                        firebaseHelper.connectViaA2DP(mDeviceName, true);
+                    }
+                }, 500);
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
                 Log.d(TAG, "A2DP DISCONNECTING");

@@ -137,7 +137,7 @@ public class BAPMPreferences {
     }
 
     public static boolean getShowNotification(Context context){
-        return reader(context).getBoolean(SHOW_NOTIFICATION, true);
+        return reader(context).getBoolean(SHOW_NOTIFICATION, false);
     }
 
     public static void setMorningStartTime(Context context, int startTime){
