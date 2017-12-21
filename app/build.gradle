@@ -23,8 +23,8 @@ android {
         applicationId "maderski.bluetoothautoplaymusic"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 86
-        versionName "3.44"
+        versionCode 87
+        versionName "3.45"
     }
     buildTypes {
         release {

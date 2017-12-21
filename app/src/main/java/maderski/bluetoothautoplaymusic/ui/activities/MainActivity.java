@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.asynctasks.StartServiceTask;
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.helpers.PermissionHelper;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             }
         });
 
-//        new StartServiceTask().execute(this);
+        new StartServiceTask().execute(this);
     }
 
     @Override

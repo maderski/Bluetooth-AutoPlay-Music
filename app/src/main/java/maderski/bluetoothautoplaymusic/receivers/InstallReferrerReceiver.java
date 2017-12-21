@@ -15,6 +15,6 @@ public class InstallReferrerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Schedule Job to run on install
-        ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
+//        ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
     }
 }

@@ -1,6 +1,8 @@
 package maderski.bluetoothautoplaymusic.services;
 
 import android.app.Service;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
@@ -66,6 +68,13 @@ public class BAPMService extends Service {
         unregisterReceiver(mBluetoothReceiver);
 
         stopForeground(true);
+
+        // Cancel the JobScheduler that was used to start the BTAPMService
+        JobScheduler jobScheduler = (JobScheduler)this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        if (jobScheduler != null) {
+            jobScheduler.cancelAll();
+        }
+
     }
 
     @Override
