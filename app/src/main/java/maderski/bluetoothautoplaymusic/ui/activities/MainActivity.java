@@ -34,6 +34,7 @@ import maderski.bluetoothautoplaymusic.helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
+import maderski.bluetoothautoplaymusic.services.BAPMService;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
 import maderski.bluetoothautoplaymusic.ui.fragments.MapsFragment;
 import maderski.bluetoothautoplaymusic.ui.fragments.OptionsFragment;
@@ -44,6 +45,7 @@ import maderski.bluetoothautoplaymusic.ui.fragments.HomeFragment;
 import maderski.bluetoothautoplaymusic.bus.BusProvider;
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent;
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent;
+import maderski.bluetoothautoplaymusic.utils.ServiceUtils;
 
 public class MainActivity extends AppCompatActivity implements HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener, WifiOffFragment.OnFragmentInteractionListener {
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             }
         });
 
-        new StartServiceTask().execute(this);
+        checkIfBAPMServiceRunning();
     }
 
     @Override
@@ -142,6 +144,15 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         super.onStop();
         BusProvider.getBusInstance().unregister(this);
     }
+
+    // Starts BAPMService if it is not running
+    private void checkIfBAPMServiceRunning(){
+        boolean isServiceRunning = ServiceUtils.isServiceRunning(this, BAPMService.class);
+        if(!isServiceRunning){
+            new StartServiceTask().execute(this);
+        }
+    }
+
 
     //Launches the AboutActivity when about is selected
     private void aboutSelected(){
