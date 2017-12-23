@@ -52,8 +52,6 @@ public class BTStateChangedService extends Service {
         Log.d(TAG, "STOP BT STATE CHANGED RECEIVER");
         unregisterReceiver(mBtStateChangedReceiver);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            stopForeground(true);
-        }
+        stopForeground(true);
     }
 }

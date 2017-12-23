@@ -42,6 +42,17 @@ public class BAPMService extends Service {
         IntentFilter filter = new IntentFilter();
         registerReceiver(mBluetoothReceiver, filter);
 
+        // Cancel the JobScheduler that was used to start the BTAPMService
+        JobScheduler jobScheduler = (JobScheduler)this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        if (jobScheduler != null) {
+            jobScheduler.cancelAll();
+            Log.d(TAG, "BAPM JobService cancelled");
+        }
+
+        // Bring service out of the foreground state
+        stopForeground(true);
+
+        // Stop the service from running
         stopSelf();
 
         return Service.START_NOT_STICKY;
@@ -66,15 +77,6 @@ public class BAPMService extends Service {
 
         // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         unregisterReceiver(mBluetoothReceiver);
-
-        stopForeground(true);
-
-        // Cancel the JobScheduler that was used to start the BTAPMService
-        JobScheduler jobScheduler = (JobScheduler)this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        if (jobScheduler != null) {
-            jobScheduler.cancelAll();
-        }
-
     }
 
     @Override
