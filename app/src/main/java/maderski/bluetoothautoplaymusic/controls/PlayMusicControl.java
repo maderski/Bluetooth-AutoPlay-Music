@@ -7,6 +7,8 @@ import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
+import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls;
+import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory;
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
@@ -16,49 +18,27 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
  */
 public class PlayMusicControl {
 
-    private static final String TAG = PlayMusicControl.class.getName();
+    private static final String TAG = "PlayMusicControl";
 
     private static Handler mHandler;
     private static Runnable mRunnable;
 
-    private PlayerControls playerControls;
+    private PlayerControls mPlayerControls;
     private FirebaseHelper mFirebaseHelper;
 
     public PlayMusicControl(Context context){
-        setPlayerControls(context);
+        String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+        Log.d(TAG, "PLAYER: " + pkgName);
+
+        mPlayerControls = PlayerControlsFactory.getPlayerControl(context, pkgName);
         mFirebaseHelper = new FirebaseHelper(context);
     }
 
-    private void setPlayerControls(final Context context){
-        String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
-        Log.d(TAG, "PLAYER: " + pkgName);
-        switch (pkgName) {
-            case PackageTools.PackageName.SPOTIFY:
-                playerControls = new Spotify(context);
-                break;
-            case PackageTools.PackageName.BEYONDPOD:
-                playerControls = new BeyondPod(context);
-                break;
-            case PackageTools.PackageName.FMINDIA:
-                playerControls = new FMIndia(context);
-                break;
-            case PackageTools.PackageName.GOOGLEPLAYMUSIC:
-                playerControls = new GooglePlayMusic(context);
-                break;
-            case PackageTools.PackageName.PANDORA:
-                playerControls = new Pandora(context);
-                break;
-            default:
-                playerControls = new OtherMusicPlayer(context);
-                break;
-        }
-    }
-
-    public void pause(){ playerControls.pause(); }
+    public void pause(){ mPlayerControls.pause(); }
 
     public void play(){
         Log.d(TAG, "Tried to play");
-        playerControls.play();
+        mPlayerControls.play();
     }
 
     public static boolean cancelCheckIfPlaying(){
@@ -99,7 +79,7 @@ public class PlayMusicControl {
                             break;
                         default:
                             Log.d(TAG, "Play media Button");
-                            playerControls.play_mediaButton(selectedMusicPlayer);
+                            mPlayerControls.playMediaButton(selectedMusicPlayer);
                             break;
                     }
                 }

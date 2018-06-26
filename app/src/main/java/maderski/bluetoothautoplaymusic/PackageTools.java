@@ -33,7 +33,8 @@ public class PackageTools {
             PackageName.FMINDIA,
             PackageName.POWERAMP,
             PackageName.DOUBLETWIST,
-            PackageName.LISTENAUDIOBOOK
+            PackageName.LISTENAUDIOBOOK,
+            PackageName.GOOGLEPODCASTS
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface PackageName {
@@ -48,6 +49,7 @@ public class PackageTools {
         String POWERAMP = "com.maxmpz.audioplayer";
         String DOUBLETWIST = "com.doubleTwist.androidPlayer";
         String LISTENAUDIOBOOK = "com.acmeandroid.listen";
+        String GOOGLEPODCASTS = "com.google.android.apps.podcasts";
     }
 
     // Launches App that is associated with that package that was put into method

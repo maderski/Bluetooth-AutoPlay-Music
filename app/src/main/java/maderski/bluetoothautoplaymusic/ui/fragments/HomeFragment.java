@@ -542,7 +542,8 @@ public class HomeFragment extends Fragment {
                     || resolveInfo.contains("mobi.beyondpod")
                     || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")
                     || resolveInfo.contains(PackageTools.PackageName.DOUBLETWIST)
-                    || resolveInfo.contains(PackageTools.PackageName.LISTENAUDIOBOOK)) {
+                    || resolveInfo.contains(PackageTools.PackageName.LISTENAUDIOBOOK)
+                    || resolveInfo.contains(PackageTools.PackageName.GOOGLEPODCASTS)) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
                 String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
                 if (!installedMediaPlayers.contains(pkg)) {
