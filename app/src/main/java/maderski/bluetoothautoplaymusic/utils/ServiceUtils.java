@@ -11,6 +11,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class ServiceUtils {
         return false;
     }
 
-    public static void createServiceNotification(int id, String title, String message, Service service, NotificationChannel channel) {
+    public static void createServiceNotification(int id, String title, String message, Service service) {
         Notification.Builder builder;
 
         if(Build.VERSION.SDK_INT < 26) {
@@ -59,7 +60,8 @@ public class ServiceUtils {
             NotificationManager notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
             String channelId = "BTAPMChannelID";
 
-            if (notificationManager != null && channel != null) {
+            if (notificationManager != null) {
+                NotificationChannel channel = ServiceUtils.getNotificationChannel(channelId);
                 notificationManager.createNotificationChannel(channel);
             }
             builder = new Notification.Builder(service, channelId);
@@ -72,6 +74,17 @@ public class ServiceUtils {
                 .build();
 
         service.startForeground(id, notification);
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private static NotificationChannel getNotificationChannel(String channelId) {
+        NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                "Bluetooth Autoplay Music",
+                NotificationManager.IMPORTANCE_UNSPECIFIED);
+        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        notificationChannel.setSound(null, null);
+        notificationChannel.enableVibration(false);
+        return notificationChannel;
     }
 
     public static void scheduleJob(Context context, Class<?> jobServiceClass) {

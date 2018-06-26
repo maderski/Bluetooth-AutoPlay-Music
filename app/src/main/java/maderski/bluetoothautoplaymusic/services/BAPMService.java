@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.services;
 
+import android.app.NotificationChannel;
 import android.app.Service;
 import android.app.job.JobScheduler;
 import android.content.Context;
@@ -63,7 +64,7 @@ public class BAPMService extends Service {
         super.onCreate();
         String title = getString(R.string.initializing);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3455, title, message, this, null);
+        ServiceUtils.createServiceNotification(3455, title, message, this);
     }
 
     @Override

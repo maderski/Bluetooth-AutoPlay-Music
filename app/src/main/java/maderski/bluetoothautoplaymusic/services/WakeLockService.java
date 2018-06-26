@@ -54,7 +54,7 @@ public class WakeLockService extends Service {
 //            channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW);
 //        }
 
-        ServiceUtils.createServiceNotification(3453, title, message, this, null);
+        ServiceUtils.createServiceNotification(3453, title, message, this);
     }
 
     @Nullable

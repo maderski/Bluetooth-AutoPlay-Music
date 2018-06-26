@@ -34,7 +34,7 @@ public class BTDisconnectService extends Service {
         super.onCreate();
         String title = getString(R.string.disconnect_message);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3454, title, message, this, null);
+        ServiceUtils.createServiceNotification(3454, title, message, this);
     }
 
     @Nullable
