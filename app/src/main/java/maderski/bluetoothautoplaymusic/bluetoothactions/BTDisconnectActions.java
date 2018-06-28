@@ -11,7 +11,7 @@ import maderski.bluetoothautoplaymusic.controls.VolumeControl;
 import maderski.bluetoothautoplaymusic.controls.WifiControl;
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper;
-import maderski.bluetoothautoplaymusic.Notification;
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.PackageTools;
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService;
 import maderski.bluetoothautoplaymusic.services.WakeLockService;
@@ -27,13 +27,13 @@ public class BTDisconnectActions {
     private static final String TAG = "BTDisconnectActions";
 
     private final Context context;
-    private final Notification mNotification;
+    private final BAPMNotification mBAPMNotification;
     private final VolumeControl mVolumeControl;
     private final PlayMusicControl mPlayMusicControl;
 
     public BTDisconnectActions(Context context){
         this.context = context;
-        this.mNotification = new Notification();
+        this.mBAPMNotification = new BAPMNotification();
         this.mVolumeControl = new VolumeControl(context);
         this.mPlayMusicControl = new PlayMusicControl(context);
     }
@@ -71,7 +71,7 @@ public class BTDisconnectActions {
         boolean canShowNotification = BAPMPreferences.getShowNotification(context);
 
         if(canShowNotification) {
-            mNotification.removeBAPMMessage(context);
+            mBAPMNotification.removeBAPMMessage(context);
         }
     }
 

@@ -15,9 +15,9 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
 /**
  * Created by Jason on 12/8/15.
  */
-public class Notification {
+public class BAPMNotification {
 
-    private static final String nTAG = Notification.class.getName();
+    private static final String TAG = "BAPMNotification";
     private static final int nID = 608;
 
     //Create notification message for BAPM
@@ -48,7 +48,7 @@ public class Notification {
         } else {
             builder.setContentTitle("Bluetooth Autoplay Music");
         }
-        nManager.notify(nTAG, nID, builder.build());
+        nManager.notify(TAG, nID, builder.build());
     }
 
     public void launchBAPM(Context context){
@@ -74,7 +74,7 @@ public class Notification {
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
-        nManager.notify(nTAG, nID, builder.build());
+        nManager.notify(TAG, nID, builder.build());
     }
 
     //Remove notification that was created by BAPM
@@ -82,10 +82,10 @@ public class Notification {
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         try {
-            nManager.cancel(nTAG, nID);
+            nManager.cancel(TAG, nID);
             BAPMDataPreferences.setLaunchNotifPresent(context, false);
         }catch(Exception e){
-            Log.e(nTAG, e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 }

@@ -12,7 +12,7 @@ import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.controls.PlayMusicControl;
 import maderski.bluetoothautoplaymusic.controls.VolumeControl;
-import maderski.bluetoothautoplaymusic.Notification;
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.services.BTStateChangedService;
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService;
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService;
@@ -93,8 +93,8 @@ public class BluetoothConnectHelper {
         }
 
         if(BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)){
-            Notification notification = new Notification();
-            notification.removeBAPMMessage(mContext);
+            BAPMNotification BAPMNotification = new BAPMNotification();
+            BAPMNotification.removeBAPMMessage(mContext);
         }
 
         if(!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)){

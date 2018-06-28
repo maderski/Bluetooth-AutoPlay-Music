@@ -18,7 +18,7 @@ import maderski.bluetoothautoplaymusic.helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.helpers.PowerHelper;
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper;
-import maderski.bluetoothautoplaymusic.Notification;
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver;
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.services.WakeLockService;
@@ -35,14 +35,14 @@ public class BTConnectActions {
     private static final String TAG = "BTConnectActions";
 
     private final Context context;
-    private final Notification mNotification;
+    private final BAPMNotification mBAPMNotification;
     private final VolumeControl mVolumeControl;
     private final PlayMusicControl mPlayMusicControl;
     private final LaunchAppHelper mLaunchAppHelper;
 
     public BTConnectActions(Context context){
         this.context = context;
-        mNotification = new Notification();
+        mBAPMNotification = new BAPMNotification();
         mVolumeControl = new VolumeControl(context);
         mPlayMusicControl = new PlayMusicControl(context);
         mLaunchAppHelper = new LaunchAppHelper();
@@ -64,7 +64,7 @@ public class BTConnectActions {
                 }
             }else{
                 if(telephone.isOnCall()) {
-                    mNotification.launchBAPM(context);
+                    mBAPMNotification.launchBAPM(context);
                 }else{
                     actionsOnBTConnect();
                 }
@@ -129,7 +129,7 @@ public class BTConnectActions {
         String mapChoice = BAPMPreferences.getMapsChoice(context);
         boolean canShowNotification = BAPMPreferences.getShowNotification(context);
         if (canShowNotification) {
-            mNotification.BAPMMessage(context, mapChoice);
+            mBAPMNotification.BAPMMessage(context, mapChoice);
         }
     }
 

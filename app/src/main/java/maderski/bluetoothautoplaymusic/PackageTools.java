@@ -58,7 +58,6 @@ public class PackageTools {
     public void launchPackage(Context context, String pkg){
         Log.d("Package intent: ", pkg + " started");
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(pkg);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if(launchIntent != null) {
             context.startActivity(launchIntent);
         } else {
