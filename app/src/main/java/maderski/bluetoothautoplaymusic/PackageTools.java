@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.StringDef;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public class PackageTools {
 
-    private static final String TAG = PackageTools.class.getName();
+    private static final String TAG = "PackageTools";
 
     // Package Names
     @StringDef({
@@ -69,10 +71,9 @@ public class PackageTools {
     public void launchPackage(Context context, String packageName, Uri data, String action){
         Log.d("Package intent: ", packageName + " started");
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        launchIntent.setAction(action);
-        launchIntent.setData(data);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if(launchIntent != null) {
+            launchIntent.setAction(action);
+            launchIntent.setData(data);
             context.startActivity(launchIntent);
         } else {
             String toastMsg = packageName.equals(PackageName.MAPS) || packageName.equals(PackageName.WAZE) ?
@@ -93,6 +94,40 @@ public class PackageTools {
                 return true;
         }
         return false;
+    }
+
+    //List of Mediaplayers that is installed on the phone
+    public List<String> listOfInstalledMediaPlayers(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        List<ResolveInfo> pkgAppsList = context.getPackageManager().queryBroadcastReceivers(intent, 0);
+        List<String> installedMediaPlayers = new ArrayList<>();
+
+        for(ResolveInfo ri:pkgAppsList){
+            String resolveInfo = ri.toString();
+            if(resolveInfo.contains("pandora")
+                    || resolveInfo.contains(".playback")
+                    || resolveInfo.contains("music")
+                    || resolveInfo.contains("Music")
+                    || resolveInfo.contains("audioplayer")
+                    || resolveInfo.contains("mobi.beyondpod")
+                    || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")
+                    || resolveInfo.contains(PackageName.DOUBLETWIST)
+                    || resolveInfo.contains(PackageName.LISTENAUDIOBOOK)) {
+                String[] resolveInfoSplit = resolveInfo.split(" ");
+                String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
+                if (!installedMediaPlayers.contains(pkg)) {
+                    installedMediaPlayers.add(pkg);
+                }
+            }
+        }
+
+        // Check if Google Podcasts is installed
+        boolean isGooglePodcastsInstalled = checkPkgOnPhone(context, PackageName.GOOGLEPODCASTS);
+        if(isGooglePodcastsInstalled) {
+            installedMediaPlayers.add(PackageName.GOOGLEPODCASTS);
+        }
+
+        return installedMediaPlayers;
     }
 
     // Returns Map App Name, intentionally only works with Google maps and Waze

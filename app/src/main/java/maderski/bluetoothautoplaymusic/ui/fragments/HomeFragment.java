@@ -94,7 +94,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        installedMediaPlayers = listOfInstalledMediaPlayers();
+        PackageTools packageTools = new PackageTools();
+        installedMediaPlayers = packageTools.listOfInstalledMediaPlayers(getActivity());
 
         setupUIElements(getView(), getContext());
         launchAppHelper = new LaunchAppHelper();
@@ -524,34 +525,5 @@ public class HomeFragment extends Fragment {
         textView = (TextView)view.findViewById(R.id.textView9);
         textView.setTypeface(typeface);
 
-    }
-
-    //List of Mediaplayers that is installed on the phone
-    private List<String> listOfInstalledMediaPlayers(){
-        Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        List<ResolveInfo> pkgAppsList = getContext().getPackageManager().queryBroadcastReceivers(intent, 0);
-        List<String> installedMediaPlayers = new ArrayList<>();
-
-        for(ResolveInfo ri:pkgAppsList){
-            String resolveInfo = ri.toString();
-            if(resolveInfo.contains("pandora")
-                    || resolveInfo.contains(".playback")
-                    || resolveInfo.contains("music")
-                    || resolveInfo.contains("Music")
-                    || resolveInfo.contains("audioplayer")
-                    || resolveInfo.contains("mobi.beyondpod")
-                    || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")
-                    || resolveInfo.contains(PackageTools.PackageName.DOUBLETWIST)
-                    || resolveInfo.contains(PackageTools.PackageName.LISTENAUDIOBOOK)
-                    || resolveInfo.contains(PackageTools.PackageName.GOOGLEPODCASTS)) {
-                String[] resolveInfoSplit = resolveInfo.split(" ");
-                String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
-                if (!installedMediaPlayers.contains(pkg)) {
-                    installedMediaPlayers.add(pkg);
-                }
-            }
-        }
-
-        return installedMediaPlayers;
     }
 }
