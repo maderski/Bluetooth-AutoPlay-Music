@@ -159,11 +159,13 @@ public class PackageTools {
     // Is app running on phone
     public boolean isAppRunning(Context context, String packageName) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+        if(activityManager != null) {
+            List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
 
-        for(ActivityManager.RunningAppProcessInfo processInfo : processInfos){
-            if(processInfo.processName.equals(packageName)){
-                return true;
+            for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+                if (processInfo.processName.equals(packageName)) {
+                    return true;
+                }
             }
         }
         return false;

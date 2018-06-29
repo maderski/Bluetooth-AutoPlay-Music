@@ -61,8 +61,7 @@ public class LaunchAppHelper extends PackageTools {
 
     //Launch Maps or Waze with a delay
     public void launchMaps(final Context context, int seconds){
-        final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context);
-        boolean canLaunchMapsNow = canMapsLaunchNow(context);
+        final boolean canLaunchMapsNow = canMapsLaunchNow(context);
 
         if(canLaunchMapsNow) {
             seconds = seconds * 1000;
@@ -71,12 +70,14 @@ public class LaunchAppHelper extends PackageTools {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    String mapAppName = BAPMPreferences.getMapsChoice(context);
+                    final String mapAppName = BAPMPreferences.getMapsChoice(context);
+                    final boolean isMapsRunning = isAppRunning(context, PackageName.MAPS);
+                    final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context) && !isMapsRunning;
                     if(canLaunchDirections){
                         Uri data = getMapsChoiceUri(context);
                         launchPackage(context, mapAppName, data, Intent.ACTION_VIEW);
                     } else {
-                        determineIfLaunchWithDrivingMode(context, mapAppName);
+                        determineIfLaunchWithDrivingMode(context, mapAppName, isMapsRunning);
                     }
                     Log.d(TAG, "delayLaunchmaps started");
                 }
@@ -86,9 +87,9 @@ public class LaunchAppHelper extends PackageTools {
     }
 
     // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
-    private void determineIfLaunchWithDrivingMode(final Context context, final String mapAppName) {
-        boolean canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
-                mapAppName.equals(PackageName.MAPS);
+    private void determineIfLaunchWithDrivingMode(final Context context, final String mapAppName, final Boolean isMapsRunning) {
+        final boolean canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
+                mapAppName.equals(PackageName.MAPS) && !isMapsRunning;
         if(canLaunchDrivingMode){
             Log.d(TAG, "LAUNCH DRIVING MODE");
             Uri data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls");

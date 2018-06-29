@@ -18,6 +18,7 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
 public class BAPMNotification {
 
     private static final String TAG = "BAPMNotification";
+    public static final String CHANNEL_ID = "BTAPMChannelID";
     private static final int nID = 608;
 
     //Create notification message for BAPM
@@ -33,7 +34,7 @@ public class BAPMNotification {
 
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_notif_icon)
                 .setAutoCancel(false)

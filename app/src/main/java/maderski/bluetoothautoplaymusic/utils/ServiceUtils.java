@@ -15,6 +15,7 @@ import android.support.annotation.RequiresApi;
 
 import java.util.List;
 
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.R;
 
 /**
@@ -58,7 +59,7 @@ public class ServiceUtils {
             builder = new android.app.Notification.Builder(service);
         } else {
             NotificationManager notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
-            String channelId = "BTAPMChannelID";
+            String channelId = BAPMNotification.CHANNEL_ID;
 
             if (notificationManager != null) {
                 NotificationChannel channel = ServiceUtils.getNotificationChannel(channelId);
