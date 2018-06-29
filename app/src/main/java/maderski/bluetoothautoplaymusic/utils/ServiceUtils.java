@@ -42,27 +42,28 @@ public class ServiceUtils {
 
     public static boolean isServiceRunning(Context context, Class<?> serviceClass){
         ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if(activityManager != null) {
+            List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
-        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
-            if (runningServiceInfo.service.getClassName().equals(serviceClass.getName())){
-                return true;
+            for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+                if (runningServiceInfo.service.getClassName().equals(serviceClass.getName())) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public static void createServiceNotification(int id, String title, String message, Service service) {
+    public static void createServiceNotification(int id, String title, String message, Service service, String channelId, String channelName) {
         Notification.Builder builder;
 
         if(Build.VERSION.SDK_INT < 26) {
             builder = new android.app.Notification.Builder(service);
         } else {
             NotificationManager notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
-            String channelId = BAPMNotification.CHANNEL_ID;
 
             if (notificationManager != null) {
-                NotificationChannel channel = ServiceUtils.getNotificationChannel(channelId);
+                NotificationChannel channel = ServiceUtils.getNotificationChannel(channelId, channelName);
                 notificationManager.createNotificationChannel(channel);
             }
             builder = new Notification.Builder(service, channelId);
@@ -78,9 +79,9 @@ public class ServiceUtils {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private static NotificationChannel getNotificationChannel(String channelId) {
+    private static NotificationChannel getNotificationChannel(String channelId, String channelName) {
         NotificationChannel notificationChannel = new NotificationChannel(channelId,
-                "Bluetooth Autoplay Music",
+                channelName,
                 NotificationManager.IMPORTANCE_UNSPECIFIED);
         notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationChannel.setSound(null, null);

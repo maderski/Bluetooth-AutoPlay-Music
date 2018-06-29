@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver;
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils;
@@ -35,7 +36,12 @@ public class BTStateChangedService extends Service {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             String title = getString(R.string.listening_if_the_phones_BT_off);
             String message = getString(R.string.app_name);
-            ServiceUtils.createServiceNotification(3452, title, message, this);
+            ServiceUtils.createServiceNotification(3452,
+                    title,
+                    message,
+                    this,
+                    BAPMNotification.CHANNEL_ID,
+                    BAPMNotification.CHANNEL_NAME);
         }
     }
 

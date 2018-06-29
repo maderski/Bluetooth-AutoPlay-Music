@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.R;
@@ -34,7 +35,12 @@ public class BTDisconnectService extends Service {
         super.onCreate();
         String title = getString(R.string.disconnect_message);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3454, title, message, this);
+        ServiceUtils.createServiceNotification(3454,
+                title,
+                message,
+                this,
+                BAPMNotification.CHANNEL_ID,
+                BAPMNotification.CHANNEL_NAME);
     }
 
     @Nullable

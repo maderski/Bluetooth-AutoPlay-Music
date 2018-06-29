@@ -127,7 +127,7 @@ public class HeadphonesFragment extends DialogFragment{
 
         LinearLayout autoplayCkBoxLL = (LinearLayout) view.findViewById(R.id.autoplay_only_ll);
         autoplayCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothDeviceUtils.listOfBluetoothDevices();
+        List<String> listOfBTDevices = BluetoothDeviceUtils.listOfBluetoothDevices(getActivity());
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(getActivity());

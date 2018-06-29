@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.receivers.BluetoothReceiver;
@@ -64,7 +65,12 @@ public class BAPMService extends Service {
         super.onCreate();
         String title = getString(R.string.initializing);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3455, title, message, this);
+        ServiceUtils.createServiceNotification(3455,
+                title,
+                message,
+                this,
+                BAPMNotification.CHANNEL_ID,
+                BAPMNotification.CHANNEL_NAME);
     }
 
     @Override

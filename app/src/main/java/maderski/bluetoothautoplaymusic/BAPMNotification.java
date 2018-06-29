@@ -17,8 +17,10 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
  */
 public class BAPMNotification {
 
-    private static final String TAG = "BAPMNotification";
+    public static final String TAG = "BAPMNotification";
     public static final String CHANNEL_ID = "BTAPMChannelID";
+    public static final String CHANNEL_NAME = "Bluetooth Autoplay Music";
+
     private static final int nID = 608;
 
     //Create notification message for BAPM

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock;
 import maderski.bluetoothautoplaymusic.R;
@@ -46,15 +47,12 @@ public class WakeLockService extends Service {
         String title = getString(R.string.wakelock_messge);
         String message = getString(R.string.app_name);
 
-//        NotificationChannel channel = null;
-
-//        if(Build.VERSION.SDK_INT > 25) {
-//            String channelId = "BTAPMChannelID";
-//            CharSequence channelName = "Bluetooth Autoplay Music";
-//            channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_LOW);
-//        }
-
-        ServiceUtils.createServiceNotification(3453, title, message, this);
+        ServiceUtils.createServiceNotification(3453,
+                title,
+                message,
+                this,
+                BAPMNotification.CHANNEL_ID,
+                BAPMNotification.CHANNEL_NAME);
     }
 
     @Nullable

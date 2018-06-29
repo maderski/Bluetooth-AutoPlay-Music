@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import maderski.bluetoothautoplaymusic.BAPMNotification;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.receivers.CustomReceiver;
 import maderski.bluetoothautoplaymusic.receivers.PowerReceiver;
@@ -53,7 +54,12 @@ public class OnBTConnectService extends Service {
 
         String title = getString(waitTillPowerConnected ? R.string.connect_to_power_msg : R.string.connect_message);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3451, title, message, this);
+        ServiceUtils.createServiceNotification(3451,
+                title,
+                message,
+                this,
+                BAPMNotification.CHANNEL_ID,
+                BAPMNotification.CHANNEL_NAME);
     }
 
     @Nullable
