@@ -11,6 +11,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.RequiresApi;
 
 import java.util.List;
@@ -54,7 +55,13 @@ public class ServiceUtils {
         return false;
     }
 
-    public static void createServiceNotification(int id, String title, String message, Service service, String channelId, String channelName) {
+    public static void createServiceNotification(int id,
+                                                 String title,
+                                                 String message,
+                                                 Service service,
+                                                 String channelId,
+                                                 String channelName,
+                                                 @DrawableRes int icon) {
         Notification.Builder builder;
 
         if(Build.VERSION.SDK_INT < 26) {
@@ -70,7 +77,7 @@ public class ServiceUtils {
         }
 
         Notification notification = builder
-                .setSmallIcon(R.drawable.ic_notif_icon)
+                .setSmallIcon(icon)
                 .setContentTitle(title)
                 .setContentText(message)
                 .build();

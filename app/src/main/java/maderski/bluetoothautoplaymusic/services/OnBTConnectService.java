@@ -59,7 +59,8 @@ public class OnBTConnectService extends Service {
                 message,
                 this,
                 BAPMNotification.CHANNEL_ID,
-                BAPMNotification.CHANNEL_NAME);
+                BAPMNotification.CHANNEL_NAME,
+                R.drawable.ic_notif_icon);
     }
 
     @Nullable
