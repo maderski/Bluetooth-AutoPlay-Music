@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.services.jobservices.StartBAPMServiceJobService;
+import maderski.bluetoothautoplaymusic.utils.BluetoothUtils;
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils;
 
 /**
@@ -18,20 +19,16 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     //Start BAPMService on phone boot
     public void onReceive(Context context, Intent intent) {
-        // Schedule Job to run on boot
-        ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
+        if(intent != null) {
+            String action = intent.getAction();
+            if(action != null && action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+                // Schedule Job to run on boot
+                ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
 
-        // Check to see Bluetooth is enabled and if not enable it
-        checkIfBluetoothEnabled();
+                // Check to see Bluetooth is disabled and if it is disabled, then enable it
+                BluetoothUtils.enableDisabledBluetooth();
 
-        Log.d(TAG, "BAPM Service Started");
-    }
-
-    private void checkIfBluetoothEnabled(){
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(bluetoothAdapter != null) {
-            if (!bluetoothAdapter.isEnabled()) {
-                bluetoothAdapter.enable();
+                Log.d(TAG, "BAPM Service Started");
             }
         }
     }

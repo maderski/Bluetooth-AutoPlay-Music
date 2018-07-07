@@ -14,7 +14,7 @@ import maderski.bluetoothautoplaymusic.R;
  * Created by Jason on 1/14/17.
  */
 
-public class BluetoothDeviceUtils {
+public class BluetoothUtils {
     public static final String TAG = "BluetoothDeviceUtils";
 
     // List of bluetooth devices on the phone
@@ -33,5 +33,14 @@ public class BluetoothDeviceUtils {
         }
 
         return btDevices;
+    }
+
+    public static void enableDisabledBluetooth(){
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                bluetoothAdapter.enable();
+            }
+        }
     }
 }

@@ -20,11 +20,16 @@ public class OnAppUpdateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Schedule Job to run on update
-        ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
+        if(intent != null) {
+            String action = intent.getAction();
+            if(action != null && action.equals(Intent.ACTION_PACKAGE_REPLACED)) {
+                // Schedule Job to run on update
+                ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
 
-        // Sync newly separated Home Work checkboxes
-        syncHomeWorkCheckboxes(context);
+                // Sync newly separated Home Work checkboxes
+                syncHomeWorkCheckboxes(context);
+            }
+        }
     }
 
     private void syncHomeWorkCheckboxes(Context context) {

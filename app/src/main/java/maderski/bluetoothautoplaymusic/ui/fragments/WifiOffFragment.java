@@ -15,7 +15,7 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.List;
 
-import maderski.bluetoothautoplaymusic.utils.BluetoothDeviceUtils;
+import maderski.bluetoothautoplaymusic.utils.BluetoothUtils;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
 
@@ -83,7 +83,7 @@ public class WifiOffFragment extends DialogFragment {
 
         LinearLayout wifiOffCkBoxLL = (LinearLayout) view.findViewById(R.id.wifi_off_ll);
         wifiOffCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothDeviceUtils.listOfBluetoothDevices(getActivity());
+        List<String> listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(getActivity());
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(getActivity());

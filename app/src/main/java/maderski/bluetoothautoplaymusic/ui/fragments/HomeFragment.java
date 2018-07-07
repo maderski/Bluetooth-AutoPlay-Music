@@ -1,10 +1,8 @@
 package maderski.bluetoothautoplaymusic.ui.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -33,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
-import maderski.bluetoothautoplaymusic.utils.BluetoothDeviceUtils;
+import maderski.bluetoothautoplaymusic.utils.BluetoothUtils;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.PackageTools;
@@ -135,7 +133,7 @@ public class HomeFragment extends Fragment {
 
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) view.findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothDeviceUtils.listOfBluetoothDevices(getActivity());
+        List<String> listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(getActivity());
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(context);
