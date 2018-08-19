@@ -21,7 +21,7 @@ public class BAPMNotification {
 
     public static final String TAG = "BAPMNotification";
 
-    private static final int N_ID = 608;
+    private static final int NOTIFICATION_ID = 608;
     private static final String CHANNEL_ID = "BTAPMChannelIDNotification";
     private static final String CHANNEL_NAME = "Bluetooth Autoplay Music Notification";
 
@@ -57,7 +57,7 @@ public class BAPMNotification {
 
         if(nManager != null) {
             createNotificationChannel(nManager);
-            nManager.notify(TAG, N_ID, builder.build());
+            nManager.notify(TAG, NOTIFICATION_ID, builder.build());
         }
     }
 
@@ -86,7 +86,7 @@ public class BAPMNotification {
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
         if(nManager != null) {
             createNotificationChannel(nManager);
-            nManager.notify(TAG, N_ID, builder.build());
+            nManager.notify(TAG, NOTIFICATION_ID, builder.build());
         }
     }
 
@@ -103,7 +103,7 @@ public class BAPMNotification {
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if(nManager != null) {
-            nManager.cancel(TAG, N_ID);
+            nManager.cancel(TAG, NOTIFICATION_ID);
             BAPMDataPreferences.setLaunchNotifPresent(context, false);
         }
     }
