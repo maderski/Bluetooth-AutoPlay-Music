@@ -24,7 +24,7 @@ import maderski.bluetoothautoplaymusic.services.OnBTConnectService;
 import maderski.bluetoothautoplaymusic.services.WakeLockService;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
-import maderski.bluetoothautoplaymusic.Telephone;
+import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper;
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils;
 
 /**
@@ -52,18 +52,18 @@ public class BTConnectActions {
         boolean waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context);
 
         if(waitTillOffPhone){
-            Telephone telephone = new Telephone(context);
+            TelephoneHelper telephoneHelper = new TelephoneHelper(context);
             if(PowerHelper.isPluggedIn(context)){
-                if(telephone.isOnCall()) {
+                if(telephoneHelper.isOnCall()) {
                     Log.d(TAG, "ON a call");
                     //Run CheckIfOnPhone
-                    telephone.CheckIfOnPhone(mVolumeControl);
+                    telephoneHelper.CheckIfOnPhone(mVolumeControl);
                 }else{
                     Log.d(TAG, "NOT on a call");
                     actionsOnBTConnect();
                 }
             }else{
-                if(telephone.isOnCall()) {
+                if(telephoneHelper.isOnCall()) {
                     mBAPMNotification.launchBAPM(context);
                 }else{
                     actionsOnBTConnect();

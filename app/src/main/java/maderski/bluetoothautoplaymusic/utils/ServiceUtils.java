@@ -21,6 +21,9 @@ import java.util.List;
  */
 
 public class ServiceUtils {
+    public static final String CHANNEL_ID_FOREGROUND_SERVICE = "BTAPMChannelID";
+    public static final String CHANNEL_NAME_FOREGROUND_SERVICE = "Bluetooth Autoplay Music";
+
     public static void startService(Context context, Class<?> serviceClass, String tag) {
         Intent intent = new Intent(context, serviceClass);
         intent.addCategory(tag);
@@ -67,7 +70,7 @@ public class ServiceUtils {
             NotificationManager notificationManager = (NotificationManager) service.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager != null) {
-                NotificationChannel channel = ServiceUtils.getNotificationChannel(channelId, channelName);
+                NotificationChannel channel = getNotificationChannel(channelId, channelName);
                 notificationManager.createNotificationChannel(channel);
             }
             builder = new Notification.Builder(service, channelId);
@@ -78,7 +81,6 @@ public class ServiceUtils {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setOngoing(true)
-                .setSmallIcon(android.R.color.transparent)
                 .build();
 
         service.startForeground(id, notification);

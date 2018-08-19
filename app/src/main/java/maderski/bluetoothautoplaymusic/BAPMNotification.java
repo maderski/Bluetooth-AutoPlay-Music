@@ -1,12 +1,14 @@
 package maderski.bluetoothautoplaymusic;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
@@ -18,10 +20,10 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
 public class BAPMNotification {
 
     public static final String TAG = "BAPMNotification";
-    public static final String CHANNEL_ID = "BTAPMChannelID";
-    public static final String CHANNEL_NAME = "Bluetooth Autoplay Music";
 
-    private static final int nID = 608;
+    private static final int N_ID = 608;
+    private static final String CHANNEL_ID = "BTAPMChannelIDNotification";
+    private static final String CHANNEL_NAME = "Bluetooth Autoplay Music Notification";
 
     //Create notification message for BAPM
     public void BAPMMessage(Context context, String mapChoicePkg){
@@ -42,6 +44,7 @@ public class BAPMNotification {
                 .setAutoCancel(false)
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
+
         Intent appLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(mapChoicePkg);
         if(appLaunchIntent != null) {
             appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -53,7 +56,8 @@ public class BAPMNotification {
         }
 
         if(nManager != null) {
-            nManager.notify(TAG, nID, builder.build());
+            createNotificationChannel(nManager);
+            nManager.notify(TAG, N_ID, builder.build());
         }
     }
 
@@ -71,7 +75,7 @@ public class BAPMNotification {
 
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_notif_icon)
@@ -81,7 +85,16 @@ public class BAPMNotification {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
         if(nManager != null) {
-            nManager.notify(TAG, nID, builder.build());
+            createNotificationChannel(nManager);
+            nManager.notify(TAG, N_ID, builder.build());
+        }
+    }
+
+    private void createNotificationChannel(NotificationManager nManager) {
+        if(Build.VERSION.SDK_INT > 25) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            nManager.createNotificationChannel(notificationChannel);
         }
     }
 
@@ -90,7 +103,7 @@ public class BAPMNotification {
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if(nManager != null) {
-            nManager.cancel(TAG, nID);
+            nManager.cancel(TAG, N_ID);
             BAPMDataPreferences.setLaunchNotifPresent(context, false);
         }
     }

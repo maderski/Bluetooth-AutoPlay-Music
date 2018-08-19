@@ -39,8 +39,8 @@ public class BTDisconnectService extends Service {
                 title,
                 message,
                 this,
-                BAPMNotification.CHANNEL_ID,
-                BAPMNotification.CHANNEL_NAME,
+                ServiceUtils.CHANNEL_ID_FOREGROUND_SERVICE,
+                ServiceUtils.CHANNEL_NAME_FOREGROUND_SERVICE,
                 R.drawable.ic_notif_icon);
     }
 

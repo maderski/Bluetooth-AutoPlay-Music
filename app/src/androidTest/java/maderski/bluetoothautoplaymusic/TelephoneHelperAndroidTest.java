@@ -4,10 +4,12 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper;
+
 /**
  * Created by Jason on 7/26/16.
  */
-public class TelephoneAndroidTest extends AndroidTestCase {
+public class TelephoneHelperAndroidTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -16,8 +18,8 @@ public class TelephoneAndroidTest extends AndroidTestCase {
     @SmallTest
     public void testIsOnCall(){
         Context context = getContext();
-        Telephone telephone = new Telephone(context);
-        boolean isOnCall = telephone.isOnCall();
+        TelephoneHelper telephoneHelper = new TelephoneHelper(context);
+        boolean isOnCall = telephoneHelper.isOnCall();
         assertEquals(false, isOnCall);
     }
 

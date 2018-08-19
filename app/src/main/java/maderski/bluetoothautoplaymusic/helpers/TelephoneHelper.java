@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic;
+package maderski.bluetoothautoplaymusic.helpers;
 
 import android.content.Context;
 import android.os.CountDownTimer;
@@ -6,19 +6,18 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.controls.VolumeControl;
-import maderski.bluetoothautoplaymusic.helpers.PowerHelper;
 
 /**
  * Created by Jason on 6/1/16.
  */
-public class Telephone {
+public class TelephoneHelper {
 
-    private static final String TAG = Telephone.class.getName();
+    private static final String TAG = "TelephoneHelper";
 
     private Context context;
     private TelephonyManager telephonyManager;
 
-    public Telephone(Context context){
+    public TelephoneHelper(Context context){
         this.context = context;
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }

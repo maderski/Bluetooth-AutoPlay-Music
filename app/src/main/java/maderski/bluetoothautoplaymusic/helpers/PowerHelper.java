@@ -18,20 +18,15 @@ public class PowerHelper {
     public static boolean isPluggedIn(Context context) {
         Intent batteryStatus = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int chargePlug = 0;
-        try {
+        if(batteryStatus != null) {
             chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        }catch (Exception e){
-            Log.e(TAG, e.getMessage());
         }
-            boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-            boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-            boolean wirelessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
 
+        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+        boolean wirelessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
 
-        if(usbCharge || acCharge || wirelessCharge)
-            return true;
-        else
-            return false;
+        return usbCharge || acCharge || wirelessCharge;
     }
 
 }
