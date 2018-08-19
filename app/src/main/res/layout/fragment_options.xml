@@ -306,7 +306,7 @@
                             android:background="@color/white"
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp"
-                            android:text="Set Devices to Turn Wifi OFF"
+                            android:text="@string/set_devices_to_turn_wifi_off"
                             android:textColor="@color/colorAccent" />
                     </LinearLayout>
                 </LinearLayout>
@@ -319,7 +319,7 @@
                     android:paddingBottom="4dp"
                     android:paddingTop="20dp"
                     android:switchPadding="100dp"
-                    android:text="Wifi OFF Use Time Spans"
+                    android:text="@string/wifi_off_use_time_spans"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 

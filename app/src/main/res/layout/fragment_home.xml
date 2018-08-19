@@ -63,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:paddingLeft="20dp">
+                        android:paddingStart="20dp">
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -88,8 +88,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/launch_maps"
                                 android:id="@+id/textView4"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
                         </LinearLayout>
 
@@ -115,8 +115,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/keep_screen_on"
                                 android:id="@+id/textView5"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
                         </LinearLayout>
 
@@ -141,8 +141,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/put_phone_in_priority_mode"
                                 android:id="@+id/textView6"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
                         </LinearLayout>
 
@@ -167,8 +167,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/set_media_volume_to_max"
                                 android:id="@+id/textView7"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
 
                         </LinearLayout>
@@ -193,8 +193,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/launch_music_player"
                                 android:id="@+id/textView8"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
 
                         </LinearLayout>
@@ -219,8 +219,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/dismiss_keyguard"
                                 android:id="@+id/textView9"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
 
                         </LinearLayout>

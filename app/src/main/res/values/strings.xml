@@ -74,4 +74,21 @@
     <string name="connect_to_power_msg">Connect to power to launch</string>
     <string name="wakelock_messge">Keeping Screen ON</string>
     <string name="no_bluetooth_device">No Bluetooth Device found</string>
+    <string name="click_to_launch">Click to launch</string>
+    <string name="bluetooth_device_connected">Bluetooth device connected</string>
+    <string name="launch_bluetooth_autoplay">Launch Bluetooth Autoplay Music</string>
+    <string name="choose_what_days_you_would_like_maps_waze_to_launch">Choose what days you would like Maps/Waze to launch</string>
+    <string name="days_to_launch">DAYS to launch</string>
+    <string name="set_devices_to_turn_wifi_off">Set Devices to Turn Wifi OFF</string>
+    <string name="wifi_off_use_time_spans">Wifi OFF Use Time Spans</string>
+    <string name="turn_wifi_off">Turn Wifi Off</string>
+    <string name="custom_time_span">CUSTOM Time Span</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="custom">Custom</string>
+    <string name="work">Work</string>
+    <string name="home">Home</string>
+    <string name="evening_time_span">Evening Time Span</string>
+    <string name="morning_time_span">Morning Time Span</string>
+    <string name="require_a2dp">Require A2DP</string>
 </resources>

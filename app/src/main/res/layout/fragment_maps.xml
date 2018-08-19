@@ -184,7 +184,7 @@
                     android:layout_gravity="start"
                     android:paddingBottom="8dp"
                     android:paddingTop="20dp"
-                    android:text="DAYS to launch"
+                    android:text="@string/days_to_launch"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
@@ -192,7 +192,7 @@
                     android:id="@+id/days_to_launch_desc"
                     android:layout_width="246dp"
                     android:layout_height="wrap_content"
-                    android:text="Choose what days you would like Maps/Waze to launch"
+                    android:text="@string/choose_what_days_you_would_like_maps_waze_to_launch"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp" />
 

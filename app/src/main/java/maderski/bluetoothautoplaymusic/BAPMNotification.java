@@ -33,8 +33,8 @@ public class BAPMNotification {
             mapAppName = "WAZE";
         }
 
-        String title = "Click to launch " + mapAppName;
-        String message = "Bluetooth device connected";
+        String title = context.getString(R.string.click_to_launch) + mapAppName;
+        String message = context.getString(R.string.bluetooth_device_connected);
 
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -64,8 +64,8 @@ public class BAPMNotification {
     public void launchBAPM(Context context){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
 
-        String title = "Launch Bluetooth Autoplay Music";
-        String message = "Bluetooth device connected";
+        String title = context.getString(R.string.launch_bluetooth_autoplay);
+        String message = context.getString(R.string.bluetooth_device_connected);
 
         BAPMDataPreferences.setLaunchNotifPresent(context, true);
 
