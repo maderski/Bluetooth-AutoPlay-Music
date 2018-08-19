@@ -51,7 +51,10 @@ public class BAPMNotification {
         } else {
             builder.setContentTitle("Bluetooth Autoplay Music");
         }
-        nManager.notify(TAG, nID, builder.build());
+
+        if(nManager != null) {
+            nManager.notify(TAG, nID, builder.build());
+        }
     }
 
     public void launchBAPM(Context context){
@@ -77,18 +80,18 @@ public class BAPMNotification {
                 .setColor(color)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setDefaults(android.app.Notification.DEFAULT_VIBRATE);
-        nManager.notify(TAG, nID, builder.build());
+        if(nManager != null) {
+            nManager.notify(TAG, nID, builder.build());
+        }
     }
 
     //Remove notification that was created by BAPM
     public void removeBAPMMessage(Context context){
         NotificationManager nManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        try {
+        if(nManager != null) {
             nManager.cancel(TAG, nID);
             BAPMDataPreferences.setLaunchNotifPresent(context, false);
-        }catch(Exception e){
-            Log.e(TAG, e.getMessage());
         }
     }
 }
