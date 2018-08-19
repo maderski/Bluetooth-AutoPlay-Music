@@ -16,9 +16,6 @@ import android.support.annotation.RequiresApi;
 
 import java.util.List;
 
-import maderski.bluetoothautoplaymusic.BAPMNotification;
-import maderski.bluetoothautoplaymusic.R;
-
 /**
  * Created by Jason on 6/6/17.
  */
@@ -80,6 +77,8 @@ public class ServiceUtils {
                 .setSmallIcon(icon)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setOngoing(true)
+                .setSmallIcon(android.R.color.transparent)
                 .build();
 
         service.startForeground(id, notification);
@@ -89,7 +88,7 @@ public class ServiceUtils {
     private static NotificationChannel getNotificationChannel(String channelId, String channelName) {
         NotificationChannel notificationChannel = new NotificationChannel(channelId,
                 channelName,
-                NotificationManager.IMPORTANCE_UNSPECIFIED);
+                NotificationManager.IMPORTANCE_MIN);
         notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationChannel.setSound(null, null);
         notificationChannel.enableVibration(false);
