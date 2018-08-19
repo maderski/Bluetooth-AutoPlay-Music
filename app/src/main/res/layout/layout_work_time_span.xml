@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
         android:paddingTop="20dp"
-        android:text="@string/morning_time_span"
+        android:text="@string/morning_time_span_label"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />

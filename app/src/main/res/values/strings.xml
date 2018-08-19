@@ -1,4 +1,5 @@
 <resources>
+    <!-- ENGLISH STRINGS -->
     <string name="app_name">Bluetooth Autoplay Music</string>
     <string name="about_menu">About</string>
     <string name="no_BT_found">No Bluetooth Device found</string>
@@ -29,7 +30,7 @@
     <string name="dim_time_button_text">Dim Time</string>
     <string name="autoplay_only">Autoplay Only</string>
     <string name="volume_text">Volume</string>
-    <string name="volume_caption">Volume set here ONLY effects autoplay devices.</string>
+    <string name="volume_caption">Volume set here ONLY affects autoplay devices.</string>
     <string name="devices_text">Devices</string>
     <string name="device_text_caption">For headphones or a speaker that you just want to play music when connected</string>
     <string name="done_button_text">Done</string>
@@ -88,7 +89,5 @@
     <string name="custom">Custom</string>
     <string name="work">Work</string>
     <string name="home">Home</string>
-    <string name="evening_time_span">Evening Time Span</string>
-    <string name="morning_time_span">Morning Time Span</string>
     <string name="require_a2dp">Require A2DP</string>
 </resources>
