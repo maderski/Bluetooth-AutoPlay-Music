@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 
 /**
@@ -14,7 +16,7 @@ public class PowerHelper {
 
     private PowerHelper(){}
 
-    //Returns true or false depending if battery is plugged in
+    // Returns true or false depending if battery is plugged in
     public static boolean isPluggedIn(Context context) {
         Intent batteryStatus = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int chargePlug = 0;
@@ -29,4 +31,13 @@ public class PowerHelper {
         return usbCharge || acCharge || wirelessCharge;
     }
 
+    // Return false if in settings "Not optimized" and true if "Optimizing battery use"
+    public static boolean isBatteryOptimized(Context context) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            final String packageName = context.getPackageName();
+
+            return powerManager != null && !powerManager.isIgnoringBatteryOptimizations(packageName);
+        } else { return false; }
+    }
 }

@@ -51,10 +51,9 @@ public class PermissionHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static boolean checkDoNotDisturbPermission(final Context context, int seconds){
-
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
-        boolean hasDoNotDisturbPerm = notificationManager.isNotificationPolicyAccessGranted();
+        boolean hasDoNotDisturbPerm = notificationManager != null && notificationManager.isNotificationPolicyAccessGranted();
         if(!hasDoNotDisturbPerm){
             long milliseconds = seconds * 1000;
             Handler handler = new Handler();
