@@ -57,8 +57,8 @@
     <string name="evening_time_span_label">Intervallo di tempo del pomeriggio</string>
     <string name="launch_waze_directions_description">Avvia Waze con le indicazioni Casa / Lavoro. Utilizza gli intervalli Home / Orario di lavoro che possono essere impostati di seguito</string>
     <string name="launch_directions_label">Avvia con DIRECTIONS</string>
-    <string name="wifi_use_time_spans_caption_morning_evening">Disattiva WIFI OFF quando Bluetooth si connette durante l\'intervallo di MATTINA e attiva WIFI ON quando Bluetooth si disconnette durante l'intervallo di tempo della SERA</string>
-    <string name="wifi_use_time_spans_caption_work_home">Disattiva WIFI OFF quando Bluetooth si collega durante l\'intervallo di LAVORO e attiva WIFI ON quando Bluetooth si disconnette durante l'intervallo HOME</string>
+    <string name="wifi_use_time_spans_caption_morning_evening">Disattiva WIFI OFF quando Bluetooth si connette durante l\'intervallo di MATTINA e attiva WIFI ON quando Bluetooth si disconnette durante l\'intervallo di tempo della SERA</string>
+    <string name="wifi_use_time_spans_caption_work_home">Disattiva WIFI OFF quando Bluetooth si collega durante l\'intervallo di LAVORO e attiva WIFI ON quando Bluetooth si disconnette durante l\'intervallo HOME</string>
     <string name="restore_the_original_volume_on_disconnect">Restore the original volume on disconnect, otherwise Android will handle it</string>
     <string name="driving_mode">Driving Mode</string>
     <string name="driving_mode_description">Avvierà Google Maps in modalità guida</string>
