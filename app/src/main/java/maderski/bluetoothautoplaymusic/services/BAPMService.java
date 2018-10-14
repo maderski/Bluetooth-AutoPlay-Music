@@ -3,9 +3,11 @@ package maderski.bluetoothautoplaymusic.services;
 import android.app.NotificationChannel;
 import android.app.Service;
 import android.app.job.JobScheduler;
+import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -88,8 +90,5 @@ public class BAPMService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        //TODO for communication return IBinder implementation
-        return null;
-    }
+    public IBinder onBind(Intent intent) { return null; }
 }
