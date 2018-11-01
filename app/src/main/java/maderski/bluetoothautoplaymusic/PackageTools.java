@@ -112,7 +112,6 @@ public class PackageTools {
                     || resolveInfo.contains("mobi.beyondpod")
                     || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")
                     || resolveInfo.contains(PackageName.DEEZERMUSIC)
-                    || resolveInfo.contains(PackageName.PANDORA)
                     || resolveInfo.contains(PackageName.DOUBLETWIST)
                     || resolveInfo.contains(PackageName.LISTENAUDIOBOOK)) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
@@ -127,6 +126,12 @@ public class PackageTools {
         boolean isGooglePodcastsInstalled = checkPkgOnPhone(context, PackageName.GOOGLEPODCASTS);
         if(isGooglePodcastsInstalled) {
             installedMediaPlayers.add(PackageName.GOOGLEPODCASTS);
+        }
+
+        // Check if Pandora is installed
+        boolean isPandoraInstalled = checkPkgOnPhone(context, PackageName.PANDORA);
+        if(isPandoraInstalled) {
+            installedMediaPlayers.add(PackageName.PANDORA);
         }
 
         return installedMediaPlayers;
