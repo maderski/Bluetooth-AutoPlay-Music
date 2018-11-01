@@ -36,7 +36,8 @@ public class PackageTools {
             PackageName.POWERAMP,
             PackageName.DOUBLETWIST,
             PackageName.LISTENAUDIOBOOK,
-            PackageName.GOOGLEPODCASTS
+            PackageName.GOOGLEPODCASTS,
+            PackageName.DEEZERMUSIC
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface PackageName {
@@ -52,6 +53,7 @@ public class PackageTools {
         String DOUBLETWIST = "com.doubleTwist.androidPlayer";
         String LISTENAUDIOBOOK = "com.acmeandroid.listen";
         String GOOGLEPODCASTS = "com.google.android.apps.podcasts";
+        String DEEZERMUSIC = "deezer.android.app";
     }
 
     // Launches App that is associated with that package that was put into method
@@ -103,13 +105,14 @@ public class PackageTools {
 
         for(ResolveInfo ri:pkgAppsList){
             String resolveInfo = ri.toString();
-            if(resolveInfo.contains("pandora")
-                    || resolveInfo.contains(".playback")
+            if(resolveInfo.contains(".playback")
                     || resolveInfo.contains("music")
                     || resolveInfo.contains("Music")
                     || resolveInfo.contains("audioplayer")
                     || resolveInfo.contains("mobi.beyondpod")
                     || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")
+                    || resolveInfo.contains(PackageName.DEEZERMUSIC)
+                    || resolveInfo.contains(PackageName.PANDORA)
                     || resolveInfo.contains(PackageName.DOUBLETWIST)
                     || resolveInfo.contains(PackageName.LISTENAUDIOBOOK)) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
