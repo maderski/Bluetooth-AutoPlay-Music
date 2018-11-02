@@ -63,11 +63,11 @@ public class HeadphonesFragment extends DialogFragment{
         AudioManager audioManager = (AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
         SeekBar volumeSeekBar = (SeekBar)rootView.findViewById(R.id.volume_seekBar);
         volumeSeekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-        volumeSeekBar.setProgress(BAPMPreferences.getHeadphonePreferredVolume(getActivity()));
+        volumeSeekBar.setProgress(BAPMPreferences.INSTANCE.getHeadphonePreferredVolume(getActivity()));
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                BAPMPreferences.setHeadphonePreferredVolume(getActivity(), progress);
+                BAPMPreferences.INSTANCE.setHeadphonePreferredVolume(getActivity(), progress);
                 Log.d(TAG, "Progress: " + Integer.toString(progress));
             }
 
@@ -92,7 +92,7 @@ public class HeadphonesFragment extends DialogFragment{
         });
 
         Switch a2dpSwitch = (Switch)rootView.findViewById(R.id.sw_headphones_a2dp);
-        boolean useA2dp = BAPMPreferences.getUseA2dpHeadphones(getActivity());
+        boolean useA2dp = BAPMPreferences.INSTANCE.getUseA2dpHeadphones(getActivity());
         a2dpSwitch.setChecked(useA2dp);
         a2dpSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -107,8 +107,8 @@ public class HeadphonesFragment extends DialogFragment{
     }
 
     private Set<String> getNonHeadphoneDevices(){
-        Set<String> btDevices = BAPMPreferences.getBTDevices(getContext());
-        Set<String> headphoneDevices = BAPMPreferences.getHeadphoneDevices(getContext());
+        Set<String> btDevices = BAPMPreferences.INSTANCE.getBTDevices(getContext());
+        Set<String> headphoneDevices = BAPMPreferences.INSTANCE.getHeadphoneDevices(getContext());
 
         for(String headphoneDevice : headphoneDevices){
             if(btDevices.contains(headphoneDevice)){
@@ -145,8 +145,8 @@ public class HeadphonesFragment extends DialogFragment{
                     CompoundButtonCompat.setButtonTintList(checkBox, new ColorStateList(states, colors));
                     checkBox.setClickable(false);
                     checkBox.setChecked(true);
-                } else if(BAPMPreferences.getBTDevices(getActivity()) != null) {
-                    checkBox.setChecked(BAPMPreferences.getHeadphoneDevices(getContext()).contains(BTDevice));
+                } else if(BAPMPreferences.INSTANCE.getBTDevices(getActivity()) != null) {
+                    checkBox.setChecked(BAPMPreferences.INSTANCE.getHeadphoneDevices(getContext()).contains(BTDevice));
                 }
                 checkBox.setTextColor(ContextCompat.getColor(getContext(), textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
@@ -168,7 +168,7 @@ public class HeadphonesFragment extends DialogFragment{
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashSet<String> savedHeadphoneDevices = new HashSet<>(BAPMPreferences.getHeadphoneDevices(context));
+                HashSet<String> savedHeadphoneDevices = new HashSet<>(BAPMPreferences.INSTANCE.getHeadphoneDevices(context));
                 if (cb.isChecked()) {
                     savedHeadphoneDevices.add(BTD);
                     if(removedDevices.contains(BTD)){

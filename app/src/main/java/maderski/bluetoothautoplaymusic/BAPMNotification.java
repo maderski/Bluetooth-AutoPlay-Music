@@ -29,7 +29,7 @@ public class BAPMNotification {
     public void BAPMMessage(Context context, String mapChoicePkg){
         int color = ContextCompat.getColor(context, R.color.colorAccent);
         String mapAppName = "GOOGLE MAPS";
-        if(BAPMPreferences.getMapsChoice(context).equalsIgnoreCase(PackageTools.PackageName.WAZE)){
+        if(BAPMPreferences.INSTANCE.getMapsChoice(context).equalsIgnoreCase(PackageTools.PackageName.WAZE)){
             mapAppName = "WAZE";
         }
 
@@ -67,7 +67,7 @@ public class BAPMNotification {
         String title = context.getString(R.string.launch_bluetooth_autoplay);
         String message = context.getString(R.string.bluetooth_device_connected);
 
-        BAPMDataPreferences.setLaunchNotifPresent(context, true);
+        BAPMDataPreferences.INSTANCE.setLaunchNotifPresent(context, true);
 
         Intent launchBAPMIntent = new Intent();
         launchBAPMIntent.setAction("maderski.bluetoothautoplaymusic.offtelephonelaunch");
@@ -104,7 +104,7 @@ public class BAPMNotification {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if(nManager != null) {
             nManager.cancel(TAG, NOTIFICATION_ID);
-            BAPMDataPreferences.setLaunchNotifPresent(context, false);
+            BAPMDataPreferences.INSTANCE.setLaunchNotifPresent(context, false);
         }
     }
 }

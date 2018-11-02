@@ -20,9 +20,9 @@ public class PowerReceiver extends BroadcastReceiver {
 
         AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         boolean isBTConnected = audioManager.isBluetoothA2dpOn();
-        boolean powerRequired = BAPMPreferences.getPowerConnected(context);
-        boolean ranActionsOnBtConnect = BAPMDataPreferences.getRanActionsOnBtConnect(context);
-        boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context);
+        boolean powerRequired = BAPMPreferences.INSTANCE.getPowerConnected(context);
+        boolean ranActionsOnBtConnect = BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(context);
+        boolean isHeadphones = BAPMDataPreferences.INSTANCE.getIsAHeadphonesDevice(context);
 
         Log.d(TAG, "Power Connected to a Selected BTDevice");
         Log.d(TAG, "Is BT Connected: " + Boolean.toString(isBTConnected));

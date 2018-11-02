@@ -27,7 +27,7 @@ public class PlayMusicControl {
     private FirebaseHelper mFirebaseHelper;
 
     public PlayMusicControl(Context context){
-        String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+        String pkgName = BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(context);
         Log.d(TAG, "PLAYER: " + pkgName);
 
         mPlayerControls = PlayerControlsFactory.getPlayerControl(context, pkgName);
@@ -54,7 +54,7 @@ public class PlayMusicControl {
     public synchronized void checkIfPlaying(final Context context, final int seconds){
         final int milliSeconds = seconds * 1000;
         final AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        final String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+        final String selectedMusicPlayer = BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(context);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -99,8 +99,8 @@ public class PlayMusicControl {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (BAPMPreferences.getLaunchGoogleMaps(context)) {
-                    String choosenMapApp = BAPMPreferences.getMapsChoice(context);
+                if (BAPMPreferences.INSTANCE.getLaunchGoogleMaps(context)) {
+                    String choosenMapApp = BAPMPreferences.INSTANCE.getMapsChoice(context);
                     launchAppHelper.launchPackage(context, choosenMapApp);
                 }
             }

@@ -104,11 +104,11 @@ public class HomeFragment extends Fragment {
     //Checks if WAZE was removed and if WAZE was set to the MapsChoice and if so, set MapsChoice in
     //SharedPrefs to MAPS
     private void checkIfWazeRemoved(Context context){
-        String mapAppChoice = BAPMPreferences.getMapsChoice(context);
+        String mapAppChoice = BAPMPreferences.INSTANCE.getMapsChoice(context);
         if(mapAppChoice.equalsIgnoreCase(PackageTools.PackageName.WAZE)) {
             if (!launchAppHelper.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)) {
                 Log.d(TAG, "Checked");
-                BAPMPreferences.setMapsChoice(context, PackageTools.PackageName.MAPS);
+                BAPMPreferences.INSTANCE.setMapsChoice(context, PackageTools.PackageName.MAPS);
             }else {
                 Log.d(TAG, "WAZE is installed");
             }
@@ -144,20 +144,20 @@ public class HomeFragment extends Fragment {
                 int textColor = R.color.colorPrimary;
                 checkBox = new CheckBox(context);
                 checkBox.setText(BTDevice);
-                if(BAPMPreferences.getHeadphoneDevices(context).contains(BTDevice)) {
+                if(BAPMPreferences.INSTANCE.getHeadphoneDevices(context).contains(BTDevice)) {
                     textColor = R.color.lightGray;
                     int states[][] = {{android.R.attr.state_checked}};
                     int colors[] = {textColor, textColor};
                     CompoundButtonCompat.setButtonTintList(checkBox, new ColorStateList(states, colors));
                     checkBox.setClickable(false);
                     checkBox.setChecked(true);
-                } else if(BAPMPreferences.getBTDevices(context) != null) {
-                    checkBox.setChecked(BAPMPreferences.getBTDevices(context).contains(BTDevice));
+                } else if(BAPMPreferences.INSTANCE.getBTDevices(context) != null) {
+                    checkBox.setChecked(BAPMPreferences.INSTANCE.getBTDevices(context).contains(BTDevice));
                 }
                 checkBox.setTextColor(ContextCompat.getColor(getContext(), textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/TitilliumText400wt.otf"));
 
-                if(!BAPMPreferences.getHeadphoneDevices(context).contains(BTDevice)) {
+                if(!BAPMPreferences.INSTANCE.getHeadphoneDevices(context).contains(BTDevice)) {
                     checkboxListener(checkBox, BTDevice, context);
                 }
                 BTDeviceCkBoxLL.addView(checkBox);
@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment {
         final CheckBox cb = checkBox;
         final String BTD = BTDevice;
 
-        saveBTDevices = new HashSet<String>(BAPMPreferences.getBTDevices(context));
+        saveBTDevices = new HashSet<String>(BAPMPreferences.INSTANCE.getBTDevices(context));
 
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment {
                         Log.d(TAG, "SAVED");
                     }
                 }
-                BAPMPreferences.setBTDevices(context, saveBTDevices);
+                BAPMPreferences.INSTANCE.setBTDevices(context, saveBTDevices);
                 mFirebaseHelper.deviceAdd(FirebaseHelper.Selection.BLUETOOTH_DEVICE, BTD, cb.isChecked());
             }
         });
@@ -237,9 +237,9 @@ public class HomeFragment extends Fragment {
                 View radioButton = radioGroup.findViewById(i);
                 int index = radioGroup.indexOfChild(radioButton);
                 String packageName = installedMediaPlayers.get(index);
-                BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName);
-                if(BAPMPreferences.getPkgSelectedMusicPlayer(context) != null) {
-                    if(!BAPMPreferences.getPkgSelectedMusicPlayer(context).equalsIgnoreCase(packageName)) {
+                BAPMPreferences.INSTANCE.setPkgSelectedMusicPlayer(context, packageName);
+                if(BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(context) != null) {
+                    if(!BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(context).equalsIgnoreCase(packageName)) {
                         mFirebaseHelper.musicPlayerChoice(packageName, true);
                     } else {
                         mFirebaseHelper.musicPlayerChoice(packageName, false);
@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment {
                 setAppleMusicRequirements(view, context, packageName);
 
                 Log.d(TAG, Integer.toString(index));
-                Log.d(TAG, BAPMPreferences.getPkgSelectedMusicPlayer(context));
+                Log.d(TAG, BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(context));
                 Log.d(TAG, Integer.toString(radioGroup.getCheckedRadioButtonId()));
             }
         });
@@ -258,9 +258,9 @@ public class HomeFragment extends Fragment {
     private void setAppleMusicRequirements(View view, Context context, String packageName){
         // Set Launch App and Unlock screen to true since it is required by Apple Music to play
         if(packageName.equals(PackageTools.PackageName.APPLEMUSIC)){
-            Set<String> autoplayOnly = BAPMPreferences.getHeadphoneDevices(context);
+            Set<String> autoplayOnly = BAPMPreferences.INSTANCE.getHeadphoneDevices(context);
             if(!autoplayOnly.isEmpty()){
-                BAPMPreferences.setHeadphoneDevices(context, new HashSet<String>());
+                BAPMPreferences.INSTANCE.setHeadphoneDevices(context, new HashSet<String>());
                 checkboxCreator(view, getContext());
                 Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show();
             }
@@ -268,26 +268,26 @@ public class HomeFragment extends Fragment {
             ToggleButton launchMusicPlayerToggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
             ToggleButton unlockScreenToggleButton = (ToggleButton)view.findViewById(R.id.UnlockToggleButton);
             ToggleButton launchMapsToggleButton = (ToggleButton)view.findViewById(R.id.MapsToggleButton);
-            if(!BAPMPreferences.getLaunchMusicPlayer(context) || !BAPMPreferences.getUnlockScreen(context)
-                    || BAPMPreferences.getLaunchGoogleMaps(context)) {
+            if(!BAPMPreferences.INSTANCE.getLaunchMusicPlayer(context) || !BAPMPreferences.INSTANCE.getUnlockScreen(context)
+                    || BAPMPreferences.INSTANCE.getLaunchGoogleMaps(context)) {
 
-                if(BAPMPreferences.getLaunchGoogleMaps(context)){
+                if(BAPMPreferences.INSTANCE.getLaunchGoogleMaps(context)){
                     Toast.makeText(context, "Launching of Maps/Waze not supported with Apple music", Toast.LENGTH_LONG).show();
                 }
 
                 launchMusicPlayerToggleButton.setChecked(true);
                 unlockScreenToggleButton.setChecked(true);
                 launchMapsToggleButton.setChecked(false);
-                BAPMPreferences.setLaunchMusicPlayer(context, true);
-                BAPMPreferences.setUnlockScreen(context, true);
-                BAPMPreferences.setLaunchGoogleMaps(context, false);
+                BAPMPreferences.INSTANCE.setLaunchMusicPlayer(context, true);
+                BAPMPreferences.INSTANCE.setUnlockScreen(context, true);
+                BAPMPreferences.INSTANCE.setLaunchGoogleMaps(context, false);
             }
         }
     }
 
     //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
     private void setMapsButtonText(View view, Context context){
-        String mapChoice = BAPMPreferences.getMapsChoice(context);
+        String mapChoice = BAPMPreferences.INSTANCE.getMapsChoice(context);
         PackageManager packageManager = context.getPackageManager();
         try {
             ApplicationInfo appInfo = packageManager.getApplicationInfo(mapChoice, 0);
@@ -306,27 +306,27 @@ public class HomeFragment extends Fragment {
         Boolean btnState;
         ToggleButton toggleButton;
 
-        btnState = BAPMPreferences.getLaunchGoogleMaps(context);
+        btnState = BAPMPreferences.INSTANCE.getLaunchGoogleMaps(context);
         toggleButton = (ToggleButton)view.findViewById(R.id.MapsToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getKeepScreenON(context);
+        btnState = BAPMPreferences.INSTANCE.getKeepScreenON(context);
         toggleButton = (ToggleButton)view.findViewById(R.id.KeepONToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getPriorityMode(context);
+        btnState = BAPMPreferences.INSTANCE.getPriorityMode(context);
         toggleButton = (ToggleButton)view.findViewById(R.id.PriorityToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getMaxVolume(context);
+        btnState = BAPMPreferences.INSTANCE.getMaxVolume(context);
         toggleButton = (ToggleButton)view.findViewById(R.id.VolumeMAXToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getLaunchMusicPlayer(context);
+        btnState = BAPMPreferences.INSTANCE.getLaunchMusicPlayer(context);
         toggleButton = (ToggleButton)view.findViewById(R.id.LaunchMusicPlayerToggleButton);
         toggleButton.setChecked(btnState);
 
-        btnState = BAPMPreferences.getUnlockScreen(context);
+        btnState = BAPMPreferences.INSTANCE.getUnlockScreen(context);
         toggleButton = (ToggleButton)view.findViewById(R.id.UnlockToggleButton);
         toggleButton.setChecked(btnState);
 
@@ -354,7 +354,7 @@ public class HomeFragment extends Fragment {
     }
 
     private int getRadioButtonIndex(){
-        String selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(getContext());
+        String selectedMusicPlayer = BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(getContext());
         return installedMediaPlayers.indexOf(selectedMusicPlayer);
     }
 
@@ -364,7 +364,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Display message that Apple Music not supported by autoplay only
-                if(BAPMPreferences.getPkgSelectedMusicPlayer(getContext()).equals(PackageTools.PackageName.APPLEMUSIC)){
+                if(BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(getContext()).equals(PackageTools.PackageName.APPLEMUSIC)){
                     Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -385,11 +385,11 @@ public class HomeFragment extends Fragment {
                 boolean on = ((ToggleButton) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MAPS, on);
                 if (on) {
-                    BAPMPreferences.setLaunchGoogleMaps(context, true);
+                    BAPMPreferences.INSTANCE.setLaunchGoogleMaps(context, true);
                     Log.i(TAG, "MapButton is ON");
                     Log.i(TAG, "Dismiss Keyguard is ON");
                 } else {
-                    BAPMPreferences.setLaunchGoogleMaps(context, false);
+                    BAPMPreferences.INSTANCE.setLaunchGoogleMaps(context, false);
                     Log.d(TAG, "MapButton is OFF");
                 }
             }
@@ -404,10 +404,10 @@ public class HomeFragment extends Fragment {
                 boolean on = ((ToggleButton) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.KEEP_SCREEN_ON, on);
                 if (on) {
-                    BAPMPreferences.setKeepScreenON(context, true);
+                    BAPMPreferences.INSTANCE.setKeepScreenON(context, true);
                     Log.d(TAG, "Keep Screen ON Button is ON");
                 } else {
-                    BAPMPreferences.setKeepScreenON(context, false);
+                    BAPMPreferences.INSTANCE.setKeepScreenON(context, false);
                     Log.d(TAG, "Keep Screen ON Button is OFF");
                 }
             }
@@ -425,10 +425,10 @@ public class HomeFragment extends Fragment {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         PermissionHelper.checkDoNotDisturbPermission(context, 0);
                     }
-                    BAPMPreferences.setPriorityMode(context, true);
+                    BAPMPreferences.INSTANCE.setPriorityMode(context, true);
                     Log.d(TAG, "Priority Button is ON");
                 } else {
-                    BAPMPreferences.setPriorityMode(context, false);
+                    BAPMPreferences.INSTANCE.setPriorityMode(context, false);
                     Log.d(TAG, "Priority Button is OFF");
                 }
             }
@@ -446,10 +446,10 @@ public class HomeFragment extends Fragment {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         PermissionHelper.checkDoNotDisturbPermission(context, 0);
                     }
-                    BAPMPreferences.setMaxVolume(context, true);
+                    BAPMPreferences.INSTANCE.setMaxVolume(context, true);
                     Log.d(TAG, "Max Volume Button is ON");
                 } else {
-                    BAPMPreferences.setMaxVolume(context, false);
+                    BAPMPreferences.INSTANCE.setMaxVolume(context, false);
                         Log.d(TAG, "Max Volume Button is OFF");
                 }
             }
@@ -464,10 +464,10 @@ public class HomeFragment extends Fragment {
                 boolean on = ((ToggleButton) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MUSIC_PLAYER, on);
                 if (on) {
-                    BAPMPreferences.setLaunchMusicPlayer(context, true);
+                    BAPMPreferences.INSTANCE.setLaunchMusicPlayer(context, true);
                     Log.d(TAG, "Launch Music Player Button is ON");
                 } else {
-                    BAPMPreferences.setLaunchMusicPlayer(context, false);
+                    BAPMPreferences.INSTANCE.setLaunchMusicPlayer(context, false);
                     Log.d(TAG, "Launch Music Player Button is OFF");
                 }
             }
@@ -482,10 +482,10 @@ public class HomeFragment extends Fragment {
                 boolean on = ((ToggleButton) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
                 if (on) {
-                    BAPMPreferences.setUnlockScreen(context, true);
+                    BAPMPreferences.INSTANCE.setUnlockScreen(context, true);
                     Log.i(TAG, "Dismiss KeyGuard Button is ON");
                 } else {
-                    BAPMPreferences.setUnlockScreen(context, false);
+                    BAPMPreferences.INSTANCE.setUnlockScreen(context, false);
                     Log.i(TAG, "Dismiss KeyGuard Button is OFF");
                 }
             }

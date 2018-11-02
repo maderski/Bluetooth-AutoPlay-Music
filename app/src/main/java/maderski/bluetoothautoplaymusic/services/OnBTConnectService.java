@@ -26,8 +26,8 @@ public class OnBTConnectService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        boolean waitTillPowerConnected = BAPMPreferences.getPowerConnected(this);
-        boolean waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(this);
+        boolean waitTillPowerConnected = BAPMPreferences.INSTANCE.getPowerConnected(this);
+        boolean waitTillOffPhone = BAPMPreferences.INSTANCE.getWaitTillOffPhone(this);
 
         // Start receivers
         if(waitTillPowerConnected) {
@@ -50,7 +50,7 @@ public class OnBTConnectService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        boolean waitTillPowerConnected = BAPMPreferences.getPowerConnected(this);
+        boolean waitTillPowerConnected = BAPMPreferences.INSTANCE.getPowerConnected(this);
 
         String title = getString(waitTillPowerConnected ? R.string.connect_to_power_msg : R.string.connect_message);
         String message = getString(R.string.app_name);
@@ -73,12 +73,12 @@ public class OnBTConnectService extends Service {
     public void onDestroy() {
         super.onDestroy();
         // Stop receivers
-        if (BAPMPreferences.getPowerConnected(this)) {
+        if (BAPMPreferences.INSTANCE.getPowerConnected(this)) {
             Log.d(TAG, "STOP POWER RECEIVER");
             unregisterReceiver(mPowerReceiver);
         }
 
-        if (BAPMPreferences.getWaitTillOffPhone(this) || BAPMPreferences.getPowerConnected(this)) {
+        if (BAPMPreferences.INSTANCE.getWaitTillOffPhone(this) || BAPMPreferences.INSTANCE.getPowerConnected(this)) {
             Log.d(TAG, "STOP CUSTOM RECEIVER");
             unregisterReceiver(mCustomReceiver);
         }

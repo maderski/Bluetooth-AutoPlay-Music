@@ -20,7 +20,7 @@ public class NotifPolicyAccessChangedReceiver extends BroadcastReceiver {
             if(intent.getAction() != null){
                 Log.d(TAG, "ACTION: " + intent.getAction());
                 RingerControl ringerControl = new RingerControl(context);
-                BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                BAPMDataPreferences.INSTANCE.setCurrentRingerSet(context, ringerControl.ringerSetting());
                 ringerControl.soundsOFF();
                 context.getApplicationContext().unregisterReceiver(this);
             }

@@ -96,7 +96,7 @@ public class WifiOffFragment extends DialogFragment {
                 checkBox.setText(BTDevice);
                 checkBox.setTextColor(getResources().getColor(textColor));
                 checkBox.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/TitilliumText400wt.otf"));
-                checkBox.setChecked(BAPMPreferences.getTurnWifiOffDevices(view.getContext()).contains(BTDevice));
+                checkBox.setChecked(BAPMPreferences.INSTANCE.getTurnWifiOffDevices(view.getContext()).contains(BTDevice));
                 checkboxListener(view.getContext(), checkBox, BTDevice);
                 wifiOffCkBoxLL.addView(checkBox);
             }
@@ -111,7 +111,7 @@ public class WifiOffFragment extends DialogFragment {
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashSet<String> wifiOFFDevices = new HashSet<>(BAPMPreferences.getTurnWifiOffDevices(context));
+                HashSet<String> wifiOFFDevices = new HashSet<>(BAPMPreferences.INSTANCE.getTurnWifiOffDevices(context));
                 if (cb.isChecked()) {
                     wifiOFFDevices.add(BTDevice);
                 } else {

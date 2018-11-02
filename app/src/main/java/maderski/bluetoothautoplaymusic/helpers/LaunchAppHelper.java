@@ -47,7 +47,7 @@ public class LaunchAppHelper extends PackageTools {
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
     public void musicPlayerLaunch(final Context context, int seconds){
-        final String pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context);
+        final String pkgName = BAPMPreferences.INSTANCE.getPkgSelectedMusicPlayer(context);
         seconds = seconds * 1000;
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -70,9 +70,9 @@ public class LaunchAppHelper extends PackageTools {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    final String mapAppName = BAPMPreferences.getMapsChoice(context);
+                    final String mapAppName = BAPMPreferences.INSTANCE.getMapsChoice(context);
                     final boolean isMapsRunning = isAppRunning(context, PackageName.MAPS);
-                    final boolean canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context) && !isMapsRunning;
+                    final boolean canLaunchDirections = BAPMPreferences.INSTANCE.getCanLaunchDirections(context) && !isMapsRunning;
                     if(canLaunchDirections){
                         Uri data = getMapsChoiceUri(context);
                         launchPackage(context, mapAppName, data, Intent.ACTION_VIEW);
@@ -88,7 +88,7 @@ public class LaunchAppHelper extends PackageTools {
 
     // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
     private void determineIfLaunchWithDrivingMode(final Context context, final String mapAppName, final Boolean isMapsRunning) {
-        final boolean canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
+        final boolean canLaunchDrivingMode = BAPMPreferences.INSTANCE.getLaunchMapsDrivingMode(context) &&
                 mapAppName.equals(PackageName.MAPS) && !isMapsRunning;
         if(canLaunchDrivingMode){
             Log.d(TAG, "LAUNCH DRIVING MODE");
@@ -102,11 +102,11 @@ public class LaunchAppHelper extends PackageTools {
     private Uri getMapsChoiceUri(Context context){
         if(mDirectionLocation != null) {
             mDirectionLocation = mDirectionLocation.equals(DirectionLocations.CUSTOM)
-                    ? BAPMPreferences.getCustomLocationName(context) : mDirectionLocation;
+                    ? BAPMPreferences.INSTANCE.getCustomLocationName(context) : mDirectionLocation;
         }
 
         Uri uri;
-        if(BAPMPreferences.getMapsChoice(context).equals(PackageName.WAZE)){
+        if(BAPMPreferences.INSTANCE.getMapsChoice(context).equals(PackageName.WAZE)){
             String wazeUri = "waze://?favorite=" + mDirectionLocation + "&navigate=yes";
             uri = Uri.parse(wazeUri);
         } else {
@@ -141,8 +141,8 @@ public class LaunchAppHelper extends PackageTools {
     }
 
     public boolean canMapsLaunchNow(Context context) {
-        final boolean isLaunchingWithDirections = BAPMPreferences.getCanLaunchDirections(context);
-        final boolean isUsingTimesToLaunch = BAPMPreferences.getUseTimesToLaunchMaps(context);
+        final boolean isLaunchingWithDirections = BAPMPreferences.INSTANCE.getCanLaunchDirections(context);
+        final boolean isUsingTimesToLaunch = BAPMPreferences.INSTANCE.getUseTimesToLaunchMaps(context);
         final boolean canLaunchDuringThisTime = canLaunchDuringThisTime(context);
 
         boolean canLaunchMapsNow = false;
@@ -171,13 +171,13 @@ public class LaunchAppHelper extends PackageTools {
 
         switch(directionLocation) {
             case DirectionLocations.HOME:
-                canLaunch = BAPMPreferences.getHomeDaysToLaunchMaps(context).contains(today);
+                canLaunch = BAPMPreferences.INSTANCE.getHomeDaysToLaunchMaps(context).contains(today);
                 break;
             case DirectionLocations.WORK:
-                canLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(context).contains(today);
+                canLaunch = BAPMPreferences.INSTANCE.getWorkDaysToLaunchMaps(context).contains(today);
                 break;
             case DirectionLocations.CUSTOM:
-                canLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(context).contains(today);
+                canLaunch = BAPMPreferences.INSTANCE.getCustomDaysToLaunchMaps(context).contains(today);
                 break;
         }
 
@@ -189,17 +189,17 @@ public class LaunchAppHelper extends PackageTools {
     }
 
     public boolean canLaunchDuringThisTime(Context context){
-        boolean isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context);
+        boolean isUseLaunchTimeEnabled = BAPMPreferences.INSTANCE.getUseTimesToLaunchMaps(context);
         if(isUseLaunchTimeEnabled) {
 
-            int morningStartTime = BAPMPreferences.getMorningStartTime(context);
-            int morningEndTime = BAPMPreferences.getMorningEndTime(context);
+            int morningStartTime = BAPMPreferences.INSTANCE.getMorningStartTime(context);
+            int morningEndTime = BAPMPreferences.INSTANCE.getMorningEndTime(context);
 
-            int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
-            int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
+            int eveningStartTime = BAPMPreferences.INSTANCE.getEveningStartTime(context);
+            int eveningEndTime = BAPMPreferences.INSTANCE.getEveningEndTime(context);
 
-            int customStartTime = BAPMPreferences.getCustomStartTime(context);
-            int customEndTime = BAPMPreferences.getCustomEndTime(context);
+            int customStartTime = BAPMPreferences.INSTANCE.getCustomStartTime(context);
+            int customEndTime = BAPMPreferences.INSTANCE.getCustomEndTime(context);
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 

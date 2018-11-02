@@ -31,7 +31,7 @@ public class ScreenONLock {
         //Set Screen Brightness(Dim: 6 / Bright: 10)
         int screenBrightness;
 
-        if(BAPMPreferences.getAutoBrightness(context)) {
+        if(BAPMPreferences.INSTANCE.getAutoBrightness(context)) {
             screenBrightness = isDark(context);
         } else {
             screenBrightness = getManualScreenBrightness(context);
@@ -56,8 +56,8 @@ public class ScreenONLock {
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         int currentTime = (hour * 100) + minute;
-        int brightSetTime = BAPMPreferences.getBrightTime(context);
-        int dimSetTime = BAPMPreferences.getDimTime(context);
+        int brightSetTime = BAPMPreferences.INSTANCE.getBrightTime(context);
+        int dimSetTime = BAPMPreferences.INSTANCE.getDimTime(context);
 
         if (currentTime >= dimSetTime || currentTime <= brightSetTime){
             screenBrightness = 6;

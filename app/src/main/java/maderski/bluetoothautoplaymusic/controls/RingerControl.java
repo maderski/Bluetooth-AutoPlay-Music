@@ -30,7 +30,7 @@ public class RingerControl {
     public void soundsOFF(){
         boolean isAlreadySilent = am.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
         if(!isAlreadySilent) {
-            boolean usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext);
+            boolean usePriorityMode = BAPMPreferences.INSTANCE.getUsePriorityMode(mContext);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 boolean hasNAPPermission = mNotificationManager.isNotificationPolicyAccessGranted();
                 if (usePriorityMode && hasNAPPermission) {
@@ -54,7 +54,7 @@ public class RingerControl {
 
     //turns phone sounds ON
     public void soundsON(){
-        boolean usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext);
+        boolean usePriorityMode = BAPMPreferences.INSTANCE.getUsePriorityMode(mContext);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
             boolean hasNAPPermission = PermissionHelper.isPermissionGranted(mContext, permission);

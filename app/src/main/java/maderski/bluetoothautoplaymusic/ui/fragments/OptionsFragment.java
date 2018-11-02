@@ -97,7 +97,7 @@ public class OptionsFragment extends Fragment {
     private void setWifiUseTimeSpansCaption(View view){
         String captionText;
         TextView wifiUseTimeSpanCaption = (TextView)view.findViewById(R.id.wifi_use_time_spans_desc);
-        if(BAPMPreferences.getCanLaunchDirections(getContext())){
+        if(BAPMPreferences.INSTANCE.getCanLaunchDirections(getContext())){
             captionText = view.getResources().getString(R.string.wifi_use_time_spans_caption_work_home);
         } else {
             captionText = view.getResources().getString(R.string.wifi_use_time_spans_caption_morning_evening);
@@ -110,38 +110,38 @@ public class OptionsFragment extends Fragment {
         Boolean btnState;
         Switch setting_switch;
 
-        btnState = BAPMPreferences.getAutoPlayMusic(context);
+        btnState = BAPMPreferences.INSTANCE.getAutoPlayMusic(context);
         setting_switch = (Switch) view.findViewById(R.id.auto_play);
         setting_switch.setChecked(btnState);
 
-        btnState = BAPMPreferences.getPowerConnected(context);
+        btnState = BAPMPreferences.INSTANCE.getPowerConnected(context);
         setting_switch = (Switch) view.findViewById(R.id.power_connected);
         setting_switch.setChecked(btnState);
 
-        btnState = BAPMPreferences.getSendToBackground(context);
+        btnState = BAPMPreferences.INSTANCE.getSendToBackground(context);
         setting_switch = (Switch) view.findViewById(R.id.send_to_background);
         setting_switch.setChecked(btnState);
 
-        btnState = BAPMPreferences.getWaitTillOffPhone(context);
+        btnState = BAPMPreferences.INSTANCE.getWaitTillOffPhone(context);
         setting_switch = (Switch) view.findViewById(R.id.wait_till_off_phone);
         setting_switch.setChecked(btnState);
 
-        btnState = BAPMPreferences.getShowNotification(context);
+        btnState = BAPMPreferences.INSTANCE.getShowNotification(context);
         setting_switch = (Switch) view.findViewById(R.id.show_notification);
         setting_switch.setChecked(btnState);
 
-        btnState = BAPMPreferences.getWifiUseMapTimeSpans(context);
+        btnState = BAPMPreferences.INSTANCE.getWifiUseMapTimeSpans(context);
         setting_switch = (Switch) view.findViewById(R.id.wifi_use_time_spans);
         setting_switch.setChecked(btnState);
 
         if(!PermissionHelper.isPermissionGranted(context, PermissionHelper.Permission.COARSE_LOCATION))
-            BAPMPreferences.setAutoBrightness(context, false);
-        btnState = BAPMPreferences.getAutoBrightness(context);
+            BAPMPreferences.INSTANCE.setAutoBrightness(context, false);
+        btnState = BAPMPreferences.INSTANCE.getAutoBrightness(context);
         setting_switch = (Switch) view.findViewById(R.id.auto_brightness);
         setting_switch.setChecked(btnState);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            btnState = BAPMPreferences.getUsePriorityMode(context);
+            btnState = BAPMPreferences.INSTANCE.getUsePriorityMode(context);
             setting_switch = (Switch) view.findViewById(R.id.sw_priority_mode);
             TextView switch_explaination = (TextView) view.findViewById(R.id.tv_priority_mode_explaination);
 
@@ -161,10 +161,10 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.WIFI_OFF_USE_TIME_SPANS, on);
                 if (on) {
-                    BAPMPreferences.setWifiUseMapTimeSpans(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setWifiUseMapTimeSpans(getActivity(), true);
                     Log.d(TAG, "WIFI OFF Use Time Spans Switch is ON");
                 } else {
-                    BAPMPreferences.setWifiUseMapTimeSpans(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setWifiUseMapTimeSpans(getActivity(), false);
                     Log.d(TAG, "WIFI OFF Use Time Spans Switch is OFF");
                 }
             }
@@ -179,10 +179,10 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.PLAY_MUSIC, on);
                 if (on) {
-                    BAPMPreferences.setAutoplayMusic(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setAutoplayMusic(getActivity(), true);
                     Log.d(TAG, "AutoPlaySwitch is ON");
                 } else {
-                    BAPMPreferences.setAutoplayMusic(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setAutoplayMusic(getActivity(), false);
                     Log.d(TAG, "AutoPlaySwitch is OFF");
                 }
             }
@@ -197,10 +197,10 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.POWER_REQUIRED, on);
                 if(on){
-                    BAPMPreferences.setPowerConnected(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setPowerConnected(getActivity(), true);
                     Log.d(TAG, "PowerConnected Switch is ON");
                 }else{
-                    BAPMPreferences.setPowerConnected(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setPowerConnected(getActivity(), false);
                     Log.d(TAG, "PowerConnected Switch is OFF");
                 }
             }
@@ -215,10 +215,10 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.GO_HOME, on);
                 if(on){
-                    BAPMPreferences.setSendToBackground(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setSendToBackground(getActivity(), true);
                     Log.d(TAG, "SendToBackground Switch is ON");
                 }else{
-                    BAPMPreferences.setSendToBackground(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setSendToBackground(getActivity(), false);
                     Log.d(TAG, "SendToBackground Switch is OFF");
                 }
             }
@@ -233,10 +233,10 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.CALL_COMPLETED, on);
                 if(on){
-                    BAPMPreferences.setWaitTillOffPhone(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setWaitTillOffPhone(getActivity(), true);
                     Log.d(TAG, "WaitTillOffPhone Switch is ON");
                 }else{
-                    BAPMPreferences.setWaitTillOffPhone(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setWaitTillOffPhone(getActivity(), false);
                     Log.d(TAG, "WaitTillOffPhone Switch is OFF");
                 }
             }
@@ -251,10 +251,10 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(FirebaseHelper.Option.SHOW_NOTIFICATION, on);
                 if(on){
-                    BAPMPreferences.setShowNotification(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setShowNotification(getActivity(), true);
                     Log.d(TAG, "Show Notification Switch is ON");
                 }else{
-                    BAPMPreferences.setShowNotification(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setShowNotification(getActivity(), false);
                     Log.d(TAG, "Show Notification Switch is OFF");
                 }
             }
@@ -271,11 +271,11 @@ public class OptionsFragment extends Fragment {
                 if(on){
                     PermissionHelper.checkPermission(getActivity(), PermissionHelper.Permission.COARSE_LOCATION);
 
-                    BAPMPreferences.setAutoBrightness(getActivity(), true);
+                    BAPMPreferences.INSTANCE.setAutoBrightness(getActivity(), true);
 
                     Log.d(TAG, "AutoBrightness Switch is ON");
                 }else{
-                    BAPMPreferences.setAutoBrightness(getActivity(), false);
+                    BAPMPreferences.INSTANCE.setAutoBrightness(getActivity(), false);
                     Log.d(TAG, "AutoBrightness Switch is OFF");
                 }
             }
@@ -294,11 +294,11 @@ public class OptionsFragment extends Fragment {
                         String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
                         PermissionHelper.checkPermission(getActivity(), permission);
 
-                        BAPMPreferences.setUsePriorityMode(getActivity(), true);
+                        BAPMPreferences.INSTANCE.setUsePriorityMode(getActivity(), true);
 
                         Log.d(TAG, "AutoBrightness Switch is ON");
                     }else{
-                        BAPMPreferences.setUsePriorityMode(getActivity(), false);
+                        BAPMPreferences.INSTANCE.setUsePriorityMode(getActivity(), false);
                         Log.d(TAG, "AutoBrightness Switch is OFF");
                     }
                 }
@@ -311,7 +311,7 @@ public class OptionsFragment extends Fragment {
         dimBrightnessButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME, true, BAPMPreferences.getDimTime(getActivity()), "Set Dim Time");
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME, true, BAPMPreferences.INSTANCE.getDimTime(getActivity()), "Set Dim Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });
@@ -322,7 +322,7 @@ public class OptionsFragment extends Fragment {
         brightBrightnessButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME, false, BAPMPreferences.getBrightTime(getActivity()), "Set Bright Time");
+                DialogFragment newFragment = TimePickerFragment.newInstance(TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME, false, BAPMPreferences.INSTANCE.getBrightTime(getActivity()), "Set Bright Time");
                 newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
             }
         });
@@ -333,12 +333,12 @@ public class OptionsFragment extends Fragment {
         SeekBar volumeSeekBar = (SeekBar)view.findViewById(R.id.max_volume_seekBar);
 
         volumeSeekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-        volumeSeekBar.setProgress(BAPMPreferences.getUserSetMaxVolume(getActivity()));
+        volumeSeekBar.setProgress(BAPMPreferences.INSTANCE.getUserSetMaxVolume(getActivity()));
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                BAPMPreferences.setUserSetMaxVolume(getActivity().getApplicationContext(), progress);
-                Log.d(TAG, "User set MAX volume: " + Integer.toString(BAPMPreferences.getUserSetMaxVolume(getActivity().getApplicationContext())));
+                BAPMPreferences.INSTANCE.setUserSetMaxVolume(getActivity().getApplicationContext(), progress);
+                Log.d(TAG, "User set MAX volume: " + Integer.toString(BAPMPreferences.INSTANCE.getUserSetMaxVolume(getActivity().getApplicationContext())));
             }
 
             @Override
@@ -355,7 +355,7 @@ public class OptionsFragment extends Fragment {
 
     public void setupRestoreOriginalVolumeCheckBox(View view){
         final Context context = view.getContext();
-        boolean isEnabled = BAPMPreferences.getRestoreNotificationVolume(context);
+        boolean isEnabled = BAPMPreferences.INSTANCE.getRestoreNotificationVolume(context);
         CheckBox restoreVolumeCheckBox = (CheckBox)view.findViewById(R.id.cb_restore_original_volume);
 
         restoreVolumeCheckBox.setChecked(isEnabled);
@@ -363,7 +363,7 @@ public class OptionsFragment extends Fragment {
         restoreVolumeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                BAPMPreferences.setRestoreNotificationVolume(context, isChecked);
+                BAPMPreferences.INSTANCE.setRestoreNotificationVolume(context, isChecked);
             }
         });
     }

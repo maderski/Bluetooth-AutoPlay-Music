@@ -36,10 +36,10 @@ public class BluetoothConnectHelper {
     }
 
     public void a2dpActions(int state) {
-        boolean isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(mContext);
+        boolean isHeadphones = BAPMDataPreferences.INSTANCE.getIsAHeadphonesDevice(mContext);
 
         if(isHeadphones){
-            BAPMDataPreferences.setIsHeadphonesDevice(mContext, false);
+            BAPMDataPreferences.INSTANCE.setIsHeadphonesDevice(mContext, false);
         }
 
         switch (state) {
@@ -52,7 +52,7 @@ public class BluetoothConnectHelper {
                 // Get Original volume
                 VolumeControl volumeControl = new VolumeControl(mContext);
                 volumeControl.saveOriginalVolume();
-                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(mContext)));
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.INSTANCE.getOriginalMediaVolume(mContext)));
 
                 checkForWifiTurnOffDevice(true);
 
@@ -81,23 +81,23 @@ public class BluetoothConnectHelper {
     public void btDisconnectActions(){
         if(BuildConfig.DEBUG) {
             Log.i(TAG, "Device disconnected: " + mDeviceName);
-            Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)));
-            Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(mContext)));
+            Log.i(TAG, "Ran actionOnBTConnect: " + Boolean.toString(BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(mContext)));
+            Log.i(TAG, "LaunchNotifPresent: " + Boolean.toString(BAPMDataPreferences.INSTANCE.getLaunchNotifPresent(mContext)));
         }
 
         stopAdditionalServices();
 
-        if(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
+        if(BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(mContext)) {
             PlayMusicControl.cancelCheckIfPlaying();
             ServiceUtils.startService(mContext, BTDisconnectService.class, BTDisconnectService.TAG);
         }
 
-        if(BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)){
+        if(BAPMPreferences.INSTANCE.getWaitTillOffPhone(mContext) && BAPMDataPreferences.INSTANCE.getLaunchNotifPresent(mContext)){
             BAPMNotification BAPMNotification = new BAPMNotification();
             BAPMNotification.removeBAPMMessage(mContext);
         }
 
-        if(!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)){
+        if(!BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(mContext)){
             checkForWifiTurnOffDevice(false);
         }
     }
@@ -108,7 +108,7 @@ public class BluetoothConnectHelper {
     }
 
     private void stopAdditionalServices(){
-        boolean didNotLaunchBAPM = !BAPMDataPreferences.getRanActionsOnBtConnect(mContext);
+        boolean didNotLaunchBAPM = !BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(mContext);
         Log.d(TAG, "Did not launch BAPM: " + String.valueOf(didNotLaunchBAPM));
 
         if(didNotLaunchBAPM) {
@@ -119,7 +119,7 @@ public class BluetoothConnectHelper {
     }
 
     private void checksBeforeLaunch(){
-        boolean powerRequired = BAPMPreferences.getPowerConnected(mContext);
+        boolean powerRequired = BAPMPreferences.INSTANCE.getPowerConnected(mContext);
 
         BTConnectActions btConnectActions = new BTConnectActions(mContext);
 
@@ -133,10 +133,10 @@ public class BluetoothConnectHelper {
     }
 
     private void checkForWifiTurnOffDevice(boolean isConnected){
-        Set<String> turnOffWifiDevices = BAPMPreferences.getTurnWifiOffDevices(mContext);
+        Set<String> turnOffWifiDevices = BAPMPreferences.INSTANCE.getTurnWifiOffDevices(mContext);
         if(turnOffWifiDevices.size() > 0) {
             if (turnOffWifiDevices.contains(mDeviceName)) {
-                BAPMDataPreferences.setIsTurnOffWifiDevice(mContext, isConnected);
+                BAPMDataPreferences.INSTANCE.setIsTurnOffWifiDevice(mContext, isConnected);
                 Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: " + Boolean.toString(isConnected));
             }
         }

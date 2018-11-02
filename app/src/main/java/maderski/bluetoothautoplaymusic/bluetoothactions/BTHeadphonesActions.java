@@ -51,14 +51,14 @@ public class BTHeadphonesActions {
 
     public void connectActions() {
         // Get headphone preferred volume
-        int preferredVolume = BAPMPreferences.getHeadphonePreferredVolume(mContext);
+        int preferredVolume = BAPMPreferences.INSTANCE.getHeadphonePreferredVolume(mContext);
         // Set headphone preferred volume
         mVolumeControl.setSpecifiedVolume(preferredVolume);
         // Start checking if music is playing
         mPlayMusicControl.checkIfPlaying(mContext, 8);
         Log.d(TAG, "HEADPHONE VOLUME SET TO:" + Integer.toString(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
 
-        BAPMDataPreferences.setIsHeadphonesDevice(mContext, true);
+        BAPMDataPreferences.INSTANCE.setIsHeadphonesDevice(mContext, true);
         if(BuildConfig.DEBUG)
             Toast.makeText(mContext, "Music Playing", Toast.LENGTH_SHORT).show();
     }
@@ -71,7 +71,7 @@ public class BTHeadphonesActions {
         }
         mVolumeControl.setToOriginalVolume(new RingerControl(mContext));
 
-        BAPMDataPreferences.setIsHeadphonesDevice(mContext, false);
+        BAPMDataPreferences.INSTANCE.setIsHeadphonesDevice(mContext, false);
         if(BuildConfig.DEBUG)
             Toast.makeText(mContext, "Music Paused", Toast.LENGTH_SHORT).show();
 

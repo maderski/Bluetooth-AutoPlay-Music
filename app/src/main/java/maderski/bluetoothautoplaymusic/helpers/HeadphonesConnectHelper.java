@@ -31,13 +31,13 @@ public class HeadphonesConnectHelper {
     }
 
     public void performActions() {
-        boolean doesRequireA2DP = BAPMPreferences.getUseA2dpHeadphones(mContext);
+        boolean doesRequireA2DP = BAPMPreferences.INSTANCE.getUseA2dpHeadphones(mContext);
         BTHeadphonesActions btHeadphonesActions = new BTHeadphonesActions(mContext);
 
         // Get Original volume
         VolumeControl volumeControl = new VolumeControl(mContext);
         volumeControl.saveOriginalVolume();
-        Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(mContext)));
+        Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.INSTANCE.getOriginalMediaVolume(mContext)));
         
         if(doesRequireA2DP) {
             checkA2dpConnectionState(btHeadphonesActions);

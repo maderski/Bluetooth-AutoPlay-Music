@@ -49,7 +49,7 @@ public class BTConnectActions {
     }
 
     public void OnBTConnect(){
-        boolean waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context);
+        boolean waitTillOffPhone = BAPMPreferences.INSTANCE.getWaitTillOffPhone(context);
 
         if(waitTillOffPhone){
             TelephoneHelper telephoneHelper = new TelephoneHelper(context);
@@ -78,7 +78,7 @@ public class BTConnectActions {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     public void actionsOnBTConnect(){
-        final boolean unlockScreen = BAPMPreferences.getUnlockScreen(context);
+        final boolean unlockScreen = BAPMPreferences.INSTANCE.getUnlockScreen(context);
 
         showBTAMNotification();
         setVolumeToMax();
@@ -93,7 +93,7 @@ public class BTConnectActions {
             putPhoneInDoNotDisturb();
         }
 
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, true);
+        BAPMDataPreferences.INSTANCE.setRanActionsOnBtConnect(context, true);
         ServiceUtils.stopService(context, OnBTConnectService.class, OnBTConnectService.TAG);
     }
 
@@ -126,15 +126,15 @@ public class BTConnectActions {
     }
 
     private void showBTAMNotification(){
-        String mapChoice = BAPMPreferences.getMapsChoice(context);
-        boolean canShowNotification = BAPMPreferences.getShowNotification(context);
+        String mapChoice = BAPMPreferences.INSTANCE.getMapsChoice(context);
+        boolean canShowNotification = BAPMPreferences.INSTANCE.getShowNotification(context);
         if (canShowNotification) {
             mBAPMNotification.BAPMMessage(context, mapChoice);
         }
     }
 
     private void turnTheScreenOn(){
-        boolean screenON = BAPMPreferences.getKeepScreenON(context);
+        boolean screenON = BAPMPreferences.INSTANCE.getKeepScreenON(context);
         if (screenON) {
             ServiceUtils.startService(context, WakeLockService.class, WakeLockService.TAG);
         }
@@ -150,7 +150,7 @@ public class BTConnectActions {
     }
 
     private void setVolumeToMax(){
-        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
+        boolean volumeMAX = BAPMPreferences.INSTANCE.getMaxVolume(context);
         if (volumeMAX) {
             Handler handler = new Handler();
             Runnable runnable = new Runnable() {
@@ -164,15 +164,15 @@ public class BTConnectActions {
     }
 
     private void autoPlayMusic(final int checkToPlaySeconds){
-        boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+        boolean playMusic = BAPMPreferences.INSTANCE.getAutoPlayMusic(context);
         if (playMusic) {
             mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds);
         }
     }
 
     private void launchMusicMapApp(){
-        boolean launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context);
-        boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(context);
+        boolean launchMusicPlayer = BAPMPreferences.INSTANCE.getLaunchMusicPlayer(context);
+        boolean launchMaps = BAPMPreferences.INSTANCE.getLaunchGoogleMaps(context);
         boolean mapsCanLaunch = mLaunchAppHelper.canMapsLaunchNow(context);
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
@@ -185,10 +185,10 @@ public class BTConnectActions {
     }
 
     private void setWifiOff(){
-        boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
+        boolean isWifiOffDevice = BAPMDataPreferences.INSTANCE.getIsTurnOffWifiDevice(context);
         if (isWifiOffDevice) {
-            int morningStartTime = BAPMPreferences.getMorningStartTime(context);
-            int morningEndTime = BAPMPreferences.getMorningEndTime(context);
+            int morningStartTime = BAPMPreferences.INSTANCE.getMorningStartTime(context);
+            int morningEndTime = BAPMPreferences.INSTANCE.getMorningEndTime(context);
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
@@ -196,7 +196,7 @@ public class BTConnectActions {
             boolean canLaunch = timeHelperMorning.isWithinTimeSpan();
             String directionLocation = canLaunch ? LaunchAppHelper.DirectionLocations.WORK : LaunchAppHelper.DirectionLocations.HOME;
 
-            boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
+            boolean canChangeWifiState = !BAPMPreferences.INSTANCE.getWifiUseMapTimeSpans(context)
                     || (canLaunch && mLaunchAppHelper.canLaunchOnThisDay(context, directionLocation));
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false);
@@ -206,13 +206,13 @@ public class BTConnectActions {
 
     private void putPhoneInDoNotDisturb(){
         RingerControl ringerControl = new RingerControl(context);
-        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+        boolean priorityMode = BAPMPreferences.INSTANCE.getPriorityMode(context);
 
         if (priorityMode) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 boolean hasDoNotDisturbPerm = PermissionHelper.checkDoNotDisturbPermission(context, 10);
                 if (hasDoNotDisturbPerm) {
-                    BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                    BAPMDataPreferences.INSTANCE.setCurrentRingerSet(context, ringerControl.ringerSetting());
                     ringerControl.soundsOFF();
                 } else {
                     BroadcastReceiver broadcastReceiver = new NotifPolicyAccessChangedReceiver();
@@ -220,7 +220,7 @@ public class BTConnectActions {
                     context.getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
                 }
             } else {
-                BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting());
+                BAPMDataPreferences.INSTANCE.setCurrentRingerSet(context, ringerControl.ringerSetting());
                 ringerControl.soundsOFF();
             }
         }

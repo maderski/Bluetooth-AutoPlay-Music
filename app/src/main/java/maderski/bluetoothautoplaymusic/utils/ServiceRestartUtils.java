@@ -25,11 +25,11 @@ public class ServiceRestartUtils {
     private static final String TAG = "ServiceRestartUtils";
 
     public static void reHoldWakeLock(Context context){
-        boolean shouldKeepScreenOn = BAPMPreferences.getKeepScreenON(context);
+        boolean shouldKeepScreenOn = BAPMPreferences.INSTANCE.getKeepScreenON(context);
 
         if(shouldKeepScreenOn) {
             AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            boolean ranBAPM = BAPMDataPreferences.getRanActionsOnBtConnect(context);
+            boolean ranBAPM = BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(context);
             boolean isConnectedToBT = audioManager.isBluetoothA2dpOn();
 
             if (ranBAPM && isConnectedToBT) {
@@ -57,7 +57,7 @@ public class ServiceRestartUtils {
         A2DPHelper a2dpHelper = new A2DPHelper(new A2DPHelper.A2DPCallbacks() {
             @Override
             public void connectedDeviceNames(Set<String> deviceNames) {
-                Set<String> selectedBTDevices = BAPMPreferences.getBTDevices(context);
+                Set<String> selectedBTDevices = BAPMPreferences.INSTANCE.getBTDevices(context);
 
                 boolean isBTConnected = audioManager.isBluetoothA2dpOn();
                 boolean isOnBTConnectServiceRunning = ServiceUtils.isServiceRunning(context, OnBTConnectService.class);

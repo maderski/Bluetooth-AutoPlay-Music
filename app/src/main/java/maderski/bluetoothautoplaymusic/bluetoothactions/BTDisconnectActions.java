@@ -58,7 +58,7 @@ public class BTDisconnectActions {
     }
 
     private void stopService() {
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, false);
+        BAPMDataPreferences.INSTANCE.setRanActionsOnBtConnect(context, false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -68,7 +68,7 @@ public class BTDisconnectActions {
     }
 
     private void removeBAPMNotification(){
-        boolean canShowNotification = BAPMPreferences.getShowNotification(context);
+        boolean canShowNotification = BAPMPreferences.INSTANCE.getShowNotification(context);
 
         if(canShowNotification) {
             mBAPMNotification.removeBAPMMessage(context);
@@ -76,14 +76,14 @@ public class BTDisconnectActions {
     }
 
     private void pauseMusic(){
-        boolean playMusic = BAPMPreferences.getAutoPlayMusic(context);
+        boolean playMusic = BAPMPreferences.INSTANCE.getAutoPlayMusic(context);
         if (playMusic) {
             mPlayMusicControl.pause();
         }
     }
 
     private void sendAppToBackground(LaunchAppHelper launchAppHelper){
-        boolean sendToBackground = BAPMPreferences.getSendToBackground(context);
+        boolean sendToBackground = BAPMPreferences.INSTANCE.getSendToBackground(context);
         if (sendToBackground) {
             launchAppHelper.sendEverythingToBackground(context);
         }
@@ -91,9 +91,9 @@ public class BTDisconnectActions {
 
     private void turnOffPriorityMode(RingerControl ringerControl){
 
-        boolean priorityMode = BAPMPreferences.getPriorityMode(context);
+        boolean priorityMode = BAPMPreferences.INSTANCE.getPriorityMode(context);
         if (priorityMode) {
-            int currentRinger = BAPMDataPreferences.getCurrentRingerSet(context);
+            int currentRinger = BAPMDataPreferences.INSTANCE.getCurrentRingerSet(context);
             try {
                 switch (currentRinger) {
                     case AudioManager.RINGER_MODE_SILENT:
@@ -113,19 +113,19 @@ public class BTDisconnectActions {
     }
 
     private void closeWaze(LaunchAppHelper launchAppHelper){
-        boolean closeWaze = BAPMPreferences.getCloseWazeOnDisconnect(context)
+        boolean closeWaze = BAPMPreferences.INSTANCE.getCloseWazeOnDisconnect(context)
                 && launchAppHelper.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
-                && BAPMPreferences.getMapsChoice(context).equals(PackageTools.PackageName.WAZE);
+                && BAPMPreferences.INSTANCE.getMapsChoice(context).equals(PackageTools.PackageName.WAZE);
         if(closeWaze) {
             launchAppHelper.closeWazeOnDisconnect(context);
         }
     }
 
     private void setWifiOn(LaunchAppHelper launchAppHelper){
-        boolean isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context);
+        boolean isWifiOffDevice = BAPMDataPreferences.INSTANCE.getIsTurnOffWifiDevice(context);
         if(isWifiOffDevice){
-            int eveningStartTime = BAPMPreferences.getEveningStartTime(context);
-            int eveningEndTime = BAPMPreferences.getEveningEndTime(context);
+            int eveningStartTime = BAPMPreferences.INSTANCE.getEveningStartTime(context);
+            int eveningEndTime = BAPMPreferences.INSTANCE.getEveningEndTime(context);
 
             int current24hrTime = TimeHelper.getCurrent24hrTime();
 
@@ -133,25 +133,25 @@ public class BTDisconnectActions {
             boolean canLaunch = timeHelperEvening.isWithinTimeSpan();
             String directionLocation = canLaunch ? LaunchAppHelper.DirectionLocations.HOME : LaunchAppHelper.DirectionLocations.WORK;
 
-            boolean canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context)
+            boolean canChangeWifiState = !BAPMPreferences.INSTANCE.getWifiUseMapTimeSpans(context)
                     || (canLaunch && launchAppHelper.canLaunchOnThisDay(context, directionLocation));
             if(canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true);
             }
-            BAPMDataPreferences.setIsTurnOffWifiDevice(context, false);
+            BAPMDataPreferences.INSTANCE.setIsTurnOffWifiDevice(context, false);
         }
     }
 
     private void stopKeepingScreenOn(){
-        boolean screenON = BAPMPreferences.getKeepScreenON(context);
+        boolean screenON = BAPMPreferences.INSTANCE.getKeepScreenON(context);
         if (screenON) {
             ServiceUtils.stopService(context, WakeLockService.class, WakeLockService.TAG);
         }
     }
 
     private void setVolumeBack(RingerControl ringerControl){
-        boolean volumeMAX = BAPMPreferences.getMaxVolume(context);
-        boolean setOriginalVolume = BAPMPreferences.getRestoreNotificationVolume(context);
+        boolean volumeMAX = BAPMPreferences.INSTANCE.getMaxVolume(context);
+        boolean setOriginalVolume = BAPMPreferences.INSTANCE.getRestoreNotificationVolume(context);
 
         if (volumeMAX && setOriginalVolume) {
             mVolumeControl.setToOriginalVolume(ringerControl);

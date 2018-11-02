@@ -39,7 +39,7 @@ public class LaunchBAPMActivity extends AppCompatActivity{
     private void dismissKeyGuard(){
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             Window window = getWindow();
-            if (!BAPMPreferences.getKeepScreenON(this)) {
+            if (!BAPMPreferences.INSTANCE.getKeepScreenON(this)) {
                 ScreenONLock screenONLock = ScreenONLock.getInstance();
                 screenONLock.enableWakeLock(this);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
@@ -62,8 +62,8 @@ public class LaunchBAPMActivity extends AppCompatActivity{
     }
 
     private void sendHomeAppTimer(int seconds){
-        boolean launchMaps = BAPMPreferences.getLaunchGoogleMaps(this);
-        boolean launchPlayer = BAPMPreferences.getLaunchMusicPlayer(this);
+        boolean launchMaps = BAPMPreferences.INSTANCE.getLaunchGoogleMaps(this);
+        boolean launchPlayer = BAPMPreferences.INSTANCE.getLaunchMusicPlayer(this);
 
         if(!launchMaps && !launchPlayer) {
             final Context context = this;

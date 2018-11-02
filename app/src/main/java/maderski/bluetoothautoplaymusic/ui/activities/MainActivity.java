@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         mFirebaseHelper = new FirebaseHelper(this);
         mFirebaseHelper.activityLaunched(FirebaseHelper.ActivityName.MAIN);
 
-        if(BAPMPreferences.getAutoBrightness(this)) {
+        if(BAPMPreferences.INSTANCE.getAutoBrightness(this)) {
             PermissionHelper.checkPermission(this, PermissionHelper.Permission.COARSE_LOCATION);
         }
 
@@ -240,27 +240,27 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
             case TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME:
                 if (isEndTime) {
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.DIM_TIME, true);
-                    BAPMPreferences.setDimTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setDimTime(this, timeSet);
                     Log.d("Settings", "Dim brightness");
                 } else {
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.BRIGHT_TIME, true);
-                    BAPMPreferences.setBrightTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setBrightTime(this, timeSet);
                     Log.d("Settings", "Bright brightness");
                 }
                 break;
             case TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN:
                 if(isEndTime) {
-                    BAPMPreferences.setMorningEndTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setMorningEndTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getMorningEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_END_TIME, true);
                 } else {
-                    BAPMPreferences.setMorningStartTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setMorningStartTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getMorningStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -270,17 +270,17 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 break;
             case TimePickerFragment.TypeOfTimeSet.EVENING_TIMESPAN:
                 if(isEndTime) {
-                    BAPMPreferences.setEveningEndTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setEveningEndTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getEveningEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_END_TIME, true);
                 } else {
-                    BAPMPreferences.setEveningStartTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setEveningStartTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getEveningStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -290,17 +290,17 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 break;
             case TimePickerFragment.TypeOfTimeSet.CUSTOM_TIMESPAN:
                 if(isEndTime) {
-                    BAPMPreferences.setCustomEndTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setCustomEndTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomEndTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getCustomEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.custom_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
                     mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.CUSTOM_END_TIME, true);
                 } else {
-                    BAPMPreferences.setCustomStartTime(this, timeSet);
+                    BAPMPreferences.INSTANCE.setCustomStartTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomStartTime(this));
+                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getCustomStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.custom_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     @Override
     public void setHeadphoneDevices(HashSet<String> headphoneDevices) {
-        BAPMPreferences.setHeadphoneDevices(getApplicationContext(), headphoneDevices);
+        BAPMPreferences.INSTANCE.setHeadphoneDevices(getApplicationContext(), headphoneDevices);
         if(BuildConfig.DEBUG) {
             for (String deviceName : headphoneDevices) {
                 Log.d(TAG, "device name: " + deviceName);
@@ -338,8 +338,8 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     @Override
     public void headphonesDoneClicked(HashSet<String> removeDevices) {
-        Set<String> headphoneDevices = BAPMPreferences.getHeadphoneDevices(this);
-        Set<String> btDevices = BAPMPreferences.getBTDevices(this);
+        Set<String> headphoneDevices = BAPMPreferences.INSTANCE.getHeadphoneDevices(this);
+        Set<String> btDevices = BAPMPreferences.INSTANCE.getBTDevices(this);
 
         for(String deviceName : removeDevices){
             if(headphoneDevices.contains(deviceName))
@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         }
 
         btDevices.addAll(headphoneDevices);
-        BAPMPreferences.setBTDevices(this, btDevices);
+        BAPMPreferences.INSTANCE.setBTDevices(this, btDevices);
 
         HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME_FRAGMENT);
         if(homeFragment != null) {
@@ -370,16 +370,16 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     @Override
     public void setWifiOffDevices(HashSet<String> wifiOffDevices) {
-        BAPMPreferences.setTurnWifiOffDevices(this, wifiOffDevices);
+        BAPMPreferences.INSTANCE.setTurnWifiOffDevices(this, wifiOffDevices);
     }
 
     @Subscribe
     public void onUseHeadphonesA2DP(A2DPSetSwitchEvent a2DPSetSwitchEvent) {
-        BAPMPreferences.setUseA2dpHeadphones(this, a2DPSetSwitchEvent.isUsingA2DP());
+        BAPMPreferences.INSTANCE.setUseA2dpHeadphones(this, a2DPSetSwitchEvent.isUsingA2DP());
     }
 
     @Subscribe
     public void onLocationNameSet(LocationNameSetEvent locationNameSetEvent) {
-        BAPMPreferences.setCustomLocationName(this, locationNameSetEvent.getLocationName());
+        BAPMPreferences.INSTANCE.setCustomLocationName(this, locationNameSetEvent.getLocationName());
     }
 }

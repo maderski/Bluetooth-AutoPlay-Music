@@ -33,11 +33,11 @@ public class OnAppUpdateReceiver extends BroadcastReceiver {
     }
 
     private void syncHomeWorkCheckboxes(Context context) {
-        boolean hasRan = BAPMPreferences.getUpdateHomeWorkDaysSync(context);
+        boolean hasRan = BAPMPreferences.INSTANCE.getUpdateHomeWorkDaysSync(context);
         if(!hasRan) {
-            Set<String> daysHomeWorkRan = BAPMPreferences.getHomeDaysToLaunchMaps(context);
-            BAPMPreferences.setWorkDaysToLaunchMaps(context, daysHomeWorkRan);
-            BAPMPreferences.setUpdateHomeWorkDaysSync(context, true);
+            Set<String> daysHomeWorkRan = BAPMPreferences.INSTANCE.getHomeDaysToLaunchMaps(context);
+            BAPMPreferences.INSTANCE.setWorkDaysToLaunchMaps(context, daysHomeWorkRan);
+            BAPMPreferences.INSTANCE.setUpdateHomeWorkDaysSync(context, true);
             Log.d(TAG, "Work/Home Sync Complete");
         }
     }
