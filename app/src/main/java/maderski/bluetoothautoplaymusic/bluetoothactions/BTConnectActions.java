@@ -94,7 +94,7 @@ public class BTConnectActions {
         }
 
         BAPMDataPreferences.INSTANCE.setRanActionsOnBtConnect(context, true);
-        ServiceUtils.stopService(context, OnBTConnectService.class, OnBTConnectService.TAG);
+        ServiceUtils.INSTANCE.stopService(context, OnBTConnectService.class, OnBTConnectService.TAG);
     }
 
     private void performActionsDelay(){
@@ -136,7 +136,7 @@ public class BTConnectActions {
     private void turnTheScreenOn(){
         boolean screenON = BAPMPreferences.INSTANCE.getKeepScreenON(context);
         if (screenON) {
-            ServiceUtils.startService(context, WakeLockService.class, WakeLockService.TAG);
+            ServiceUtils.INSTANCE.startService(context, WakeLockService.class, WakeLockService.TAG);
         }
     }
 

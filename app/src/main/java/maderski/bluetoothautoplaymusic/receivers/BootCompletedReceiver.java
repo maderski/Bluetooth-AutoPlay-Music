@@ -23,10 +23,10 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             if(action != null && action.equals(Intent.ACTION_BOOT_COMPLETED)) {
                 // Schedule Job to run on boot
-                ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
+                ServiceUtils.INSTANCE.scheduleJob(context, StartBAPMServiceJobService.class);
 
                 // Check to see Bluetooth is disabled and if it is disabled, then enable it
-                BluetoothUtils.enableDisabledBluetooth();
+                BluetoothUtils.INSTANCE.enableDisabledBluetooth();
 
                 Log.d(TAG, "BAPM Service Started");
             }

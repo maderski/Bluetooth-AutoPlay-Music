@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
 
         LinearLayout BTDeviceCkBoxLL = (LinearLayout) view.findViewById(R.id.checkBoxLL);
         BTDeviceCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(getActivity());
+        List<String> listOfBTDevices = BluetoothUtils.INSTANCE.listOfBluetoothDevices(getActivity());
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(context);

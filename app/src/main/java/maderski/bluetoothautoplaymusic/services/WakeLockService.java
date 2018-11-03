@@ -47,7 +47,7 @@ public class WakeLockService extends Service {
         String title = getString(R.string.wakelock_messge);
         String message = getString(R.string.app_name);
 
-        ServiceUtils.createServiceNotification(3453,
+        ServiceUtils.INSTANCE.createServiceNotification(3453,
                 title,
                 message,
                 this,

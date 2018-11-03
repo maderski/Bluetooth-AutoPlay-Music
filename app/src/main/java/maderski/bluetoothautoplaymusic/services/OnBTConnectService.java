@@ -54,7 +54,7 @@ public class OnBTConnectService extends Service {
 
         String title = getString(waitTillPowerConnected ? R.string.connect_to_power_msg : R.string.connect_message);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3451,
+        ServiceUtils.INSTANCE.createServiceNotification(3451,
                 title,
                 message,
                 this,

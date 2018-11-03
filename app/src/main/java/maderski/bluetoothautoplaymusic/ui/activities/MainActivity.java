@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
     // Starts BAPMService if it is not running
     private void checkIfBAPMServiceRunning(){
-        boolean isServiceRunning = ServiceUtils.isServiceRunning(this, BAPMService.class);
+        boolean isServiceRunning = ServiceUtils.INSTANCE.isServiceRunning(this, BAPMService.class);
         if(!isServiceRunning){
             new StartServiceTask().execute(this);
         }

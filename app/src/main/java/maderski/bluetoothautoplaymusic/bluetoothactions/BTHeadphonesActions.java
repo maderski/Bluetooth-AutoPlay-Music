@@ -46,7 +46,7 @@ public class BTHeadphonesActions {
         };
         handler.postDelayed(runnable, 4000);
 
-        ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+        ServiceUtils.INSTANCE.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 
     public void connectActions() {
@@ -75,6 +75,6 @@ public class BTHeadphonesActions {
         if(BuildConfig.DEBUG)
             Toast.makeText(mContext, "Music Paused", Toast.LENGTH_SHORT).show();
 
-        ServiceUtils.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+        ServiceUtils.INSTANCE.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 }

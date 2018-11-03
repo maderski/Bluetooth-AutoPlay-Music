@@ -62,7 +62,7 @@ public class BTDisconnectActions {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ServiceUtils.stopService(context, BTDisconnectService.class, BTDisconnectService.TAG);
+                ServiceUtils.INSTANCE.stopService(context, BTDisconnectService.class, BTDisconnectService.TAG);
             }
         }, 5000);
     }
@@ -145,7 +145,7 @@ public class BTDisconnectActions {
     private void stopKeepingScreenOn(){
         boolean screenON = BAPMPreferences.INSTANCE.getKeepScreenON(context);
         if (screenON) {
-            ServiceUtils.stopService(context, WakeLockService.class, WakeLockService.TAG);
+            ServiceUtils.INSTANCE.stopService(context, WakeLockService.class, WakeLockService.TAG);
         }
     }
 

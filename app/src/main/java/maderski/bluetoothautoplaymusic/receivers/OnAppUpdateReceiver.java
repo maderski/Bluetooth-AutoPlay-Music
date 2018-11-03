@@ -24,7 +24,7 @@ public class OnAppUpdateReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             if(action != null && action.equals(Intent.ACTION_PACKAGE_REPLACED)) {
                 // Schedule Job to run on update
-                ServiceUtils.scheduleJob(context, StartBAPMServiceJobService.class);
+                ServiceUtils.INSTANCE.scheduleJob(context, StartBAPMServiceJobService.class);
 
                 // Sync newly separated Home Work checkboxes
                 syncHomeWorkCheckboxes(context);

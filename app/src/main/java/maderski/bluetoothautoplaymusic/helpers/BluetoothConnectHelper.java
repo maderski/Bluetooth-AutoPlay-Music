@@ -89,7 +89,7 @@ public class BluetoothConnectHelper {
 
         if(BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(mContext)) {
             PlayMusicControl.cancelCheckIfPlaying();
-            ServiceUtils.startService(mContext, BTDisconnectService.class, BTDisconnectService.TAG);
+            ServiceUtils.INSTANCE.startService(mContext, BTDisconnectService.class, BTDisconnectService.TAG);
         }
 
         if(BAPMPreferences.INSTANCE.getWaitTillOffPhone(mContext) && BAPMDataPreferences.INSTANCE.getLaunchNotifPresent(mContext)){
@@ -103,8 +103,8 @@ public class BluetoothConnectHelper {
     }
 
     private void startAdditionalServices(){
-        ServiceUtils.startService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
-        ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+        ServiceUtils.INSTANCE.startService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
+        ServiceUtils.INSTANCE.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 
     private void stopAdditionalServices(){
@@ -112,10 +112,10 @@ public class BluetoothConnectHelper {
         Log.d(TAG, "Did not launch BAPM: " + String.valueOf(didNotLaunchBAPM));
 
         if(didNotLaunchBAPM) {
-            ServiceUtils.stopService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
+            ServiceUtils.INSTANCE.stopService(mContext, OnBTConnectService.class, OnBTConnectService.TAG);
         }
 
-        ServiceUtils.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+        ServiceUtils.INSTANCE.stopService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
     }
 
     private void checksBeforeLaunch(){

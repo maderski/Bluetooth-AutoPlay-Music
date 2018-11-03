@@ -67,7 +67,7 @@ public class BAPMService extends Service {
         super.onCreate();
         String title = getString(R.string.initializing);
         String message = getString(R.string.app_name);
-        ServiceUtils.createServiceNotification(3455,
+        ServiceUtils.INSTANCE.createServiceNotification(3455,
                 title,
                 message,
                 this,

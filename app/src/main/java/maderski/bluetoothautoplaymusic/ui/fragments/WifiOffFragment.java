@@ -83,7 +83,7 @@ public class WifiOffFragment extends DialogFragment {
 
         LinearLayout wifiOffCkBoxLL = (LinearLayout) view.findViewById(R.id.wifi_off_ll);
         wifiOffCkBoxLL.removeAllViews();
-        List<String> listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(getActivity());
+        List<String> listOfBTDevices = BluetoothUtils.INSTANCE.listOfBluetoothDevices(getActivity());
         if (listOfBTDevices.contains("No Bluetooth Device found") ||
                 listOfBTDevices.isEmpty()){
             textView = new TextView(getActivity());

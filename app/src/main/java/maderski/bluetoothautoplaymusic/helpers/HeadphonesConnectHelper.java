@@ -55,7 +55,7 @@ public class HeadphonesConnectHelper {
                 case BluetoothProfile.STATE_CONNECTED:
                     Log.d(TAG, "A2DP CONNECTED");
                     btHeadphonesActions.connectActions();
-                    ServiceUtils.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
+                    ServiceUtils.INSTANCE.startService(mContext, BTStateChangedService.class, BTStateChangedService.TAG);
                     break;
                 case BluetoothProfile.STATE_DISCONNECTING:
                     Log.d(TAG, "A2DP DISCONNECTING");

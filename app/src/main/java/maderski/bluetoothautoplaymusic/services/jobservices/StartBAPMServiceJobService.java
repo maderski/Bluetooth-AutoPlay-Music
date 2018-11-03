@@ -13,7 +13,7 @@ import maderski.bluetoothautoplaymusic.utils.ServiceUtils;
 public class StartBAPMServiceJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        ServiceUtils.startService(getApplicationContext(), BAPMService.class, BAPMService.TAG);
+        ServiceUtils.INSTANCE.startService(getApplicationContext(), BAPMService.class, BAPMService.TAG);
 
         return true;
     }
