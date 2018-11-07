@@ -36,7 +36,7 @@ public class CustomReceiver extends BroadcastReceiver {
         switch (action) {
             case ACTION_POWER_LAUNCH:
                 Log.d(TAG, "POWER_LAUNCH");
-                btConnectActions.OnBTConnect();
+                btConnectActions.onBTConnect();
                 firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.POWER);
                 break;
             case ACTION_OFF_TELE_LAUNCH:

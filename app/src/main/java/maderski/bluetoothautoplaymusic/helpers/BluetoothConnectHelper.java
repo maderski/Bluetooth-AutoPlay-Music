@@ -125,10 +125,10 @@ public class BluetoothConnectHelper {
 
         if (powerRequired) {
             if (PowerHelper.isPluggedIn(mContext)) {
-                btConnectActions.OnBTConnect();
+                btConnectActions.onBTConnect();
             }
         } else {
-            btConnectActions.OnBTConnect();
+            btConnectActions.onBTConnect();
         }
     }
 
