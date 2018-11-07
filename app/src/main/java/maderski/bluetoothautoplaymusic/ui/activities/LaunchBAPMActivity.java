@@ -41,7 +41,7 @@ public class LaunchBAPMActivity extends AppCompatActivity{
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             Window window = getWindow();
             if (!BAPMPreferences.INSTANCE.getKeepScreenON(this)) {
-                ScreenONLock screenONLock = ScreenONLock.getInstance();
+                ScreenONLock screenONLock = ScreenONLock.Companion.getInstance();
                 screenONLock.enableWakeLock(this);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
                 window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);

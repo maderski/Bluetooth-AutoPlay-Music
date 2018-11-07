@@ -24,7 +24,7 @@ public class WakeLockService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Get wakelock instance
-        mScreenONLock = ScreenONLock.getInstance();
+        mScreenONLock = ScreenONLock.Companion.getInstance();
 
         // Release wakelock if it is still held for some reason
         if(mScreenONLock.wakeLockHeld()){
