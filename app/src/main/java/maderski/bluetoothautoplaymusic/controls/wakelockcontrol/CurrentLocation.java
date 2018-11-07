@@ -9,16 +9,17 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * Created by Jason on 2/7/16.
+ *  Created by Jason on 2/7/16.
+ *
+ *  Get course location
  */
 public class CurrentLocation {
 
-    private static final String TAG = CurrentLocation.class.getName();
+    private static final String TAG = "CurrentLocation";
 
     private LocationManager locationManager;
     private Location location;
 
-    //Get course location
     public CurrentLocation(Context context){
 
         //Get Permission

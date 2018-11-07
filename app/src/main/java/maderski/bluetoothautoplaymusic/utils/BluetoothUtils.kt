@@ -13,7 +13,7 @@ import maderski.bluetoothautoplaymusic.R
  */
 
 object BluetoothUtils {
-    val TAG = "BluetoothDeviceUtils"
+    const val TAG = "BluetoothDeviceUtils"
 
     // List of bluetooth devices on the phone
     fun listOfBluetoothDevices(context: Context): List<String> {

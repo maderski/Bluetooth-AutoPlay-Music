@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants;
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock;
@@ -26,7 +27,7 @@ public class LaunchBAPMActivity extends AppCompatActivity{
 
         // Create Firebase Event
         FirebaseHelper firebaseHelper = new FirebaseHelper(this);
-        firebaseHelper.activityLaunched(FirebaseHelper.ActivityName.LAUNCH_BAPM);
+        firebaseHelper.activityLaunched(ActivityNameConstants.LAUNCH_BAPM);
 
         // Dismiss the keyguard
         dismissKeyGuard();

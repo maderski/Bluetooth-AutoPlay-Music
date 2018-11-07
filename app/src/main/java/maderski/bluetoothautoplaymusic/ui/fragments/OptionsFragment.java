@@ -20,6 +20,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.analytics.constants.OptionConstants;
+import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants;
 import maderski.bluetoothautoplaymusic.helpers.PermissionHelper;
 import maderski.bluetoothautoplaymusic.R;
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences;
@@ -159,7 +161,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.WIFI_OFF_USE_TIME_SPANS, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.WIFI_OFF_USE_TIME_SPANS, on);
                 if (on) {
                     BAPMPreferences.INSTANCE.setWifiUseMapTimeSpans(getActivity(), true);
                     Log.d(TAG, "WIFI OFF Use Time Spans Switch is ON");
@@ -177,7 +179,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.PLAY_MUSIC, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.PLAY_MUSIC, on);
                 if (on) {
                     BAPMPreferences.INSTANCE.setAutoplayMusic(getActivity(), true);
                     Log.d(TAG, "AutoPlaySwitch is ON");
@@ -195,7 +197,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.POWER_REQUIRED, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.POWER_REQUIRED, on);
                 if(on){
                     BAPMPreferences.INSTANCE.setPowerConnected(getActivity(), true);
                     Log.d(TAG, "PowerConnected Switch is ON");
@@ -213,7 +215,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.GO_HOME, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.GO_HOME, on);
                 if(on){
                     BAPMPreferences.INSTANCE.setSendToBackground(getActivity(), true);
                     Log.d(TAG, "SendToBackground Switch is ON");
@@ -231,7 +233,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.CALL_COMPLETED, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.CALL_COMPLETED, on);
                 if(on){
                     BAPMPreferences.INSTANCE.setWaitTillOffPhone(getActivity(), true);
                     Log.d(TAG, "WaitTillOffPhone Switch is ON");
@@ -249,7 +251,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.SHOW_NOTIFICATION, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.SHOW_NOTIFICATION, on);
                 if(on){
                     BAPMPreferences.INSTANCE.setShowNotification(getActivity(), true);
                     Log.d(TAG, "Show Notification Switch is ON");
@@ -267,7 +269,7 @@ public class OptionsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((Switch) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Option.AUTO_BRIGHTNESS, on);
+                mFirebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on);
                 if(on){
                     PermissionHelper.checkPermission(getActivity(), PermissionHelper.Permission.COARSE_LOCATION);
 
@@ -289,7 +291,7 @@ public class OptionsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     boolean on = ((Switch) view).isChecked();
-                    mFirebaseHelper.featureEnabled(FirebaseHelper.Option.PRIORITY_MODE, on);
+                    mFirebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on);
                     if(on){
                         String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
                         PermissionHelper.checkPermission(getActivity(), permission);
@@ -373,7 +375,7 @@ public class OptionsFragment extends Fragment {
         wifiOffDeviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFirebaseHelper.selectionMade(FirebaseHelper.Selection.SET_WIFI_OFF_DEVICE);
+                mFirebaseHelper.selectionMade(SelectionConstants.SET_WIFI_OFF_DEVICE);
                 DialogFragment newFragment = WifiOffFragment.newInstance();
                 newFragment.show(getActivity().getSupportFragmentManager(), "wifiOffFragment");
             }

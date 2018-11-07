@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants;
+import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants;
 import maderski.bluetoothautoplaymusic.asynctasks.StartServiceTask;
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper;
 import maderski.bluetoothautoplaymusic.BuildConfig;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         setSupportActionBar(toolbar);
 
         mFirebaseHelper = new FirebaseHelper(this);
-        mFirebaseHelper.activityLaunched(FirebaseHelper.ActivityName.MAIN);
+        mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN);
 
         if(BAPMPreferences.INSTANCE.getAutoBrightness(this)) {
             PermissionHelper.checkPermission(this, PermissionHelper.Permission.COARSE_LOCATION);
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 } else if(itemId == R.id.menu_options){
                     Fragment optionsFragment = OptionsFragment.newInstance();
                     handleNavigationSelection(optionsFragment, TAG_OPTIONS_FRAGMENT);
-                    mFirebaseHelper.selectionMade(FirebaseHelper.Selection.OPTIONS);
+                    mFirebaseHelper.selectionMade(SelectionConstants.OPTIONS);
                     return true;
                 } else {
                     return false;
@@ -121,11 +123,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.about_menu) {
-            mFirebaseHelper.selectionMade(FirebaseHelper.Selection.ABOUT);
+            mFirebaseHelper.selectionMade(SelectionConstants.ABOUT);
             aboutSelected();
             return true;
         } else if (id == R.id.link_menu){
-            mFirebaseHelper.selectionMade(FirebaseHelper.Selection.RATE_ME);
+            mFirebaseHelper.selectionMade(SelectionConstants.RATE_ME);
             linkSelected();
             return true;
         }
@@ -239,11 +241,11 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         switch(typeOfTimeSet) {
             case TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME:
                 if (isEndTime) {
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.DIM_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.DIM_TIME, true);
                     BAPMPreferences.INSTANCE.setDimTime(this, timeSet);
                     Log.d("Settings", "Dim brightness");
                 } else {
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.BRIGHT_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.BRIGHT_TIME, true);
                     BAPMPreferences.INSTANCE.setBrightTime(this, timeSet);
                     Log.d("Settings", "Bright brightness");
                 }
@@ -256,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_END_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.MORNING_END_TIME, true);
                 } else {
                     BAPMPreferences.INSTANCE.setMorningStartTime(this, timeSet);
 
@@ -264,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.MORNING_START_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.MORNING_START_TIME, true);
                 }
                 Log.d("Map Options", typeOfTimeSet);
                 break;
@@ -276,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_END_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.EVENING_END_TIME, true);
                 } else {
                     BAPMPreferences.INSTANCE.setEveningStartTime(this, timeSet);
 
@@ -284,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.EVENING_START_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.EVENING_START_TIME, true);
                 }
                 Log.d("Map Options", typeOfTimeSet);
                 break;
@@ -296,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     TextView timeDisplayed = (TextView)findViewById(R.id.custom_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.CUSTOM_END_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_END_TIME, true);
                 } else {
                     BAPMPreferences.INSTANCE.setCustomStartTime(this, timeSet);
 
@@ -304,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                     TextView timeDisplayed = (TextView)findViewById(R.id.custom_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
-                    mFirebaseHelper.timeSetSelected(FirebaseHelper.Selection.CUSTOM_START_TIME, true);
+                    mFirebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_START_TIME, true);
                 }
                 Log.d("Map Options", typeOfTimeSet);
                 break;
@@ -315,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     public void onTimeCancel(String typeOfTimeSet, boolean isEndTime) {
         switch(typeOfTimeSet) {
             case TimePickerFragment.TypeOfTimeSet.SCREEN_BRIGHTNESS_TIME:
-                mFirebaseHelper.timeSetSelected(isEndTime ? FirebaseHelper.Selection.DIM_TIME : FirebaseHelper.Selection.BRIGHT_TIME, false);
+                mFirebaseHelper.timeSetSelected(isEndTime ? SelectionConstants.DIM_TIME : SelectionConstants.BRIGHT_TIME, false);
                 break;
             case TimePickerFragment.TypeOfTimeSet.MORNING_TIMESPAN:
                 break;
@@ -365,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
     @Override
     public void headDeviceSelection(String deviceName, boolean addDevice) {
         if(mFirebaseHelper != null)
-            mFirebaseHelper.deviceAdd(FirebaseHelper.Selection.HEADPHONE_DEVICE, deviceName, addDevice);
+            mFirebaseHelper.deviceAdd(SelectionConstants.HEADPHONE_DEVICE, deviceName, addDevice);
     }
 
     @Override

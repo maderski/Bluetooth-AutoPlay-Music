@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Set;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants;
+import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants;
 import maderski.bluetoothautoplaymusic.utils.BluetoothUtils;
 import maderski.bluetoothautoplaymusic.BuildConfig;
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper;
@@ -194,7 +196,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
                 BAPMPreferences.INSTANCE.setBTDevices(context, saveBTDevices);
-                mFirebaseHelper.deviceAdd(FirebaseHelper.Selection.BLUETOOTH_DEVICE, BTD, cb.isChecked());
+                mFirebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTD, cb.isChecked());
             }
         });
     }
@@ -369,7 +371,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                mFirebaseHelper.selectionMade(FirebaseHelper.Selection.SET_AUTOPLAY_ONLY);
+                mFirebaseHelper.selectionMade(SelectionConstants.SET_AUTOPLAY_ONLY);
                 DialogFragment newFragment = HeadphonesFragment.newInstance();
                 newFragment.show(getActivity().getSupportFragmentManager(), "autoplayOnlyFragment");
             }
@@ -383,7 +385,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MAPS, on);
+                mFirebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MAPS, on);
                 if (on) {
                     BAPMPreferences.INSTANCE.setLaunchGoogleMaps(context, true);
                     Log.i(TAG, "MapButton is ON");
@@ -402,7 +404,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.KEEP_SCREEN_ON, on);
+                mFirebaseHelper.featureEnabled(FeatureConstants.KEEP_SCREEN_ON, on);
                 if (on) {
                     BAPMPreferences.INSTANCE.setKeepScreenON(context, true);
                     Log.d(TAG, "Keep Screen ON Button is ON");
@@ -420,7 +422,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.PRIORITY_MODE, on);
+                mFirebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on);
                 if(on) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         PermissionHelper.checkDoNotDisturbPermission(context, 0);
@@ -441,7 +443,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.MAX_VOLUME, on);
+                mFirebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on);
                 if (on) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         PermissionHelper.checkDoNotDisturbPermission(context, 0);
@@ -462,7 +464,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.LAUNCH_MUSIC_PLAYER, on);
+                mFirebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MUSIC_PLAYER, on);
                 if (on) {
                     BAPMPreferences.INSTANCE.setLaunchMusicPlayer(context, true);
                     Log.d(TAG, "Launch Music Player Button is ON");
@@ -480,7 +482,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 boolean on = ((ToggleButton) view).isChecked();
-                mFirebaseHelper.featureEnabled(FirebaseHelper.Feature.DISMISS_KEYGUARD, on);
+                mFirebaseHelper.featureEnabled(FeatureConstants.DISMISS_KEYGUARD, on);
                 if (on) {
                     BAPMPreferences.INSTANCE.setUnlockScreen(context, true);
                     Log.i(TAG, "Dismiss KeyGuard Button is ON");

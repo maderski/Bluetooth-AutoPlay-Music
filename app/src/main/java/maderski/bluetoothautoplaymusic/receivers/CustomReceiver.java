@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper;
+import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants;
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions;
 
 /**
@@ -36,13 +37,13 @@ public class CustomReceiver extends BroadcastReceiver {
             case ACTION_POWER_LAUNCH:
                 Log.d(TAG, "POWER_LAUNCH");
                 btConnectActions.OnBTConnect();
-                firebaseHelper.bluetoothActionLaunch(FirebaseHelper.BTActionsLaunch.POWER);
+                firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.POWER);
                 break;
             case ACTION_OFF_TELE_LAUNCH:
                 Log.d(TAG, "OFF_TELE_LAUNCH");
                 //Calling actionsOnBTConnect cause onBTConnect already ran
                 btConnectActions.actionsOnBTConnect();
-                firebaseHelper.bluetoothActionLaunch(FirebaseHelper.BTActionsLaunch.TELEPHONE);
+                firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE);
                 break;
         }
     }
