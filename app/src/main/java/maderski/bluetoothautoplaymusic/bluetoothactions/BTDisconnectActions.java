@@ -135,8 +135,8 @@ public class BTDisconnectActions {
 
             boolean canChangeWifiState = !BAPMPreferences.INSTANCE.getWifiUseMapTimeSpans(context)
                     || (canLaunch && launchAppHelper.canLaunchOnThisDay(context, directionLocation));
-            if(canChangeWifiState && !WifiControl.isWifiON(context)) {
-                WifiControl.wifiON(context, true);
+            if(canChangeWifiState && !WifiControl.INSTANCE.isWifiON(context)) {
+                WifiControl.INSTANCE.wifiON(context, true);
             }
             BAPMDataPreferences.INSTANCE.setIsTurnOffWifiDevice(context, false);
         }

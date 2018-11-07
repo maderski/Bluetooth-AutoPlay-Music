@@ -198,8 +198,8 @@ public class BTConnectActions {
 
             boolean canChangeWifiState = !BAPMPreferences.INSTANCE.getWifiUseMapTimeSpans(context)
                     || (canLaunch && mLaunchAppHelper.canLaunchOnThisDay(context, directionLocation));
-            if (canChangeWifiState && WifiControl.isWifiON(context)) {
-                WifiControl.wifiON(context, false);
+            if (canChangeWifiState && WifiControl.INSTANCE.isWifiON(context)) {
+                WifiControl.INSTANCE.wifiON(context, false);
             }
         }
     }

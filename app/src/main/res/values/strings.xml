@@ -90,4 +90,6 @@
     <string name="work">Work</string>
     <string name="home">Home</string>
     <string name="require_a2dp">Require A2DP</string>
+    <string name="wifi_turned_on">Wifi turned ON</string>
+    <string name="wifi_turned_off">Wifi turned OFF</string>
 </resources>
