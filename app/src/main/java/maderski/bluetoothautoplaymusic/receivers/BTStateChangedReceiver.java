@@ -36,8 +36,8 @@ public class BTStateChangedReceiver extends BroadcastReceiver {
             switch (state) {
                 case BluetoothAdapter.STATE_OFF:
                     Log.d(TAG, "Bluetooth off");
-                    ServiceUtils.INSTANCE.stopService(context, BTStateChangedService.class, BTStateChangedService.TAG);
-                    ServiceUtils.INSTANCE.startService(context, BTDisconnectService.class, BTDisconnectService.TAG);
+                    ServiceUtils.INSTANCE.stopService(context, BTStateChangedService.class, BTStateChangedService.Companion.getTAG());
+                    ServiceUtils.INSTANCE.startService(context, BTDisconnectService.class, BTDisconnectService.Companion.getTAG());
                     break;
                 case BluetoothAdapter.STATE_TURNING_OFF:
                     Log.d(TAG, "Turning Bluetooth off...");
