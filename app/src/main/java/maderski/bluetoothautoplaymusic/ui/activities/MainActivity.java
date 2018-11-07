@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN);
 
         if(BAPMPreferences.INSTANCE.getAutoBrightness(this)) {
-            PermissionHelper.checkPermission(this, PermissionHelper.Permission.COARSE_LOCATION);
+            PermissionHelper.INSTANCE.checkPermission(this, PermissionHelper.COARSE_LOCATION);
         }
 
         getSupportFragmentManager()
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 if(isEndTime) {
                     BAPMPreferences.INSTANCE.setMorningEndTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getMorningEndTime(this));
+                    String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getMorningEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 } else {
                     BAPMPreferences.INSTANCE.setMorningStartTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getMorningStartTime(this));
+                    String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getMorningStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.morning_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 if(isEndTime) {
                     BAPMPreferences.INSTANCE.setEveningEndTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getEveningEndTime(this));
+                    String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getEveningEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 } else {
                     BAPMPreferences.INSTANCE.setEveningStartTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getEveningStartTime(this));
+                    String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getEveningStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.evening_start_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 if(isEndTime) {
                     BAPMPreferences.INSTANCE.setCustomEndTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getCustomEndTime(this));
+                    String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getCustomEndTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.custom_end_time_displayed);
                     timeDisplayed.setText(setTime);
 
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements HeadphonesFragmen
                 } else {
                     BAPMPreferences.INSTANCE.setCustomStartTime(this, timeSet);
 
-                    String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getCustomStartTime(this));
+                    String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getCustomStartTime(this));
                     TextView timeDisplayed = (TextView)findViewById(R.id.custom_start_time_displayed);
                     timeDisplayed.setText(setTime);
 

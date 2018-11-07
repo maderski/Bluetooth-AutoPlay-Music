@@ -425,7 +425,7 @@ public class HomeFragment extends Fragment {
                 mFirebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on);
                 if(on) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        PermissionHelper.checkDoNotDisturbPermission(context, 0);
+                        PermissionHelper.INSTANCE.checkDoNotDisturbPermission(context, 0);
                     }
                     BAPMPreferences.INSTANCE.setPriorityMode(context, true);
                     Log.d(TAG, "Priority Button is ON");
@@ -446,7 +446,7 @@ public class HomeFragment extends Fragment {
                 mFirebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on);
                 if (on) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        PermissionHelper.checkDoNotDisturbPermission(context, 0);
+                        PermissionHelper.INSTANCE.checkDoNotDisturbPermission(context, 0);
                     }
                     BAPMPreferences.INSTANCE.setMaxVolume(context, true);
                     Log.d(TAG, "Max Volume Button is ON");

@@ -136,7 +136,7 @@ public class OptionsFragment extends Fragment {
         setting_switch = (Switch) view.findViewById(R.id.wifi_use_time_spans);
         setting_switch.setChecked(btnState);
 
-        if(!PermissionHelper.isPermissionGranted(context, PermissionHelper.Permission.COARSE_LOCATION))
+        if(!PermissionHelper.INSTANCE.isPermissionGranted(context, PermissionHelper.COARSE_LOCATION))
             BAPMPreferences.INSTANCE.setAutoBrightness(context, false);
         btnState = BAPMPreferences.INSTANCE.getAutoBrightness(context);
         setting_switch = (Switch) view.findViewById(R.id.auto_brightness);
@@ -271,7 +271,7 @@ public class OptionsFragment extends Fragment {
                 boolean on = ((Switch) view).isChecked();
                 mFirebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on);
                 if(on){
-                    PermissionHelper.checkPermission(getActivity(), PermissionHelper.Permission.COARSE_LOCATION);
+                    PermissionHelper.INSTANCE.checkPermission(getActivity(), PermissionHelper.COARSE_LOCATION);
 
                     BAPMPreferences.INSTANCE.setAutoBrightness(getActivity(), true);
 
@@ -294,7 +294,7 @@ public class OptionsFragment extends Fragment {
                     mFirebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on);
                     if(on){
                         String permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY;
-                        PermissionHelper.checkPermission(getActivity(), permission);
+                        PermissionHelper.INSTANCE.checkPermission(getActivity(), permission);
 
                         BAPMPreferences.INSTANCE.setUsePriorityMode(getActivity(), true);
 

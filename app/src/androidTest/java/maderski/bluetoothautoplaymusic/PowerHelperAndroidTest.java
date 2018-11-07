@@ -18,7 +18,7 @@ public class PowerHelperAndroidTest extends AndroidTestCase {
     @SmallTest
     public void testIsPluggedIn(){
         Context context = getContext();
-        boolean isPluggedIn = PowerHelper.isPluggedIn(context);
+        boolean isPluggedIn = PowerHelper.INSTANCE.isPluggedIn(context);
         assertEquals(true, isPluggedIn);
     }
 

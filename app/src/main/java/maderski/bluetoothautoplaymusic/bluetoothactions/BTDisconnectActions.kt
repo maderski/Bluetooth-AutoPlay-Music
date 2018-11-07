@@ -107,11 +107,11 @@ class BTDisconnectActions(private val context: Context) {
             val eveningStartTime = BAPMPreferences.getEveningStartTime(context)
             val eveningEndTime = BAPMPreferences.getEveningEndTime(context)
 
-            val current24hrTime = TimeHelper.getCurrent24hrTime()
+            val current24hrTime = TimeHelper.current24hrTime
 
             val timeHelperEvening = TimeHelper(eveningStartTime, eveningEndTime, current24hrTime)
             val canLaunch = timeHelperEvening.isWithinTimeSpan
-            val directionLocation = if (canLaunch) LaunchAppHelper.DirectionLocations.HOME else LaunchAppHelper.DirectionLocations.WORK
+            val directionLocation = if (canLaunch) LaunchAppHelper.HOME else LaunchAppHelper.WORK
 
             val canChangeWifiState = BAPMPreferences.getWifiUseMapTimeSpans(context).not() || canLaunch && launchAppHelper.canLaunchOnThisDay(context, directionLocation)
             if (canChangeWifiState && !WifiControl.isWifiON(context)) {

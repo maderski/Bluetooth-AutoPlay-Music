@@ -431,7 +431,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningStartButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getMorningStartTime(getActivity()));
+        String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getMorningStartTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -446,7 +446,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void morningEndButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getMorningEndTime(getActivity()));
+        String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getMorningEndTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.morning_end_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -461,7 +461,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningStartButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getEveningStartTime(getActivity()));
+        String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getEveningStartTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -476,7 +476,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void eveningEndButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getEveningEndTime(getActivity()));
+        String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getEveningEndTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.evening_end_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -491,7 +491,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void customStartButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getCustomStartTime(getActivity()));
+        String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getCustomStartTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.custom_start_time_displayed);
         timeDisplayed.setText(setTime);
 
@@ -506,7 +506,7 @@ public class MapsFragment extends Fragment {
     }
 
     public void customEndButton(View view){
-        String setTime = TimeHelper.get12hrTime(BAPMPreferences.INSTANCE.getCustomEndTime(getActivity()));
+        String setTime = TimeHelper.Companion.get12hrTime(BAPMPreferences.INSTANCE.getCustomEndTime(getActivity()));
         TextView timeDisplayed = (TextView)view.findViewById(R.id.custom_end_time_displayed);
         timeDisplayed.setText(setTime);
 

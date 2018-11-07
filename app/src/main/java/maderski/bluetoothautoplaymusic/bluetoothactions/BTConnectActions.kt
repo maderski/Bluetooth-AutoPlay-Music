@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic.bluetoothactions
 
 import android.app.KeyguardManager
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
@@ -45,8 +44,8 @@ class BTConnectActions(private val context: Context) {
             if (PowerHelper.isPluggedIn(context)) {
                 if (telephoneHelper.isOnCall) {
                     Log.d(TAG, "ON a call")
-                    //Run CheckIfOnPhone
-                    telephoneHelper.CheckIfOnPhone(mVolumeControl)
+                    //Run checkIfOnPhone
+                    telephoneHelper.checkIfOnPhone(mVolumeControl)
                 } else {
                     Log.d(TAG, "NOT on a call")
                     actionsOnBTConnect()
@@ -172,11 +171,11 @@ class BTConnectActions(private val context: Context) {
             val morningStartTime = BAPMPreferences.getMorningStartTime(context)
             val morningEndTime = BAPMPreferences.getMorningEndTime(context)
 
-            val current24hrTime = TimeHelper.getCurrent24hrTime()
+            val current24hrTime = TimeHelper.current24hrTime
 
             val timeHelperMorning = TimeHelper(morningStartTime, morningEndTime, current24hrTime)
             val canLaunch = timeHelperMorning.isWithinTimeSpan
-            val directionLocation = if (canLaunch) LaunchAppHelper.DirectionLocations.WORK else LaunchAppHelper.DirectionLocations.HOME
+            val directionLocation = if (canLaunch) LaunchAppHelper.WORK else LaunchAppHelper.HOME
 
             val canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context) || canLaunch && mLaunchAppHelper.canLaunchOnThisDay(context, directionLocation)
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
