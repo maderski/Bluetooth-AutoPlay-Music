@@ -88,7 +88,7 @@ public class BluetoothConnectHelper {
         stopAdditionalServices();
 
         if(BAPMDataPreferences.INSTANCE.getRanActionsOnBtConnect(mContext)) {
-            PlayMusicControl.cancelCheckIfPlaying();
+            PlayMusicControl.Companion.cancelCheckIfPlaying();
             ServiceUtils.INSTANCE.startService(mContext, BTDisconnectService.class, BTDisconnectService.TAG);
         }
 

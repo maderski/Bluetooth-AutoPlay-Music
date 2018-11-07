@@ -65,7 +65,7 @@ public class BTHeadphonesActions {
 
     public void disconnectActions(){
         mPlayMusicControl.pause();
-        PlayMusicControl.cancelCheckIfPlaying();
+        PlayMusicControl.Companion.cancelCheckIfPlaying();
         if(mAudioManager.isMusicActive()) {
             mPlayMusicControl.pause();
         }
