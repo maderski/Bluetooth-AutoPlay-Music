@@ -17,7 +17,7 @@ import maderski.bluetoothautoplaymusic.helpers.PermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.BAPMNotification
+import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.services.WakeLockService
@@ -31,7 +31,7 @@ import maderski.bluetoothautoplaymusic.utils.ServiceUtils
  */
 
 class BTConnectActions(private val context: Context) {
-    private val mBAPMNotification: BAPMNotification = BAPMNotification()
+    private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
     private val mVolumeControl: VolumeControl = VolumeControl(context)
     private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
     private val mLaunchAppHelper: LaunchAppHelper = LaunchAppHelper()
@@ -52,7 +52,7 @@ class BTConnectActions(private val context: Context) {
                 }
             } else {
                 if (telephoneHelper.isOnCall) {
-                    mBAPMNotification.launchBAPM(context)
+                    mBAPMNotification.launchBAPM()
                 } else {
                     actionsOnBTConnect()
                 }
@@ -115,7 +115,7 @@ class BTConnectActions(private val context: Context) {
         val mapChoice = BAPMPreferences.getMapsChoice(context)
         val canShowNotification = BAPMPreferences.getShowNotification(context)
         if (canShowNotification) {
-            mBAPMNotification.BAPMMessage(context, mapChoice)
+            mBAPMNotification.bapmMessage(mapChoice)
         }
     }
 

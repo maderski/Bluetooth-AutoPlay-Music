@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions
-import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
 

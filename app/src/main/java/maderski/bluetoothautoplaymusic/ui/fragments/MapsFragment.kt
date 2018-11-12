@@ -1,0 +1,510 @@
+package maderski.bluetoothautoplaymusic.ui.fragments
+
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.graphics.Typeface
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.support.annotation.IdRes
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Switch
+import android.widget.TextView
+
+import java.util.ArrayList
+import java.util.HashSet
+
+import maderski.bluetoothautoplaymusic.helpers.TimeHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper
+import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.bus.BusProvider
+import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
+
+class MapsFragment : Fragment() {
+
+    private val mMapChoicesAvailable = ArrayList<String>()
+    private var mCanLaunchDirections = false
+
+    private var mLocationNameEditText: EditText? = null
+    private val mTextChangeHandler = Handler(Looper.getMainLooper())
+    private val mTextChangeRunnable = Runnable {
+        val enteredText = mLocationNameEditText?.text.toString()
+        BusProvider.busInstance.post(LocationNameSetEvent(enteredText))
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val rootView = inflater.inflate(R.layout.fragment_maps, container, false)
+
+        val typeface_bold = Typeface.createFromAsset(requireActivity().assets, "fonts/TitilliumText600wt.otf")
+        var textView = rootView.findViewById<View>(R.id.map_options_text) as TextView
+        textView.typeface = typeface_bold
+
+        textView = rootView.findViewById<View>(R.id.daysToLaunchLabel) as TextView
+        textView.typeface = typeface_bold
+
+        textView = rootView.findViewById<View>(R.id.map_app_choice) as TextView
+        textView.typeface = typeface_bold
+
+        textView = rootView.findViewById<View>(R.id.morning_timespan_label) as TextView
+        textView.typeface = typeface_bold
+
+        textView = rootView.findViewById<View>(R.id.evening_timespan_label) as TextView
+        textView.typeface = typeface_bold
+
+        mMapChoicesAvailable.add(PackageHelper.MAPS)
+        val launchAppHelper = LaunchAppHelper()
+        val wazeInstalled = launchAppHelper.checkPkgOnPhone(requireActivity(), PackageHelper.WAZE)
+        if (wazeInstalled) {
+            mMapChoicesAvailable.add(PackageHelper.WAZE)
+        }
+        setupCloseWaze(rootView)
+        setupDrivingModeMaps(rootView)
+        setupLaunchWazeDirections(rootView)
+
+        setupLaunchTimesSwitch(rootView)
+
+        mapsRadiobuttonCreator(rootView, requireActivity())
+        mapsRadioButtonListener(rootView)
+
+        setMapChoice(rootView, activity)
+        setCheckBoxes(rootView, R.id.ll_home_chk_boxes)
+        setCheckBoxes(rootView, R.id.ll_work_days_chk_boxes)
+        setCheckBoxes(rootView, R.id.ll_custom_days_chk_boxes)
+
+        morningStartButton(rootView)
+        morningEndButton(rootView)
+        eveningStartButton(rootView)
+        eveningEndButton(rootView)
+        customStartButton(rootView)
+        customEndButton(rootView)
+
+        customLocationName(rootView)
+
+        return rootView
+    }
+
+    fun setupLaunchWazeDirections(view: View) {
+
+        mCanLaunchDirections = BAPMPreferences.getCanLaunchDirections(requireActivity())
+
+        val launchDirectionsSwitch = view.findViewById<View>(R.id.launch_waze_directions) as Switch
+        val launchDirectionsDesc = view.findViewById<View>(R.id.launch_waze_directions_desc) as TextView
+
+        val launchTimesSwitch = view.findViewById<View>(R.id.times_to_launch) as Switch
+
+        val morningTimeSpanText = view.findViewById<View>(R.id.morning_timespan_label) as TextView
+        val eveningTimeSpanText = view.findViewById<View>(R.id.evening_timespan_label) as TextView
+
+        val homeCheckboxLabel = view.findViewById<View>(R.id.tv_home_location_label) as TextView
+        val workCheckboxLabel = view.findViewById<View>(R.id.tv_work_location_label) as TextView
+
+        if (mCanLaunchDirections) {
+            morningTimeSpanText.setText(R.string.work_directions_label)
+            eveningTimeSpanText.setText(R.string.home_directions_label)
+        }
+
+        launchDirectionsSwitch.isChecked = mCanLaunchDirections
+        launchDirectionsSwitch.visibility = View.VISIBLE
+        launchDirectionsDesc.visibility = View.VISIBLE
+        launchDirectionsSwitch.setOnClickListener { view ->
+            val on = (view as Switch).isChecked
+            if (on) {
+                BAPMPreferences.setCanLaunchDirections(requireActivity(), true)
+                BAPMPreferences.setUseTimesToLaunchMaps(requireActivity(), true)
+                launchTimesSwitch.isChecked = true
+                morningTimeSpanText.setText(R.string.work_directions_label)
+                eveningTimeSpanText.setText(R.string.home_directions_label)
+
+                homeCheckboxLabel.text = "Home"
+                workCheckboxLabel.text = "Work"
+                Log.d(TAG, "LaunchDirectionsSwitch is ON")
+            } else {
+                BAPMPreferences.setCanLaunchDirections(requireActivity(), false)
+                morningTimeSpanText.setText(R.string.morning_time_span_label)
+                eveningTimeSpanText.setText(R.string.evening_time_span_label)
+
+                homeCheckboxLabel.text = "Evening"
+                workCheckboxLabel.text = "Morning"
+                Log.d(TAG, "LaunchDirectionsSwitch is OFF")
+            }
+        }
+    }
+
+    fun setupDrivingModeMaps(view: View) {
+        val mapChoice = BAPMPreferences.getMapsChoice(requireActivity())
+        val drivingModeSwitch = view.findViewById<View>(R.id.sw_driving_mode) as Switch
+        val drivingModeDesc = view.findViewById<View>(R.id.tv_driving_mode_desc) as TextView
+        val locationNameExplaination = view.findViewById<View>(R.id.tv_location_name_explaination) as TextView
+        val locationNameEditText = view.findViewById<View>(R.id.et_custom_location_name) as EditText
+
+        if (mapChoice == PackageHelper.MAPS) {
+            drivingModeSwitch.isChecked = BAPMPreferences.getLaunchMapsDrivingMode(requireActivity())
+            drivingModeSwitch.visibility = View.VISIBLE
+            drivingModeDesc.visibility = View.VISIBLE
+            drivingModeSwitch.setOnClickListener { view ->
+                val on = (view as Switch).isChecked
+                if (on) {
+                    BAPMPreferences.setLaunchMapsDrivingMode(requireActivity(), true)
+                    Log.d(TAG, "DrivingModeSwitch is ON")
+                } else {
+                    BAPMPreferences.setLaunchMapsDrivingMode(requireActivity(), false)
+                    Log.d(TAG, "DrivingModeSwitch is OFF")
+                }
+            }
+
+            locationNameExplaination.setText(R.string.enter_address_here)
+            locationNameEditText.setHint(R.string.location_address)
+        } else {
+            drivingModeSwitch.visibility = View.GONE
+            drivingModeDesc.visibility = View.GONE
+
+            locationNameExplaination.setText(R.string.enter_favorite_from_waze)
+            locationNameEditText.setHint(R.string.waze_favorite_name)
+        }
+    }
+
+    fun setupCloseWaze(view: View) {
+        val mapChoice = BAPMPreferences.getMapsChoice(requireActivity())
+        val closeWazeSwitch = view.findViewById<View>(R.id.close_waze) as Switch
+        val closeWazeDesc = view.findViewById<View>(R.id.close_waze_desc) as TextView
+        if (mapChoice == PackageHelper.WAZE) {
+            closeWazeSwitch.isChecked = BAPMPreferences.getCloseWazeOnDisconnect(requireActivity())
+            closeWazeSwitch.visibility = View.VISIBLE
+            closeWazeDesc.visibility = View.VISIBLE
+            closeWazeSwitch.setOnClickListener { closeWazeSwitchView ->
+                val on = (closeWazeSwitchView as Switch).isChecked
+                if (on) {
+                    BAPMPreferences.setCloseWazeOnDisconnect(requireActivity(), true)
+                    BAPMPreferences.setSendToBackground(requireActivity(), true)
+                    Log.d(TAG, "CloseWazeSwitch is ON")
+                } else {
+                    BAPMPreferences.setCloseWazeOnDisconnect(requireActivity(), false)
+                    Log.d(TAG, "CloseWazeSwitch is OFF")
+                }
+            }
+        } else {
+            closeWazeSwitch.visibility = View.GONE
+            closeWazeDesc.visibility = View.GONE
+        }
+    }
+
+    fun setupLaunchTimesSwitch(view: View) {
+        val isEnabled = BAPMPreferences.getUseTimesToLaunchMaps(requireActivity())
+
+        val launchDirectionsSwitch = view.findViewById<View>(R.id.launch_waze_directions) as Switch
+        val morningTimeSpanText = view.findViewById<View>(R.id.morning_timespan_label) as TextView
+        val eveningTimeSpanText = view.findViewById<View>(R.id.evening_timespan_label) as TextView
+
+        val launchTimesSwitch = view.findViewById<View>(R.id.times_to_launch) as Switch
+        launchTimesSwitch.isChecked = isEnabled
+
+        launchTimesSwitch.setOnClickListener { view ->
+            val on = (view as Switch).isChecked
+            if (on) {
+                BAPMPreferences.setUseTimesToLaunchMaps(requireActivity(), true)
+                Log.d(TAG, "LaunchTimesSwitch is ON")
+            } else {
+                BAPMPreferences.setUseTimesToLaunchMaps(requireActivity(), false)
+                BAPMPreferences.setCanLaunchDirections(requireActivity(), false)
+
+                launchDirectionsSwitch.isChecked = false
+                morningTimeSpanText.text = "Morning Time Span"
+                eveningTimeSpanText.text = "Evening Time Span"
+
+                Log.d(TAG, "LaunchTimesSwitch is OFF")
+            }
+        }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+    }
+
+    private fun setMapChoice(view: View, context: Context?) {
+        val mapChoice = BAPMPreferences.getMapsChoice(requireActivity())
+        val index = mMapChoicesAvailable.indexOf(mapChoice)
+        val rdoGroup = view.findViewById<View>(R.id.rdo_group_map_app_choice) as RadioGroup
+        val radioButton = rdoGroup.getChildAt(index) as RadioButton
+        radioButton.isChecked = true
+    }
+
+    // Create Map app choice Radiobuttons
+    private fun mapsRadiobuttonCreator(view: View, context: Context) {
+        var rdoButton: RadioButton
+        var appInfo: ApplicationInfo
+        var mapAppName = "No Name"
+        val pm = context.packageManager
+
+        val rdoMPGroup = view.findViewById<View>(R.id.rdo_group_map_app_choice) as RadioGroup
+        rdoMPGroup.removeAllViews()
+
+        for (packageName in mMapChoicesAvailable) {
+            try {
+                appInfo = pm.getApplicationInfo(packageName, 0)
+                mapAppName = pm.getApplicationLabel(appInfo).toString()
+                if (mapAppName == "Maps") {
+                    mapAppName = "Google Maps"
+                }
+
+            } catch (e: Exception) {
+                Log.e(TAG, e.message)
+            }
+
+            rdoButton = RadioButton(context)
+            rdoButton.text = mapAppName
+            rdoButton.setTextColor(resources.getColor(R.color.colorPrimary))
+            rdoButton.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
+            rdoMPGroup.addView(rdoButton)
+        }
+    }
+
+    private fun mapsRadioButtonListener(view: View) {
+        val group = view.findViewById<View>(R.id.rdo_group_map_app_choice) as RadioGroup
+        group.setOnCheckedChangeListener { radioGroup, i ->
+            val radioButton = radioGroup.findViewById<View>(i)
+            val index = radioGroup.indexOfChild(radioButton)
+            val packageName = mMapChoicesAvailable[index]
+            BAPMPreferences.setMapsChoice(requireActivity(), packageName)
+            setupCloseWaze(view)
+            setupDrivingModeMaps(view)
+            setupLaunchWazeDirections(view)
+        }
+    }
+
+    private fun setCheckBoxes(view: View, @IdRes linearLayoutId: Int) {
+        var checkBox: CheckBox
+        val entireWeek = arrayOf("1", "2", "3", "4", "5", "6", "7")
+        val daysToLaunchSet: MutableSet<String>
+
+        val daysToLaunchChkBoxLL = view.findViewById<View>(linearLayoutId) as LinearLayout
+        daysToLaunchChkBoxLL.removeAllViews()
+
+        when (linearLayoutId) {
+            R.id.ll_home_chk_boxes -> {
+                daysToLaunchSet = BAPMPreferences.getHomeDaysToLaunchMaps(requireActivity()) ?: mutableSetOf()
+
+                val checkboxLabelText = if (mCanLaunchDirections) "Home" else "Evening"
+                val checkboxLabel = view.findViewById<View>(R.id.tv_home_location_label) as TextView
+                checkboxLabel.text = checkboxLabelText
+            }
+            R.id.ll_work_days_chk_boxes -> {
+                daysToLaunchSet = BAPMPreferences.getWorkDaysToLaunchMaps(requireActivity()) ?: mutableSetOf()
+
+                val checkboxLabelText = if (mCanLaunchDirections) "Work" else "Morning"
+                val checkboxLabel = view.findViewById<View>(R.id.tv_work_location_label) as TextView
+                checkboxLabel.text = checkboxLabelText
+            }
+            else -> daysToLaunchSet = BAPMPreferences.getCustomDaysToLaunchMaps(requireActivity()) ?: mutableSetOf()
+        }
+
+        val params = RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        for (day in entireWeek) {
+            checkBox = CheckBox(activity)
+            checkBox.isChecked = daysToLaunchSet.contains(day)
+
+            when (linearLayoutId) {
+                R.id.ll_home_chk_boxes -> {
+                    checkBox.text = getNameOfDay(day)
+                    checkBox.setTextColor(ContextCompat.getColor(requireActivity(), R.color.colorPrimary))
+                    checkBox.typeface = Typeface.createFromAsset(requireActivity().assets, "fonts/TitilliumText400wt.otf")
+                    homeCheckboxListener(checkBox, day)
+                }
+                R.id.ll_work_days_chk_boxes -> {
+                    checkBox.layoutParams = params
+                    workCheckboxListener(checkBox, day)
+                }
+                else -> {
+                    checkBox.layoutParams = params
+                    customCheckboxListener(checkBox, day)
+                }
+            }
+
+            daysToLaunchChkBoxLL.addView(checkBox)
+        }
+    }
+
+    private fun homeCheckboxListener(checkBox: CheckBox, dayNumber: String) {
+        val fragmentActivity = requireActivity()
+
+        checkBox.setOnClickListener {
+            val daysToLaunch = BAPMPreferences.getHomeDaysToLaunchMaps(fragmentActivity) as MutableSet<String>
+            if (checkBox.isChecked) {
+                daysToLaunch.add(dayNumber)
+                BAPMPreferences.setHomeDaysToLaunchMaps(fragmentActivity, daysToLaunch)
+            } else {
+                daysToLaunch.remove(dayNumber)
+                BAPMPreferences.setHomeDaysToLaunchMaps(fragmentActivity, daysToLaunch)
+            }
+        }
+    }
+
+    private fun workCheckboxListener(checkBox: CheckBox, dayNumber: String) {
+        val fragmentActivity = requireActivity()
+
+        checkBox.setOnClickListener {
+            val daysToLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(fragmentActivity) as MutableSet<String>
+            if (checkBox.isChecked) {
+                daysToLaunch.add(dayNumber)
+                BAPMPreferences.setWorkDaysToLaunchMaps(fragmentActivity, daysToLaunch)
+            } else {
+                daysToLaunch.remove(dayNumber)
+                BAPMPreferences.setWorkDaysToLaunchMaps(fragmentActivity, daysToLaunch)
+            }
+        }
+    }
+
+    private fun customCheckboxListener(checkBox: CheckBox, dayNumber: String) {
+        val fragmentActivity = requireActivity()
+
+        checkBox.setOnClickListener {
+            val daysToLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(fragmentActivity) as MutableSet<String>
+            if (checkBox.isChecked) {
+                daysToLaunch.add(dayNumber)
+                BAPMPreferences.setCustomDaysToLaunchMaps(fragmentActivity, daysToLaunch)
+            } else {
+                daysToLaunch.remove(dayNumber)
+                BAPMPreferences.setCustomDaysToLaunchMaps(fragmentActivity, daysToLaunch)
+            }
+        }
+    }
+
+    fun morningStartButton(view: View) {
+        val setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(requireActivity()))
+        val timeDisplayed = view.findViewById<View>(R.id.morning_start_time_displayed) as TextView
+        timeDisplayed.text = setTime
+
+        val morningStartButton = view.findViewById<View>(R.id.morning_start_button) as Button
+        morningStartButton.setOnClickListener {
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.MORNING_TIMESPAN, false, BAPMPreferences.getMorningStartTime(requireActivity()), "Set Morning Start Time")
+            newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+        }
+    }
+
+    fun morningEndButton(view: View) {
+        val setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(requireActivity()))
+        val timeDisplayed = view.findViewById<View>(R.id.morning_end_time_displayed) as TextView
+        timeDisplayed.text = setTime
+
+        val morningEndButton = view.findViewById<View>(R.id.morning_end_button) as Button
+        morningEndButton.setOnClickListener {
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.MORNING_TIMESPAN, true, BAPMPreferences.getMorningEndTime(requireActivity()), "Set Morning End Time")
+            newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+        }
+    }
+
+    fun eveningStartButton(view: View) {
+        val setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(requireActivity()))
+        val timeDisplayed = view.findViewById<View>(R.id.evening_start_time_displayed) as TextView
+        timeDisplayed.text = setTime
+
+        val eveningStartButton = view.findViewById<View>(R.id.evening_start_button) as Button
+        eveningStartButton.setOnClickListener {
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.EVENING_TIMESPAN, false, BAPMPreferences.getEveningStartTime(requireActivity()), "Set Evening Start Time")
+            newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+        }
+    }
+
+    fun eveningEndButton(view: View) {
+        val setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(requireActivity()))
+        val timeDisplayed = view.findViewById<View>(R.id.evening_end_time_displayed) as TextView
+        timeDisplayed.text = setTime
+
+        val eveningEndButton = view.findViewById<View>(R.id.evening_end_button) as Button
+        eveningEndButton.setOnClickListener {
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.EVENING_TIMESPAN, true, BAPMPreferences.getEveningEndTime(requireActivity()), "Set Evening End Time")
+            newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+        }
+    }
+
+    fun customStartButton(view: View) {
+        val setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomStartTime(requireActivity()))
+        val timeDisplayed = view.findViewById<View>(R.id.custom_start_time_displayed) as TextView
+        timeDisplayed.text = setTime
+
+        val eveningStartButton = view.findViewById<View>(R.id.custom_start_button) as Button
+        eveningStartButton.setOnClickListener {
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.CUSTOM_TIMESPAN, false, BAPMPreferences.getCustomStartTime(requireActivity()), "Set Custom Start Time")
+            newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+        }
+    }
+
+    fun customEndButton(view: View) {
+        val setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomEndTime(requireActivity()))
+        val timeDisplayed = view.findViewById<View>(R.id.custom_end_time_displayed) as TextView
+        timeDisplayed.text = setTime
+
+        val eveningEndButton = view.findViewById<View>(R.id.custom_end_button) as Button
+        eveningEndButton.setOnClickListener {
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.CUSTOM_TIMESPAN, true, BAPMPreferences.getCustomEndTime(requireActivity()), "Set Custom End Time")
+            newFragment.show(requireActivity().supportFragmentManager, "timePicker")
+        }
+    }
+
+    fun customLocationName(view: View) {
+        val locationName = BAPMPreferences.getCustomLocationName(requireActivity())
+        mLocationNameEditText = view.findViewById<View>(R.id.et_custom_location_name) as EditText
+
+        if (locationName.isNotEmpty()) {
+            mLocationNameEditText?.setText(locationName)
+        }
+
+        mLocationNameEditText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+            }
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                mTextChangeHandler.removeCallbacks(mTextChangeRunnable)
+                mTextChangeHandler.postDelayed(mTextChangeRunnable, 250)
+            }
+        })
+    }
+
+    private fun getNameOfDay(dayNumber: String): String {
+        when (dayNumber) {
+            "1" -> return "Sunday"
+            "2" -> return "Monday"
+            "3" -> return "Tuesday"
+            "4" -> return "Wednesday"
+            "5" -> return "Thursday"
+            "6" -> return "Friday"
+            "7" -> return "Saturday"
+            else -> return "Unknown Day Number"
+        }
+    }
+
+    companion object {
+        private val TAG = "MapsFragment"
+
+        fun newInstance(): MapsFragment {
+            return MapsFragment()
+        }
+    }
+}// Required empty public constructor

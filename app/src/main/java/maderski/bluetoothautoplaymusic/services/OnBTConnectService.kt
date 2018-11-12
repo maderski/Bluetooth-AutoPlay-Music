@@ -6,7 +6,6 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.BAPMNotification
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.receivers.CustomReceiver
 import maderski.bluetoothautoplaymusic.receivers.PowerReceiver

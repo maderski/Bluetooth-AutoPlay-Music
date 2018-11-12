@@ -11,8 +11,8 @@ import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.BAPMNotification
-import maderski.bluetoothautoplaymusic.PackageTools
+import maderski.bluetoothautoplaymusic.notification.BAPMNotification
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
@@ -24,7 +24,7 @@ import maderski.bluetoothautoplaymusic.utils.ServiceUtils
  */
 
 class BTDisconnectActions(private val context: Context) {
-    private val mBAPMNotification: BAPMNotification = BAPMNotification()
+    private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
     private val mVolumeControl: VolumeControl = VolumeControl(context)
     private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
 
@@ -56,7 +56,7 @@ class BTDisconnectActions(private val context: Context) {
         val canShowNotification = BAPMPreferences.getShowNotification(context)
 
         if (canShowNotification) {
-            mBAPMNotification.removeBAPMMessage(context)
+            mBAPMNotification.removeBAPMMessage()
         }
     }
 
@@ -94,8 +94,8 @@ class BTDisconnectActions(private val context: Context) {
 
     private fun closeWaze(launchAppHelper: LaunchAppHelper) {
         val closeWaze = (BAPMPreferences.getCloseWazeOnDisconnect(context)
-                && launchAppHelper.checkPkgOnPhone(context, PackageTools.PackageName.WAZE)
-                && BAPMPreferences.getMapsChoice(context) == PackageTools.PackageName.WAZE)
+                && launchAppHelper.checkPkgOnPhone(context, PackageHelper.WAZE)
+                && BAPMPreferences.getMapsChoice(context) == PackageHelper.WAZE)
         if (closeWaze) {
             launchAppHelper.closeWazeOnDisconnect(context)
         }

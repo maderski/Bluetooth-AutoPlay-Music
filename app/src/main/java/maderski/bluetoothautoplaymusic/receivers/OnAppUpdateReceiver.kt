@@ -31,7 +31,7 @@ class OnAppUpdateReceiver : BroadcastReceiver() {
     private fun syncHomeWorkCheckboxes(context: Context) {
         val hasRan = BAPMPreferences.getUpdateHomeWorkDaysSync(context)
         if (!hasRan) {
-            val daysHomeWorkRan = BAPMPreferences.getHomeDaysToLaunchMaps(context) as Set<String>
+            val daysHomeWorkRan = BAPMPreferences.getHomeDaysToLaunchMaps(context) as MutableSet<String>
             BAPMPreferences.setWorkDaysToLaunchMaps(context, daysHomeWorkRan)
             BAPMPreferences.setUpdateHomeWorkDaysSync(context, true)
             Log.d(TAG, "Work/Home Sync Complete")

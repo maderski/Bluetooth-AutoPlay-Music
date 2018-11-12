@@ -6,7 +6,6 @@ import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 
-import maderski.bluetoothautoplaymusic.BAPMNotification
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
 import maderski.bluetoothautoplaymusic.R

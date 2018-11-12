@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.BAPMNotification
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils

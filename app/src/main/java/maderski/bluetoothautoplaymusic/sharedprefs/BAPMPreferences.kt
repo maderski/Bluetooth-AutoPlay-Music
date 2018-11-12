@@ -2,12 +2,10 @@ package maderski.bluetoothautoplaymusic.sharedprefs
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.AudioManager
 
-import java.util.Arrays
 import java.util.HashSet
 
-import maderski.bluetoothautoplaymusic.PackageTools
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 
 /**
@@ -110,8 +108,8 @@ object BAPMPreferences {
     fun setUseTimesToLaunchMaps(context: Context, enabled: Boolean) = editor(context).putBoolean(USE_TIMES_TO_LAUNCH_MAPS, enabled).apply()
     fun getUseTimesToLaunchMaps(context: Context): Boolean = reader(context).getBoolean(USE_TIMES_TO_LAUNCH_MAPS, false)
 
-    fun setTurnWifiOffDevices(context: Context, turnWifiOffDevices: Set<String>) = editor(context).putStringSet(TURN_WIFI_OFF_DEVICES, turnWifiOffDevices).apply()
-    fun getTurnWifiOffDevices(context: Context): Set<String> = reader(context).getStringSet(TURN_WIFI_OFF_DEVICES, HashSet()) ?: HashSet()
+    fun setTurnWifiOffDevices(context: Context, turnWifiOffDevices: MutableSet<String>) = editor(context).putStringSet(TURN_WIFI_OFF_DEVICES, turnWifiOffDevices).apply()
+    fun getTurnWifiOffDevices(context: Context): MutableSet<String> = reader(context).getStringSet(TURN_WIFI_OFF_DEVICES, mutableSetOf()) ?: mutableSetOf()
 
     fun setCloseWazeOnDisconnect(context: Context, enabled: Boolean) = editor(context).putBoolean(CLOSE_WAZE_ON_DISCONNECT, enabled).apply()
     fun getCloseWazeOnDisconnect(context: Context): Boolean = reader(context).getBoolean(CLOSE_WAZE_ON_DISCONNECT, true)
@@ -128,14 +126,14 @@ object BAPMPreferences {
     fun setDimTime(context: Context, time: Int) = editor(context).putInt(DIM_TIME_KEY, time).apply()
     fun getDimTime(context: Context): Int = reader(context).getInt(DIM_TIME_KEY, 2000)
 
-    fun setCustomDaysToLaunchMaps(context: Context, customDays: Set<String>) = editor(context).putStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, customDays).apply()
-    fun getCustomDaysToLaunchMaps(context: Context): Set<String>? = reader(context).getStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, mutableSetOf<String>())
+    fun setCustomDaysToLaunchMaps(context: Context, customDays: MutableSet<String>) = editor(context).putStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, customDays).apply()
+    fun getCustomDaysToLaunchMaps(context: Context): MutableSet<String>? = reader(context).getStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, mutableSetOf<String>())
 
-    fun setWorkDaysToLaunchMaps(context: Context, _stringSet: Set<String>) = editor(context).putStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, _stringSet).apply()
-    fun getWorkDaysToLaunchMaps(context: Context): Set<String>? = reader(context).getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
+    fun setWorkDaysToLaunchMaps(context: Context, _stringSet: MutableSet<String>) = editor(context).putStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, _stringSet).apply()
+    fun getWorkDaysToLaunchMaps(context: Context): MutableSet<String>? = reader(context).getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
 
-    fun setHomeDaysToLaunchMaps(context: Context, _stringSet: Set<String>) = editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet).apply()
-    fun getHomeDaysToLaunchMaps(context: Context): Set<String>? = reader(context).getStringSet(DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
+    fun setHomeDaysToLaunchMaps(context: Context, _stringSet: MutableSet<String>) = editor(context).putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet).apply()
+    fun getHomeDaysToLaunchMaps(context: Context): MutableSet<String>? = reader(context).getStringSet(DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
 
     fun setAutoBrightness(context: Context, enabled: Boolean) = editor(context).putBoolean(AUTO_BRIGHTNESS_KEY, enabled).apply()
     fun getAutoBrightness(context: Context): Boolean = reader(context).getBoolean(AUTO_BRIGHTNESS_KEY, false)
@@ -156,19 +154,19 @@ object BAPMPreferences {
     fun getLaunchMusicPlayer(context: Context): Boolean = reader(context).getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false)
 
     fun setPkgSelectedMusicPlayer(context: Context, packageName: String) = editor(context).putString(PKG_SELECTED_MUSIC_PLAYER_KEY, packageName).apply()
-    fun getPkgSelectedMusicPlayer(context: Context): String = reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageTools.PackageName.GOOGLEPLAYMUSIC) ?: PackageTools.PackageName.GOOGLEPLAYMUSIC
+    fun getPkgSelectedMusicPlayer(context: Context): String = reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageHelper.GOOGLEPLAYMUSIC) ?: PackageHelper.GOOGLEPLAYMUSIC
 
     fun setUnlockScreen(context: Context, enabled: Boolean) = editor(context).putBoolean(UNLOCK_SCREEN_KEY, enabled).apply()
     fun getUnlockScreen(context: Context): Boolean = reader(context).getBoolean(UNLOCK_SCREEN_KEY, false)
 
-    fun setHeadphoneDevices(context: Context, headphoneDevices: Set<String>) = editor(context).putStringSet(HEADPHONE_DEVICES_KEY, headphoneDevices).apply()
-    fun getHeadphoneDevices(context: Context): Set<String> = reader(context).getStringSet(HEADPHONE_DEVICES_KEY, HashSet()) ?: HashSet()
+    fun setHeadphoneDevices(context: Context, headphoneDevices: MutableSet<String>) = editor(context).putStringSet(HEADPHONE_DEVICES_KEY, headphoneDevices).apply()
+    fun getHeadphoneDevices(context: Context): MutableSet<String> = reader(context).getStringSet(HEADPHONE_DEVICES_KEY, mutableSetOf()) ?: mutableSetOf()
 
-    fun setBTDevices(context: Context, _stringSet: Set<String>) = editor(context).putStringSet(BTDEVICES_KEY, _stringSet).apply()
-    fun getBTDevices(context: Context): Set<String> = reader(context).getStringSet(BTDEVICES_KEY, HashSet()) ?: HashSet()
+    fun setBTDevices(context: Context, _stringSet: MutableSet<String>) = editor(context).putStringSet(BTDEVICES_KEY, _stringSet).apply()
+    fun getBTDevices(context: Context): MutableSet<String> = reader(context).getStringSet(BTDEVICES_KEY, mutableSetOf()) ?: mutableSetOf()
 
     fun setMapsChoice(context: Context, SelectedMapsApp: String) = editor(context).putString(MAPS_CHOICE_KEY, SelectedMapsApp).apply()
-    fun getMapsChoice(context: Context): String = reader(context).getString(MAPS_CHOICE_KEY, PackageTools.PackageName.MAPS) ?: PackageTools.PackageName.MAPS
+    fun getMapsChoice(context: Context): String = reader(context).getString(MAPS_CHOICE_KEY, PackageHelper.MAPS) ?: PackageHelper.MAPS
 
     fun setAutoplayMusic(context: Context, enabled: Boolean) = editor(context).putBoolean(AUTOPLAY_MUSIC_KEY, enabled).apply()
     fun getAutoPlayMusic(context: Context): Boolean = reader(context).getBoolean(AUTOPLAY_MUSIC_KEY, true)

@@ -10,7 +10,7 @@ import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.PackageTools
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 /**
@@ -57,7 +57,7 @@ class PlayMusicControl(context: Context) {
 
             if (!audioManager.isMusicActive) {
                 when (selectedMusicPlayer) {
-                    PackageTools.PackageName.PANDORA -> finalAttemptToPlayPandora(context, audioManager)
+                    PackageHelper.PANDORA -> finalAttemptToPlayPandora(context)
                     else -> {
                         Log.d(TAG, "Play media Button")
                         mPlayerControls.playMediaButton(selectedMusicPlayer)
@@ -70,9 +70,9 @@ class PlayMusicControl(context: Context) {
         mHandler?.postDelayed(mRunnable, milliSeconds.toLong())
     }
 
-    private fun finalAttemptToPlayPandora(context: Context, audioManager: AudioManager) {
+    private fun finalAttemptToPlayPandora(context: Context) {
         val launchAppHelper = LaunchAppHelper()
-        launchAppHelper.launchPackage(context, PackageTools.PackageName.PANDORA)
+        launchAppHelper.launchPackage(context, PackageHelper.PANDORA)
         Log.d(TAG, "PANDORA LAUNCHED")
 
         val handler = Handler()

@@ -8,12 +8,9 @@ import android.os.Looper
 import android.support.annotation.StringDef
 import android.util.Log
 
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 import java.util.ArrayList
 import java.util.Calendar
 
-import maderski.bluetoothautoplaymusic.PackageTools
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
@@ -21,7 +18,7 @@ import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
 /**
  * Created by Jason on 12/8/15.
  */
-class LaunchAppHelper : PackageTools() {
+class LaunchAppHelper : PackageHelper() {
 
     private var mDirectionLocation: String? = null
     private val mCanLaunchThisTimeLocations = ArrayList<String>()
@@ -47,7 +44,7 @@ class LaunchAppHelper : PackageTools() {
             val handler = Handler()
             val runnable = Runnable {
                 val mapAppName = BAPMPreferences.getMapsChoice(context)
-                val isMapsRunning = isAppRunning(context, PackageTools.PackageName.MAPS)
+                val isMapsRunning = isAppRunning(context, PackageHelper.MAPS)
                 val canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context) && !isMapsRunning
                 if (canLaunchDirections) {
                     val data = getMapsChoiceUri(context)
@@ -64,7 +61,7 @@ class LaunchAppHelper : PackageTools() {
     // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
     private fun determineIfLaunchWithDrivingMode(context: Context, mapAppName: String, isMapsRunning: Boolean) {
         val canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
-                mapAppName == PackageTools.PackageName.MAPS && (isMapsRunning.not())
+                mapAppName == PackageHelper.MAPS && (isMapsRunning.not())
         if (canLaunchDrivingMode) {
             Log.d(TAG, "LAUNCH DRIVING MODE")
             val data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls")
@@ -83,7 +80,7 @@ class LaunchAppHelper : PackageTools() {
         }
 
         val uri: Uri
-        if (BAPMPreferences.getMapsChoice(context) == PackageTools.PackageName.WAZE) {
+        if (BAPMPreferences.getMapsChoice(context) == PackageHelper.WAZE) {
             val wazeUri = "waze://?favorite=$mDirectionLocation&navigate=yes"
             uri = Uri.parse(wazeUri)
         } else {

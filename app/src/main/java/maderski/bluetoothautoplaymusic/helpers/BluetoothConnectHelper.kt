@@ -10,7 +10,7 @@ import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
-import maderski.bluetoothautoplaymusic.BAPMNotification
+import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.services.BTStateChangedService
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
@@ -75,8 +75,8 @@ class BluetoothConnectHelper(private val mContext: Context, private val mDeviceN
         }
 
         if (BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)) {
-            val bapmNotification = BAPMNotification()
-            bapmNotification.removeBAPMMessage(mContext)
+            val bapmNotification = BAPMNotification(mContext)
+            bapmNotification.removeBAPMMessage()
         }
 
         if (!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
