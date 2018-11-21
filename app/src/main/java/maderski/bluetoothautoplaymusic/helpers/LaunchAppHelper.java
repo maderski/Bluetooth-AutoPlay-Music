@@ -24,7 +24,7 @@ import maderski.bluetoothautoplaymusic.ui.activities.MainActivity;
  */
 public class LaunchAppHelper extends PackageTools {
 
-    private static final String TAG = LaunchAppHelper.class.getName();
+    private static final String TAG = "LaunchAppHelper";
 
     @StringDef({
             DirectionLocations.HOME,
@@ -87,8 +87,9 @@ public class LaunchAppHelper extends PackageTools {
 
     // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
     private void determineIfLaunchWithDrivingMode(final Context context, final String mapAppName) {
-        boolean canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
-                mapAppName.equals(PackageName.MAPS);
+        final boolean isMapsRunning = isAppRunning(context, PackageName.MAPS);
+        final boolean canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
+                mapAppName.equals(PackageName.MAPS) && !isMapsRunning;
         if(canLaunchDrivingMode){
             Log.d(TAG, "LAUNCH DRIVING MODE");
             Uri data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls");

@@ -33,7 +33,9 @@ public class PackageTools {
             PackageName.FMINDIA,
             PackageName.POWERAMP,
             PackageName.DOUBLETWIST,
-            PackageName.LISTENAUDIOBOOK
+            PackageName.LISTENAUDIOBOOK,
+            PackageName.DEEZERMUSIC,
+            PackageName.GOOGLEPODCASTS
     })
     @Retention(RetentionPolicy.SOURCE)
     public @interface PackageName {
@@ -48,6 +50,8 @@ public class PackageTools {
         String POWERAMP = "com.maxmpz.audioplayer";
         String DOUBLETWIST = "com.doubleTwist.androidPlayer";
         String LISTENAUDIOBOOK = "com.acmeandroid.listen";
+        String DEEZERMUSIC = "deezer.android.app";
+        String GOOGLEPODCASTS = "com.google.android.apps.podcasts";
     }
 
     // Launches App that is associated with that package that was put into method
@@ -123,13 +127,16 @@ public class PackageTools {
     // Is app running on phone
     public boolean isAppRunning(Context context, String packageName) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+        if (activityManager != null) {
+            List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
 
-        for(ActivityManager.RunningAppProcessInfo processInfo : processInfos){
-            if(processInfo.processName.equals(packageName)){
-                return true;
+            for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+                if (processInfo.processName.equals(packageName)) {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 }

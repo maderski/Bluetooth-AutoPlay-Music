@@ -534,21 +534,32 @@ public class HomeFragment extends Fragment {
 
         for(ResolveInfo ri:pkgAppsList){
             String resolveInfo = ri.toString();
-            if(resolveInfo.contains("pandora")
-                    || resolveInfo.contains(".playback")
+            if(resolveInfo.contains(".playback")
                     || resolveInfo.contains("music")
                     || resolveInfo.contains("Music")
                     || resolveInfo.contains("audioplayer")
                     || resolveInfo.contains("mobi.beyondpod")
                     || resolveInfo.contains("au.com.shiftyjelly.pocketcasts")
                     || resolveInfo.contains(PackageTools.PackageName.DOUBLETWIST)
-                    || resolveInfo.contains(PackageTools.PackageName.LISTENAUDIOBOOK)) {
+                    || resolveInfo.contains(PackageTools.PackageName.LISTENAUDIOBOOK)
+                    || resolveInfo.contains(PackageTools.PackageName.DEEZERMUSIC)) {
                 String[] resolveInfoSplit = resolveInfo.split(" ");
                 String pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"));
                 if (!installedMediaPlayers.contains(pkg)) {
                     installedMediaPlayers.add(pkg);
                 }
             }
+        }
+
+        PackageTools packageTools = new PackageTools();
+        Boolean isPandoraInstalled = packageTools.checkPkgOnPhone(getActivity(), PackageTools.PackageName.PANDORA);
+        if(isPandoraInstalled) {
+            installedMediaPlayers.add(PackageTools.PackageName.PANDORA);
+        }
+
+        Boolean isGooglePodcastsInstalled = packageTools.checkPkgOnPhone(getActivity(), PackageTools.PackageName.GOOGLEPODCASTS);
+        if(isGooglePodcastsInstalled) {
+            installedMediaPlayers.add(PackageTools.PackageName.GOOGLEPODCASTS);
         }
 
         return installedMediaPlayers;
