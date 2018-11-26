@@ -24,7 +24,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 89
-        versionName "3.47"
+        versionName "3.48"
     }
     buildTypes {
         release {
