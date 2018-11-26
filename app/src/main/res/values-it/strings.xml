@@ -92,4 +92,5 @@
     <string name="require_a2dp">Richiedi A2DP</string>
     <string name="wifi_turned_off">Wifi disattivato</string>
     <string name="wifi_turned_on">" Wifi attivato"</string>
+    <string name="no_music_players_msg">Nessun lettore musicale trovato</string>
 </resources>

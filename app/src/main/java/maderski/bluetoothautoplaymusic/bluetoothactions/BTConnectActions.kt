@@ -38,26 +38,24 @@ class BTConnectActions(private val context: Context) {
 
     fun onBTConnect() {
         val waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context)
-
         if (waitTillOffPhone) {
-            val telephoneHelper = TelephoneHelper(context)
-            if (PowerHelper.isPluggedIn(context)) {
-                if (telephoneHelper.isOnCall) {
-                    Log.d(TAG, "ON a call")
-                    //Run checkIfOnPhone
-                    telephoneHelper.checkIfOnPhone(mVolumeControl)
-                } else {
-                    Log.d(TAG, "NOT on a call")
-                    actionsOnBTConnect()
-                }
-            } else {
-                if (telephoneHelper.isOnCall) {
-                    mBAPMNotification.launchBAPM()
-                } else {
-                    actionsOnBTConnect()
-                }
-            }
+            actionsWhileOnCall()
         } else {
+            actionsOnBTConnect()
+        }
+    }
+
+    private fun actionsWhileOnCall() {
+        val telephoneHelper = TelephoneHelper(context)
+        val isOnCall = telephoneHelper.isOnCall
+        val isPluggedIn = PowerHelper.isPluggedIn(context)
+
+        if (isOnCall) {
+            Log.d(TAG, "ON a call")
+            // if plugged in run on the phone check else launch notification
+            if (isPluggedIn) telephoneHelper.checkIfOnPhone(mVolumeControl) else mBAPMNotification.launchBAPM()
+        } else {
+            Log.d(TAG, "NOT on a call")
             actionsOnBTConnect()
         }
     }

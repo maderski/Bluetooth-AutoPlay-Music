@@ -11,20 +11,20 @@ internal class OtherMusicPlayer(context: Context) : PlayerControls(context) {
 
     @Synchronized
     override fun play() {
-        Log.d(TAG, "Other Play Music")
-        val packageName = BAPMPreferences.getPkgSelectedMusicPlayer(mContext)
+        Log.d(TAG, "Play Music")
+        val packageName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
 
         val downIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         val downEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY)
         downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent)
         downIntent.setPackage(packageName)
-        mContext.sendOrderedBroadcast(downIntent, null)
+        context.sendOrderedBroadcast(downIntent, null)
 
         val upIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         val upEvent = KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY)
         upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent)
         upIntent.setPackage(packageName)
-        mContext.sendOrderedBroadcast(upIntent, null)
+        context.sendOrderedBroadcast(upIntent, null)
     }
 
     companion object {

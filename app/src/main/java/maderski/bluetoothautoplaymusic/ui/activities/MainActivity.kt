@@ -25,7 +25,6 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.asynctasks.StartServiceTask
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity(),
         TimePickerFragment.TimePickerDialogListener,
         WifiOffFragment.OnFragmentInteractionListener {
 
-    private val mFirebaseHelper: FirebaseHelper = FirebaseHelper(this)
+    private lateinit var mFirebaseHelper: FirebaseHelper
 
     // Show version of the BAPM App
     private val version: String
@@ -63,6 +62,8 @@ class MainActivity : AppCompatActivity(),
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
+        mFirebaseHelper = FirebaseHelper(this)
+
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
 
         if (BAPMPreferences.getAutoBrightness(this)) {
@@ -77,21 +78,24 @@ class MainActivity : AppCompatActivity(),
         val bottomNavigationView = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             val itemId = item.itemId
-            if (itemId == R.id.menu_home) {
-                val homeFragment = HomeFragment.newInstance()
-                handleNavigationSelection(homeFragment, TAG_HOME_FRAGMENT)
-                true
-            } else if (itemId == R.id.menu_maps) {
-                val mapsFragment = MapsFragment.newInstance()
-                handleNavigationSelection(mapsFragment, TAG_MAPS_FRAGMENT)
-                true
-            } else if (itemId == R.id.menu_options) {
-                val optionsFragment = OptionsFragment.newInstance()
-                handleNavigationSelection(optionsFragment, TAG_OPTIONS_FRAGMENT)
-                mFirebaseHelper.selectionMade(SelectionConstants.OPTIONS)
-                true
-            } else {
-                false
+            when (itemId) {
+                R.id.menu_home -> {
+                    val homeFragment = HomeFragment.newInstance()
+                    handleNavigationSelection(homeFragment, TAG_HOME_FRAGMENT)
+                    true
+                }
+                R.id.menu_maps -> {
+                    val mapsFragment = MapsFragment.newInstance()
+                    handleNavigationSelection(mapsFragment, TAG_MAPS_FRAGMENT)
+                    true
+                }
+                R.id.menu_options -> {
+                    val optionsFragment = OptionsFragment.newInstance()
+                    handleNavigationSelection(optionsFragment, TAG_OPTIONS_FRAGMENT)
+                    mFirebaseHelper.selectionMade(SelectionConstants.OPTIONS)
+                    true
+                }
+                else -> false
             }
         }
 
@@ -138,8 +142,9 @@ class MainActivity : AppCompatActivity(),
     // Starts BAPMService if it is not running
     private fun checkIfBAPMServiceRunning() {
         val isServiceRunning = ServiceUtils.isServiceRunning(this, BAPMService::class.java)
-        if (!isServiceRunning) {
-            StartServiceTask().execute(this)
+        if (isServiceRunning.not()) {
+            val serviceIntent = Intent(this, BAPMService::class.java)
+            startService(serviceIntent)
         }
     }
 

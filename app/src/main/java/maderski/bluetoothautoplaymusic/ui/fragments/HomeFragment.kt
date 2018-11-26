@@ -39,10 +39,7 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class HomeFragment : Fragment() {
 
-    private var saveBTDevices: MutableSet<String> = HashSet()
-    private var launchAppHelper: LaunchAppHelper = LaunchAppHelper()
-    private var installedMediaPlayers: List<String> = ArrayList()
-    private var mFirebaseHelper: FirebaseHelper = FirebaseHelper(requireActivity())
+    private lateinit var mFirebaseHelper: FirebaseHelper
 
     private val packageHelper: PackageHelper = PackageHelper()
     private val radioButtonIndex: Int
@@ -50,6 +47,13 @@ class HomeFragment : Fragment() {
             val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity())
             return installedMediaPlayers.indexOf(selectedMusicPlayer)
         }
+
+    private var installedMediaPlayers: List<String> = ArrayList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mFirebaseHelper = FirebaseHelper(requireActivity())
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -66,21 +70,14 @@ class HomeFragment : Fragment() {
         return rootView
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
     override fun onResume() {
         super.onResume()
         installedMediaPlayers = packageHelper.listOfInstalledMediaPlayers(requireActivity())
 
         view?.let {
-            setupUIElements(it, requireActivity())
+            setupUIElements(it)
         }
+
         checkIfWazeRemoved(requireActivity())
     }
 
@@ -89,6 +86,7 @@ class HomeFragment : Fragment() {
     private fun checkIfWazeRemoved(context: Context) {
         val mapAppChoice = BAPMPreferences.getMapsChoice(requireActivity())
         if (mapAppChoice.equals(PackageHelper.WAZE, ignoreCase = true)) {
+            val launchAppHelper = LaunchAppHelper()
             val isWazeOnPhone = launchAppHelper.checkPkgOnPhone(context, PackageHelper.WAZE)
             if (isWazeOnPhone.not()) {
                 Log.d(TAG, "Checked")
@@ -100,13 +98,15 @@ class HomeFragment : Fragment() {
     }
 
     //Setup the UI
-    private fun setupUIElements(view: View, context: Context) {
-        setFonts(view, context)
-        radiobuttonCreator(view, context)
-        checkboxCreator(view, context)
-        setButtonPreferences(view, context)
-        radioButtonListener(view, context)
-        setMapsButtonText(view, context)
+    private fun setupUIElements(view: View) {
+        val fragmentActivity = requireActivity()
+
+        setFonts(view, fragmentActivity)
+        radiobuttonCreator(view, fragmentActivity)
+        checkboxCreator(view, fragmentActivity)
+        setButtonPreferences(view, fragmentActivity)
+        radioButtonListener(view, fragmentActivity)
+        setMapsButtonText(view, fragmentActivity)
     }
 
     //Create Checkboxes
@@ -117,41 +117,44 @@ class HomeFragment : Fragment() {
         val btDeviceCkBoxLL = view.findViewById<View>(R.id.checkBoxLL) as LinearLayout
         btDeviceCkBoxLL.removeAllViews()
         val listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(requireActivity())
-        if (listOfBTDevices.contains("No Bluetooth Device found") || listOfBTDevices.isEmpty()) {
+        val noBTDeviceFoundMsg = resources.getString(R.string.no_BT_found)
+        val isNoBTDevice = listOfBTDevices.contains(noBTDeviceFoundMsg) || listOfBTDevices.isEmpty()
+        if (isNoBTDevice) {
             textView = TextView(context)
             textView.setText(R.string.no_BT_found)
             btDeviceCkBoxLL.addView(textView)
         } else {
-            for (BTDevice in listOfBTDevices) {
+            listOfBTDevices.forEach { btDevice ->
                 var textColor = R.color.colorPrimary
                 checkBox = CheckBox(context)
-                checkBox.text = BTDevice
-                if (BAPMPreferences.getHeadphoneDevices(requireActivity()).contains(BTDevice)) {
+                checkBox.text = btDevice
+
+                val isHeadphonesDevice = BAPMPreferences.getHeadphoneDevices(requireActivity()).contains(btDevice)
+                if (isHeadphonesDevice) {
                     textColor = R.color.lightGray
                     val states = arrayOf(intArrayOf(android.R.attr.state_checked))
                     val colors = intArrayOf(textColor, textColor)
                     CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList(states, colors))
                     checkBox.isClickable = false
                     checkBox.isChecked = true
-                } else if (BAPMPreferences.getBTDevices(context).isNotEmpty()) {
-                    checkBox.isChecked = BAPMPreferences.getBTDevices(context).contains(BTDevice)
+                } else {
+                    val isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(btDevice)
+                    checkBox.isChecked = isSelectedBTDevice
+                    checkboxListener(checkBox, btDevice, context)
                 }
-                checkBox.setTextColor(ContextCompat.getColor(getContext()!!, textColor))
+
+                checkBox.setTextColor(ContextCompat.getColor(context, textColor))
                 checkBox.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
 
-                if (!BAPMPreferences.getHeadphoneDevices(context).contains(BTDevice)) {
-                    checkboxListener(checkBox, BTDevice, context)
-                }
                 btDeviceCkBoxLL.addView(checkBox)
             }
         }
-
     }
 
     //Get Selected Checkboxes
     private fun checkboxListener(checkBox: CheckBox, BTDevice: String, context: Context) {
 
-        saveBTDevices = HashSet(BAPMPreferences.getBTDevices(context))
+        val saveBTDevices = HashSet(BAPMPreferences.getBTDevices(context))
 
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
@@ -172,13 +175,12 @@ class HomeFragment : Fragment() {
                 }
             }
             BAPMPreferences.setBTDevices(context, saveBTDevices)
-            mFirebaseHelper!!.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTDevice, checkBox.isChecked)
+            mFirebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTDevice, checkBox.isChecked)
         }
     }
 
     //Get list of installed Mediaplayers and create Radiobuttons
     private fun radiobuttonCreator(view: View, context: Context) {
-
         var rdoButton: RadioButton
         var appInfo: ApplicationInfo
         var mediaPlayer = "No Name"
@@ -197,9 +199,11 @@ class HomeFragment : Fragment() {
                 Log.e(TAG, e.message)
             }
 
+            val color = ContextCompat.getColor(context, R.color.colorPrimary)
+
             rdoButton = RadioButton(context)
             rdoButton.text = mediaPlayer
-            rdoButton.setTextColor(resources.getColor(R.color.colorPrimary))
+            rdoButton.setTextColor(color)
             rdoButton.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
             rdoMPGroup.addView(rdoButton)
         }
@@ -212,19 +216,18 @@ class HomeFragment : Fragment() {
             val radioButton = radioGroup.findViewById<View>(i)
             val index = radioGroup.indexOfChild(radioButton)
             val packageName = installedMediaPlayers[index]
+
             BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName)
-            if (BAPMPreferences.getPkgSelectedMusicPlayer(context) != null) {
-                if (!BAPMPreferences.getPkgSelectedMusicPlayer(context).equals(packageName, ignoreCase = true)) {
-                    mFirebaseHelper!!.musicPlayerChoice(packageName, true)
-                } else {
-                    mFirebaseHelper!!.musicPlayerChoice(packageName, false)
-                }
-            }
+
+            // Firebase analytics
+            val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context)
+            val hasMusicPlayerChanged = selectedMusicPlayer.equals(packageName, ignoreCase = true).not()
+            mFirebaseHelper.musicPlayerChoice(context, packageName, hasMusicPlayerChanged)
 
             setAppleMusicRequirements(view, context, packageName)
 
             Log.d(TAG, Integer.toString(index))
-            Log.d(TAG, BAPMPreferences.getPkgSelectedMusicPlayer(context))
+            Log.d(TAG, "Selected Music Player: $selectedMusicPlayer")
             Log.d(TAG, Integer.toString(radioGroup.checkedRadioButtonId))
         }
     }
@@ -263,12 +266,12 @@ class HomeFragment : Fragment() {
     private fun setMapsButtonText(view: View, context: Context) {
         var mapChoice = BAPMPreferences.getMapsChoice(context)
         val packageManager = context.packageManager
-        try {
+        mapChoice = try {
             val appInfo = packageManager.getApplicationInfo(mapChoice, 0)
-            mapChoice = packageManager.getApplicationLabel(appInfo).toString()
+            packageManager.getApplicationLabel(appInfo).toString()
         } catch (e: Exception) {
             Log.e(TAG, e.message)
-            mapChoice = "Maps"
+            "Maps"
         }
 
         val textView = view.findViewById<View>(R.id.textView4) as TextView
@@ -318,7 +321,7 @@ class HomeFragment : Fragment() {
                 musicPlayersLL.layoutParams = layoutParams
                 val textView = TextView(context)
                 textView.gravity = Gravity.CENTER_HORIZONTAL
-                textView.text = "No music players found"
+                textView.text = getString(R.string.no_music_players_msg)
                 musicPlayersLL.addView(textView)
             }
         } catch (e: Exception) {

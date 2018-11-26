@@ -26,10 +26,11 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class OptionsFragment : Fragment() {
 
-    private var mFirebaseHelper: FirebaseHelper = FirebaseHelper(requireActivity())
+    private lateinit var mFirebaseHelper: FirebaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mFirebaseHelper = FirebaseHelper(requireActivity())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

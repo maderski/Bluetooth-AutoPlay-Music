@@ -40,7 +40,7 @@ object ServiceUtils {
     }
 
     fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
-        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
         if (activityManager != null) {
             val services = activityManager.getRunningServices(Integer.MAX_VALUE)
 

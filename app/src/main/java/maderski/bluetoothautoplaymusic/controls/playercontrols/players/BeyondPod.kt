@@ -7,11 +7,11 @@ import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 
 internal class BeyondPod(context: Context) : PlayerControls(context) {
     override fun play() {
-        Log.d(TAG, "Beyond Pod Music")
+        Log.d(TAG, "Play Music")
         val intent = Intent()
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
         intent.action = "mobi.beyondpod.command.PLAY"
-        mContext.sendBroadcast(intent)
+        context.sendBroadcast(intent)
     }
 
     companion object {

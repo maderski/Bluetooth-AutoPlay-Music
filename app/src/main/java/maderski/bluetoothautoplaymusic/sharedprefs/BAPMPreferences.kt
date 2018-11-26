@@ -57,8 +57,16 @@ object BAPMPreferences {
     private const val USE_PRIORITY_MODE = "UsePriorityMode"
     private const val USE_A2DP_HEADPHONES = "UseA2DPHeadphones"
     private const val UPDATE_HOME_WORK_DAYS_SYNC = "updateHomeDaysSync"
+    private const val USE_FIREBASE_ANALYTICS = "UseFirebaseAnalytics"
+    private const val ASKED_FIREBASE_OPT_IN = "AskedFirebaseOptIn"
 
     private val launchDays = mutableSetOf("1", "2", "3", "4", "5", "6", "7")
+
+    fun setAskedFirebaseOptIn(context: Context, hasAsked: Boolean) = editor(context).putBoolean(ASKED_FIREBASE_OPT_IN, hasAsked).apply()
+    fun getAskedFirebaseOptIn(context: Context): Boolean = reader(context).getBoolean(ASKED_FIREBASE_OPT_IN, false)
+
+    fun setUseFirebaseAnalytics(context: Context, canUseFirebase: Boolean) = editor(context).putBoolean(USE_FIREBASE_ANALYTICS, canUseFirebase).apply()
+    fun getUseFirebaseAnalytics(context: Context): Boolean = reader(context).getBoolean(USE_FIREBASE_ANALYTICS, true)
 
     fun setUpdateHomeWorkDaysSync(context: Context, hasRan: Boolean) = editor(context).putBoolean(UPDATE_HOME_WORK_DAYS_SYNC, hasRan).apply()
     fun getUpdateHomeWorkDaysSync(context: Context): Boolean = reader(context).getBoolean(UPDATE_HOME_WORK_DAYS_SYNC, false)
