@@ -85,16 +85,21 @@ open class PackageHelper {
             }
         }
 
-        // Check if Google Podcasts is installed
-        val isGooglePodcastsInstalled = checkPkgOnPhone(context, GOOGLEPODCASTS)
-        if (isGooglePodcastsInstalled) {
-            installedMediaPlayers.add(GOOGLEPODCASTS)
-        }
+        val packagesToCheck = arrayOf(
+                GOOGLEPODCASTS,
+                PANDORA,
+                RADIOPARADISE,
+                TUNEINRADIOPRO,
+                FOOBAR2000,
+                VANILLAMUSIC,
+                JIOMUSIC
+        )
 
-        // Check if Pandora is installed
-        val isPandoraInstalled = checkPkgOnPhone(context, PANDORA)
-        if (isPandoraInstalled) {
-            installedMediaPlayers.add(PANDORA)
+        packagesToCheck.forEach { packageName ->
+            val isPackageInstalled = checkPkgOnPhone(context, packageName)
+            if (isPackageInstalled) {
+                installedMediaPlayers.add(packageName)
+            }
         }
 
         return installedMediaPlayers
@@ -162,7 +167,12 @@ open class PackageHelper {
                 LISTENAUDIOBOOK,
                 GOOGLEPODCASTS,
                 DEEZERMUSIC,
-                POCKET_CASTS
+                POCKET_CASTS,
+                RADIOPARADISE,
+                TUNEINRADIOPRO,
+                FOOBAR2000,
+                VANILLAMUSIC,
+                JIOMUSIC
         )
         @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
         annotation class PackageName
@@ -181,5 +191,10 @@ open class PackageHelper {
         const val GOOGLEPODCASTS = "com.google.android.apps.podcasts"
         const val DEEZERMUSIC = "deezer.android.app"
         const val POCKET_CASTS = "au.com.shiftyjelly.pocketcasts"
+        const val RADIOPARADISE = "com.earthflare.android.radioparadisewidget.gpv2"
+        const val TUNEINRADIOPRO = "radiotime.player"
+        const val FOOBAR2000 = "com.foobar2000.foobar2000"
+        const val VANILLAMUSIC = "ch.blinkenlights.android.vanilla"
+        const val JIOMUSIC = "com.jio.media.jiobeats"
     }
 }
