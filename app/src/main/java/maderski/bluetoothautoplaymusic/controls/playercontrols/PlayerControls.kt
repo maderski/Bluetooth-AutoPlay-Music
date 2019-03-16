@@ -8,7 +8,7 @@ import android.view.KeyEvent
 /**
  * Created by Jason on 8/1/16.
  */
-abstract class PlayerControls(var context: Context) {
+abstract class PlayerControls(val context: Context) {
 
     private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
