@@ -13,25 +13,26 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
  * Created by Jason on 1/28/17.
  */
 
-class FirebaseHelper(val context: Context) {
+class FirebaseHelper(context: Context) {
 
     private val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    private val isFirebaseEnabled = BAPMPreferences.getUseFirebaseAnalytics(context)
 
     fun showAnalyticsCollectionsConsent(activity: Activity) {
         val dialogBuilder = AlertDialog.Builder(activity)
                 .setTitle("Firebase Analytics")
                 .setMessage("Allow use of analytics?")
                 .setPositiveButton("Yes") { _, _ ->
-                    setAnalyticsCollectionEnabled(true)
+                    setAnalyticsCollectionEnabled(activity, true)
                 }
                 .setNegativeButton("No") { _, _ ->
-                    setAnalyticsCollectionEnabled(false)
+                    setAnalyticsCollectionEnabled(activity, false)
                 }
         val dialog = dialogBuilder.create()
         dialog.show()
     }
 
-    private fun setAnalyticsCollectionEnabled(isEnabled: Boolean) {
+    private fun setAnalyticsCollectionEnabled(context: Context, isEnabled: Boolean) {
         BAPMPreferences.setUseFirebaseAnalytics(context, isEnabled)
         firebaseAnalytics.setAnalyticsCollectionEnabled(isEnabled)
     }
@@ -94,7 +95,6 @@ class FirebaseHelper(val context: Context) {
     fun bluetoothActionLaunch(launchEventTrigger: String) = logEvent(launchEventTrigger, null)
 
     private fun logEvent(eventName: String, bundle: Bundle?) {
-        val isFirebaseEnabled = BAPMPreferences.getUseFirebaseAnalytics(context)
         if (isFirebaseEnabled) {
             firebaseAnalytics.logEvent(eventName, bundle)
         }
