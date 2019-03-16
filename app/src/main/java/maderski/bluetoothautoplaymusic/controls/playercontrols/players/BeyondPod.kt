@@ -5,7 +5,7 @@ import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 
-internal class BeyondPod(context: Context) : PlayerControls(context) {
+class BeyondPod(context: Context) : PlayerControls(context) {
     override fun play() {
         Log.d(TAG, "Play Music")
         val intent = Intent()

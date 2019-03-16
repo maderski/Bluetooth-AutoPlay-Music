@@ -5,7 +5,7 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 
-internal class Pandora(context: Context) : PlayerControls(context) {
+class Pandora(context: Context) : PlayerControls(context) {
 
     override fun play() {
         Log.d(TAG, "Play Music")

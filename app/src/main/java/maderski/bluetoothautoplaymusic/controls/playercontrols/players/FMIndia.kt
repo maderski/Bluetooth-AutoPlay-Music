@@ -7,7 +7,7 @@ import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
-internal class FMIndia(context: Context) : PlayerControls(context) {
+class FMIndia(context: Context) : PlayerControls(context) {
 
     override fun play() {
         Log.d(TAG, "Play Music")

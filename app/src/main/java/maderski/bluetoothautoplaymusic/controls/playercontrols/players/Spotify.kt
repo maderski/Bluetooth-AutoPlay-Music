@@ -8,7 +8,7 @@ import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 
-internal class Spotify(context: Context) : PlayerControls(context) {
+class Spotify(context: Context) : PlayerControls(context) {
 
     override fun play() {
         Log.d(TAG, "Play Music")

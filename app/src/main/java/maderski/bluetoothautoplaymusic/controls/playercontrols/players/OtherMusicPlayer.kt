@@ -7,7 +7,7 @@ import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
-internal class OtherMusicPlayer(context: Context) : PlayerControls(context) {
+class OtherMusicPlayer(context: Context) : PlayerControls(context) {
 
     @Synchronized
     override fun play() {
