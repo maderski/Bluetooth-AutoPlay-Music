@@ -11,8 +11,7 @@ import android.util.Log
 /**
  * Created by Jason on 2/21/16.
  */
-object PowerHelper {
-    private val TAG = "PowerHelper"
+object PowerUtils {
 
     // Returns true or false depending if battery is plugged in
     fun isPluggedIn(context: Context): Boolean {

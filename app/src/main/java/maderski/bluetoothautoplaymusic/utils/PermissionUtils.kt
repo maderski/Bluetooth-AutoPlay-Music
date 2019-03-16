@@ -2,18 +2,17 @@ package maderski.bluetoothautoplaymusic.helpers
 
 import android.Manifest
 import android.app.Activity
+import android.app.AppOpsManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
+import android.os.Process
 import android.support.annotation.RequiresApi
 import android.support.annotation.StringDef
 import android.support.v4.app.ActivityCompat
-
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 
 /**
  * Created by Jason on 9/10/16.
@@ -27,11 +26,13 @@ object PermissionHelper {
 
     const val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
 
+    private const val GET_USAGE_STATS = "android:get_usage_stats"
+
     fun checkPermission(activity: Activity, permission: String) {
         val packageManager = activity.packageManager
         val hasPermission = packageManager.checkPermission(permission,
                 activity.packageName)
-        //Check if Permission is granted
+        // Check if Permission is granted
         if (hasPermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     activity,
@@ -44,7 +45,7 @@ object PermissionHelper {
         val packageManager = context.packageManager
         val hasPermission = packageManager.checkPermission(permission,
                 context.packageName)
-        //Check if Permission is granted
+        // Check if Permission is granted
         return hasPermission == PackageManager.PERMISSION_GRANTED
 
     }
@@ -64,5 +65,11 @@ object PermissionHelper {
             handler.postDelayed(runnable, milliseconds)
         }
         return hasDoNotDisturbPerm
+    }
+
+    fun hasUsageStatsPermission(context: Context): Boolean {
+        val appOpsManager = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = appOpsManager.checkOpNoThrow(GET_USAGE_STATS, Process.myUid(), context.packageName)
+        return mode == AppOpsManager.MODE_ALLOWED
     }
 }
