@@ -93,4 +93,5 @@
     <string name="wifi_turned_off">Wifi apagado</string>
     <string name="wifi_turned_on">" Wifi encendido"</string>
     <string name="no_music_players_msg">No se encontraron reproductores de música</string>
+    <string name="unable_to_launch">Incapaz de lanzar</string>
 </resources>
