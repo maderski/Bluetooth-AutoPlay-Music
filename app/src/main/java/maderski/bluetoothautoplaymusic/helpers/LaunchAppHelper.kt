@@ -5,86 +5,117 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.StringDef
 import android.util.Log
-
-import java.util.ArrayList
-import java.util.Calendar
-
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation.*
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
+import java.util.*
+
 
 /**
  * Created by Jason on 12/8/15.
  */
-class LaunchAppHelper : PackageHelper() {
+class LaunchAppHelper(private val context: Context) {
+    private val packageHelper = PackageHelper(context)
+    private val canLaunchThisTimeLocations = ArrayList<DirectionLocation>()
 
-    private var mDirectionLocation: String? = null
-    private val mCanLaunchThisTimeLocations = ArrayList<String>()
+    private var directionLocation: DirectionLocation = NONE
+
+    // SharePrefs Info
+    private val mapAppChosen = BAPMPreferences.getMapsChoice(context)
+    private val customLocationName = BAPMPreferences.getCustomLocationName(context)
+    private val mapAppName = BAPMPreferences.getMapsChoice(context)
+    private val canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context)
+    private val canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
+            mapAppName == MAPS.packageName
+    private val isLaunchingWithDirections = BAPMPreferences.getCanLaunchDirections(context)
+    private val isUsingTimesToLaunch = BAPMPreferences.getUseTimesToLaunchMaps(context)
+
+    private val morningStartTime = BAPMPreferences.getMorningStartTime(context)
+    private val morningEndTime = BAPMPreferences.getMorningEndTime(context)
+
+    private val eveningStartTime = BAPMPreferences.getEveningStartTime(context)
+    private val eveningEndTime = BAPMPreferences.getEveningEndTime(context)
+
+    private val customStartTime = BAPMPreferences.getCustomStartTime(context)
+    private val customEndTime = BAPMPreferences.getCustomEndTime(context)
+
+    private val isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context)
+
+    private val musicPlayerPkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
+
+    private val daysToLaunchHome = BAPMPreferences.getHomeDaysToLaunchMaps(context)
+    private val daysToLaunchWork = BAPMPreferences.getWorkDaysToLaunchMaps(context)
+    private val daysToLaunchCustom = BAPMPreferences.getCustomDaysToLaunchMaps(context)
+
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
-    fun musicPlayerLaunch(context: Context, seconds: Int) {
-        var seconds = seconds
-        val pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
-        seconds = seconds * 1000
+    fun musicPlayerLaunch(seconds: Int) {
+        val mills = seconds * 1000L
         val handler = Handler()
-        val runnable = Runnable { launchPackage(context, pkgName) }
-        handler.postDelayed(runnable, seconds.toLong())
+        val runnable = Runnable { packageHelper.launchPackage(musicPlayerPkgName) }
+        handler.postDelayed(runnable, mills)
     }
 
     //Launch Maps or Waze with a delay
-    fun launchMaps(context: Context, seconds: Int) {
-        var seconds = seconds
-        val canLaunchMapsNow = canMapsLaunchNow(context)
+    fun launchMaps(seconds: Int) {
+        val canLaunchMapsNow = canMapsLaunchNow()
 
         if (canLaunchMapsNow) {
-            seconds = seconds * 1000
+            val mills = seconds * 1000L
 
             val handler = Handler()
             val runnable = Runnable {
-                val mapAppName = BAPMPreferences.getMapsChoice(context)
-                val isMapsRunning = isAppRunning(context, PackageHelper.MAPS)
-                val canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context) && !isMapsRunning
                 if (canLaunchDirections) {
-                    val data = getMapsChoiceUri(context)
-                    launchPackage(context, mapAppName, data, Intent.ACTION_VIEW)
+                    val data = getMapsChoiceUri()
+                    packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
                 } else {
-                    determineIfLaunchWithDrivingMode(context, mapAppName, isMapsRunning)
+                    determineIfLaunchWithDrivingMode(mapAppName)
                 }
                 Log.d(TAG, "delayLaunchmaps started")
+
             }
-            handler.postDelayed(runnable, seconds.toLong())
+            handler.postDelayed(runnable, mills)
         }
+    }
+
+    private fun determineHowToLaunchMaps() {
+        val isMapsRunning = packageHelper.isAppRunning(MAPS.packageName)
+        if (canLaunchDirections && !isMapsRunning && directionLocation != NONE) {
+            val data = getMapsChoiceUri()
+            packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
+        } else {
+            determineIfLaunchWithDrivingMode(mapAppName)
+        }
+        Log.d(TAG, "delayLaunchmaps started")
     }
 
     // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
-    private fun determineIfLaunchWithDrivingMode(context: Context, mapAppName: String, isMapsRunning: Boolean) {
-        val canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
-                mapAppName == PackageHelper.MAPS && (isMapsRunning.not())
+    private fun determineIfLaunchWithDrivingMode(mapAppName: String) {
         if (canLaunchDrivingMode) {
             Log.d(TAG, "LAUNCH DRIVING MODE")
             val data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls")
-            launchPackage(context, mapAppName, data, Intent.ACTION_VIEW)
+            packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
         } else {
-            launchPackage(context, mapAppName)
+            packageHelper.launchPackage(mapAppName)
         }
     }
 
-    private fun getMapsChoiceUri(context: Context): Uri {
-        if (mDirectionLocation != null) {
-            mDirectionLocation = if (mDirectionLocation == CUSTOM)
-                BAPMPreferences.getCustomLocationName(context)
-            else
-                mDirectionLocation
-        }
+    private fun getMapsChoiceUri(): Uri {
+        val location = if (directionLocation == CUSTOM)
+            customLocationName
+        else
+            directionLocation.location
 
         val uri: Uri
-        if (BAPMPreferences.getMapsChoice(context) == PackageHelper.WAZE) {
-            val wazeUri = "waze://?favorite=$mDirectionLocation&navigate=yes"
+        if (mapAppChosen == WAZE.packageName) {
+            val wazeUri = "waze://?favorite=$location&navigate=yes"
             uri = Uri.parse(wazeUri)
         } else {
-            val mapsUri = "google.navigation:q=" + mDirectionLocation!!
+            val mapsUri = "google.navigation:q=" + location
             uri = Uri.parse(mapsUri)
         }
 
@@ -92,7 +123,7 @@ class LaunchAppHelper : PackageHelper() {
         return uri
     }
 
-    fun launchBAPMActivity(context: Context) {
+    fun launchBAPMActivity() {
         val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable {
             val intentArray = arrayOfNulls<Intent>(2)
@@ -111,23 +142,17 @@ class LaunchAppHelper : PackageHelper() {
         context.startActivity(i)
     }
 
-    fun canMapsLaunchNow(context: Context): Boolean {
-        val isLaunchingWithDirections = BAPMPreferences.getCanLaunchDirections(context)
-        val isUsingTimesToLaunch = BAPMPreferences.getUseTimesToLaunchMaps(context)
-        val canLaunchDuringThisTime = canLaunchDuringThisTime(context)
+    fun canMapsLaunchNow(): Boolean {
+        val canLaunchDuringThisTime = canLaunchDuringThisTime()
 
         var canLaunchMapsNow = false
         if (isLaunchingWithDirections || isUsingTimesToLaunch) {
             if (canLaunchDuringThisTime) {
-                for (location in mCanLaunchThisTimeLocations) {
-                    canLaunchMapsNow = canLaunchOnThisDay(context, location)
-                    if (canLaunchMapsNow) {
-                        mDirectionLocation = location
-                        break
-                    }
-                }
+                directionLocation = canLaunchThisTimeLocations.find { directionLocation ->
+                    canLaunchOnThisDay(directionLocation)
+                } ?: NONE
             }
-            mCanLaunchThisTimeLocations.clear()
+            canLaunchThisTimeLocations.clear()
         } else {
             canLaunchMapsNow = true
         }
@@ -135,15 +160,15 @@ class LaunchAppHelper : PackageHelper() {
         return canLaunchMapsNow
     }
 
-    fun canLaunchOnThisDay(context: Context, @DirectionLocations directionLocation: String): Boolean {
+    fun canLaunchOnThisDay(directionLocation: DirectionLocation): Boolean {
         val calendar = Calendar.getInstance()
         val today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK))
         var canLaunch = false
 
         when (directionLocation) {
-            HOME -> canLaunch = BAPMPreferences.getHomeDaysToLaunchMaps(context)!!.contains(today)
-            WORK -> canLaunch = BAPMPreferences.getWorkDaysToLaunchMaps(context)!!.contains(today)
-            CUSTOM -> canLaunch = BAPMPreferences.getCustomDaysToLaunchMaps(context)!!.contains(today)
+            HOME -> canLaunch = daysToLaunchHome?.contains(today) ?: false
+            WORK -> canLaunch = daysToLaunchWork?.contains(today) ?: false
+            CUSTOM -> canLaunch = daysToLaunchCustom?.contains(today) ?: false
         }
 
         Log.d(TAG, "Day of the week: $today")
@@ -153,37 +178,26 @@ class LaunchAppHelper : PackageHelper() {
         return canLaunch
     }
 
-    fun canLaunchDuringThisTime(context: Context): Boolean {
-        val isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context)
+    fun canLaunchDuringThisTime(): Boolean {
         if (isUseLaunchTimeEnabled) {
-
-            val morningStartTime = BAPMPreferences.getMorningStartTime(context)
-            val morningEndTime = BAPMPreferences.getMorningEndTime(context)
-
-            val eveningStartTime = BAPMPreferences.getEveningStartTime(context)
-            val eveningEndTime = BAPMPreferences.getEveningEndTime(context)
-
-            val customStartTime = BAPMPreferences.getCustomStartTime(context)
-            val customEndTime = BAPMPreferences.getCustomEndTime(context)
-
             val current24hrTime = TimeHelper.current24hrTime
 
             val timeHelperMorning = TimeHelper(morningStartTime, morningEndTime, current24hrTime)
             val canLaunchWork = timeHelperMorning.isWithinTimeSpan
             if (canLaunchWork) {
-                mCanLaunchThisTimeLocations.add(WORK)
+                canLaunchThisTimeLocations.add(WORK)
             }
 
             val timeHelperEvening = TimeHelper(eveningStartTime, eveningEndTime, current24hrTime)
             val canLaunchHome = timeHelperEvening.isWithinTimeSpan
             if (canLaunchHome) {
-                mCanLaunchThisTimeLocations.add(HOME)
+                canLaunchThisTimeLocations.add(HOME)
             }
 
             val timeHelperCustom = TimeHelper(customStartTime, customEndTime, current24hrTime)
             val canLaunchCustom = timeHelperCustom.isWithinTimeSpan
             if (canLaunchCustom) {
-                mCanLaunchThisTimeLocations.add(CUSTOM)
+                canLaunchThisTimeLocations.add(CUSTOM)
             }
 
             return canLaunchWork || canLaunchHome || canLaunchCustom
@@ -192,7 +206,7 @@ class LaunchAppHelper : PackageHelper() {
         }
     }
 
-    fun launchWazeDirections(context: Context, location: String) {
+    fun launchWazeDirections(location: String) {
         val handler = Handler()
         val runnable = Runnable {
             val uriString = "waze://?favorite=$location&navigate=yes"
@@ -200,32 +214,31 @@ class LaunchAppHelper : PackageHelper() {
             val uri = Uri.parse(uriString)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = uri
-            context.sendBroadcast(intent)
+            packageHelper.sendBroadcast(intent)
         }
 
         handler.postDelayed(runnable, 4000)
     }
 
-    fun closeWazeOnDisconnect(context: Context) {
+    fun closeWazeOnDisconnect() {
         val handler = Handler()
         val runnable = Runnable {
             val intent = Intent()
             intent.action = "Eliran_Close_Intent"
-            context.sendBroadcast(intent)
+            packageHelper.sendBroadcast(intent)
         }
 
         handler.postDelayed(runnable, 2000)
     }
 
+    enum class DirectionLocation(val location: String) {
+        NONE("None"),
+        HOME("Home"),
+        WORK("Work"),
+        CUSTOM("Custom")
+    }
+
     companion object {
-        @StringDef(HOME, WORK, CUSTOM)
-        @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-        annotation class DirectionLocations
-
-        const val HOME = "Home"
-        const val WORK = "Work"
-        const val CUSTOM = "Custom"
-
         private const val TAG = "LaunchAppHelper"
     }
 }
