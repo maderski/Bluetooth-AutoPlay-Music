@@ -1,36 +1,42 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.app.ActivityManager
+import android.app.Service
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.support.annotation.StringDef
 import android.util.Log
 import android.widget.Toast
-import java.util.*
+import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 
 /**
  * Created by Jason on 7/28/16.
  */
-open class PackageHelper {
+class PackageHelper(private val context: Context) {
+    // Get all Installed Packages that are on the device
+    val allInstalledPackages: List<ApplicationInfo> get() {
+        val packageManager: PackageManager = context.packageManager
+        return packageManager.getInstalledApplications(0).toList()
+    }
+
     // Launches App that is associated with that package that was put into method
-    fun launchPackage(context: Context, pkg: String) {
-        Log.d("Package intent: ", "$pkg started")
-        val launchIntent = context.packageManager.getLaunchIntentForPackage(pkg)
+    fun launchPackage(packageName: String) {
+        Log.d("Package intent: ", "$packageName started")
+        val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
         if (launchIntent != null) {
             context.startActivity(launchIntent)
         } else {
-            val toastMsg = if (pkg == MAPS || pkg == WAZE)
-                "Unable to launch MAPS or WAZE"
-            else
-                "Unable to launch Music player"
-            Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
+            showUnableToLaunchToast(packageName)
         }
     }
 
-    fun launchPackage(context: Context, packageName: String, data: Uri, action: String) {
+    fun launchPackage(packageName: String, data: Uri, action: String) {
         Log.d("Package intent: ", "$packageName started")
         val launchIntent = context.packageManager.getLaunchIntentForPackage(packageName)
         if (launchIntent != null) {
@@ -38,163 +44,124 @@ open class PackageHelper {
             launchIntent.data = data
             context.startActivity(launchIntent)
         } else {
-            val toastMsg = if (packageName == MAPS || packageName == WAZE)
-                "Unable to launch MAPS or WAZE"
-            else
-                "Unable to launch Music player"
-            Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
+            showUnableToLaunchToast(packageName)
         }
+    }
+
+    private fun showUnableToLaunchToast(packageName: String) {
+        val unableToLaunchMsg = context.getString(R.string.unable_to_launch)
+        val toastMsg = when(packageName) {
+            MAPS.packageName -> "$unableToLaunchMsg MAPS"
+            WAZE.packageName -> "$unableToLaunchMsg WAZE"
+            else -> "$unableToLaunchMsg Media Player"
+        }
+        Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
     }
 
     //Returns true if Package is on phone
-    fun checkPkgOnPhone(context: Context, pkg: String): Boolean {
-        val packages: List<ApplicationInfo>
-        val pm: PackageManager
+    fun isPackageOnPhone(packageName: String): Boolean =
+            allInstalledPackages.any { packageInfo -> packageInfo.packageName == packageName }
 
-        pm = context.packageManager
-        packages = pm.getInstalledApplications(0)
-        for (packageInfo in packages) {
-            if (packageInfo.packageName == pkg)
-                return true
-        }
-        return false
-    }
-
-    //List of Mediaplayers that is installed on the phone
-    fun listOfInstalledMediaPlayers(context: Context): List<String> {
+    // Set of Mediaplayers that is installed on the phone
+    fun installedMediaPlayersSet(): Set<String> {
         val intent = Intent(Intent.ACTION_MEDIA_BUTTON)
-        val pkgAppsList = context.packageManager.queryBroadcastReceivers(intent, 0)
-        val installedMediaPlayers = ArrayList<String>()
+        val actionMediaButtonReceivers = context.packageManager.queryBroadcastReceivers(intent, 0)
+        val installedMediaPlayers = actionMediaButtonReceivers.filter { resolveInfo ->
+            val resolveInfoString = resolveInfo.toString()
+            resolveInfoString.contains(".playback")
+                    || resolveInfoString.contains("music")
+                    || resolveInfoString.contains("Music")
+                    || resolveInfoString.contains("audioplayer")
+        }.map { musicPlayerResolveInfo ->
+            val musicPlayerRIString = musicPlayerResolveInfo.toString()
+            val resolveInfoSplit = musicPlayerRIString.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"))
+        }.toMutableSet()
 
-        for (ri in pkgAppsList) {
-            val resolveInfo = ri.toString()
-            if (resolveInfo.contains(".playback")
-                    || resolveInfo.contains("music")
-                    || resolveInfo.contains("Music")
-                    || resolveInfo.contains("audioplayer")
-                    || resolveInfo.contains(BEYONDPOD)
-                    || resolveInfo.contains(POCKET_CASTS)
-                    || resolveInfo.contains(DEEZERMUSIC)
-                    || resolveInfo.contains(DOUBLETWIST)
-                    || resolveInfo.contains(LISTENAUDIOBOOK)) {
-                val resolveInfoSplit = resolveInfo.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                val pkg = resolveInfoSplit[1].substring(0, resolveInfoSplit[1].indexOf("/"))
-                if (!installedMediaPlayers.contains(pkg)) {
-                    installedMediaPlayers.add(pkg)
-                }
-            }
-        }
-
-        val packagesToCheck = arrayOf(
-                GOOGLEPODCASTS,
-                PANDORA,
-                RADIOPARADISE,
-                TUNEINRADIOPRO,
-                FOOBAR2000,
-                VANILLAMUSIC,
-                JIOMUSIC
-        )
-
-        packagesToCheck.forEach { packageName ->
-            val isPackageInstalled = checkPkgOnPhone(context, packageName)
-            if (isPackageInstalled) {
-                installedMediaPlayers.add(packageName)
-            }
-        }
+        val mediaPlayerPackagesToAdd = MediaPlayers.values().map { it.packageName }
+        installedMediaPlayers.addAll(mediaPlayerPackagesToAdd)
 
         return installedMediaPlayers
     }
 
     // Returns Map App Name, intentionally only works with Google maps and Waze
-    fun getMapAppName(context: Context, pkg: String): String {
+    fun getMapAppName(packageName: String): String {
         var mapAppName = "Not Found"
         try {
-            val appInfo = context.packageManager.getApplicationInfo(pkg, 0)
-            mapAppName = context.packageManager.getApplicationLabel(appInfo).toString()
-            if (mapAppName.equals("MAPS", ignoreCase = true)) {
-                mapAppName = "WAZE"
+            val appInfo = context.packageManager.getApplicationInfo(packageName, 0)
+            val applicationLabel = context.packageManager.getApplicationLabel(appInfo).toString()
+            mapAppName = if (applicationLabel.equals("MAPS", ignoreCase = true)) {
+                "WAZE"
             } else {
-                mapAppName = "GOOGLE MAPS"
+                "GOOGLE MAPS"
             }
         } catch (e: Exception) {
             Log.e(TAG, e.message)
-        }
-
-        return mapAppName
-    }
-
-    // List of Installed Packages on the phone
-    fun listOfPackagesOnPhone(context: Context) {
-        val pm = context.packageManager
-        val appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-
-        for (pkg in appInfo) {
-            Log.d(TAG, "Installed Pkg: " + pkg.packageName)
+        } finally {
+            return mapAppName
         }
     }
 
     // Is app running on phone
-    fun isAppRunning(context: Context, packageName: String): Boolean {
-        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-        activityManager?.let {
-            val processInfos = it.runningAppProcesses
+    fun isAppRunning(packageName: String): Boolean {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val processInfos = activityManager.runningAppProcesses
+        return processInfos.any { processInfo-> processInfo.processName == packageName }
+    }
 
-            for (processInfo in processInfos) {
-                if (processInfo.processName == packageName) {
-                    return true
+    fun getCurrentForegroundPackageName(): String {
+        val hasUsageStatsPermission = PermissionUtils.hasUsageStatsPermission(context)
+        if (hasUsageStatsPermission) {
+            val usageStatsManager = context.getSystemService(Service.USAGE_STATS_SERVICE) as UsageStatsManager
+            val endTime = System.currentTimeMillis()
+            val beginTime = endTime - 1000 * 3600
+            val usageEvents = usageStatsManager.queryEvents(beginTime, endTime)
+            val eventOut = UsageEvents.Event()
+
+            while (usageEvents.hasNextEvent()) {
+                usageEvents.getNextEvent(eventOut)
+                return if (eventOut.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                    eventOut.packageName
+                } else {
+                    PACKAGE_NOT_FOUND
                 }
             }
+        } else {
+            //TODO:// handle the case when usageStats permission is not granted
         }
+        return PACKAGE_NOT_FOUND
+    }
 
-        return false
+    fun sendBroadcast(intent: Intent) = context.sendBroadcast(intent)
+
+    enum class MediaPlayers(val packageName: String) {
+        GOOGLE_PLAY_MUSIC("com.google.android.music"),
+        SPOTIFY("com.spotify.music"),
+        PANDORA("com.pandora.android"),
+        BEYOND_POD("mobi.beyondpod"),
+        APPLE_MUSIC("com.apple.android.music"),
+        FM_INDIA("com.fmindia.activities"),
+        POWER_AMP("com.maxmpz.audioplayer"),
+        DOUBLE_TWIST("com.doubleTwist.androidPlayer"),
+        LISTEN_AUDIO_BOOK("com.acmeandroid.listen"),
+        GOOGLE_PODCASTS("com.google.android.apps.podcasts"),
+        DEEZERMUSIC("deezer.android.app"),
+        POCKET_CASTS("au.com.shiftyjelly.pocketcasts"),
+        RADIO_PARADISE("com.earthflare.android.radioparadisewidget.gpv2"),
+        TUNE_IN_RADIO_PRO("radiotime.player"),
+        FOOBAR_2000("com.foobar2000.foobar2000"),
+        VANILLA_MUSIC("ch.blinkenlights.android.vanilla"),
+        JIO_MUSIC("com.jio.media.jiobeats")
+    }
+
+    enum class MapApps(val packageName: String) {
+        MAPS("com.google.android.apps.maps"),
+        WAZE("com.waze")
     }
 
     companion object {
-        private const val TAG = "PackageTools"
+        private const val TAG = "PackageHelper"
 
-        // Package Names
-        @StringDef(
-                MAPS,
-                WAZE,
-                GOOGLEPLAYMUSIC,
-                SPOTIFY,
-                PANDORA,
-                BEYONDPOD,
-                APPLEMUSIC,
-                FMINDIA,
-                POWERAMP,
-                DOUBLETWIST,
-                LISTENAUDIOBOOK,
-                GOOGLEPODCASTS,
-                DEEZERMUSIC,
-                POCKET_CASTS,
-                RADIOPARADISE,
-                TUNEINRADIOPRO,
-                FOOBAR2000,
-                VANILLAMUSIC,
-                JIOMUSIC
-        )
-        @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-        annotation class PackageName
-
-        const val MAPS = "com.google.android.apps.maps"
-        const val WAZE = "com.waze"
-        const val GOOGLEPLAYMUSIC = "com.google.android.music"
-        const val SPOTIFY = "com.spotify.music"
-        const val PANDORA = "com.pandora.android"
-        const val BEYONDPOD = "mobi.beyondpod"
-        const val APPLEMUSIC = "com.apple.android.music"
-        const val FMINDIA = "com.fmindia.activities"
-        const val POWERAMP = "com.maxmpz.audioplayer"
-        const val DOUBLETWIST = "com.doubleTwist.androidPlayer"
-        const val LISTENAUDIOBOOK = "com.acmeandroid.listen"
-        const val GOOGLEPODCASTS = "com.google.android.apps.podcasts"
-        const val DEEZERMUSIC = "deezer.android.app"
-        const val POCKET_CASTS = "au.com.shiftyjelly.pocketcasts"
-        const val RADIOPARADISE = "com.earthflare.android.radioparadisewidget.gpv2"
-        const val TUNEINRADIOPRO = "radiotime.player"
-        const val FOOBAR2000 = "com.foobar2000.foobar2000"
-        const val VANILLAMUSIC = "ch.blinkenlights.android.vanilla"
-        const val JIOMUSIC = "com.jio.media.jiobeats"
+        const val PACKAGE_NOT_FOUND = "packageNotFound"
     }
 }
