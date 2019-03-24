@@ -3,10 +3,10 @@ package maderski.bluetoothautoplaymusic.sharedprefs
 import android.content.Context
 import android.content.SharedPreferences
 
-import java.util.HashSet
-
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
 
 /**
  * Created by Jason on 1/5/16.
@@ -162,7 +162,7 @@ object BAPMPreferences {
     fun getLaunchMusicPlayer(context: Context): Boolean = reader(context).getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false)
 
     fun setPkgSelectedMusicPlayer(context: Context, packageName: String) = editor(context).putString(PKG_SELECTED_MUSIC_PLAYER_KEY, packageName).apply()
-    fun getPkgSelectedMusicPlayer(context: Context): String = reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, PackageHelper.GOOGLEPLAYMUSIC) ?: PackageHelper.GOOGLEPLAYMUSIC
+    fun getPkgSelectedMusicPlayer(context: Context): String = reader(context).getString(PKG_SELECTED_MUSIC_PLAYER_KEY, GOOGLE_PLAY_MUSIC.packageName) ?: GOOGLE_PLAY_MUSIC.packageName
 
     fun setUnlockScreen(context: Context, enabled: Boolean) = editor(context).putBoolean(UNLOCK_SCREEN_KEY, enabled).apply()
     fun getUnlockScreen(context: Context): Boolean = reader(context).getBoolean(UNLOCK_SCREEN_KEY, false)
@@ -174,7 +174,7 @@ object BAPMPreferences {
     fun getBTDevices(context: Context): MutableSet<String> = reader(context).getStringSet(BTDEVICES_KEY, mutableSetOf()) ?: mutableSetOf()
 
     fun setMapsChoice(context: Context, SelectedMapsApp: String) = editor(context).putString(MAPS_CHOICE_KEY, SelectedMapsApp).apply()
-    fun getMapsChoice(context: Context): String = reader(context).getString(MAPS_CHOICE_KEY, PackageHelper.MAPS) ?: PackageHelper.MAPS
+    fun getMapsChoice(context: Context): String = reader(context).getString(MAPS_CHOICE_KEY, MAPS.packageName) ?: MAPS.packageName
 
     fun setAutoplayMusic(context: Context, enabled: Boolean) = editor(context).putBoolean(AUTOPLAY_MUSIC_KEY, enabled).apply()
     fun getAutoPlayMusic(context: Context): Boolean = reader(context).getBoolean(AUTOPLAY_MUSIC_KEY, true)

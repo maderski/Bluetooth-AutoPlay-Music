@@ -36,6 +36,7 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
 
 class MapsFragment : Fragment() {
 
@@ -70,11 +71,11 @@ class MapsFragment : Fragment() {
         textView = rootView.findViewById<View>(R.id.evening_timespan_label) as TextView
         textView.typeface = typeface_bold
 
-        mMapChoicesAvailable.add(PackageHelper.MAPS)
-        val launchAppHelper = LaunchAppHelper()
-        val wazeInstalled = launchAppHelper.checkPkgOnPhone(requireActivity(), PackageHelper.WAZE)
+        mMapChoicesAvailable.add(MAPS.packageName)
+        val launchAppHelper = LaunchAppHelper(requireContext())
+        val wazeInstalled = launchAppHelper.isAbleToLaunch(WAZE.packageName)
         if (wazeInstalled) {
-            mMapChoicesAvailable.add(PackageHelper.WAZE)
+            mMapChoicesAvailable.add(WAZE.packageName)
         }
         setupCloseWaze(rootView)
         setupDrivingModeMaps(rootView)
@@ -156,7 +157,7 @@ class MapsFragment : Fragment() {
         val locationNameExplaination = view.findViewById<View>(R.id.tv_location_name_explaination) as TextView
         val locationNameEditText = view.findViewById<View>(R.id.et_custom_location_name) as EditText
 
-        if (mapChoice == PackageHelper.MAPS) {
+        if (mapChoice == MAPS.packageName) {
             drivingModeSwitch.isChecked = BAPMPreferences.getLaunchMapsDrivingMode(requireActivity())
             drivingModeSwitch.visibility = View.VISIBLE
             drivingModeDesc.visibility = View.VISIBLE
@@ -186,7 +187,7 @@ class MapsFragment : Fragment() {
         val mapChoice = BAPMPreferences.getMapsChoice(requireActivity())
         val closeWazeSwitch = view.findViewById<View>(R.id.close_waze) as Switch
         val closeWazeDesc = view.findViewById<View>(R.id.close_waze_desc) as TextView
-        if (mapChoice == PackageHelper.WAZE) {
+        if (mapChoice == WAZE.packageName) {
             closeWazeSwitch.isChecked = BAPMPreferences.getCloseWazeOnDisconnect(requireActivity())
             closeWazeSwitch.visibility = View.VISIBLE
             closeWazeDesc.visibility = View.VISIBLE

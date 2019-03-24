@@ -69,7 +69,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
             val handler = Handler()
             val runnable = Runnable {
                 finish()
-                val launchAppHelper = LaunchAppHelper()
+                val launchAppHelper = LaunchAppHelper(this)
                 launchAppHelper.sendEverythingToBackground(context)
             }
             handler.postDelayed(runnable, milliSeconds.toLong())

@@ -9,7 +9,7 @@ import maderski.bluetoothautoplaymusic.utils.PowerUtils;
 /**
  * Created by Jason on 7/26/16.
  */
-public class PowerHelperAndroidTest extends AndroidTestCase {
+public class PowerUtilsAndroidTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();

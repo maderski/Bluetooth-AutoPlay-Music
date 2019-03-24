@@ -33,22 +33,24 @@ import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
-import maderski.bluetoothautoplaymusic.helpers.PermissionHelper
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class HomeFragment : Fragment() {
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
-    private val packageHelper: PackageHelper = PackageHelper()
+    private val packageHelper: PackageHelper = PackageHelper(requireContext())
     private val radioButtonIndex: Int
         get() {
             val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity())
             return installedMediaPlayers.indexOf(selectedMusicPlayer)
         }
 
-    private var installedMediaPlayers: List<String> = ArrayList()
+    private var installedMediaPlayers: Set<String> = mutableSetOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +74,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        installedMediaPlayers = packageHelper.listOfInstalledMediaPlayers(requireActivity())
+        installedMediaPlayers = packageHelper.installedMediaPlayersSet()
 
         view?.let {
             setupUIElements(it)
@@ -85,12 +87,12 @@ class HomeFragment : Fragment() {
     //SharedPrefs to MAPS
     private fun checkIfWazeRemoved(context: Context) {
         val mapAppChoice = BAPMPreferences.getMapsChoice(requireActivity())
-        if (mapAppChoice.equals(PackageHelper.WAZE, ignoreCase = true)) {
-            val launchAppHelper = LaunchAppHelper()
-            val isWazeOnPhone = launchAppHelper.checkPkgOnPhone(context, PackageHelper.WAZE)
+        if (mapAppChoice.equals(WAZE.packageName, ignoreCase = true)) {
+            val launchAppHelper = LaunchAppHelper(requireActivity())
+            val isWazeOnPhone = launchAppHelper.isAbleToLaunch(WAZE.packageName)
             if (isWazeOnPhone.not()) {
                 Log.d(TAG, "Checked")
-                BAPMPreferences.setMapsChoice(context, PackageHelper.MAPS)
+                BAPMPreferences.setMapsChoice(context, MAPS.packageName)
             } else {
                 Log.d(TAG, "WAZE is installed")
             }
@@ -215,7 +217,7 @@ class HomeFragment : Fragment() {
         group.setOnCheckedChangeListener { radioGroup, i ->
             val radioButton = radioGroup.findViewById<View>(i)
             val index = radioGroup.indexOfChild(radioButton)
-            val packageName = installedMediaPlayers[index]
+            val packageName = installedMediaPlayers.toList()[index]
 
             BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName)
 
@@ -234,7 +236,7 @@ class HomeFragment : Fragment() {
 
     private fun setAppleMusicRequirements(view: View, context: Context, packageName: String) {
         // Set Launch App and Unlock screen to true since it is required by Apple Music to play
-        if (packageName == PackageHelper.APPLEMUSIC) {
+        if (packageName == APPLE_MUSIC.packageName) {
             val autoplayOnly = BAPMPreferences.getHeadphoneDevices(context)
             if (!autoplayOnly.isEmpty()) {
                 BAPMPreferences.setHeadphoneDevices(context, HashSet())
@@ -335,7 +337,7 @@ class HomeFragment : Fragment() {
         val autoplayOnlyButton = view.findViewById<View>(R.id.autoplay_only_button) as Button
         autoplayOnlyButton.setOnClickListener(View.OnClickListener {
             // Display message that Apple Music not supported by autoplay only
-            if (BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity()) == PackageHelper.APPLEMUSIC) {
+            if (BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity()) == APPLE_MUSIC.packageName) {
                 Toast.makeText(context, "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show()
                 return@OnClickListener
             }
@@ -385,7 +387,7 @@ class HomeFragment : Fragment() {
             mFirebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on)
             if (on) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PermissionHelper.checkDoNotDisturbPermission(requireActivity(), 0)
+                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
                 }
                 BAPMPreferences.setPriorityMode(requireActivity(), true)
                 Log.d(TAG, "Priority Button is ON")
@@ -403,7 +405,7 @@ class HomeFragment : Fragment() {
             mFirebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on)
             if (on) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    PermissionHelper.checkDoNotDisturbPermission(requireActivity(), 0)
+                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
                 }
                 BAPMPreferences.setMaxVolume(requireActivity(), true)
                 Log.d(TAG, "Max Volume Button is ON")

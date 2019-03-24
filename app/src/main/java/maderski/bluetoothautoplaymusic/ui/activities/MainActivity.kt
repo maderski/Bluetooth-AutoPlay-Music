@@ -28,7 +28,7 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
-import maderski.bluetoothautoplaymusic.helpers.PermissionHelper
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(),
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
 
         if (BAPMPreferences.getAutoBrightness(this)) {
-            PermissionHelper.checkPermission(this, PermissionHelper.COARSE_LOCATION)
+            PermissionUtils.checkPermission(this, PermissionUtils.COARSE_LOCATION)
         }
 
         supportFragmentManager

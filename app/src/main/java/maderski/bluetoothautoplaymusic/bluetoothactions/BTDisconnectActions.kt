@@ -4,15 +4,15 @@ import android.content.Context
 import android.media.AudioManager
 import android.os.Handler
 import android.util.Log
-
 import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
-import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
@@ -31,7 +31,7 @@ class BTDisconnectActions(private val context: Context) {
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     fun actionsOnBTDisconnect() {
-        val launchAppHelper = LaunchAppHelper()
+        val launchAppHelper = LaunchAppHelper(context)
         val ringerControl = RingerControl(context)
 
         removeBAPMNotification()
@@ -94,10 +94,10 @@ class BTDisconnectActions(private val context: Context) {
 
     private fun closeWaze(launchAppHelper: LaunchAppHelper) {
         val closeWaze = (BAPMPreferences.getCloseWazeOnDisconnect(context)
-                && launchAppHelper.checkPkgOnPhone(context, PackageHelper.WAZE)
-                && BAPMPreferences.getMapsChoice(context) == PackageHelper.WAZE)
+                && launchAppHelper.isAbleToLaunch(WAZE.packageName)
+                && BAPMPreferences.getMapsChoice(context) == WAZE.packageName)
         if (closeWaze) {
-            launchAppHelper.closeWazeOnDisconnect(context)
+            launchAppHelper.closeWazeOnDisconnect()
         }
     }
 
@@ -111,9 +111,9 @@ class BTDisconnectActions(private val context: Context) {
 
             val timeHelperEvening = TimeHelper(eveningStartTime, eveningEndTime, current24hrTime)
             val canLaunch = timeHelperEvening.isWithinTimeSpan
-            val directionLocation = if (canLaunch) LaunchAppHelper.HOME else LaunchAppHelper.WORK
+            val directionLocation = if (canLaunch) DirectionLocation.HOME else DirectionLocation.WORK
 
-            val canChangeWifiState = BAPMPreferences.getWifiUseMapTimeSpans(context).not() || canLaunch && launchAppHelper.canLaunchOnThisDay(context, directionLocation)
+            val canChangeWifiState = BAPMPreferences.getWifiUseMapTimeSpans(context).not() || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true)
             }

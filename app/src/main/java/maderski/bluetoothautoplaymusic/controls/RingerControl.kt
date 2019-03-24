@@ -7,7 +7,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.helpers.PermissionHelper
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 /**
@@ -49,7 +49,7 @@ class RingerControl(private val mContext: Context) {
         val usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY
-            val hasNAPPermission = PermissionHelper.isPermissionGranted(mContext, permission)
+            val hasNAPPermission = PermissionUtils.isPermissionGranted(mContext, permission)
             if (usePriorityMode && hasNAPPermission) {
                 mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
                 Log.d(TAG, "RingerControl: " + "Normal")

@@ -51,6 +51,7 @@ class LaunchAppHelper(private val context: Context) {
     private val daysToLaunchWork = BAPMPreferences.getWorkDaysToLaunchMaps(context)
     private val daysToLaunchCustom = BAPMPreferences.getCustomDaysToLaunchMaps(context)
 
+    fun launchApp(packageName: String) = packageHelper.launchPackage(packageName)
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
     fun musicPlayerLaunch(seconds: Int) {
@@ -169,6 +170,7 @@ class LaunchAppHelper(private val context: Context) {
             HOME -> canLaunch = daysToLaunchHome?.contains(today) ?: false
             WORK -> canLaunch = daysToLaunchWork?.contains(today) ?: false
             CUSTOM -> canLaunch = daysToLaunchCustom?.contains(today) ?: false
+            NONE -> false
         }
 
         Log.d(TAG, "Day of the week: $today")
@@ -230,6 +232,8 @@ class LaunchAppHelper(private val context: Context) {
 
         handler.postDelayed(runnable, 2000)
     }
+
+    fun isAbleToLaunch(packageName: String) = packageHelper.isPackageOnPhone(packageName)
 
     enum class DirectionLocation(val location: String) {
         NONE("None"),

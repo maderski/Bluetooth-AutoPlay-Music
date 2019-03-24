@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.helpers
+package maderski.bluetoothautoplaymusic.utils
 
 import android.Manifest
 import android.app.Activity
@@ -17,7 +17,7 @@ import android.support.v4.app.ActivityCompat
 /**
  * Created by Jason on 9/10/16.
  */
-object PermissionHelper {
+object PermissionUtils {
     @StringDef(
             COARSE_LOCATION
     )

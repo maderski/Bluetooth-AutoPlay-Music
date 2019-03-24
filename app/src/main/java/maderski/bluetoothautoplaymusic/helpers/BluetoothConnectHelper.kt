@@ -16,6 +16,7 @@ import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.utils.PowerUtils
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
 
 /**
@@ -106,7 +107,7 @@ class BluetoothConnectHelper(private val mContext: Context, private val mDeviceN
         val btConnectActions = BTConnectActions(mContext)
 
         if (powerRequired) {
-            if (PowerHelper.isPluggedIn(mContext)) {
+            if (PowerUtils.isPluggedIn(mContext)) {
                 btConnectActions.onBTConnect()
             }
         } else {

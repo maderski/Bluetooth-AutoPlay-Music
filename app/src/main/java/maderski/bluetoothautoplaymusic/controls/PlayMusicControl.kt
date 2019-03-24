@@ -11,6 +11,7 @@ import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 /**
@@ -19,14 +20,13 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 class PlayMusicControl(context: Context) {
 
     private val mPlayerControls: PlayerControls
-    private val mFirebaseHelper: FirebaseHelper
+    private val mFirebaseHelper: FirebaseHelper = FirebaseHelper(context)
 
     init {
         val pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
         Log.d(TAG, "PLAYER: $pkgName")
 
         mPlayerControls = PlayerControlsFactory.getPlayerControl(context, pkgName)
-        mFirebaseHelper = FirebaseHelper(context)
     }
 
     fun pause() {
@@ -57,7 +57,7 @@ class PlayMusicControl(context: Context) {
 
             if (!audioManager.isMusicActive) {
                 when (selectedMusicPlayer) {
-                    PackageHelper.PANDORA -> finalAttemptToPlayPandora(context)
+                    PANDORA.packageName -> finalAttemptToPlayPandora(context)
                     else -> {
                         Log.d(TAG, "Play media Button")
                         mPlayerControls.playMediaButton(selectedMusicPlayer)
@@ -71,15 +71,15 @@ class PlayMusicControl(context: Context) {
     }
 
     private fun finalAttemptToPlayPandora(context: Context) {
-        val launchAppHelper = LaunchAppHelper()
-        launchAppHelper.launchPackage(context, PackageHelper.PANDORA)
+        val launchAppHelper = LaunchAppHelper(context)
+        launchAppHelper.launchApp(PANDORA.packageName)
         Log.d(TAG, "PANDORA LAUNCHED")
 
         val handler = Handler()
         val runnable = Runnable {
             if (BAPMPreferences.getLaunchGoogleMaps(context)) {
                 val choosenMapApp = BAPMPreferences.getMapsChoice(context)
-                launchAppHelper.launchPackage(context, choosenMapApp)
+                launchAppHelper.launchApp(choosenMapApp)
             }
         }
         handler.postDelayed(runnable, 4000)

@@ -6,6 +6,7 @@ import android.telephony.TelephonyManager
 import android.util.Log
 
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.utils.PowerUtils
 
 /**
  * Created by Jason on 6/1/16.
@@ -33,7 +34,7 @@ class TelephoneHelper(private val context: Context) {
 
         object : CountDownTimer(totalSeconds.toLong(), countDownInterval.toLong()) {
             override fun onTick(millisUntilFinished: Long) {
-                if (PowerHelper.isPluggedIn(context)) {
+                if (PowerUtils.isPluggedIn(context)) {
                     if (isOnCall) {
                         Log.d(TAG, "On Call, check again in 3 sec")
                     } else {

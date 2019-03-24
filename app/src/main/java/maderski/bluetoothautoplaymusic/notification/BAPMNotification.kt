@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
 
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -27,7 +28,7 @@ class BAPMNotification(val context: Context) {
     //Create notification message for BAPM
     fun bapmMessage(mapChoicePkg: String) {
         val color = ContextCompat.getColor(context, R.color.colorAccent)
-        val mapAppName = if (BAPMPreferences.getMapsChoice(context).equals(PackageHelper.WAZE, ignoreCase = true)) {
+        val mapAppName = if (BAPMPreferences.getMapsChoice(context).equals(WAZE.packageName, ignoreCase = true)) {
             "WAZE"
         } else {
             "GOOGLE MAPS"

@@ -13,10 +13,12 @@ import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
-import maderski.bluetoothautoplaymusic.helpers.PermissionHelper
-import maderski.bluetoothautoplaymusic.helpers.PowerHelper
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
+import maderski.bluetoothautoplaymusic.utils.PowerUtils
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.*
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
@@ -34,7 +36,7 @@ class BTConnectActions(private val context: Context) {
     private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
     private val mVolumeControl: VolumeControl = VolumeControl(context)
     private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
-    private val mLaunchAppHelper: LaunchAppHelper = LaunchAppHelper()
+    private val mLaunchAppHelper: LaunchAppHelper = LaunchAppHelper(context)
 
     fun onBTConnect() {
         val waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context)
@@ -48,7 +50,7 @@ class BTConnectActions(private val context: Context) {
     private fun actionsWhileOnCall() {
         val telephoneHelper = TelephoneHelper(context)
         val isOnCall = telephoneHelper.isOnCall
-        val isPluggedIn = PowerHelper.isPluggedIn(context)
+        val isPluggedIn = PowerUtils.isPluggedIn(context)
 
         if (isOnCall) {
             Log.d(TAG, "ON a call")
@@ -129,7 +131,7 @@ class BTConnectActions(private val context: Context) {
         val isKeyguardLocked = keyguardManager.isKeyguardLocked
         Log.d(TAG, "Is keyguard locked: " + java.lang.Boolean.toString(isKeyguardLocked))
         if (isKeyguardLocked) {
-            mLaunchAppHelper.launchBAPMActivity(context)
+            mLaunchAppHelper.launchBAPMActivity()
         }
     }
 
@@ -152,14 +154,14 @@ class BTConnectActions(private val context: Context) {
     private fun launchMusicMapApp() {
         val launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context)
         val launchMaps = BAPMPreferences.getLaunchGoogleMaps(context)
-        val mapsCanLaunch = mLaunchAppHelper.canMapsLaunchNow(context)
+        val mapsCanLaunch = mLaunchAppHelper.canMapsLaunchNow()
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
-            mLaunchAppHelper.musicPlayerLaunch(context, 3)
+            mLaunchAppHelper.musicPlayerLaunch(3)
         }
 
         if (launchMaps) {
-            mLaunchAppHelper.launchMaps(context, 3)
+            mLaunchAppHelper.launchMaps(3)
         }
     }
 
@@ -173,9 +175,9 @@ class BTConnectActions(private val context: Context) {
 
             val timeHelperMorning = TimeHelper(morningStartTime, morningEndTime, current24hrTime)
             val canLaunch = timeHelperMorning.isWithinTimeSpan
-            val directionLocation = if (canLaunch) LaunchAppHelper.WORK else LaunchAppHelper.HOME
+            val directionLocation = if (canLaunch) DirectionLocation.WORK else DirectionLocation.HOME
 
-            val canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context) || canLaunch && mLaunchAppHelper.canLaunchOnThisDay(context, directionLocation)
+            val canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context) || canLaunch && mLaunchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false)
             }
@@ -188,7 +190,7 @@ class BTConnectActions(private val context: Context) {
 
         if (priorityMode) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val hasDoNotDisturbPerm = PermissionHelper.checkDoNotDisturbPermission(context, 10)
+                val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, 10)
                 if (hasDoNotDisturbPerm) {
                     BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting())
                     ringerControl.soundsOFF()

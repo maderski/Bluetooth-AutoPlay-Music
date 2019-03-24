@@ -20,7 +20,7 @@ import android.widget.TextView
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.OptionConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.helpers.PermissionHelper
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
@@ -102,7 +102,7 @@ class OptionsFragment : Fragment() {
         settingSwitch = view.findViewById<View>(R.id.wifi_use_time_spans) as Switch
         settingSwitch.isChecked = btnState
 
-        if (!PermissionHelper.isPermissionGranted(context, PermissionHelper.COARSE_LOCATION))
+        if (!PermissionUtils.isPermissionGranted(context, PermissionUtils.COARSE_LOCATION))
             BAPMPreferences.setAutoBrightness(context, false)
         btnState = BAPMPreferences.getAutoBrightness(context)
         settingSwitch = view.findViewById<View>(R.id.auto_brightness) as Switch
@@ -217,7 +217,7 @@ class OptionsFragment : Fragment() {
             val on = (autoBrightnessSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on)
             if (on) {
-                PermissionHelper.checkPermission(requireActivity(), PermissionHelper.COARSE_LOCATION)
+                PermissionUtils.checkPermission(requireActivity(), PermissionUtils.COARSE_LOCATION)
 
                 BAPMPreferences.setAutoBrightness(requireActivity(), true)
 
@@ -237,7 +237,7 @@ class OptionsFragment : Fragment() {
                 mFirebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on)
                 if (on) {
                     val permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY
-                    PermissionHelper.checkPermission(requireActivity(), permission)
+                    PermissionUtils.checkPermission(requireActivity(), permission)
 
                     BAPMPreferences.setUsePriorityMode(requireActivity(), true)
 
