@@ -5,20 +5,22 @@ import java.lang.IllegalStateException
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class SetOnce<T : Any>(val typeToken: TypeToken<T>) : ReadWriteProperty<Any, T> {
-    private var storedObject: Any? = null
+class SetOnceDelegate<T : Any>(private val typeToken: TypeToken<T>) : ReadWriteProperty<Any, T> {
+    private var value: T? = null
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
-        if (storedObject == null) {
-            throw IllegalStateException()
+        if (value == null) {
+            throw IllegalStateException("Value of ${typeToken.type} has NOT been set!")
         } else {
-            return storedObject as T
+            return value!!
         }
     }
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-        if (storedObject == null) {
-            storedObject = value
+        if (this.value == null) {
+            this.value = value
         }
     }
 }
+
+inline fun <reified T: Any> setOnceOf(): SetOnceDelegate<T> = SetOnceDelegate(object : TypeToken<T>() {})
