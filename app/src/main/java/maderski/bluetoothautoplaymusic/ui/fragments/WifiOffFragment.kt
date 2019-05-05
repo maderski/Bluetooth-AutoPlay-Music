@@ -3,7 +3,7 @@ package maderski.bluetoothautoplaymusic.ui.fragments
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
-class WifiOffFragment : DialogFragment() {
+class WifiOffFragment : androidx.fragment.app.DialogFragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
 

@@ -11,8 +11,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.annotation.DrawableRes
-import android.support.annotation.RequiresApi
+import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 
 /**
  * Created by Jason on 6/6/17.
@@ -63,7 +63,7 @@ object ServiceUtils {
         val builder: Notification.Builder
 
         builder = if (Build.VERSION.SDK_INT < 26) {
-            android.app.Notification.Builder(service)
+            Notification.Builder(service)
         } else {
             val notificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

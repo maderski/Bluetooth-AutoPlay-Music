@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
-import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat.startActivity
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
 import android.widget.Toast
 import maderski.bluetoothautoplaymusic.R
 

@@ -5,9 +5,9 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.media.AudioManager
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.CompoundButtonCompat
+import androidx.fragment.app.DialogFragment
+import androidx.core.content.ContextCompat
+import androidx.core.widget.CompoundButtonCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +29,7 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 
-class HeadphonesFragment : DialogFragment() {
+class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
 
     private val removedDevices = HashSet<String>()
 

@@ -7,10 +7,10 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.IdRes
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import androidx.annotation.IdRes
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -38,7 +38,7 @@ import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
 
-class MapsFragment : Fragment() {
+class MapsFragment : androidx.fragment.app.Fragment() {
 
     private val mMapChoicesAvailable = ArrayList<String>()
     private var mCanLaunchDirections = false

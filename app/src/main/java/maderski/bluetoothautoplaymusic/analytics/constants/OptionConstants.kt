@@ -1,6 +1,6 @@
 package maderski.bluetoothautoplaymusic.analytics.constants
 
-import android.support.annotation.StringDef
+import androidx.annotation.StringDef
 
 object OptionConstants {
     @StringDef(

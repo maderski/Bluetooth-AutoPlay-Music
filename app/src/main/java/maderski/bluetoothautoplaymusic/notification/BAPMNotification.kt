@@ -7,9 +7,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorInt
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*

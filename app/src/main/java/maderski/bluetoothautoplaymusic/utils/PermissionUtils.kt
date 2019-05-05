@@ -10,9 +10,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.Process
-import android.support.annotation.RequiresApi
-import android.support.annotation.StringDef
-import android.support.v4.app.ActivityCompat
+import androidx.annotation.RequiresApi
+import androidx.annotation.StringDef
+import androidx.core.app.ActivityCompat
 
 /**
  * Created by Jason on 9/10/16.

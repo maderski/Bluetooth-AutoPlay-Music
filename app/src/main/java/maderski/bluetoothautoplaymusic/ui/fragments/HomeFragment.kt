@@ -6,9 +6,9 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.CompoundButtonCompat
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.widget.CompoundButtonCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -39,7 +39,7 @@ import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
-class HomeFragment : Fragment() {
+class HomeFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 

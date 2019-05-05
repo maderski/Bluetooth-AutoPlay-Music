@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.annotation.StringDef
-import android.support.v4.app.DialogFragment
+import androidx.annotation.StringDef
+import androidx.fragment.app.DialogFragment
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.Gravity
@@ -18,7 +18,7 @@ import java.lang.annotation.RetentionPolicy
 /**
  * Created by Jason on 9/17/16.
  */
-class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerFragment : androidx.fragment.app.DialogFragment(), TimePickerDialog.OnTimeSetListener {
     interface TimePickerDialogListener {
         fun onTimeSet(typeOfTimeSet: String, isEndTime: Boolean, view: TimePicker, hourOfDay: Int, minute: Int)
         fun onTimeCancel(typeOfTimeSet: String, isEndTime: Boolean)

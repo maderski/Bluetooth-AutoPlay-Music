@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothProfile
 import android.content.Context
-import android.support.v4.util.ArraySet
+import androidx.collection.ArraySet
 import android.util.Log
 
 /**
@@ -24,7 +24,7 @@ class A2DPHelper(private val mCallbacks: A2DPCallbacks) : BluetoothProfile.Servi
     }
 
     override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
-        val deviceNames = ArraySet<String>()
+        val deviceNames = androidx.collection.ArraySet<String>()
         val devices = proxy.connectedDevices
         for (device in devices) {
             Log.d(TAG, "CONNECTED DEVICE: " + device.name)
