@@ -17,7 +17,7 @@ class CustomReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             val action = intent.action ?: ""
-            performAction(action, context)
+            performAction(action, context.applicationContext)
         }
     }
 

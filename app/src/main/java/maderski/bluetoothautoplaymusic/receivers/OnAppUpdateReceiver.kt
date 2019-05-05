@@ -19,11 +19,12 @@ class OnAppUpdateReceiver : BroadcastReceiver() {
         if (intent != null) {
             val action = intent.action
             if (action != null && action == Intent.ACTION_PACKAGE_REPLACED) {
+                val appContext = context.applicationContext
                 // Schedule Job to run on update
-                ServiceUtils.scheduleJob(context, StartBAPMServiceJobService::class.java)
+                ServiceUtils.scheduleJob(appContext, StartBAPMServiceJobService::class.java)
 
                 // Sync newly separated Home Work checkboxes
-                syncHomeWorkCheckboxes(context)
+                syncHomeWorkCheckboxes(appContext)
             }
         }
     }

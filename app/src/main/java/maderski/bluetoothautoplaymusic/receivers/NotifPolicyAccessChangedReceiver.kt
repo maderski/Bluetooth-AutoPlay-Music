@@ -18,7 +18,7 @@ class NotifPolicyAccessChangedReceiver : BroadcastReceiver() {
             if (intent.action != null) {
                 Log.d(TAG, "ACTION: ${intent.action}")
                 val ringerControl = RingerControl(context)
-                BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting())
+                BAPMDataPreferences.setCurrentRingerSet(context.applicationContext, ringerControl.ringerSetting())
                 ringerControl.soundsOFF()
                 context.applicationContext.unregisterReceiver(this)
             }

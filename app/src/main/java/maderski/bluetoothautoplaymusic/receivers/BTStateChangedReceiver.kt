@@ -18,7 +18,7 @@ class BTStateChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             if (intent.action != null) {
-                connectionStateChangedActions(context, intent)
+                connectionStateChangedActions(context.applicationContext, intent)
             }
         }
     }

@@ -15,11 +15,11 @@ import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 class PowerReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-
-        val isBTConnected = BluetoothUtils.isBluetoothA2DPOnCompat(context)
-        val powerRequired = BAPMPreferences.getPowerConnected(context)
-        val ranActionsOnBtConnect = BAPMDataPreferences.getRanActionsOnBtConnect(context)
-        val isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context)
+        val appContext = context.applicationContext
+        val isBTConnected = BluetoothUtils.isBluetoothA2DPOnCompat(appContext)
+        val powerRequired = BAPMPreferences.getPowerConnected(appContext)
+        val ranActionsOnBtConnect = BAPMDataPreferences.getRanActionsOnBtConnect(appContext)
+        val isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(appContext)
 
         Log.d(TAG, "Power Connected to a Selected BTDevice")
         Log.d(TAG, "Is BT Connected: " + java.lang.Boolean.toString(isBTConnected))
@@ -27,7 +27,7 @@ class PowerReceiver : BroadcastReceiver() {
         if (powerRequired && isBTConnected && ranActionsOnBtConnect.not() && isHeadphones.not()) {
             val launchIntent = Intent()
             launchIntent.action = "maderski.bluetoothautoplaymusic.pluggedinlaunch"
-            context.sendBroadcast(launchIntent)
+            appContext.sendBroadcast(launchIntent)
         }
     }
 

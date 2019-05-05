@@ -25,9 +25,9 @@ class BluetoothReceiver : BroadcastReceiver() {
                 Log.d(TAG, "ACTION: $action")
 
                 val btDeviceName = btDevice.name ?: "None"
-
-                val isASelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(btDeviceName)
-                val isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(context).contains(btDeviceName)
+                val appContext = context.applicationContext
+                val isASelectedBTDevice = BAPMPreferences.getBTDevices(appContext).contains(btDeviceName)
+                val isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(appContext).contains(btDeviceName)
                 Log.d(TAG, "Device: " + btDeviceName +
                         "\nis SelectedBTDevice: " + java.lang.Boolean.toString(isASelectedBTDevice) +
                         "\nis A Headphone device: " + java.lang.Boolean.toString(isAHeadphonesBTDevice))
@@ -36,11 +36,11 @@ class BluetoothReceiver : BroadcastReceiver() {
                     val state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0)
 
                     if (isAHeadphonesBTDevice) {
-                        val headphonesConnectHelper = HeadphonesConnectHelper(context, action, state)
+                        val headphonesConnectHelper = HeadphonesConnectHelper(appContext, action, state)
 
                         headphonesConnectHelper.performActions()
                     } else if (action == BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED) {
-                        val bluetoothConnectHelper = BluetoothConnectHelper(context, btDeviceName)
+                        val bluetoothConnectHelper = BluetoothConnectHelper(appContext, btDeviceName)
 
                         bluetoothConnectHelper.a2dpActions(state)
                     }
