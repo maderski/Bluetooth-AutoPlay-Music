@@ -4,9 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import maderski.bluetoothautoplaymusic.services.jobservices.StartBAPMServiceJobService
-import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import maderski.bluetoothautoplaymusic.workers.OnBootWorker
 
 /**
  * Created by Jason on 1/5/16.
@@ -18,11 +18,11 @@ class BootCompletedReceiver : BroadcastReceiver() {
         if (intent != null) {
             val action = intent.action
             if (action != null && action == Intent.ACTION_BOOT_COMPLETED) {
-                // Schedule Job to run on boot
-                ServiceUtils.scheduleJob(context, StartBAPMServiceJobService::class.java)
-
-                // Check to see Bluetooth is disabled and if it is disabled, then enable it
-                BluetoothUtils.enableDisabledBluetooth()
+                // Create and add work request to work manager
+                val workOnBootRequest = OneTimeWorkRequestBuilder<OnBootWorker>()
+                        .addTag(OnBootWorker.TAG)
+                        .build()
+                WorkManager.getInstance().enqueue(workOnBootRequest)
 
                 Log.d(TAG, "BAPM Service Started")
             }

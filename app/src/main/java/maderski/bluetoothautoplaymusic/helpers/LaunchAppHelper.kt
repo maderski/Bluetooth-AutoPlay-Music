@@ -55,10 +55,7 @@ class LaunchAppHelper(private val context: Context) {
 
     //Create a delay before the Music App is launched and if enable launchPackage maps
     fun musicPlayerLaunch(seconds: Int) {
-        val mills = seconds * 1000L
-        val handler = Handler()
-        val runnable = Runnable { packageHelper.launchPackage(musicPlayerPkgName) }
-        handler.postDelayed(runnable, mills)
+        packageHelper.launchPackage(musicPlayerPkgName)
     }
 
     //Launch Maps or Waze with a delay

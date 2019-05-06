@@ -38,13 +38,6 @@ class BAPMService : Service() {
         val filter = IntentFilter()
         registerReceiver(mBluetoothReceiver, filter)
 
-        // Cancel the JobScheduler that was used to start the BTAPMService
-        val jobScheduler: JobScheduler? = this.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        jobScheduler?.let {
-            it.cancelAll()
-            Log.d(TAG, "BAPM JobService cancelled")
-        }
-
         // Bring service out of the foreground state
         stopForeground(true)
 
@@ -64,7 +57,8 @@ class BAPMService : Service() {
                 this,
                 ServiceUtils.CHANNEL_ID_FOREGROUND_SERVICE,
                 ServiceUtils.CHANNEL_NAME_FOREGROUND_SERVICE,
-                R.drawable.ic_notif_icon)
+                R.drawable.ic_notif_icon,
+                false)
     }
 
     override fun onDestroy() {

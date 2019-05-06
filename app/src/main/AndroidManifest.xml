@@ -63,7 +63,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".receivers.BTStateChangedReceiver" />
-        <receiver android:name=".receivers.PowerReceiver" />
         <receiver android:name=".receivers.CustomReceiver" />
 
         <service android:name=".services.BAPMService" />
@@ -71,9 +70,6 @@
         <service android:name=".services.BTStateChangedService" />
         <service android:name=".services.WakeLockService" />
         <service android:name=".services.BTDisconnectService" />
-        <service
-            android:name=".services.jobservices.StartBAPMServiceJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

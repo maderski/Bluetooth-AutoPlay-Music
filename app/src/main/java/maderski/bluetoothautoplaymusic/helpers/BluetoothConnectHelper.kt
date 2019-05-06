@@ -16,20 +16,19 @@ import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.PowerUtils
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
 
 /**
  * Created by Jason on 6/1/17.
  */
 
-class BluetoothConnectHelper(private val mContext: Context, private val mDeviceName: String) {
+class BluetoothConnectHelper(private val context: Context, private val deviceName: String) {
 
     fun a2dpActions(state: Int) {
-        val isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(mContext)
+        val isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(context)
 
         if (isHeadphones) {
-            BAPMDataPreferences.setIsHeadphonesDevice(mContext, false)
+            BAPMDataPreferences.setIsHeadphonesDevice(context, false)
         }
 
         when (state) {
@@ -38,9 +37,9 @@ class BluetoothConnectHelper(private val mContext: Context, private val mDeviceN
                 Log.d(TAG, "A2DP CONNECTED")
 
                 // Get Original volume
-                val volumeControl = VolumeControl(mContext)
+                val volumeControl = VolumeControl(context)
                 volumeControl.saveOriginalVolume()
-                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(mContext)))
+                Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)))
 
                 checkForWifiTurnOffDevice(true)
 
@@ -49,8 +48,8 @@ class BluetoothConnectHelper(private val mContext: Context, private val mDeviceN
                 Handler().postDelayed({
                     checksBeforeLaunch()
 
-                    val firebaseHelper = FirebaseHelper(mContext)
-                    firebaseHelper.connectViaA2DP(mDeviceName, true)
+                    val firebaseHelper = FirebaseHelper(context)
+                    firebaseHelper.connectViaA2DP(deviceName, true)
                 }, 500)
             }
             BluetoothProfile.STATE_DISCONNECTING -> Log.d(TAG, "A2DP DISCONNECTING")
@@ -63,63 +62,59 @@ class BluetoothConnectHelper(private val mContext: Context, private val mDeviceN
 
     fun btDisconnectActions() {
         if (BuildConfig.DEBUG) {
-            Log.i(TAG, "Device disconnected: $mDeviceName")
-            Log.i(TAG, "Ran actionOnBTConnect: " + java.lang.Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(mContext)))
-            Log.i(TAG, "LaunchNotifPresent: " + java.lang.Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(mContext)))
+            Log.i(TAG, "Device disconnected: $deviceName")
+            Log.i(TAG, "Ran actionOnBTConnect: " + java.lang.Boolean.toString(BAPMDataPreferences.getRanActionsOnBtConnect(context)))
+            Log.i(TAG, "LaunchNotifPresent: " + java.lang.Boolean.toString(BAPMDataPreferences.getLaunchNotifPresent(context)))
         }
 
         stopAdditionalServices()
 
-        if (BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
+        if (BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
             PlayMusicControl.cancelCheckIfPlaying()
-            ServiceUtils.startService(mContext, BTDisconnectService::class.java, BTDisconnectService.TAG)
+            ServiceUtils.startService(context, BTDisconnectService::class.java, BTDisconnectService.TAG)
         }
 
-        if (BAPMPreferences.getWaitTillOffPhone(mContext) && BAPMDataPreferences.getLaunchNotifPresent(mContext)) {
-            val bapmNotification = BAPMNotification(mContext)
+        if (BAPMPreferences.getWaitTillOffPhone(context) && BAPMDataPreferences.getLaunchNotifPresent(context)) {
+            val bapmNotification = BAPMNotification(context)
             bapmNotification.removeBAPMMessage()
         }
 
-        if (!BAPMDataPreferences.getRanActionsOnBtConnect(mContext)) {
+        if (!BAPMDataPreferences.getRanActionsOnBtConnect(context)) {
             checkForWifiTurnOffDevice(false)
         }
     }
 
     private fun startAdditionalServices() {
-        ServiceUtils.startService(mContext, OnBTConnectService::class.java, OnBTConnectService.TAG)
-        ServiceUtils.startService(mContext, BTStateChangedService::class.java, BTStateChangedService.TAG)
+        ServiceUtils.startService(context, OnBTConnectService::class.java, OnBTConnectService.TAG)
+        ServiceUtils.startService(context, BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 
     private fun stopAdditionalServices() {
-        val didNotLaunchBAPM = !BAPMDataPreferences.getRanActionsOnBtConnect(mContext)
+        val didNotLaunchBAPM = !BAPMDataPreferences.getRanActionsOnBtConnect(context)
         Log.d(TAG, "Did not launch BAPM: " + didNotLaunchBAPM.toString())
 
         if (didNotLaunchBAPM) {
-            ServiceUtils.stopService(mContext, OnBTConnectService::class.java, OnBTConnectService.TAG)
+            ServiceUtils.stopService(context, OnBTConnectService::class.java, OnBTConnectService.TAG)
         }
 
-        ServiceUtils.stopService(mContext, BTStateChangedService::class.java, BTStateChangedService.TAG)
+        ServiceUtils.stopService(context, BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 
     private fun checksBeforeLaunch() {
-        val powerRequired = BAPMPreferences.getPowerConnected(mContext)
+        val powerRequired = BAPMPreferences.getPowerConnected(context)
 
-        val btConnectActions = BTConnectActions(mContext)
+        val btConnectActions = BTConnectActions(context)
 
-        if (powerRequired) {
-            if (PowerUtils.isPluggedIn(mContext)) {
-                btConnectActions.onBTConnect()
-            }
-        } else {
+        if (!powerRequired) {
             btConnectActions.onBTConnect()
         }
     }
 
     private fun checkForWifiTurnOffDevice(isConnected: Boolean) {
-        val turnOffWifiDevices = BAPMPreferences.getTurnWifiOffDevices(mContext)
+        val turnOffWifiDevices = BAPMPreferences.getTurnWifiOffDevices(context)
         if (turnOffWifiDevices.isNotEmpty()) {
-            if (turnOffWifiDevices.contains(mDeviceName)) {
-                BAPMDataPreferences.setIsTurnOffWifiDevice(mContext, isConnected)
+            if (turnOffWifiDevices.contains(deviceName)) {
+                BAPMDataPreferences.setIsTurnOffWifiDevice(context, isConnected)
                 Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: " + java.lang.Boolean.toString(isConnected))
             }
         }

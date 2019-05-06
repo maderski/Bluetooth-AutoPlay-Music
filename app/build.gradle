@@ -38,12 +38,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
+    def work_manager_version = '2.0.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -54,6 +55,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
     implementation 'com.squareup:otto:1.3.8'
+    implementation "androidx.work:work-runtime-ktx:$work_manager_version"
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }

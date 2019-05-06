@@ -6,7 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import androidx.core.widget.CompoundButtonCompat
 import android.util.Log
@@ -23,7 +22,6 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
 
-import java.util.ArrayList
 import java.util.HashSet
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
@@ -41,20 +39,21 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class HomeFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var mFirebaseHelper: FirebaseHelper
+    private lateinit var firebaseHelper: FirebaseHelper
+    private lateinit var packageHelper: PackageHelper
 
-    private val packageHelper: PackageHelper = PackageHelper(requireContext())
     private val radioButtonIndex: Int
         get() {
             val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity())
             return installedMediaPlayers.indexOf(selectedMusicPlayer)
         }
 
-    private var installedMediaPlayers: Set<String> = mutableSetOf()
+    private var installedMediaPlayers: Set<String> = setOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mFirebaseHelper = FirebaseHelper(requireActivity())
+        firebaseHelper = FirebaseHelper(requireActivity())
+        packageHelper = PackageHelper(requireActivity())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -177,37 +176,29 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 }
             }
             BAPMPreferences.setBTDevices(context, saveBTDevices)
-            mFirebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTDevice, checkBox.isChecked)
+            firebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTDevice, checkBox.isChecked)
         }
     }
 
     //Get list of installed Mediaplayers and create Radiobuttons
     private fun radiobuttonCreator(view: View, context: Context) {
-        var rdoButton: RadioButton
-        var appInfo: ApplicationInfo
-        var mediaPlayer = "No Name"
         val pm = context.packageManager
-
         val rdoMPGroup = view.findViewById<View>(R.id.rdoMusicPlayers) as RadioGroup
         rdoMPGroup.removeAllViews()
 
         for (packageName in installedMediaPlayers) {
-
             try {
-                appInfo = pm.getApplicationInfo(packageName, 0)
-                mediaPlayer = pm.getApplicationLabel(appInfo).toString()
-
+                val appInfo = pm.getApplicationInfo(packageName, 0)
+                val mediaPlayer = pm.getApplicationLabel(appInfo).toString()
+                val color = ContextCompat.getColor(context, R.color.colorPrimary)
+                val rdoButton = RadioButton(context)
+                rdoButton.text = mediaPlayer
+                rdoButton.setTextColor(color)
+                rdoButton.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
+                rdoMPGroup.addView(rdoButton)
             } catch (e: Exception) {
                 Log.e(TAG, e.message)
             }
-
-            val color = ContextCompat.getColor(context, R.color.colorPrimary)
-
-            rdoButton = RadioButton(context)
-            rdoButton.text = mediaPlayer
-            rdoButton.setTextColor(color)
-            rdoButton.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
-            rdoMPGroup.addView(rdoButton)
         }
     }
 
@@ -224,7 +215,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             // Firebase analytics
             val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context)
             val hasMusicPlayerChanged = selectedMusicPlayer.equals(packageName, ignoreCase = true).not()
-            mFirebaseHelper.musicPlayerChoice(context, packageName, hasMusicPlayerChanged)
+            firebaseHelper.musicPlayerChoice(context, packageName, hasMusicPlayerChanged)
 
             setAppleMusicRequirements(view, context, packageName)
 
@@ -342,7 +333,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 return@OnClickListener
             }
 
-            mFirebaseHelper.selectionMade(SelectionConstants.SET_AUTOPLAY_ONLY)
+            firebaseHelper.selectionMade(SelectionConstants.SET_AUTOPLAY_ONLY)
             val newFragment = HeadphonesFragment.newInstance()
             newFragment.show(requireActivity().supportFragmentManager, "autoplayOnlyFragment")
         })
@@ -353,7 +344,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val mapsToggleButton = view.findViewById<View>(R.id.MapsToggleButton) as Button
         mapsToggleButton.setOnClickListener { mapsToggleButtonView ->
             val on = (mapsToggleButtonView as ToggleButton).isChecked
-            mFirebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MAPS, on)
+            firebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MAPS, on)
             if (on) {
                 BAPMPreferences.setLaunchGoogleMaps(requireActivity(), true)
                 Log.i(TAG, "MapButton is ON")
@@ -369,7 +360,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val keepOnToggleButton = view.findViewById<View>(R.id.KeepONToggleButton) as Button
         keepOnToggleButton.setOnClickListener { keepOnToggleButtonView ->
             val on = (keepOnToggleButtonView as ToggleButton).isChecked
-            mFirebaseHelper.featureEnabled(FeatureConstants.KEEP_SCREEN_ON, on)
+            firebaseHelper.featureEnabled(FeatureConstants.KEEP_SCREEN_ON, on)
             if (on) {
                 BAPMPreferences.setKeepScreenON(requireActivity(), true)
                 Log.d(TAG, "Keep Screen ON Button is ON")
@@ -384,7 +375,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val priorityToggleButton = view.findViewById<View>(R.id.PriorityToggleButton) as Button
         priorityToggleButton.setOnClickListener { view ->
             val on = (view as ToggleButton).isChecked
-            mFirebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on)
+            firebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on)
             if (on) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
@@ -402,7 +393,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val volumeMAXToggleButton = view.findViewById<View>(R.id.VolumeMAXToggleButton) as Button
         volumeMAXToggleButton.setOnClickListener { keepOnToggleButtonViewView ->
             val on = (keepOnToggleButtonViewView as ToggleButton).isChecked
-            mFirebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on)
+            firebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on)
             if (on) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
@@ -420,7 +411,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val launchMusicPlayerToggleButton = view.findViewById<View>(R.id.LaunchMusicPlayerToggleButton) as Button
         launchMusicPlayerToggleButton.setOnClickListener { launchMusicPlayerToggleButtonView ->
             val on = (launchMusicPlayerToggleButtonView as ToggleButton).isChecked
-            mFirebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MUSIC_PLAYER, on)
+            firebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MUSIC_PLAYER, on)
             if (on) {
                 BAPMPreferences.setLaunchMusicPlayer(requireActivity(), true)
                 Log.d(TAG, "Launch Music Player Button is ON")
@@ -435,7 +426,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val unlockScreenToggleButton = view.findViewById<View>(R.id.UnlockToggleButton) as Button
         unlockScreenToggleButton.setOnClickListener { unlockScreenToggleButtonView ->
             val on = (unlockScreenToggleButtonView as ToggleButton).isChecked
-            mFirebaseHelper.featureEnabled(FeatureConstants.DISMISS_KEYGUARD, on)
+            firebaseHelper.featureEnabled(FeatureConstants.DISMISS_KEYGUARD, on)
             if (on) {
                 BAPMPreferences.setUnlockScreen(requireActivity(), true)
                 Log.i(TAG, "Dismiss KeyGuard Button is ON")

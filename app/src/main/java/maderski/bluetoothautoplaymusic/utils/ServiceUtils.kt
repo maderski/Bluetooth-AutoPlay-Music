@@ -13,6 +13,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 
 /**
  * Created by Jason on 6/6/17.
@@ -34,23 +35,22 @@ object ServiceUtils {
     }
 
     fun stopService(context: Context, serviceClass: Class<*>, tag: String) {
-        val intent = Intent(context, serviceClass)
-        intent.addCategory(tag)
-        context.stopService(intent)
+        try {
+            val intent = Intent(context, serviceClass)
+            intent.addCategory(tag)
+            context.stopService(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
-        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-        if (activityManager != null) {
-            val services = activityManager.getRunningServices(Integer.MAX_VALUE)
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val services = activityManager.getRunningServices(Integer.MAX_VALUE)
 
-            for (runningServiceInfo in services) {
-                if (runningServiceInfo.service.className == serviceClass.name) {
-                    return true
-                }
-            }
+        return services.any { runningServiceInfo ->
+            runningServiceInfo.service.className == serviceClass.name
         }
-        return false
     }
 
     fun createServiceNotification(id: Int,
@@ -59,29 +59,44 @@ object ServiceUtils {
                                   service: Service,
                                   channelId: String,
                                   channelName: String,
-                                  @DrawableRes icon: Int) {
-        val builder: Notification.Builder
+                                  @DrawableRes icon: Int,
+                                  isOngoing: Boolean) {
+
+        val notification = getNotification(title, message, service, channelId, channelName, icon, isOngoing)
+        service.startForeground(id, notification)
+    }
+
+    private fun getNotification(title: String,
+                                message: String,
+                                context: Context,
+                                channelId: String,
+                                channelName: String,
+                                @DrawableRes icon: Int,
+                                isOngoing: Boolean): Notification {
+        val builder: NotificationCompat.Builder
 
         builder = if (Build.VERSION.SDK_INT < 26) {
-            Notification.Builder(service)
+            NotificationCompat.Builder(context, channelId)
         } else {
-            val notificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = getNotificationChannel(channelId, channelName)
+            notificationManager.createNotificationChannel(channel)
 
-            if (notificationManager != null) {
-                val channel = getNotificationChannel(channelId, channelName)
-                notificationManager.createNotificationChannel(channel)
-            }
-            Notification.Builder(service, channelId)
+            NotificationCompat.Builder(context, channelId)
         }
 
         val notification = builder
                 .setSmallIcon(icon)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setOngoing(true)
+                .setOnlyAlertOnce(true)
                 .build()
 
-        service.startForeground(id, notification)
+        if (isOngoing) {
+            notification.flags = NotificationCompat.FLAG_FOREGROUND_SERVICE
+        }
+
+        return notification
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -93,16 +108,5 @@ object ServiceUtils {
         notificationChannel.setSound(null, null)
         notificationChannel.enableVibration(false)
         return notificationChannel
-    }
-
-    fun scheduleJob(context: Context, jobServiceClass: Class<*>) {
-        val jobServiceComponent = ComponentName(context, jobServiceClass)
-        val builder = JobInfo.Builder(0, jobServiceComponent)
-        builder.setMinimumLatency(1000)
-        builder.setOverrideDeadline(10000)
-
-        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-
-        jobScheduler.schedule(builder.build())
     }
 }

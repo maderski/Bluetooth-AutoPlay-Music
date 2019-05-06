@@ -4,10 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-
-import maderski.bluetoothautoplaymusic.services.jobservices.StartBAPMServiceJobService
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.workers.OnAppUpdateWorker
+import maderski.bluetoothautoplaymusic.workers.OnBootWorker
 
 /**
  * Created by Jason on 6/10/17.
@@ -20,8 +21,14 @@ class OnAppUpdateReceiver : BroadcastReceiver() {
             val action = intent.action
             if (action != null && action == Intent.ACTION_PACKAGE_REPLACED) {
                 val appContext = context.applicationContext
-                // Schedule Job to run on update
-                ServiceUtils.scheduleJob(appContext, StartBAPMServiceJobService::class.java)
+                // Create and add work request to work manager
+                val workOnAppUpdateRequest = OneTimeWorkRequestBuilder<OnAppUpdateWorker>()
+                        .addTag(OnBootWorker.TAG)
+                        .build()
+                WorkManager.getInstance().enqueue(workOnAppUpdateRequest)
+
+                Log.d(TAG, "BAPM Service Started")
+
 
                 // Sync newly separated Home Work checkboxes
                 syncHomeWorkCheckboxes(appContext)

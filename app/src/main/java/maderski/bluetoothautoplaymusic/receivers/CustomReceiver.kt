@@ -26,11 +26,6 @@ class CustomReceiver : BroadcastReceiver() {
         val firebaseHelper = FirebaseHelper(context)
 
         when (action) {
-            ACTION_POWER_LAUNCH -> {
-                Log.d(TAG, "POWER_LAUNCH")
-                btConnectActions.onBTConnect()
-                firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.POWER)
-            }
             ACTION_OFF_TELE_LAUNCH -> {
                 Log.d(TAG, "OFF_TELE_LAUNCH")
                 //Calling actionsOnBTConnect cause onBTConnect already ran
@@ -43,7 +38,6 @@ class CustomReceiver : BroadcastReceiver() {
     companion object {
         const val TAG = "CustomReceiver"
 
-        private const val ACTION_POWER_LAUNCH = "maderski.bluetoothautoplaymusic.pluggedinlaunch"
-        private const val ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch"
+        const val ACTION_OFF_TELE_LAUNCH = "maderski.bluetoothautoplaymusic.offtelephonelaunch"
     }
 }

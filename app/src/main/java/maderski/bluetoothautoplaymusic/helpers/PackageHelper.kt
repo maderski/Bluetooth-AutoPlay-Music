@@ -79,7 +79,10 @@ class PackageHelper(private val context: Context) {
         }.toMutableSet()
 
         val mediaPlayerPackagesToAdd = MediaPlayers.values().map { it.packageName }
-        installedMediaPlayers.addAll(mediaPlayerPackagesToAdd)
+        val mediaPlayersInstalled = mediaPlayerPackagesToAdd.filter { packageName ->
+            isPackageOnPhone(packageName)
+        }
+        installedMediaPlayers.addAll(mediaPlayersInstalled)
 
         return installedMediaPlayers
     }

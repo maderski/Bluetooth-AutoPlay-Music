@@ -33,7 +33,8 @@ class BTDisconnectService : Service() {
                 this,
                 ServiceUtils.CHANNEL_ID_FOREGROUND_SERVICE,
                 ServiceUtils.CHANNEL_NAME_FOREGROUND_SERVICE,
-                R.drawable.ic_notif_icon)
+                R.drawable.ic_notif_icon,
+                false)
     }
 
     override fun onBind(intent: Intent): IBinder? {

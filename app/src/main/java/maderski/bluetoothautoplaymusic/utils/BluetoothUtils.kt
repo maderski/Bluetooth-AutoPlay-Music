@@ -50,7 +50,9 @@ object BluetoothUtils {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             audioManager.isBluetoothA2dpOn
         } else {
-            audioManager.getDevices(AudioDeviceInfo.TYPE_BLUETOOTH_A2DP).isNotEmpty()
+            audioManager.getDevices(AudioManager.GET_DEVICES_ALL).any {
+                it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP
+            }
         }
     }
 }

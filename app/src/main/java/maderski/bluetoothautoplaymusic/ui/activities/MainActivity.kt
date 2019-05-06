@@ -6,12 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +13,11 @@ import android.view.View
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.otto.Subscribe
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
@@ -28,11 +27,11 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
 import java.util.*
 
