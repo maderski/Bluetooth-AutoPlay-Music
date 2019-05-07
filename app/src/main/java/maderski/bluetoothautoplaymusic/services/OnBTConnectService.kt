@@ -2,15 +2,12 @@ package maderski.bluetoothautoplaymusic.services
 
 import android.app.Service
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.receivers.CustomReceiver
-import maderski.bluetoothautoplaymusic.receivers.CustomReceiver.Companion.ACTION_OFF_TELE_LAUNCH
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
 import maderski.bluetoothautoplaymusic.workers.OnPowerConnectedWorker
@@ -20,15 +17,10 @@ import maderski.bluetoothautoplaymusic.workers.OnPowerConnectedWorker
  */
 
 class OnBTConnectService : Service() {
-
-    private val mCustomReceiver = CustomReceiver()
-
     private var waitTillPowerConnected = false
-    private var waitTillOffPhone = false
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         waitTillPowerConnected = BAPMPreferences.getPowerConnected(this.applicationContext)
-        waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(this.applicationContext)
 
         if (waitTillPowerConnected) {
             Log.d(TAG, "ENQUEUE POWER WORKER")
@@ -57,13 +49,6 @@ class OnBTConnectService : Service() {
                 R.drawable.ic_notif_icon,
                 false)
 
-        if (waitTillOffPhone) {
-            Log.d(TAG, "START CUSTOM RECEIVER")
-            val customFilter = IntentFilter()
-            customFilter.addAction(ACTION_OFF_TELE_LAUNCH)
-            registerReceiver(mCustomReceiver, customFilter)
-        }
-
         return START_STICKY
     }
 
@@ -73,12 +58,6 @@ class OnBTConnectService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        if (waitTillOffPhone) {
-            Log.d(TAG, "STOP CUSTOM RECEIVER")
-            unregisterReceiver(mCustomReceiver)
-        }
-
         if (waitTillPowerConnected) {
             WorkManager.getInstance().cancelAllWorkByTag(OnPowerConnectedWorker.TAG)
         }

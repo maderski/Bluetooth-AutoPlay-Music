@@ -63,7 +63,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".receivers.BTStateChangedReceiver" />
-        <receiver android:name=".receivers.CustomReceiver" />
 
         <service android:name=".services.BAPMService" />
         <service android:name=".services.OnBTConnectService" />
