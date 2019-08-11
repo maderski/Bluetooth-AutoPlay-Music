@@ -44,14 +44,14 @@ android {
 }
 
 dependencies {
-    def work_manager_version = '2.0.1'
+    def work_manager_version = '2.1.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
     implementation 'com.squareup:otto:1.3.8'

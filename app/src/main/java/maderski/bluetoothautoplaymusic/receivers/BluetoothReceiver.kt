@@ -50,7 +50,6 @@ class BluetoothReceiver : BroadcastReceiver() {
     }
 
     companion object {
-
         private const val TAG = "BluetoothReceiver"
     }
 }

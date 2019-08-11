@@ -23,7 +23,7 @@ class BTStateChangedService : Service() {
         Log.d(TAG, "START BT STATE CHANGED RECEIVER")
         val btStateChangedFilter = IntentFilter("android.bluetooth.adapter.action.STATE_CHANGED")
         registerReceiver(mBtStateChangedReceiver, btStateChangedFilter)
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     override fun onCreate() {

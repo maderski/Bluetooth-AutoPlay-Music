@@ -44,7 +44,7 @@ class BAPMService : Service() {
         // Stop the service from running
         stopSelf()
 
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onCreate() {
