@@ -44,24 +44,32 @@ android {
 }
 
 dependencies {
-    def work_manager_version = '2.1.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation 'com.google.firebase:firebase-crash:16.2.1'
-    implementation 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
-    implementation 'com.squareup:otto:1.3.8'
-    implementation "androidx.work:work-runtime-ktx:$work_manager_version"
-    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    // jetbrains
+    implementation dep.jetbrains.kotlin_stdlib_jdk7
+    // androidx
+    implementation dep.androidx.work_manager
+    implementation dep.androidx.app_compat
+    implementation dep.androidx.legacy
+    // google
+    implementation dep.google.material
+    implementation dep.google.gson
+    // firebase
+    implementation dep.firebase.core
+    implementation dep.firebase.crash
+    // luckycatlabs
+    implementation dep.luckycatlabs.sunrise_sunset_calc
+    // squareup
+    implementation dep.squareup.otto
+    // koin
+    implementation dep.koin.koin_android
+    // debug
+    implementation(dep.debug.crashlytics) {
         transitive = true
     }
-
-    testImplementation 'junit:junit:4.12'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-1'
+    debugImplementation dep.debug.leak_canary
+    // junit
+    testImplementation dep.junit.junit
 }
 
 apply plugin: 'com.google.gms.google-services'
