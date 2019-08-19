@@ -10,25 +10,27 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
-
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 
 /**
  * Created by Jason on 12/8/15.
  */
-class BAPMNotification(val context: Context) {
+class BAPMNotification(val context: Context): KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+    private val dataPreferences: BAPMDataPreferences by inject()
 
     private val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
     //Create notification message for BAPM
     fun bapmMessage(mapChoicePkg: String) {
         val color = ContextCompat.getColor(context, R.color.colorAccent)
-        val mapAppName = if (BAPMPreferences.getMapsChoice(context).equals(WAZE.packageName, ignoreCase = true)) {
+        val mapAppName = if (preferences.getMapsChoice().equals(WAZE.packageName, ignoreCase = true)) {
             "WAZE"
         } else {
             "GOOGLE MAPS"
@@ -63,7 +65,7 @@ class BAPMNotification(val context: Context) {
         val title = context.getString(R.string.launch_bluetooth_autoplay)
         val message = context.getString(R.string.bluetooth_device_connected)
 
-        BAPMDataPreferences.setLaunchNotifPresent(context, true)
+        dataPreferences.setLaunchNotifPresent(true)
 
         val launchBAPMIntent = Intent()
         launchBAPMIntent.action = "maderski.bluetoothautoplaymusic.offtelephonelaunch"
@@ -103,7 +105,7 @@ class BAPMNotification(val context: Context) {
     fun removeBAPMMessage() {
         nManager?.let { notificationManager ->
             notificationManager.cancel(TAG, NOTIFICATION_ID)
-            BAPMDataPreferences.setLaunchNotifPresent(context, false)
+            dataPreferences.setLaunchNotifPresent(false)
         }
     }
 

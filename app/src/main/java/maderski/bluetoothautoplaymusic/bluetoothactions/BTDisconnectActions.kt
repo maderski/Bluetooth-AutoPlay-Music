@@ -18,12 +18,17 @@ import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 6/3/17.
  */
 
-class BTDisconnectActions(private val context: Context) {
+class BTDisconnectActions(private val context: Context): KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+    private val dataPreferences: BAPMDataPreferences by inject()
+
     private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
     private val mVolumeControl: VolumeControl = VolumeControl(context)
     private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
@@ -48,12 +53,12 @@ class BTDisconnectActions(private val context: Context) {
     }
 
     private fun stopService() {
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, false)
+        dataPreferences.setRanActionsOnBtConnect(false)
         Handler().postDelayed({ ServiceUtils.stopService(context, BTDisconnectService::class.java, BTDisconnectService.TAG) }, 5000)
     }
 
     private fun removeBAPMNotification() {
-        val canShowNotification = BAPMPreferences.getShowNotification(context)
+        val canShowNotification = preferences.getShowNotification()
 
         if (canShowNotification) {
             mBAPMNotification.removeBAPMMessage()
@@ -61,14 +66,14 @@ class BTDisconnectActions(private val context: Context) {
     }
 
     private fun pauseMusic() {
-        val playMusic = BAPMPreferences.getAutoPlayMusic(context)
+        val playMusic = preferences.getAutoPlayMusic()
         if (playMusic) {
             mPlayMusicControl.pause()
         }
     }
 
     private fun sendAppToBackground(launchAppHelper: LaunchAppHelper) {
-        val sendToBackground = BAPMPreferences.getSendToBackground(context)
+        val sendToBackground = preferences.getSendToBackground()
         if (sendToBackground) {
             launchAppHelper.sendEverythingToBackground(context)
         }
@@ -76,9 +81,9 @@ class BTDisconnectActions(private val context: Context) {
 
     private fun turnOffPriorityMode(ringerControl: RingerControl) {
 
-        val priorityMode = BAPMPreferences.getPriorityMode(context)
+        val priorityMode = preferences.getPriorityMode()
         if (priorityMode) {
-            val currentRinger = BAPMDataPreferences.getCurrentRingerSet(context)
+            val currentRinger = dataPreferences.getCurrentRingerSet()
             try {
                 when (currentRinger) {
                     AudioManager.RINGER_MODE_SILENT -> Log.d(TAG, "Phone is on Silent")
@@ -93,19 +98,19 @@ class BTDisconnectActions(private val context: Context) {
     }
 
     private fun closeWaze(launchAppHelper: LaunchAppHelper) {
-        val closeWaze = (BAPMPreferences.getCloseWazeOnDisconnect(context)
+        val closeWaze = (preferences.getCloseWazeOnDisconnect()
                 && launchAppHelper.isAbleToLaunch(WAZE.packageName)
-                && BAPMPreferences.getMapsChoice(context) == WAZE.packageName)
+                && preferences.getMapsChoice() == WAZE.packageName)
         if (closeWaze) {
             launchAppHelper.closeWazeOnDisconnect()
         }
     }
 
     private fun setWifiOn(launchAppHelper: LaunchAppHelper) {
-        val isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context)
+        val isWifiOffDevice = dataPreferences.getIsTurnOffWifiDevice()
         if (isWifiOffDevice) {
-            val eveningStartTime = BAPMPreferences.getEveningStartTime(context)
-            val eveningEndTime = BAPMPreferences.getEveningEndTime(context)
+            val eveningStartTime = preferences.getEveningStartTime()
+            val eveningEndTime = preferences.getEveningEndTime()
 
             val current24hrTime = TimeHelper.current24hrTime
 
@@ -113,24 +118,24 @@ class BTDisconnectActions(private val context: Context) {
             val canLaunch = timeHelperEvening.isWithinTimeSpan
             val directionLocation = if (canLaunch) DirectionLocation.HOME else DirectionLocation.WORK
 
-            val canChangeWifiState = BAPMPreferences.getWifiUseMapTimeSpans(context).not() || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
+            val canChangeWifiState = preferences.getWifiUseMapTimeSpans().not() || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true)
             }
-            BAPMDataPreferences.setIsTurnOffWifiDevice(context, false)
+            dataPreferences.setIsTurnOffWifiDevice(false)
         }
     }
 
     private fun stopKeepingScreenOn() {
-        val screenON = BAPMPreferences.getKeepScreenON(context)
+        val screenON = preferences.getKeepScreenON()
         if (screenON) {
             ServiceUtils.stopService(context, WakeLockService::class.java, WakeLockService.TAG)
         }
     }
 
     private fun setVolumeBack(ringerControl: RingerControl) {
-        val volumeMAX = BAPMPreferences.getMaxVolume(context)
-        val setOriginalVolume = BAPMPreferences.getRestoreNotificationVolume(context)
+        val volumeMAX = preferences.getMaxVolume()
+        val setOriginalVolume = preferences.getRestoreNotificationVolume()
 
         if (volumeMAX && setOriginalVolume) {
             mVolumeControl.setToOriginalVolume(ringerControl)

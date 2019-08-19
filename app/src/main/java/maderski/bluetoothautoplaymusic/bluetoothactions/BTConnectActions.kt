@@ -8,38 +8,41 @@ import android.os.Build
 import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
-
 import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.utils.PowerUtils
-import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.*
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
+import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
+import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
+import maderski.bluetoothautoplaymusic.utils.PowerUtils
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 6/3/17.
  */
 
-class BTConnectActions(private val context: Context) {
+class BTConnectActions(private val context: Context): KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+    private val dataPreferences: BAPMDataPreferences by inject()
+
     private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
     private val mVolumeControl: VolumeControl = VolumeControl(context)
     private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
     private val mLaunchAppHelper: LaunchAppHelper = LaunchAppHelper(context)
 
     fun onBTConnect() {
-        val waitTillOffPhone = BAPMPreferences.getWaitTillOffPhone(context)
+        val waitTillOffPhone = preferences.getWaitTillOffPhone()
         if (waitTillOffPhone) {
             actionsWhileOnCall()
         } else {
@@ -66,7 +69,7 @@ class BTConnectActions(private val context: Context) {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     fun actionsOnBTConnect() {
-        val unlockScreen = BAPMPreferences.getUnlockScreen(context)
+        val unlockScreen = preferences.getUnlockScreen()
 
         showBTAMNotification()
         setVolumeToMax()
@@ -81,7 +84,7 @@ class BTConnectActions(private val context: Context) {
             putPhoneInDoNotDisturb()
         }
 
-        BAPMDataPreferences.setRanActionsOnBtConnect(context, true)
+        dataPreferences.setRanActionsOnBtConnect(true)
         ServiceUtils.stopService(context, OnBTConnectService::class.java, OnBTConnectService.TAG)
     }
 
@@ -112,15 +115,15 @@ class BTConnectActions(private val context: Context) {
     }
 
     private fun showBTAMNotification() {
-        val mapChoice = BAPMPreferences.getMapsChoice(context)
-        val canShowNotification = BAPMPreferences.getShowNotification(context)
+        val mapChoice = preferences.getMapsChoice()
+        val canShowNotification = preferences.getShowNotification()
         if (canShowNotification) {
             mBAPMNotification.bapmMessage(mapChoice)
         }
     }
 
     private fun turnTheScreenOn() {
-        val screenON = BAPMPreferences.getKeepScreenON(context)
+        val screenON = preferences.getKeepScreenON()
         if (screenON) {
             ServiceUtils.startService(context, WakeLockService::class.java, WakeLockService.TAG)
         }
@@ -136,7 +139,7 @@ class BTConnectActions(private val context: Context) {
     }
 
     private fun setVolumeToMax() {
-        val volumeMAX = BAPMPreferences.getMaxVolume(context)
+        val volumeMAX = preferences.getMaxVolume()
         if (volumeMAX) {
             val handler = Handler()
             val runnable = Runnable { mVolumeControl.checkSetMAXVol(4) }
@@ -145,15 +148,15 @@ class BTConnectActions(private val context: Context) {
     }
 
     private fun autoPlayMusic(checkToPlaySeconds: Int) {
-        val playMusic = BAPMPreferences.getAutoPlayMusic(context)
+        val playMusic = preferences.getAutoPlayMusic()
         if (playMusic) {
             mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds)
         }
     }
 
     private fun launchMusicMapApp() {
-        val launchMusicPlayer = BAPMPreferences.getLaunchMusicPlayer(context)
-        val launchMaps = BAPMPreferences.getLaunchGoogleMaps(context)
+        val launchMusicPlayer = preferences.getLaunchMusicPlayer()
+        val launchMaps = preferences.getLaunchGoogleMaps()
         val mapsCanLaunch = mLaunchAppHelper.canMapsLaunchNow()
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
@@ -166,10 +169,10 @@ class BTConnectActions(private val context: Context) {
     }
 
     private fun setWifiOff() {
-        val isWifiOffDevice = BAPMDataPreferences.getIsTurnOffWifiDevice(context)
+        val isWifiOffDevice = dataPreferences.getIsTurnOffWifiDevice()
         if (isWifiOffDevice) {
-            val morningStartTime = BAPMPreferences.getMorningStartTime(context)
-            val morningEndTime = BAPMPreferences.getMorningEndTime(context)
+            val morningStartTime = preferences.getMorningStartTime()
+            val morningEndTime = preferences.getMorningEndTime()
 
             val current24hrTime = TimeHelper.current24hrTime
 
@@ -177,7 +180,7 @@ class BTConnectActions(private val context: Context) {
             val canLaunch = timeHelperMorning.isWithinTimeSpan
             val directionLocation = if (canLaunch) DirectionLocation.WORK else DirectionLocation.HOME
 
-            val canChangeWifiState = !BAPMPreferences.getWifiUseMapTimeSpans(context) || canLaunch && mLaunchAppHelper.canLaunchOnThisDay(directionLocation)
+            val canChangeWifiState = !preferences.getWifiUseMapTimeSpans() || canLaunch && mLaunchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false)
             }
@@ -186,13 +189,13 @@ class BTConnectActions(private val context: Context) {
 
     private fun putPhoneInDoNotDisturb() {
         val ringerControl = RingerControl(context)
-        val priorityMode = BAPMPreferences.getPriorityMode(context)
+        val priorityMode = preferences.getPriorityMode()
 
         if (priorityMode) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, 10)
                 if (hasDoNotDisturbPerm) {
-                    BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting())
+                    dataPreferences.setCurrentRingerSet(ringerControl.ringerSetting())
                     ringerControl.soundsOFF()
                 } else {
                     val broadcastReceiver = NotifPolicyAccessChangedReceiver()
@@ -200,7 +203,7 @@ class BTConnectActions(private val context: Context) {
                     context.applicationContext.registerReceiver(broadcastReceiver, intentFilter)
                 }
             } else {
-                BAPMDataPreferences.setCurrentRingerSet(context, ringerControl.ringerSetting())
+                dataPreferences.setCurrentRingerSet(ringerControl.ringerSetting())
                 ringerControl.soundsOFF()
             }
         }

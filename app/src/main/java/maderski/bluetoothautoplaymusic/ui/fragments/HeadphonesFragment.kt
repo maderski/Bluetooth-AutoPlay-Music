@@ -5,31 +5,24 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.media.AudioManager
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.core.content.ContextCompat
-import androidx.core.widget.CompoundButtonCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.Switch
-import android.widget.TextView
-
-import java.util.HashSet
-
-import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.core.widget.CompoundButtonCompat
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import org.koin.android.ext.android.inject
+import java.util.*
 
 class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
+    private val preferences: BAPMPreferences by inject()
 
     private val removedDevices = HashSet<String>()
 
@@ -37,8 +30,8 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
 
     private val nonHeadphoneDevices: Set<String>
         get() {
-            val btDevices = BAPMPreferences.getBTDevices(requireActivity())
-            val headphoneDevices = BAPMPreferences.getHeadphoneDevices(requireActivity())
+            val btDevices = preferences.getBTDevices()
+            val headphoneDevices = preferences.getHeadphoneDevices()
 
             for (headphoneDevice in headphoneDevices) {
                 if (btDevices.contains(headphoneDevice)) {
@@ -58,11 +51,11 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
         val audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
         val volumeSeekBar = rootView.findViewById<View>(R.id.volume_seekBar) as SeekBar
         volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        volumeSeekBar.progress = BAPMPreferences.getHeadphonePreferredVolume(requireActivity())
+        volumeSeekBar.progress = preferences.getHeadphonePreferredVolume()
         volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                BAPMPreferences.setHeadphonePreferredVolume(requireActivity(), progress)
-                Log.d(TAG, "Progress: " + Integer.toString(progress))
+                preferences.setHeadphonePreferredVolume(progress)
+                Log.d(TAG, "Progress: $progress")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -81,11 +74,11 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
         }
 
         val a2dpSwitch = rootView.findViewById<View>(R.id.sw_headphones_a2dp) as Switch
-        val useA2dp = BAPMPreferences.getUseA2dpHeadphones(requireActivity())
+        val useA2dp = preferences.getUseA2dpHeadphones()
         a2dpSwitch.isChecked = useA2dp
-        a2dpSwitch.setOnCheckedChangeListener { buttonView, isChecked -> BusProvider.busInstance.post(A2DPSetSwitchEvent(isChecked)) }
+        a2dpSwitch.setOnCheckedChangeListener { _, isChecked -> BusProvider.busInstance.post(A2DPSetSwitchEvent(isChecked)) }
 
-        removedDevices?.clear()
+        removedDevices.clear()
         return rootView
     }
 
@@ -114,14 +107,14 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
                     CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList(states, colors))
                     checkBox.isClickable = false
                     checkBox.isChecked = true
-                } else if (BAPMPreferences.getBTDevices(requireActivity()).isNotEmpty()) {
-                    checkBox.isChecked = BAPMPreferences.getHeadphoneDevices(requireActivity()).contains(BTDevice)
+                } else if (preferences.getBTDevices().isNotEmpty()) {
+                    checkBox.isChecked = preferences.getHeadphoneDevices().contains(BTDevice)
                 }
                 checkBox.setTextColor(ContextCompat.getColor(requireActivity(), textColor))
                 checkBox.typeface = Typeface.createFromAsset(requireActivity().assets, "fonts/TitilliumText400wt.otf")
 
                 if (!nonHeadphoneDevices.contains(BTDevice)) {
-                    checkboxListener(view.context, checkBox, BTDevice)
+                    checkboxListener(checkBox, BTDevice)
                 }
                 autoplayCkBoxLL.addView(checkBox)
             }
@@ -130,10 +123,10 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
     }
 
     //Get Selected Checkboxes
-    private fun checkboxListener(context: Context, checkBox: CheckBox, BTDevice: String) {
+    private fun checkboxListener(checkBox: CheckBox, BTDevice: String) {
 
         checkBox.setOnClickListener {
-            val savedHeadphoneDevices = HashSet(BAPMPreferences.getHeadphoneDevices(context))
+            val savedHeadphoneDevices = HashSet(preferences.getHeadphoneDevices())
             if (checkBox.isChecked) {
                 savedHeadphoneDevices.add(BTDevice)
                 if (removedDevices.contains(BTDevice)) {
@@ -161,7 +154,7 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
         if (context is OnFragmentInteractionListener) {
             mListener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
     }
 

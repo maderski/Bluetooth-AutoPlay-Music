@@ -12,44 +12,48 @@ import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.util.*
 
 
 /**
  * Created by Jason on 12/8/15.
  */
-class LaunchAppHelper(private val context: Context) {
+class LaunchAppHelper(private val context: Context) : KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+
     private val packageHelper = PackageHelper(context)
     private val canLaunchThisTimeLocations = ArrayList<DirectionLocation>()
 
     private var directionLocation: DirectionLocation = NONE
 
     // SharePrefs Info
-    private val mapAppChosen = BAPMPreferences.getMapsChoice(context)
-    private val customLocationName = BAPMPreferences.getCustomLocationName(context)
-    private val mapAppName = BAPMPreferences.getMapsChoice(context)
-    private val canLaunchDirections = BAPMPreferences.getCanLaunchDirections(context)
-    private val canLaunchDrivingMode = BAPMPreferences.getLaunchMapsDrivingMode(context) &&
+    private val mapAppChosen = preferences.getMapsChoice()
+    private val customLocationName = preferences.getCustomLocationName()
+    private val mapAppName = preferences.getMapsChoice()
+    private val canLaunchDirections = preferences.getCanLaunchDirections()
+    private val canLaunchDrivingMode = preferences.getLaunchMapsDrivingMode() &&
             mapAppName == MAPS.packageName
-    private val isLaunchingWithDirections = BAPMPreferences.getCanLaunchDirections(context)
-    private val isUsingTimesToLaunch = BAPMPreferences.getUseTimesToLaunchMaps(context)
+    private val isLaunchingWithDirections = preferences.getCanLaunchDirections()
+    private val isUsingTimesToLaunch = preferences.getUseTimesToLaunchMaps()
 
-    private val morningStartTime = BAPMPreferences.getMorningStartTime(context)
-    private val morningEndTime = BAPMPreferences.getMorningEndTime(context)
+    private val morningStartTime = preferences.getMorningStartTime()
+    private val morningEndTime = preferences.getMorningEndTime()
 
-    private val eveningStartTime = BAPMPreferences.getEveningStartTime(context)
-    private val eveningEndTime = BAPMPreferences.getEveningEndTime(context)
+    private val eveningStartTime = preferences.getEveningStartTime()
+    private val eveningEndTime = preferences.getEveningEndTime()
 
-    private val customStartTime = BAPMPreferences.getCustomStartTime(context)
-    private val customEndTime = BAPMPreferences.getCustomEndTime(context)
+    private val customStartTime = preferences.getCustomStartTime()
+    private val customEndTime = preferences.getCustomEndTime()
 
-    private val isUseLaunchTimeEnabled = BAPMPreferences.getUseTimesToLaunchMaps(context)
+    private val isUseLaunchTimeEnabled = preferences.getUseTimesToLaunchMaps()
 
-    private val musicPlayerPkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
+    private val musicPlayerPkgName = preferences.getPkgSelectedMusicPlayer()
 
-    private val daysToLaunchHome = BAPMPreferences.getHomeDaysToLaunchMaps(context)
-    private val daysToLaunchWork = BAPMPreferences.getWorkDaysToLaunchMaps(context)
-    private val daysToLaunchCustom = BAPMPreferences.getCustomDaysToLaunchMaps(context)
+    private val daysToLaunchHome = preferences.getHomeDaysToLaunchMaps()
+    private val daysToLaunchWork = preferences.getWorkDaysToLaunchMaps()
+    private val daysToLaunchCustom = preferences.getCustomDaysToLaunchMaps()
 
     fun launchApp(packageName: String) = packageHelper.launchPackage(packageName)
 

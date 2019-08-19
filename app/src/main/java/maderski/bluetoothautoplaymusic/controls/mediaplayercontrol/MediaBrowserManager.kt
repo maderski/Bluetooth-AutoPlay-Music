@@ -5,12 +5,10 @@ import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 
 class MediaBrowserManager(
+        context: Context,
         packageName: String,
         infoName: String
 ): MediaBrowserCompat.ConnectionCallback() {
-//    @Inject
-    lateinit var context: Context
-
     private val mediaBrowser: MediaBrowserCompat
 
     init {

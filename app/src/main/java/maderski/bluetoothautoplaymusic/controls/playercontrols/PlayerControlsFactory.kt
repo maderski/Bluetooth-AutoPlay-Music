@@ -10,9 +10,9 @@ object PlayerControlsFactory {
         when(selectedPlayerPkgName) {
             SPOTIFY.packageName -> Spotify(context)
             BEYOND_POD.packageName -> BeyondPod(context)
-            FM_INDIA.packageName -> FMIndia(context)
+            FM_INDIA.packageName -> FMIndia(context, selectedPlayerPkgName)
             GOOGLE_PLAY_MUSIC.packageName -> GooglePlayMusic(context)
             PANDORA.packageName -> Pandora(context)
-            else -> OtherMusicPlayer(context)
+            else -> OtherMusicPlayer(context, selectedPlayerPkgName)
         }
 }

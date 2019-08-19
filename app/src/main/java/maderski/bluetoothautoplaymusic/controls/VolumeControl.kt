@@ -11,11 +11,15 @@ import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
 
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 4/2/16.
  */
-class VolumeControl(private val context: Context) {
+class VolumeControl(private val context: Context): KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+    private val dataPreferences: BAPMDataPreferences by inject()
 
     private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val mStreamType: Int =
@@ -27,13 +31,13 @@ class VolumeControl(private val context: Context) {
     // Set Mediavolume to MAX
     fun volumeMAX() {
         val maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        Log.d(TAG, "Max Media Volume is: " + Integer.toString(maxVolume))
+        Log.d(TAG, "Max Media Volume is: $maxVolume")
         am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI)
     }
 
     fun saveOriginalVolume() {
         val originalVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
-        BAPMDataPreferences.setOriginalMediaVolume(context, originalVolume)
+        dataPreferences.setOriginalMediaVolume(originalVolume)
     }
 
     // Set to specified media volume
@@ -45,18 +49,18 @@ class VolumeControl(private val context: Context) {
 
     // Set original media volume
     fun setToOriginalVolume(ringerControl: RingerControl) {
-        val originalMediaVolume = BAPMDataPreferences.getOriginalMediaVolume(context)
+        val originalMediaVolume = dataPreferences.getOriginalMediaVolume()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
                 am.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
-                Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume))
+                Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
             } else {
                 Log.d(TAG, "Did NOT set Media Volume")
             }
         } else {
             am.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
-            Log.d(TAG, "Media Volume is set to: " + Integer.toString(originalMediaVolume))
+            Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
         }
     }
 
@@ -65,9 +69,9 @@ class VolumeControl(private val context: Context) {
         val milliseconds = seconds * 1000
         val handler = Handler()
         val runnable = Runnable {
-            BAPMDataPreferences.setOriginalMediaVolume(context, am.getStreamVolume(AudioManager.STREAM_MUSIC))
+            dataPreferences.setOriginalMediaVolume(am.getStreamVolume(AudioManager.STREAM_MUSIC))
 
-            Log.d(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(context)))
+            Log.d(TAG, "Original Media Volume is: " + dataPreferences.getOriginalMediaVolume().toString())
             // TODO: This belongs somewhere else
             // Launch actionOnBTConnect cause off the Telephone
             val btConnectActions = BTConnectActions(context)
@@ -81,7 +85,7 @@ class VolumeControl(private val context: Context) {
     }
 
     private fun setToMaxVol() {
-        val maxVolume = BAPMPreferences.getUserSetMaxVolume(context)
+        val maxVolume = preferences.getUserSetMaxVolume(getDeviceMaxVolume(context))
         if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
             am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI)
             Log.d(TAG, "Set Volume To MAX")

@@ -3,21 +3,22 @@ package maderski.bluetoothautoplaymusic.ui.activities
 import android.app.KeyguardManager
 import android.content.Context
 import android.os.Build
-import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import android.view.Window
 import android.view.WindowManager
-
+import androidx.appcompat.app.AppCompatActivity
+import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.android.ext.android.inject
 
 class LaunchBAPMActivity : AppCompatActivity() {
+    private val preferences: BAPMPreferences by inject()
+    private val screenONLock: ScreenONLock by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
     private fun dismissKeyGuard() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             val window = window
-            if (!BAPMPreferences.getKeepScreenON(this)) {
-                val screenONLock = ScreenONLock.instance
+            if (!preferences.getKeepScreenON()) {
                 screenONLock.enableWakeLock(this)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
                 window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
@@ -60,8 +60,8 @@ class LaunchBAPMActivity : AppCompatActivity() {
     }
 
     private fun sendHomeAppTimer(seconds: Int) {
-        val launchMaps = BAPMPreferences.getLaunchGoogleMaps(this)
-        val launchPlayer = BAPMPreferences.getLaunchMusicPlayer(this)
+        val launchMaps = preferences.getLaunchGoogleMaps()
+        val launchPlayer = preferences.getLaunchMusicPlayer()
 
         if (!launchMaps && !launchPlayer) {
             val context = this

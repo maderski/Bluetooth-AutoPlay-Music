@@ -9,11 +9,18 @@ import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConsta
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-class OnPowerConnectedWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class OnPowerConnectedWorker(
+        context: Context,
+        workerParams: WorkerParameters
+) : Worker(context, workerParams), KoinComponent {
+    private val dataPreferences: BAPMDataPreferences by inject()
+
     override fun doWork(): Result {
         val isBTConnected = BluetoothUtils.isBluetoothA2DPOnCompat(applicationContext)
-        val isHeadphones = BAPMDataPreferences.getIsAHeadphonesDevice(applicationContext)
+        val isHeadphones = dataPreferences.getIsAHeadphonesDevice()
         Log.d(TAG, "is BTConnected: $isBTConnected")
         if (isBTConnected && !isHeadphones) {
             val btConnectActions = BTConnectActions(applicationContext)

@@ -12,21 +12,29 @@ import maderski.bluetoothautoplaymusic.services.BTStateChangedService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 11/4/17.
  */
 
-class HeadphonesConnectHelper(private val mContext: Context, private val mAction: String, private val mState: Int) {
+class HeadphonesConnectHelper(
+        private val mContext: Context,
+        private val mAction: String,
+        private val mState: Int
+): KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+    private val dataPreferences: BAPMDataPreferences by inject()
 
     fun performActions() {
-        val doesRequireA2DP = BAPMPreferences.getUseA2dpHeadphones(mContext)
+        val doesRequireA2DP = preferences.getUseA2dpHeadphones()
         val btHeadphonesActions = BTHeadphonesActions(mContext)
 
         // Get Original volume
         val volumeControl = VolumeControl(mContext)
         volumeControl.saveOriginalVolume()
-        Log.i(TAG, "Original Media Volume is: " + Integer.toString(BAPMDataPreferences.getOriginalMediaVolume(mContext)))
+        Log.i(TAG, "Original Media Volume is: ${dataPreferences.getOriginalMediaVolume()}")
 
         if (doesRequireA2DP) {
             checkA2dpConnectionState(btHeadphonesActions)

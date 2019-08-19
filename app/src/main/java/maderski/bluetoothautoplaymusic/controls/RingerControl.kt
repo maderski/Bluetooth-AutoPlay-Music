@@ -9,11 +9,15 @@ import android.util.Log
 
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.android.ext.android.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 12/8/15.
  */
-class RingerControl(private val mContext: Context) {
+class RingerControl(private val mContext: Context) : KoinComponent {
+    private val preferences: BAPMPreferences by inject()
 
     private val am: AudioManager = mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val mNotificationManager: NotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -22,7 +26,7 @@ class RingerControl(private val mContext: Context) {
     fun soundsOFF() {
         val isAlreadySilent = am.ringerMode == AudioManager.RINGER_MODE_SILENT
         if (!isAlreadySilent) {
-            val usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext)
+            val usePriorityMode = preferences.getUsePriorityMode()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val hasNAPPermission = mNotificationManager.isNotificationPolicyAccessGranted
                 if (usePriorityMode && hasNAPPermission) {
@@ -46,7 +50,7 @@ class RingerControl(private val mContext: Context) {
 
     //turns phone sounds ON
     fun soundsON() {
-        val usePriorityMode = BAPMPreferences.getUsePriorityMode(mContext)
+        val usePriorityMode = preferences.getUsePriorityMode()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY
             val hasNAPPermission = PermissionUtils.isPermissionGranted(mContext, permission)

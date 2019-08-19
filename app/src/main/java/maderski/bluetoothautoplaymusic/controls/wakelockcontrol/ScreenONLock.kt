@@ -13,14 +13,14 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
  */
 
 //Uses the singleton pattern, only want one instance of ScreenONLock
-class ScreenONLock private constructor() {
+class ScreenONLock(private val preferences: BAPMPreferences) {
 
     private var mWakeLock: PowerManager.WakeLock? = null
 
     //Enable WakeLock
     fun enableWakeLock(context: Context) {
         //Set Screen Brightness(Dim: 6 / Bright: 10)
-        val screenBrightness: Int = if (BAPMPreferences.getAutoBrightness(context)) {
+        val screenBrightness: Int = if (preferences.getAutoBrightness()) {
             isDark(context)
         } else {
             getManualScreenBrightness(context)
@@ -45,8 +45,8 @@ class ScreenONLock private constructor() {
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
         val currentTime = hour * 100 + minute
-        val brightSetTime = BAPMPreferences.getBrightTime(context)
-        val dimSetTime = BAPMPreferences.getDimTime(context)
+        val brightSetTime = preferences.getBrightTime()
+        val dimSetTime = preferences.getDimTime()
 
         if (currentTime >= dimSetTime || currentTime <= brightSetTime) {
             screenBrightness = 6
@@ -104,8 +104,6 @@ class ScreenONLock private constructor() {
     companion object {
         private const val TAG = "ScreenONLock"
         private const val WAKELOCK_TAG = "maderski.bluetoothautoplaymusic.controls.wakelockcontrol:StayON"
-
-        val instance = ScreenONLock()
     }
 
 }

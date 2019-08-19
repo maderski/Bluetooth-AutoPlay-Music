@@ -33,12 +33,14 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import org.koin.android.ext.android.inject
 import java.util.*
 
 class MainActivity : AppCompatActivity(),
         HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener,
         WifiOffFragment.OnFragmentInteractionListener {
+    private val preferences: BAPMPreferences by inject()
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity(),
 
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
 
-        if (BAPMPreferences.getAutoBrightness(this)) {
+        if (preferences.getAutoBrightness()) {
             PermissionUtils.checkPermission(this, PermissionUtils.COARSE_LOCATION)
         }
 
@@ -178,15 +180,15 @@ class MainActivity : AppCompatActivity(),
         alertDialog.setTitle("Bluetooth Autoplay Music")
         alertDialog.setMessage("Google Play Store location")
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Launch Store"
-        ) { dialog, which ->
+        ) { _, _ ->
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse("market://details?id=maderski.bluetoothautoplaymusic")
             startActivity(intent)
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Cancel"
-        ) { dialog, which -> dialog.dismiss() }
+        ) { dialog, _ -> dialog.dismiss() }
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Copy Link"
-        ) { dialog, which ->
+        ) { _, _ ->
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("PlayStoreLink",
                     "https://play.google.com/store/apps/details?id=maderski.bluetoothautoplaymusic")
@@ -207,26 +209,26 @@ class MainActivity : AppCompatActivity(),
         when (typeOfTimeSet) {
             TimePickerFragment.SCREEN_BRIGHTNESS_TIME -> if (isEndTime) {
                 mFirebaseHelper.timeSetSelected(SelectionConstants.DIM_TIME, true)
-                BAPMPreferences.setDimTime(this, timeSet)
+                preferences.setDimTime(timeSet)
                 Log.d("Settings", "Dim brightness")
             } else {
                 mFirebaseHelper.timeSetSelected(SelectionConstants.BRIGHT_TIME, true)
-                BAPMPreferences.setBrightTime(this, timeSet)
+                preferences.setBrightTime(timeSet)
                 Log.d("Settings", "Bright brightness")
             }
             TimePickerFragment.MORNING_TIMESPAN -> {
                 if (isEndTime) {
-                    BAPMPreferences.setMorningEndTime(this, timeSet)
+                    preferences.setMorningEndTime(timeSet)
 
-                    val setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningEndTime(this))
+                    val setTime = TimeHelper.get12hrTime(preferences.getMorningEndTime())
                     val timeDisplayed = findViewById<View>(R.id.morning_end_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
                     mFirebaseHelper.timeSetSelected(SelectionConstants.MORNING_END_TIME, true)
                 } else {
-                    BAPMPreferences.setMorningStartTime(this, timeSet)
+                    preferences.setMorningStartTime(timeSet)
 
-                    val setTime = TimeHelper.get12hrTime(BAPMPreferences.getMorningStartTime(this))
+                    val setTime = TimeHelper.get12hrTime(preferences.getMorningStartTime())
                     val timeDisplayed = findViewById<View>(R.id.morning_start_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
@@ -236,17 +238,17 @@ class MainActivity : AppCompatActivity(),
             }
             TimePickerFragment.EVENING_TIMESPAN -> {
                 if (isEndTime) {
-                    BAPMPreferences.setEveningEndTime(this, timeSet)
+                    preferences.setEveningEndTime(timeSet)
 
-                    val setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningEndTime(this))
+                    val setTime = TimeHelper.get12hrTime(preferences.getEveningEndTime())
                     val timeDisplayed = findViewById<View>(R.id.evening_end_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
                     mFirebaseHelper.timeSetSelected(SelectionConstants.EVENING_END_TIME, true)
                 } else {
-                    BAPMPreferences.setEveningStartTime(this, timeSet)
+                    preferences.setEveningStartTime(timeSet)
 
-                    val setTime = TimeHelper.get12hrTime(BAPMPreferences.getEveningStartTime(this))
+                    val setTime = TimeHelper.get12hrTime(preferences.getEveningStartTime())
                     val timeDisplayed = findViewById<View>(R.id.evening_start_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
@@ -256,17 +258,17 @@ class MainActivity : AppCompatActivity(),
             }
             TimePickerFragment.CUSTOM_TIMESPAN -> {
                 if (isEndTime) {
-                    BAPMPreferences.setCustomEndTime(this, timeSet)
+                    preferences.setCustomEndTime(timeSet)
 
-                    val setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomEndTime(this))
+                    val setTime = TimeHelper.get12hrTime(preferences.getCustomEndTime())
                     val timeDisplayed = findViewById<View>(R.id.custom_end_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
                     mFirebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_END_TIME, true)
                 } else {
-                    BAPMPreferences.setCustomStartTime(this, timeSet)
+                    preferences.setCustomStartTime(timeSet)
 
-                    val setTime = TimeHelper.get12hrTime(BAPMPreferences.getCustomStartTime(this))
+                    val setTime = TimeHelper.get12hrTime(preferences.getCustomStartTime())
                     val timeDisplayed = findViewById<View>(R.id.custom_start_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
@@ -287,7 +289,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun setHeadphoneDevices(headphoneDevices: HashSet<String>) {
-        BAPMPreferences.setHeadphoneDevices(applicationContext, headphoneDevices)
+        preferences.setHeadphoneDevices(headphoneDevices)
         if (BuildConfig.DEBUG) {
             for (deviceName in headphoneDevices) {
                 Log.d(TAG, "device name: $deviceName")
@@ -295,11 +297,11 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun headphonesDoneClicked(removeDevices: HashSet<String>) {
-        val headphoneDevices = BAPMPreferences.getHeadphoneDevices(this)
-        val btDevices = BAPMPreferences.getBTDevices(this)
+    override fun headphonesDoneClicked(removedDevices: HashSet<String>) {
+        val headphoneDevices = preferences.getHeadphoneDevices()
+        val btDevices = preferences.getBTDevices()
 
-        for (deviceName in removeDevices) {
+        for (deviceName in removedDevices) {
             if (headphoneDevices.contains(deviceName))
                 headphoneDevices.remove(deviceName)
         }
@@ -311,7 +313,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         btDevices.addAll(headphoneDevices)
-        BAPMPreferences.setBTDevices(this, btDevices)
+        preferences.setBTDevices(btDevices)
 
         val homeFragment = supportFragmentManager.findFragmentByTag(TAG_HOME_FRAGMENT) as HomeFragment?
         if (homeFragment != null) {
@@ -326,17 +328,17 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun setWifiOffDevices(wifiOffDevices: HashSet<String>) {
-        BAPMPreferences.setTurnWifiOffDevices(this, wifiOffDevices)
+        preferences.setTurnWifiOffDevices(wifiOffDevices)
     }
 
     @Subscribe
     fun onUseHeadphonesA2DP(a2DPSetSwitchEvent: A2DPSetSwitchEvent) {
-        BAPMPreferences.setUseA2dpHeadphones(this, a2DPSetSwitchEvent.isUsingA2DP)
+        preferences.setUseA2dpHeadphones(a2DPSetSwitchEvent.isUsingA2DP)
     }
 
     @Subscribe
     fun onLocationNameSet(locationNameSetEvent: LocationNameSetEvent) {
-        BAPMPreferences.setCustomLocationName(this, locationNameSetEvent.locationName)
+        preferences.setCustomLocationName(locationNameSetEvent.locationName)
     }
 
     companion object {

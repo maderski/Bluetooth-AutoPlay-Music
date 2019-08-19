@@ -22,9 +22,12 @@ import maderski.bluetoothautoplaymusic.analytics.constants.OptionConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.android.ext.android.inject
 
 class OptionsFragment : androidx.fragment.app.Fragment() {
+    private val preferences: BAPMPreferences by inject()
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
@@ -64,7 +67,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun setWifiUseTimeSpansCaption(view: View) {
-        val captionText: String = if (BAPMPreferences.getCanLaunchDirections(requireActivity())) {
+        val captionText: String = if (preferences.getCanLaunchDirections()) {
             view.resources.getString(R.string.wifi_use_time_spans_caption_work_home)
         } else {
             view.resources.getString(R.string.wifi_use_time_spans_caption_morning_evening)
@@ -78,38 +81,38 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         var btnState: Boolean?
         var settingSwitch: Switch
 
-        btnState = BAPMPreferences.getAutoPlayMusic(context)
+        btnState = preferences.getAutoPlayMusic()
         settingSwitch = view.findViewById<View>(R.id.auto_play) as Switch
         settingSwitch.isChecked = btnState
 
-        btnState = BAPMPreferences.getPowerConnected(context)
+        btnState = preferences.getPowerConnected()
         settingSwitch = view.findViewById<View>(R.id.power_connected) as Switch
         settingSwitch.isChecked = btnState
 
-        btnState = BAPMPreferences.getSendToBackground(context)
+        btnState = preferences.getSendToBackground()
         settingSwitch = view.findViewById<View>(R.id.send_to_background) as Switch
         settingSwitch.isChecked = btnState
 
-        btnState = BAPMPreferences.getWaitTillOffPhone(context)
+        btnState = preferences.getWaitTillOffPhone()
         settingSwitch = view.findViewById<View>(R.id.wait_till_off_phone) as Switch
         settingSwitch.isChecked = btnState
 
-        btnState = BAPMPreferences.getShowNotification(context)
+        btnState = preferences.getShowNotification()
         settingSwitch = view.findViewById<View>(R.id.show_notification) as Switch
         settingSwitch.isChecked = btnState
 
-        btnState = BAPMPreferences.getWifiUseMapTimeSpans(context)
+        btnState = preferences.getWifiUseMapTimeSpans()
         settingSwitch = view.findViewById<View>(R.id.wifi_use_time_spans) as Switch
         settingSwitch.isChecked = btnState
 
         if (!PermissionUtils.isPermissionGranted(context, PermissionUtils.COARSE_LOCATION))
-            BAPMPreferences.setAutoBrightness(context, false)
-        btnState = BAPMPreferences.getAutoBrightness(context)
+            preferences.setAutoBrightness(false)
+        btnState = preferences.getAutoBrightness()
         settingSwitch = view.findViewById<View>(R.id.auto_brightness) as Switch
         settingSwitch.isChecked = btnState
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            btnState = BAPMPreferences.getUsePriorityMode(context)
+            btnState = preferences.getUsePriorityMode()
             settingSwitch = view.findViewById<View>(R.id.sw_priority_mode) as Switch
             val switch_explaination = view.findViewById<View>(R.id.tv_priority_mode_explaination) as TextView
 
@@ -127,10 +130,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (wifiUseTimeSpansSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.WIFI_OFF_USE_TIME_SPANS, on)
             if (on) {
-                BAPMPreferences.setWifiUseMapTimeSpans(requireActivity(), true)
+                preferences.setWifiUseMapTimeSpans(true)
                 Log.d(TAG, "WIFI OFF Use Time Spans Switch is ON")
             } else {
-                BAPMPreferences.setWifiUseMapTimeSpans(requireActivity(), false)
+                preferences.setWifiUseMapTimeSpans(false)
                 Log.d(TAG, "WIFI OFF Use Time Spans Switch is OFF")
             }
         }
@@ -142,10 +145,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (autoPlaySwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.PLAY_MUSIC, on)
             if (on) {
-                BAPMPreferences.setAutoplayMusic(requireActivity(), true)
+                preferences.setAutoplayMusic(true)
                 Log.d(TAG, "AutoPlaySwitch is ON")
             } else {
-                BAPMPreferences.setAutoplayMusic(requireActivity(), false)
+                preferences.setAutoplayMusic(false)
                 Log.d(TAG, "AutoPlaySwitch is OFF")
             }
         }
@@ -157,10 +160,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (powerConnectedSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.POWER_REQUIRED, on)
             if (on) {
-                BAPMPreferences.setPowerConnected(requireActivity(), true)
+                preferences.setPowerConnected(true)
                 Log.d(TAG, "PowerConnected Switch is ON")
             } else {
-                BAPMPreferences.setPowerConnected(requireActivity(), false)
+                preferences.setPowerConnected(false)
                 Log.d(TAG, "PowerConnected Switch is OFF")
             }
         }
@@ -172,10 +175,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (sendToBackgroundSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.GO_HOME, on)
             if (on) {
-                BAPMPreferences.setSendToBackground(requireActivity(), true)
+                preferences.setSendToBackground(true)
                 Log.d(TAG, "SendToBackground Switch is ON")
             } else {
-                BAPMPreferences.setSendToBackground(requireActivity(), false)
+                preferences.setSendToBackground(false)
                 Log.d(TAG, "SendToBackground Switch is OFF")
             }
         }
@@ -187,10 +190,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (waitTillOffPhoneSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.CALL_COMPLETED, on)
             if (on) {
-                BAPMPreferences.setWaitTillOffPhone(requireActivity(), true)
+                preferences.setWaitTillOffPhone(true)
                 Log.d(TAG, "WaitTillOffPhone Switch is ON")
             } else {
-                BAPMPreferences.setWaitTillOffPhone(requireActivity(), false)
+                preferences.setWaitTillOffPhone(false)
                 Log.d(TAG, "WaitTillOffPhone Switch is OFF")
             }
         }
@@ -202,10 +205,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (showNotificationSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.SHOW_NOTIFICATION, on)
             if (on) {
-                BAPMPreferences.setShowNotification(requireActivity(), true)
+                preferences.setShowNotification(true)
                 Log.d(TAG, "Show Notification Switch is ON")
             } else {
-                BAPMPreferences.setShowNotification(requireActivity(), false)
+                preferences.setShowNotification(false)
                 Log.d(TAG, "Show Notification Switch is OFF")
             }
         }
@@ -219,11 +222,11 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             if (on) {
                 PermissionUtils.checkPermission(requireActivity(), PermissionUtils.COARSE_LOCATION)
 
-                BAPMPreferences.setAutoBrightness(requireActivity(), true)
+                preferences.setAutoBrightness(true)
 
                 Log.d(TAG, "AutoBrightness Switch is ON")
             } else {
-                BAPMPreferences.setAutoBrightness(requireActivity(), false)
+                preferences.setAutoBrightness(false)
                 Log.d(TAG, "AutoBrightness Switch is OFF")
             }
         }
@@ -239,11 +242,11 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
                     val permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY
                     PermissionUtils.checkPermission(requireActivity(), permission)
 
-                    BAPMPreferences.setUsePriorityMode(requireActivity(), true)
+                    preferences.setUsePriorityMode(true)
 
                     Log.d(TAG, "AutoBrightness Switch is ON")
                 } else {
-                    BAPMPreferences.setUsePriorityMode(requireActivity(), false)
+                    preferences.setUsePriorityMode(false)
                     Log.d(TAG, "AutoBrightness Switch is OFF")
                 }
             }
@@ -253,7 +256,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     fun dimBrightnessButton(view: View) {
         val dimBrightnessButton = view.findViewById<View>(R.id.dimtimebutton) as Button
         dimBrightnessButton.setOnClickListener {
-            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.SCREEN_BRIGHTNESS_TIME, true, BAPMPreferences.getDimTime(requireActivity()), "Set Dim Time")
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.SCREEN_BRIGHTNESS_TIME, true, preferences.getDimTime(), "Set Dim Time")
             newFragment.show(requireActivity().supportFragmentManager, "timePicker")
         }
     }
@@ -261,21 +264,22 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     fun brightBrightnessButton(view: View) {
         val brightBrightnessButton = view.findViewById<View>(R.id.brighttimebutton) as Button
         brightBrightnessButton.setOnClickListener {
-            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.SCREEN_BRIGHTNESS_TIME, false, BAPMPreferences.getBrightTime(requireActivity()), "Set Bright Time")
+            val newFragment = TimePickerFragment.newInstance(TimePickerFragment.SCREEN_BRIGHTNESS_TIME, false, preferences.getBrightTime(), "Set Bright Time")
             newFragment.show(requireActivity().supportFragmentManager, "timePicker")
         }
     }
 
     fun setMaxVolumeSeekBar(view: View) {
         val audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val deviceMaxVolume = VolumeControl.getDeviceMaxVolume(requireActivity())
         val volumeSeekBar = view.findViewById<View>(R.id.max_volume_seekBar) as SeekBar
 
         volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        volumeSeekBar.progress = BAPMPreferences.getUserSetMaxVolume(requireActivity())
+        volumeSeekBar.progress = preferences.getUserSetMaxVolume(deviceMaxVolume)
         volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                BAPMPreferences.setUserSetMaxVolume(requireActivity().applicationContext, progress)
-                Log.d(TAG, "User set MAX volume: " + Integer.toString(BAPMPreferences.getUserSetMaxVolume(requireActivity().applicationContext)))
+                preferences.setUserSetMaxVolume(progress)
+                Log.d(TAG, "User set MAX volume: " + Integer.toString(preferences.getUserSetMaxVolume(deviceMaxVolume)))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -289,13 +293,12 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun setupRestoreOriginalVolumeCheckBox(view: View) {
-        val context = view.context
-        val isEnabled = BAPMPreferences.getRestoreNotificationVolume(context)
+        val isEnabled = preferences.getRestoreNotificationVolume()
         val restoreVolumeCheckBox = view.findViewById<View>(R.id.cb_restore_original_volume) as CheckBox
 
         restoreVolumeCheckBox.isChecked = isEnabled
 
-        restoreVolumeCheckBox.setOnCheckedChangeListener { buttonView, isChecked -> BAPMPreferences.setRestoreNotificationVolume(context, isChecked) }
+        restoreVolumeCheckBox.setOnCheckedChangeListener { buttonView, isChecked -> preferences.setRestoreNotificationVolume(isChecked) }
     }
 
     fun wifiOffDeviceButton(view: View) {

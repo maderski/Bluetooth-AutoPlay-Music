@@ -17,8 +17,10 @@ import java.util.HashSet
 import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.android.ext.android.inject
 
 class WifiOffFragment : androidx.fragment.app.DialogFragment() {
+    private val preferences: BAPMPreferences by inject()
 
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -72,7 +74,7 @@ class WifiOffFragment : androidx.fragment.app.DialogFragment() {
                 checkBox.text = BTDevice
                 checkBox.setTextColor(resources.getColor(textColor))
                 checkBox.typeface = Typeface.createFromAsset(fragmentActivity.assets, "fonts/TitilliumText400wt.otf")
-                checkBox.isChecked = BAPMPreferences.getTurnWifiOffDevices(fragmentActivity).contains(BTDevice)
+                checkBox.isChecked = preferences.getTurnWifiOffDevices().contains(BTDevice)
                 checkboxListener(fragmentActivity, checkBox, BTDevice)
                 wifiOffCkBoxLL.addView(checkBox)
             }
@@ -84,7 +86,7 @@ class WifiOffFragment : androidx.fragment.app.DialogFragment() {
     private fun checkboxListener(context: Context, checkBox: CheckBox, BTDevice: String) {
 
         checkBox.setOnClickListener {
-            val wifiOFFDevices = HashSet(BAPMPreferences.getTurnWifiOffDevices(context))
+            val wifiOFFDevices = HashSet(preferences.getTurnWifiOffDevices())
             if (checkBox.isChecked) {
                 wifiOFFDevices.add(BTDevice)
             } else {

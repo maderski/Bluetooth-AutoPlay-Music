@@ -1,50 +1,43 @@
 package maderski.bluetoothautoplaymusic.ui.fragments
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.core.widget.CompoundButtonCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.ToggleButton
-
-import java.util.HashSet
-
+import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.core.widget.CompoundButtonCompat
+import maderski.bluetoothautoplaymusic.BuildConfig
+import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
-import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.APPLE_MUSIC
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
+import org.koin.android.ext.android.inject
+import java.util.*
 
 class HomeFragment : androidx.fragment.app.Fragment() {
+    private val preferences: BAPMPreferences by inject()
 
     private lateinit var firebaseHelper: FirebaseHelper
     private lateinit var packageHelper: PackageHelper
 
     private val radioButtonIndex: Int
         get() {
-            val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity())
+            val selectedMusicPlayer = preferences.getPkgSelectedMusicPlayer()
             return installedMediaPlayers.indexOf(selectedMusicPlayer)
         }
 
@@ -85,13 +78,13 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     //Checks if WAZE was removed and if WAZE was set to the MapsChoice and if so, set MapsChoice in
     //SharedPrefs to MAPS
     private fun checkIfWazeRemoved(context: Context) {
-        val mapAppChoice = BAPMPreferences.getMapsChoice(requireActivity())
+        val mapAppChoice = preferences.getMapsChoice()
         if (mapAppChoice.equals(WAZE.packageName, ignoreCase = true)) {
             val launchAppHelper = LaunchAppHelper(requireActivity())
             val isWazeOnPhone = launchAppHelper.isAbleToLaunch(WAZE.packageName)
             if (isWazeOnPhone.not()) {
                 Log.d(TAG, "Checked")
-                BAPMPreferences.setMapsChoice(context, MAPS.packageName)
+                preferences.setMapsChoice(MAPS.packageName)
             } else {
                 Log.d(TAG, "WAZE is installed")
             }
@@ -130,7 +123,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 checkBox = CheckBox(context)
                 checkBox.text = btDevice
 
-                val isHeadphonesDevice = BAPMPreferences.getHeadphoneDevices(requireActivity()).contains(btDevice)
+                val isHeadphonesDevice = preferences.getHeadphoneDevices().contains(btDevice)
                 if (isHeadphonesDevice) {
                     textColor = R.color.lightGray
                     val states = arrayOf(intArrayOf(android.R.attr.state_checked))
@@ -139,9 +132,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                     checkBox.isClickable = false
                     checkBox.isChecked = true
                 } else {
-                    val isSelectedBTDevice = BAPMPreferences.getBTDevices(context).contains(btDevice)
+                    val isSelectedBTDevice = preferences.getBTDevices().contains(btDevice)
                     checkBox.isChecked = isSelectedBTDevice
-                    checkboxListener(checkBox, btDevice, context)
+                    checkboxListener(checkBox, btDevice)
                 }
 
                 checkBox.setTextColor(ContextCompat.getColor(context, textColor))
@@ -153,9 +146,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     }
 
     //Get Selected Checkboxes
-    private fun checkboxListener(checkBox: CheckBox, BTDevice: String, context: Context) {
+    private fun checkboxListener(checkBox: CheckBox, BTDevice: String) {
 
-        val saveBTDevices = HashSet(BAPMPreferences.getBTDevices(context))
+        val saveBTDevices = HashSet(preferences.getBTDevices())
 
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
@@ -175,7 +168,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                     Log.d(TAG, "SAVED")
                 }
             }
-            BAPMPreferences.setBTDevices(context, saveBTDevices)
+            preferences.setBTDevices(saveBTDevices)
             firebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTDevice, checkBox.isChecked)
         }
     }
@@ -210,10 +203,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val index = radioGroup.indexOfChild(radioButton)
             val packageName = installedMediaPlayers.toList()[index]
 
-            BAPMPreferences.setPkgSelectedMusicPlayer(context, packageName)
+            preferences.setPkgSelectedMusicPlayer(packageName)
 
             // Firebase analytics
-            val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context)
+            val selectedMusicPlayer = preferences.getPkgSelectedMusicPlayer()
             val hasMusicPlayerChanged = selectedMusicPlayer.equals(packageName, ignoreCase = true).not()
             firebaseHelper.musicPlayerChoice(context, packageName, hasMusicPlayerChanged)
 
@@ -228,9 +221,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private fun setAppleMusicRequirements(view: View, context: Context, packageName: String) {
         // Set Launch App and Unlock screen to true since it is required by Apple Music to play
         if (packageName == APPLE_MUSIC.packageName) {
-            val autoplayOnly = BAPMPreferences.getHeadphoneDevices(context)
-            if (!autoplayOnly.isEmpty()) {
-                BAPMPreferences.setHeadphoneDevices(context, HashSet())
+            val autoplayOnly = preferences.getHeadphoneDevices()
+            if (autoplayOnly.isNotEmpty()) {
+                preferences.setHeadphoneDevices(HashSet())
                 checkboxCreator(view, requireActivity())
                 Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show()
             }
@@ -238,26 +231,26 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val launchMusicPlayerToggleButton = view.findViewById<View>(R.id.LaunchMusicPlayerToggleButton) as ToggleButton
             val unlockScreenToggleButton = view.findViewById<View>(R.id.UnlockToggleButton) as ToggleButton
             val launchMapsToggleButton = view.findViewById<View>(R.id.MapsToggleButton) as ToggleButton
-            if (!BAPMPreferences.getLaunchMusicPlayer(context) || !BAPMPreferences.getUnlockScreen(context)
-                    || BAPMPreferences.getLaunchGoogleMaps(context)) {
+            if (!preferences.getLaunchMusicPlayer() || !preferences.getUnlockScreen()
+                    || preferences.getLaunchGoogleMaps()) {
 
-                if (BAPMPreferences.getLaunchGoogleMaps(context)) {
+                if (preferences.getLaunchGoogleMaps()) {
                     Toast.makeText(context, "Launching of Maps/Waze not supported with Apple music", Toast.LENGTH_LONG).show()
                 }
 
                 launchMusicPlayerToggleButton.isChecked = true
                 unlockScreenToggleButton.isChecked = true
                 launchMapsToggleButton.isChecked = false
-                BAPMPreferences.setLaunchMusicPlayer(context, true)
-                BAPMPreferences.setUnlockScreen(context, true)
-                BAPMPreferences.setLaunchGoogleMaps(context, false)
+                preferences.setLaunchMusicPlayer(true)
+                preferences.setUnlockScreen(true)
+                preferences.setLaunchGoogleMaps(false)
             }
         }
     }
 
     //Change the Maps button text to Maps or Waze depending on what Maps the user is launching
     private fun setMapsButtonText(view: View, context: Context) {
-        var mapChoice = BAPMPreferences.getMapsChoice(context)
+        var mapChoice = preferences.getMapsChoice()
         val packageManager = context.packageManager
         mapChoice = try {
             val appInfo = packageManager.getApplicationInfo(mapChoice, 0)
@@ -277,26 +270,26 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         var btnState: Boolean?
         var toggleButton: ToggleButton = view.findViewById<View>(R.id.MapsToggleButton) as ToggleButton
 
-        btnState = BAPMPreferences.getLaunchGoogleMaps(context)
+        btnState = preferences.getLaunchGoogleMaps()
         toggleButton.isChecked = btnState
 
-        btnState = BAPMPreferences.getKeepScreenON(context)
+        btnState = preferences.getKeepScreenON()
         toggleButton = view.findViewById<View>(R.id.KeepONToggleButton) as ToggleButton
         toggleButton.isChecked = btnState
 
-        btnState = BAPMPreferences.getPriorityMode(context)
+        btnState = preferences.getPriorityMode()
         toggleButton = view.findViewById<View>(R.id.PriorityToggleButton) as ToggleButton
         toggleButton.isChecked = btnState
 
-        btnState = BAPMPreferences.getMaxVolume(context)
+        btnState = preferences.getMaxVolume()
         toggleButton = view.findViewById<View>(R.id.VolumeMAXToggleButton) as ToggleButton
         toggleButton.isChecked = btnState
 
-        btnState = BAPMPreferences.getLaunchMusicPlayer(context)
+        btnState = preferences.getLaunchMusicPlayer()
         toggleButton = view.findViewById<View>(R.id.LaunchMusicPlayerToggleButton) as ToggleButton
         toggleButton.isChecked = btnState
 
-        btnState = BAPMPreferences.getUnlockScreen(context)
+        btnState = preferences.getUnlockScreen()
         toggleButton = view.findViewById<View>(R.id.UnlockToggleButton) as ToggleButton
         toggleButton.isChecked = btnState
 
@@ -328,7 +321,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val autoplayOnlyButton = view.findViewById<View>(R.id.autoplay_only_button) as Button
         autoplayOnlyButton.setOnClickListener(View.OnClickListener {
             // Display message that Apple Music not supported by autoplay only
-            if (BAPMPreferences.getPkgSelectedMusicPlayer(requireActivity()) == APPLE_MUSIC.packageName) {
+            if (preferences.getPkgSelectedMusicPlayer() == APPLE_MUSIC.packageName) {
                 Toast.makeText(context, "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show()
                 return@OnClickListener
             }
@@ -346,11 +339,11 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val on = (mapsToggleButtonView as ToggleButton).isChecked
             firebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MAPS, on)
             if (on) {
-                BAPMPreferences.setLaunchGoogleMaps(requireActivity(), true)
+                preferences.setLaunchGoogleMaps(true)
                 Log.i(TAG, "MapButton is ON")
                 Log.i(TAG, "Dismiss Keyguard is ON")
             } else {
-                BAPMPreferences.setLaunchGoogleMaps(requireActivity(), false)
+                preferences.setLaunchGoogleMaps(false)
                 Log.d(TAG, "MapButton is OFF")
             }
         }
@@ -362,10 +355,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val on = (keepOnToggleButtonView as ToggleButton).isChecked
             firebaseHelper.featureEnabled(FeatureConstants.KEEP_SCREEN_ON, on)
             if (on) {
-                BAPMPreferences.setKeepScreenON(requireActivity(), true)
+                preferences.setKeepScreenON(true)
                 Log.d(TAG, "Keep Screen ON Button is ON")
             } else {
-                BAPMPreferences.setKeepScreenON(requireActivity(), false)
+                preferences.setKeepScreenON(false)
                 Log.d(TAG, "Keep Screen ON Button is OFF")
             }
         }
@@ -380,10 +373,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
                 }
-                BAPMPreferences.setPriorityMode(requireActivity(), true)
+                preferences.setPriorityMode(true)
                 Log.d(TAG, "Priority Button is ON")
             } else {
-                BAPMPreferences.setPriorityMode(requireActivity(), false)
+                preferences.setPriorityMode(false)
                 Log.d(TAG, "Priority Button is OFF")
             }
         }
@@ -398,10 +391,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
                 }
-                BAPMPreferences.setMaxVolume(requireActivity(), true)
+                preferences.setMaxVolume(true)
                 Log.d(TAG, "Max Volume Button is ON")
             } else {
-                BAPMPreferences.setMaxVolume(requireActivity(), false)
+                preferences.setMaxVolume(false)
                 Log.d(TAG, "Max Volume Button is OFF")
             }
         }
@@ -413,10 +406,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val on = (launchMusicPlayerToggleButtonView as ToggleButton).isChecked
             firebaseHelper.featureEnabled(FeatureConstants.LAUNCH_MUSIC_PLAYER, on)
             if (on) {
-                BAPMPreferences.setLaunchMusicPlayer(requireActivity(), true)
+                preferences.setLaunchMusicPlayer(true)
                 Log.d(TAG, "Launch Music Player Button is ON")
             } else {
-                BAPMPreferences.setLaunchMusicPlayer(requireActivity(), false)
+                preferences.setLaunchMusicPlayer(false)
                 Log.d(TAG, "Launch Music Player Button is OFF")
             }
         }
@@ -428,10 +421,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val on = (unlockScreenToggleButtonView as ToggleButton).isChecked
             firebaseHelper.featureEnabled(FeatureConstants.DISMISS_KEYGUARD, on)
             if (on) {
-                BAPMPreferences.setUnlockScreen(requireActivity(), true)
+                preferences.setUnlockScreen(true)
                 Log.i(TAG, "Dismiss KeyGuard Button is ON")
             } else {
-                BAPMPreferences.setUnlockScreen(requireActivity(), false)
+                preferences.setUnlockScreen(false)
                 Log.i(TAG, "Dismiss KeyGuard Button is OFF")
             }
         }

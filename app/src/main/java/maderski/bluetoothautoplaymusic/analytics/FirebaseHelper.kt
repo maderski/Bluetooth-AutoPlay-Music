@@ -8,32 +8,35 @@ import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 1/28/17.
  */
 
-class FirebaseHelper(context: Context) {
+class FirebaseHelper(context: Context): KoinComponent {
+    private val preferences: BAPMPreferences by inject()
 
     private val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
-    private val isFirebaseEnabled = BAPMPreferences.getUseFirebaseAnalytics(context)
+    private val isFirebaseEnabled = preferences.getUseFirebaseAnalytics()
 
     fun showAnalyticsCollectionsConsent(activity: Activity) {
         val dialogBuilder = AlertDialog.Builder(activity)
                 .setTitle("Firebase Analytics")
                 .setMessage("Allow use of analytics?")
                 .setPositiveButton("Yes") { _, _ ->
-                    setAnalyticsCollectionEnabled(activity, true)
+                    setAnalyticsCollectionEnabled(true)
                 }
                 .setNegativeButton("No") { _, _ ->
-                    setAnalyticsCollectionEnabled(activity, false)
+                    setAnalyticsCollectionEnabled(false)
                 }
         val dialog = dialogBuilder.create()
         dialog.show()
     }
 
-    private fun setAnalyticsCollectionEnabled(context: Context, isEnabled: Boolean) {
-        BAPMPreferences.setUseFirebaseAnalytics(context, isEnabled)
+    private fun setAnalyticsCollectionEnabled(isEnabled: Boolean) {
+        preferences.setUseFirebaseAnalytics(isEnabled)
         firebaseAnalytics.setAnalyticsCollectionEnabled(isEnabled)
     }
 

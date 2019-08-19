@@ -10,11 +10,14 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.helpers.BluetoothConnectHelper
 import maderski.bluetoothautoplaymusic.helpers.HeadphonesConnectHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 1/5/16.
  */
-class BluetoothReceiver : BroadcastReceiver() {
+class BluetoothReceiver : BroadcastReceiver(), KoinComponent {
+    private val preferences: BAPMPreferences by inject()
 
     //On receive of Broadcast
     override fun onReceive(context: Context, intent: Intent?) {
@@ -26,8 +29,8 @@ class BluetoothReceiver : BroadcastReceiver() {
 
                 val btDeviceName = btDevice.name ?: "None"
                 val appContext = context.applicationContext
-                val isASelectedBTDevice = BAPMPreferences.getBTDevices(appContext).contains(btDeviceName)
-                val isAHeadphonesBTDevice = BAPMPreferences.getHeadphoneDevices(appContext).contains(btDeviceName)
+                val isASelectedBTDevice = preferences.getBTDevices().contains(btDeviceName)
+                val isAHeadphonesBTDevice = preferences.getHeadphoneDevices().contains(btDeviceName)
                 Log.d(TAG, "Device: " + btDeviceName +
                         "\nis SelectedBTDevice: " + java.lang.Boolean.toString(isASelectedBTDevice) +
                         "\nis A Headphone device: " + java.lang.Boolean.toString(isAHeadphonesBTDevice))

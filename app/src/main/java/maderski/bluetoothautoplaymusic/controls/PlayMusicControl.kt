@@ -12,18 +12,22 @@ import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFac
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 12/8/15.
  */
-class PlayMusicControl(context: Context) {
+class PlayMusicControl(context: Context) : KoinComponent {
+    private val preferences: BAPMPreferences by inject()
 
     private val mPlayerControls: PlayerControls
     private val mFirebaseHelper: FirebaseHelper = FirebaseHelper(context)
 
     init {
-        val pkgName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
+        val pkgName = preferences.getPkgSelectedMusicPlayer()
         Log.d(TAG, "PLAYER: $pkgName")
 
         mPlayerControls = PlayerControlsFactory.getPlayerControl(context, pkgName)
@@ -42,7 +46,7 @@ class PlayMusicControl(context: Context) {
     fun checkIfPlaying(context: Context, seconds: Int) {
         val milliSeconds = seconds * 1000
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val selectedMusicPlayer = BAPMPreferences.getPkgSelectedMusicPlayer(context)
+        val selectedMusicPlayer = preferences.getPkgSelectedMusicPlayer()
         Handler().postDelayed({
             if (!audioManager.isMusicActive) {
                 play()
@@ -77,8 +81,8 @@ class PlayMusicControl(context: Context) {
 
         val handler = Handler()
         val runnable = Runnable {
-            if (BAPMPreferences.getLaunchGoogleMaps(context)) {
-                val choosenMapApp = BAPMPreferences.getMapsChoice(context)
+            if (preferences.getLaunchGoogleMaps()) {
+                val choosenMapApp = preferences.getMapsChoice()
                 launchAppHelper.launchApp(choosenMapApp)
             }
         }

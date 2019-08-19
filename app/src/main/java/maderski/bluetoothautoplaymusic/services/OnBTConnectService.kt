@@ -11,16 +11,20 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.ServiceUtils
 import maderski.bluetoothautoplaymusic.workers.OnPowerConnectedWorker
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 6/6/17.
  */
 
-class OnBTConnectService : Service() {
+class OnBTConnectService : Service(), KoinComponent {
+    private val preferences: BAPMPreferences by inject()
+
     private var waitTillPowerConnected = false
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        waitTillPowerConnected = BAPMPreferences.getPowerConnected(this.applicationContext)
+        waitTillPowerConnected = preferences.getPowerConnected()
 
         if (waitTillPowerConnected) {
             Log.d(TAG, "ENQUEUE POWER WORKER")

@@ -9,12 +9,15 @@ import androidx.work.WorkManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.workers.OnAppUpdateWorker
 import maderski.bluetoothautoplaymusic.workers.OnBootWorker
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 6/10/17.
  */
 
-class OnAppUpdateReceiver : BroadcastReceiver() {
+class OnAppUpdateReceiver : BroadcastReceiver(), KoinComponent {
+    private val preferences: BAPMPreferences by inject()
 
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
@@ -37,11 +40,11 @@ class OnAppUpdateReceiver : BroadcastReceiver() {
     }
 
     private fun syncHomeWorkCheckboxes(context: Context) {
-        val hasRan = BAPMPreferences.getUpdateHomeWorkDaysSync(context)
+        val hasRan = preferences.getUpdateHomeWorkDaysSync()
         if (!hasRan) {
-            val daysHomeWorkRan = BAPMPreferences.getHomeDaysToLaunchMaps(context) as MutableSet<String>
-            BAPMPreferences.setWorkDaysToLaunchMaps(context, daysHomeWorkRan)
-            BAPMPreferences.setUpdateHomeWorkDaysSync(context, true)
+            val daysHomeWorkRan = preferences.getHomeDaysToLaunchMaps() as MutableSet<String>
+            preferences.setWorkDaysToLaunchMaps(daysHomeWorkRan)
+            preferences.setUpdateHomeWorkDaysSync(true)
             Log.d(TAG, "Work/Home Sync Complete")
         }
     }

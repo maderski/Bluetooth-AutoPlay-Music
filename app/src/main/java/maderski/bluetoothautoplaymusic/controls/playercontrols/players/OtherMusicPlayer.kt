@@ -7,12 +7,11 @@ import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
-class OtherMusicPlayer(context: Context) : PlayerControls(context) {
+class OtherMusicPlayer(context: Context, private val packageName: String) : PlayerControls(context) {
 
     @Synchronized
     override fun play() {
         Log.d(TAG, "Play Music")
-        val packageName = BAPMPreferences.getPkgSelectedMusicPlayer(context)
 
         val downIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         val downEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY)
