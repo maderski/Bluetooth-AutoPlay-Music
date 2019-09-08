@@ -28,6 +28,7 @@ import java.util.*
 
 class MapsFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
+    private val launchAppHelper: LaunchAppHelper by inject()
 
     private val mMapChoicesAvailable = ArrayList<String>()
     private var mCanLaunchDirections = false
@@ -61,7 +62,6 @@ class MapsFragment : androidx.fragment.app.Fragment() {
         textView.typeface = typeface_bold
 
         mMapChoicesAvailable.add(MAPS.packageName)
-        val launchAppHelper = LaunchAppHelper(requireContext())
         val wazeInstalled = launchAppHelper.isAbleToLaunch(WAZE.packageName)
         if (wazeInstalled) {
             mMapChoicesAvailable.add(WAZE.packageName)

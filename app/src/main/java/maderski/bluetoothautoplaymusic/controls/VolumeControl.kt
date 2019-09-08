@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
@@ -99,7 +100,7 @@ class VolumeControl(private val context: Context): KoinComponent {
 
         setToMaxVol()
 
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable { setToMaxVol() }
         handler.postDelayed(runnable, milliseconds.toLong())
     }

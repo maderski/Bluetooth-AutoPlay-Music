@@ -19,6 +19,7 @@ import org.koin.android.ext.android.inject
 class LaunchBAPMActivity : AppCompatActivity() {
     private val preferences: BAPMPreferences by inject()
     private val screenONLock: ScreenONLock by inject()
+    private val launchAppHelper: LaunchAppHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +70,6 @@ class LaunchBAPMActivity : AppCompatActivity() {
             val handler = Handler()
             val runnable = Runnable {
                 finish()
-                val launchAppHelper = LaunchAppHelper(this)
                 launchAppHelper.sendEverythingToBackground(context)
             }
             handler.postDelayed(runnable, milliSeconds.toLong())

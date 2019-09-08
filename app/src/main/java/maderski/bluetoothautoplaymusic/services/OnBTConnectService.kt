@@ -9,7 +9,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
 import maderski.bluetoothautoplaymusic.workers.OnPowerConnectedWorker
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -20,6 +20,7 @@ import org.koin.core.inject
 
 class OnBTConnectService : Service(), KoinComponent {
     private val preferences: BAPMPreferences by inject()
+    private val serviceManager: ServiceManager by inject()
 
     private var waitTillPowerConnected = false
 
@@ -44,12 +45,12 @@ class OnBTConnectService : Service(), KoinComponent {
         val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
         val title = getString(resId)
         val message = getString(R.string.app_name)
-        ServiceUtils.createServiceNotification(3451,
+        serviceManager.createServiceNotification(3451,
                 title,
                 message,
                 this,
-                ServiceUtils.CHANNEL_ID_FOREGROUND_SERVICE,
-                ServiceUtils.CHANNEL_NAME_FOREGROUND_SERVICE,
+                ServiceManager.CHANNEL_ID_FOREGROUND_SERVICE,
+                ServiceManager.CHANNEL_NAME_FOREGROUND_SERVICE,
                 R.drawable.ic_notif_icon,
                 false)
 

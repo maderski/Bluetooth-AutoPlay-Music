@@ -7,13 +7,16 @@ import android.util.Log
 
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 7/8/17.
  */
 
-class BTDisconnectService : Service() {
+class BTDisconnectService : Service(), KoinComponent {
+    private val serviceManager: ServiceManager by inject()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val btDisconnectActions = BTDisconnectActions(this)
@@ -27,12 +30,12 @@ class BTDisconnectService : Service() {
         super.onCreate()
         val title = getString(R.string.disconnect_message)
         val message = getString(R.string.app_name)
-        ServiceUtils.createServiceNotification(3454,
+        serviceManager.createServiceNotification(3454,
                 title,
                 message,
                 this,
-                ServiceUtils.CHANNEL_ID_FOREGROUND_SERVICE,
-                ServiceUtils.CHANNEL_NAME_FOREGROUND_SERVICE,
+                ServiceManager.CHANNEL_ID_FOREGROUND_SERVICE,
+                ServiceManager.CHANNEL_NAME_FOREGROUND_SERVICE,
                 R.drawable.ic_notif_icon,
                 false)
     }

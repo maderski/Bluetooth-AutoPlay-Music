@@ -8,15 +8,15 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.BuildConfig
-import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.services.BTStateChangedService
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
+import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -27,6 +27,7 @@ import org.koin.core.inject
 class BluetoothConnectHelper(private val context: Context, private val deviceName: String): KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
+    private val serviceManager: ServiceManager by inject()
 
     fun a2dpActions(state: Int) {
         val isHeadphones = dataPreferences.getIsAHeadphonesDevice()
@@ -74,8 +75,7 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
         stopAdditionalServices()
 
         if (dataPreferences.getRanActionsOnBtConnect()) {
-            PlayMusicControl.cancelCheckIfPlaying()
-            ServiceUtils.startService(context, BTDisconnectService::class.java, BTDisconnectService.TAG)
+            serviceManager.startService(BTDisconnectService::class.java, BTDisconnectService.TAG)
         }
 
         if (preferences.getWaitTillOffPhone() && dataPreferences.getLaunchNotifPresent()) {
@@ -89,8 +89,8 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
     }
 
     private fun startAdditionalServices() {
-        ServiceUtils.startService(context, OnBTConnectService::class.java, OnBTConnectService.TAG)
-        ServiceUtils.startService(context, BTStateChangedService::class.java, BTStateChangedService.TAG)
+        serviceManager.startService(OnBTConnectService::class.java, OnBTConnectService.TAG)
+        serviceManager.startService(BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 
     private fun stopAdditionalServices() {
@@ -98,10 +98,10 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
         Log.d(TAG, "Did not launch BAPM: $didNotLaunchBAPM")
 
         if (didNotLaunchBAPM) {
-            ServiceUtils.stopService(context, OnBTConnectService::class.java, OnBTConnectService.TAG)
+            serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
         }
 
-        ServiceUtils.stopService(context, BTStateChangedService::class.java, BTStateChangedService.TAG)
+        serviceManager.stopService(BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 
     private fun checksBeforeLaunch() {

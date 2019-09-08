@@ -1,6 +1,17 @@
 package maderski.bluetoothautoplaymusic.di
 
+import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
+import maderski.bluetoothautoplaymusic.controls.RingerControl
+import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.controls.mediaplayer.KeyEventControl
+import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
+import maderski.bluetoothautoplaymusic.helpers.MediaSessionTokenHelper
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
+import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper
+import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
+import maderski.bluetoothautoplaymusic.notification.BAPMNotification
+import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMSharedPrefsAccess
@@ -10,7 +21,11 @@ import org.koin.dsl.module
 object KoinModules {
     val list = listOf(
             prefsModules,
-            controlModules
+            controlModules,
+            firebaseModule,
+            serviceModule,
+            helperModules,
+            notificationModule
     )
 }
 
@@ -21,5 +36,28 @@ val prefsModules = module {
 
 val controlModules = module {
     single { ScreenONLock(get()) }
+    single { KeyEventControl(androidContext()) }
+    single { VolumeControl(androidContext()) }
+    single { RingerControl(androidContext()) }
+    single { MediaPlayerControlManager(androidContext(), get(), get(), get(), get())}
+}
+
+val firebaseModule = module {
+    single { FirebaseHelper(androidContext()) }
+}
+
+val serviceModule = module {
+    single { ServiceManager(androidContext()) }
+}
+
+val helperModules = module {
+    single { PackageHelper(androidContext()) }
+    single { TelephoneHelper(androidContext()) }
+    single { LaunchAppHelper(androidContext(), get(), get()) }
+    single { MediaSessionTokenHelper(androidContext()) }
+}
+
+val notificationModule = module {
+    single { BAPMNotification(androidContext()) }
 }
 

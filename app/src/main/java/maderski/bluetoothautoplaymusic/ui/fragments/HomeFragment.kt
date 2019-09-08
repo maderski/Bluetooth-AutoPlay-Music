@@ -31,9 +31,9 @@ import java.util.*
 
 class HomeFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
-
-    private lateinit var firebaseHelper: FirebaseHelper
-    private lateinit var packageHelper: PackageHelper
+    private val launchAppHelper: LaunchAppHelper by inject()
+    private val firebaseHelper: FirebaseHelper by inject()
+    private val packageHelper: PackageHelper by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -42,12 +42,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         }
 
     private var installedMediaPlayers: Set<String> = setOf()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        firebaseHelper = FirebaseHelper(requireActivity())
-        packageHelper = PackageHelper(requireActivity())
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -80,7 +74,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private fun checkIfWazeRemoved(context: Context) {
         val mapAppChoice = preferences.getMapsChoice()
         if (mapAppChoice.equals(WAZE.packageName, ignoreCase = true)) {
-            val launchAppHelper = LaunchAppHelper(requireActivity())
             val isWazeOnPhone = launchAppHelper.isAbleToLaunch(WAZE.packageName)
             if (isWazeOnPhone.not()) {
                 Log.d(TAG, "Checked")

@@ -10,9 +10,11 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
+import android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 import android.widget.Toast
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.*
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 
 /**
@@ -20,7 +22,7 @@ import maderski.bluetoothautoplaymusic.utils.PermissionUtils
  */
 class PackageHelper(private val context: Context) {
     // Get all Installed Packages that are on the device
-    val allInstalledPackages: List<ApplicationInfo> get() {
+    private val allInstalledPackages: List<ApplicationInfo> get() {
         val packageManager: PackageManager = context.packageManager
         return packageManager.getInstalledApplications(0).toList()
     }
@@ -130,7 +132,7 @@ class PackageHelper(private val context: Context) {
                 }
             }
         } else {
-            //TODO:// handle the case when usageStats permission is not granted
+            //TODO: handle the case when usageStats permission is not granted
         }
         return PACKAGE_NOT_FOUND
     }
@@ -154,7 +156,14 @@ class PackageHelper(private val context: Context) {
         TUNE_IN_RADIO_PRO("radiotime.player"),
         FOOBAR_2000("com.foobar2000.foobar2000"),
         VANILLA_MUSIC("ch.blinkenlights.android.vanilla"),
-        JIO_MUSIC("com.jio.media.jiobeats")
+        JIO_MUSIC("com.jio.media.jiobeats"),
+        YOUTUBE_MUSIC("com.google.android.apps.youtube.music"),
+        NOT_ON_LIST("not_on_list");
+
+        companion object {
+            fun getEnumForMediaPlayerPkg(packageName: String): MediaPlayers =
+                    values().firstOrNull { it.packageName == packageName } ?: NOT_ON_LIST
+        }
     }
 
     enum class MapApps(val packageName: String) {

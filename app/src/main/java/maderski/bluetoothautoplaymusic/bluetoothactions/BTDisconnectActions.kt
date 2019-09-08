@@ -4,20 +4,21 @@ import android.content.Context
 import android.media.AudioManager
 import android.os.Handler
 import android.util.Log
-import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
+import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.services.BTDisconnectService
+import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -28,17 +29,16 @@ import org.koin.core.inject
 class BTDisconnectActions(private val context: Context): KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
-
-    private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
-    private val mVolumeControl: VolumeControl = VolumeControl(context)
-    private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
+    private val mBAPMNotification: BAPMNotification by inject()
+    private val mVolumeControl: VolumeControl by inject()
+    private val launchAppHelper: LaunchAppHelper by inject()
+    private val ringerControl: RingerControl by inject()
+    private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
+    private val serviceManager: ServiceManager by inject()
 
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     fun actionsOnBTDisconnect() {
-        val launchAppHelper = LaunchAppHelper(context)
-        val ringerControl = RingerControl(context)
-
         removeBAPMNotification()
         pauseMusic()
         turnOffPriorityMode(ringerControl)
@@ -54,7 +54,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
 
     private fun stopService() {
         dataPreferences.setRanActionsOnBtConnect(false)
-        Handler().postDelayed({ ServiceUtils.stopService(context, BTDisconnectService::class.java, BTDisconnectService.TAG) }, 5000)
+        Handler().postDelayed({ serviceManager.stopService(BTDisconnectService::class.java, BTDisconnectService.TAG) }, 5000)
     }
 
     private fun removeBAPMNotification() {
@@ -68,7 +68,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     private fun pauseMusic() {
         val playMusic = preferences.getAutoPlayMusic()
         if (playMusic) {
-            mPlayMusicControl.pause()
+            mediaPlayerControlManager.pause()
         }
     }
 
@@ -129,7 +129,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     private fun stopKeepingScreenOn() {
         val screenON = preferences.getKeepScreenON()
         if (screenON) {
-            ServiceUtils.stopService(context, WakeLockService::class.java, WakeLockService.TAG)
+            serviceManager.stopService(WakeLockService::class.java, WakeLockService.TAG)
         }
     }
 

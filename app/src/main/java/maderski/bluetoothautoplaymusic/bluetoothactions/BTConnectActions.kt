@@ -7,11 +7,12 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.CountDownTimer
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import maderski.bluetoothautoplaymusic.controls.PlayMusicControl
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
+import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
@@ -19,12 +20,13 @@ import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
+import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.utils.PowerUtils
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -35,11 +37,11 @@ import org.koin.core.inject
 class BTConnectActions(private val context: Context): KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
-
-    private val mBAPMNotification: BAPMNotification = BAPMNotification(context)
-    private val mVolumeControl: VolumeControl = VolumeControl(context)
-    private val mPlayMusicControl: PlayMusicControl = PlayMusicControl(context)
-    private val mLaunchAppHelper: LaunchAppHelper = LaunchAppHelper(context)
+    private val volumeControl: VolumeControl by inject()
+    private val bapmNotification: BAPMNotification by inject()
+    private val launchAppHelper: LaunchAppHelper by inject()
+    private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
+    private val serviceManager: ServiceManager by inject()
 
     fun onBTConnect() {
         val waitTillOffPhone = preferences.getWaitTillOffPhone()
@@ -58,7 +60,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
         if (isOnCall) {
             Log.d(TAG, "ON a call")
             // if plugged in run on the phone check else launch notification
-            if (isPluggedIn) telephoneHelper.checkIfOnPhone(mVolumeControl) else mBAPMNotification.launchBAPM()
+            if (isPluggedIn) telephoneHelper.checkIfOnPhone(volumeControl) else bapmNotification.launchBAPM()
         } else {
             Log.d(TAG, "NOT on a call")
             actionsOnBTConnect()
@@ -79,53 +81,54 @@ class BTConnectActions(private val context: Context): KoinComponent {
             performActionsDelay()
         } else {
             launchMusicMapApp()
-            autoPlayMusic(6)
+            autoPlayMusic()
             setWifiOff()
             putPhoneInDoNotDisturb()
         }
 
         dataPreferences.setRanActionsOnBtConnect(true)
-        ServiceUtils.stopService(context, OnBTConnectService::class.java, OnBTConnectService.TAG)
+        serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
     }
 
     private fun performActionsDelay() {
-        val seconds = 30000
+        Handler(Looper.getMainLooper()).post {
+            val milliSeconds = 30000
+            object : CountDownTimer(milliSeconds.toLong(), 1000) {
 
-        object : CountDownTimer(seconds.toLong(), 1000) {
-
-            override fun onTick(millisUntilFinished: Long) {
-                val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-                val isDeviceLocked = keyguardManager.isDeviceLocked
-                Log.d(TAG, "IS DEVICE LOCKED: " + isDeviceLocked.toString())
-                if (!isDeviceLocked && millisUntilFinished < 28000) {
-                    cancel()
-                    onFinish()
+                override fun onTick(millisUntilFinished: Long) {
+                    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    val isDeviceLocked = keyguardManager.isDeviceLocked
+                    Log.d(TAG, "IS DEVICE LOCKED: $isDeviceLocked")
+                    if (!isDeviceLocked && millisUntilFinished < 28000) {
+                        cancel()
+                        onFinish()
+                    }
+                    Log.d(TAG, "LOCKED mills left to check: $millisUntilFinished")
                 }
-                Log.d(TAG, "LOCKED mills left to check: " + millisUntilFinished.toString())
-            }
 
-            override fun onFinish() {
-                unlockTheScreen()
-                launchMusicMapApp()
-                autoPlayMusic(6)
-                setWifiOff()
-                putPhoneInDoNotDisturb()
-            }
-        }.start()
+                override fun onFinish() {
+                    unlockTheScreen()
+                    launchMusicMapApp()
+                    autoPlayMusic()
+                    setWifiOff()
+                    putPhoneInDoNotDisturb()
+                }
+            }.start()
+        }
     }
 
     private fun showBTAMNotification() {
         val mapChoice = preferences.getMapsChoice()
         val canShowNotification = preferences.getShowNotification()
         if (canShowNotification) {
-            mBAPMNotification.bapmMessage(mapChoice)
+            bapmNotification.bapmMessage(mapChoice)
         }
     }
 
     private fun turnTheScreenOn() {
         val screenON = preferences.getKeepScreenON()
         if (screenON) {
-            ServiceUtils.startService(context, WakeLockService::class.java, WakeLockService.TAG)
+            serviceManager.startService(WakeLockService::class.java, WakeLockService.TAG)
         }
     }
 
@@ -134,37 +137,35 @@ class BTConnectActions(private val context: Context): KoinComponent {
         val isKeyguardLocked = keyguardManager.isKeyguardLocked
         Log.d(TAG, "Is keyguard locked: " + java.lang.Boolean.toString(isKeyguardLocked))
         if (isKeyguardLocked) {
-            mLaunchAppHelper.launchBAPMActivity()
+            launchAppHelper.launchBAPMActivity()
         }
     }
 
     private fun setVolumeToMax() {
         val volumeMAX = preferences.getMaxVolume()
         if (volumeMAX) {
-            val handler = Handler()
-            val runnable = Runnable { mVolumeControl.checkSetMAXVol(4) }
-            handler.postDelayed(runnable, 3000)
+            volumeControl.checkSetMAXVol(4)
         }
     }
 
-    private fun autoPlayMusic(checkToPlaySeconds: Int) {
+    private fun autoPlayMusic() {
         val playMusic = preferences.getAutoPlayMusic()
         if (playMusic) {
-            mPlayMusicControl.checkIfPlaying(context, checkToPlaySeconds)
+            mediaPlayerControlManager.play()
         }
     }
 
     private fun launchMusicMapApp() {
         val launchMusicPlayer = preferences.getLaunchMusicPlayer()
         val launchMaps = preferences.getLaunchGoogleMaps()
-        val mapsCanLaunch = mLaunchAppHelper.canMapsLaunchNow()
+        val mapsCanLaunch = launchAppHelper.canMapsLaunchNow()
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
-            mLaunchAppHelper.musicPlayerLaunch(3)
+            launchAppHelper.musicPlayerLaunch(3)
         }
 
         if (launchMaps) {
-            mLaunchAppHelper.launchMaps(3)
+            launchAppHelper.launchMaps(3)
         }
     }
 
@@ -180,7 +181,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
             val canLaunch = timeHelperMorning.isWithinTimeSpan
             val directionLocation = if (canLaunch) DirectionLocation.WORK else DirectionLocation.HOME
 
-            val canChangeWifiState = !preferences.getWifiUseMapTimeSpans() || canLaunch && mLaunchAppHelper.canLaunchOnThisDay(directionLocation)
+            val canChangeWifiState = !preferences.getWifiUseMapTimeSpans() || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false)
             }

@@ -29,11 +29,13 @@ import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
+import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.android.ext.android.inject
+import org.koin.core.inject
 import java.util.*
 
 class MainActivity : AppCompatActivity(),
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity(),
         TimePickerFragment.TimePickerDialogListener,
         WifiOffFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
+    private val serviceManager: ServiceManager by inject()
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
@@ -101,6 +104,8 @@ class MainActivity : AppCompatActivity(),
         }
 
         checkIfBAPMServiceRunning()
+
+        PermissionUtils.checkNotificationListenerPermission(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -142,7 +147,7 @@ class MainActivity : AppCompatActivity(),
 
     // Starts BAPMService if it is not running
     private fun checkIfBAPMServiceRunning() {
-        val isServiceRunning = ServiceUtils.isServiceRunning(this, BAPMService::class.java)
+        val isServiceRunning = serviceManager.isServiceRunning(BAPMService::class.java)
         if (isServiceRunning.not()) {
             val serviceIntent = Intent(this, BAPMService::class.java)
             startService(serviceIntent)

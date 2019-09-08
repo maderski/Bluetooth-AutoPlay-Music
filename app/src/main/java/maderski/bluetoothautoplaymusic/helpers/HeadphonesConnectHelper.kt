@@ -9,9 +9,10 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTHeadphonesActions
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.services.BTStateChangedService
+import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -26,6 +27,7 @@ class HeadphonesConnectHelper(
 ): KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
+    private val serviceManager: ServiceManager by inject()
 
     fun performActions() {
         val doesRequireA2DP = preferences.getUseA2dpHeadphones()
@@ -50,7 +52,7 @@ class HeadphonesConnectHelper(
                 BluetoothProfile.STATE_CONNECTED -> {
                     Log.d(TAG, "A2DP CONNECTED")
                     btHeadphonesActions.connectActions()
-                    ServiceUtils.startService(mContext, BTStateChangedService::class.java, BTStateChangedService.TAG)
+                    serviceManager.startService(BTStateChangedService::class.java, BTStateChangedService.TAG)
                 }
                 BluetoothProfile.STATE_DISCONNECTING -> Log.d(TAG, "A2DP DISCONNECTING")
                 BluetoothProfile.STATE_DISCONNECTED -> {

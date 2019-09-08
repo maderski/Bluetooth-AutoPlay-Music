@@ -51,6 +51,7 @@ dependencies {
     implementation dep.androidx.work_manager
     implementation dep.androidx.app_compat
     implementation dep.androidx.legacy
+    implementation dep.androidx.core
     // google
     implementation dep.google.material
     implementation dep.google.gson

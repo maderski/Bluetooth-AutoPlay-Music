@@ -13,6 +13,7 @@ import android.os.Process
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringDef
 import androidx.core.app.ActivityCompat
+import maderski.bluetoothautoplaymusic.services.BAPMNotificationListenerService
 
 /**
  * Created by Jason on 9/10/16.
@@ -25,7 +26,6 @@ object PermissionUtils {
     annotation class Permission
 
     const val COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
-
     private const val GET_USAGE_STATS = "android:get_usage_stats"
 
     fun checkPermission(activity: Activity, permission: String) {
@@ -65,6 +65,13 @@ object PermissionUtils {
             handler.postDelayed(runnable, milliseconds)
         }
         return hasDoNotDisturbPerm
+    }
+
+    fun checkNotificationListenerPermission(context: Context) {
+        val hasPermission = BAPMNotificationListenerService.isEnabled(context)
+        if (!hasPermission) {
+            context.startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+        }
     }
 
     fun hasUsageStatsPermission(context: Context): Boolean {

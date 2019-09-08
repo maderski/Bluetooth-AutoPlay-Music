@@ -1,8 +1,6 @@
 package maderski.bluetoothautoplaymusic.services
 
 import android.app.Service
-import android.app.job.JobScheduler
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
@@ -13,12 +11,15 @@ import io.fabric.sdk.android.Fabric
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.receivers.BluetoothReceiver
-import maderski.bluetoothautoplaymusic.utils.ServiceUtils
+import maderski.bluetoothautoplaymusic.utils.serviceManager
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by Jason on 1/5/16.
  */
-class BAPMService : Service() {
+class BAPMService : Service(), KoinComponent {
+    private val serviceManager: ServiceManager by inject()
 
     private val mBluetoothReceiver = BluetoothReceiver()
 
@@ -51,12 +52,12 @@ class BAPMService : Service() {
         super.onCreate()
         val title = getString(R.string.initializing)
         val message = getString(R.string.app_name)
-        ServiceUtils.createServiceNotification(3455,
+        serviceManager.createServiceNotification(3455,
                 title,
                 message,
                 this,
-                ServiceUtils.CHANNEL_ID_FOREGROUND_SERVICE,
-                ServiceUtils.CHANNEL_NAME_FOREGROUND_SERVICE,
+                ServiceManager.CHANNEL_ID_FOREGROUND_SERVICE,
+                ServiceManager.CHANNEL_NAME_FOREGROUND_SERVICE,
                 R.drawable.ic_notif_icon,
                 false)
     }

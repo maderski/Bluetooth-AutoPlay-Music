@@ -20,10 +20,12 @@ import java.util.*
 /**
  * Created by Jason on 12/8/15.
  */
-class LaunchAppHelper(private val context: Context) : KoinComponent {
-    private val preferences: BAPMPreferences by inject()
+class LaunchAppHelper(
+        private val context: Context,
+        private val packageHelper: PackageHelper,
+        preferences: BAPMPreferences
+) {
 
-    private val packageHelper = PackageHelper(context)
     private val canLaunchThisTimeLocations = ArrayList<DirectionLocation>()
 
     private var directionLocation: DirectionLocation = NONE
@@ -69,7 +71,7 @@ class LaunchAppHelper(private val context: Context) : KoinComponent {
         if (canLaunchMapsNow) {
             val mills = seconds * 1000L
 
-            val handler = Handler()
+            val handler = Handler(Looper.getMainLooper())
             val runnable = Runnable {
                 if (canLaunchDirections) {
                     val data = getMapsChoiceUri()
