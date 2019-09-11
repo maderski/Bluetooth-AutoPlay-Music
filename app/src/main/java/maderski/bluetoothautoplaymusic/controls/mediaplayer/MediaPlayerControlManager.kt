@@ -33,20 +33,27 @@ class MediaPlayerControlManager(
         playAgainHandler = Handler(Looper.getMainLooper())
         playAgainRunnable = Runnable {
             // launch the app
-            launchAppHelper.launchApp(selectedMusicPlayerPackageName)
-            // attempt to play again after app has been launched
-            playAgainHandler?.postDelayed({
-                if (!audioManager.isMusicActive) {
-                    keyEventControl.playMediaButton(selectedMusicPlayerPackageName)
-                }
-            }, DELAY)
+            if (!audioManager.isMusicActive) {
+                launchAppHelper.launchApp(selectedMusicPlayerPackageName)
+                // attempt to play again after app has been launched
+                playAgainHandler?.postDelayed({
+                    if (!audioManager.isMusicActive) {
+                        keyEventControl.playMediaButton(selectedMusicPlayerPackageName)
+                    }
+                }, DELAY)
+            }
         }
-        playAgainHandler?.postDelayed(playAgainRunnable, DELAY)
+        playAgainRunnable?.let {
+            playAgainHandler?.postDelayed(it, DELAY)
+        }
     }
 
     private fun cancelDelayedPlayAgain() {
         if (playAgainHandler != null && playAgainRunnable != null) {
-            playAgainHandler?.removeCallbacks(playAgainRunnable)
+            playAgainRunnable?.let {
+                playAgainHandler?.removeCallbacks(it)
+            }
+
             playAgainHandler = null
             playAgainRunnable = null
         }
@@ -64,6 +71,6 @@ class MediaPlayerControlManager(
     }
 
     companion object {
-        const val DELAY = 2000L
+        const val DELAY = 3000L
     }
 }

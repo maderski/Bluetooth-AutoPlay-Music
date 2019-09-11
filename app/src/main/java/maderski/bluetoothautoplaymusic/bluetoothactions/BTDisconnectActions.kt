@@ -1,8 +1,10 @@
 package maderski.bluetoothautoplaymusic.bluetoothactions
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
@@ -18,7 +20,6 @@ import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -41,8 +42,8 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     fun actionsOnBTDisconnect() {
         removeBAPMNotification()
         pauseMusic()
-        turnOffPriorityMode(ringerControl)
         sendAppToBackground(launchAppHelper)
+        turnOffPriorityMode(ringerControl)
         closeWaze(launchAppHelper)
         setWifiOn(launchAppHelper)
         stopKeepingScreenOn()
@@ -75,7 +76,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     private fun sendAppToBackground(launchAppHelper: LaunchAppHelper) {
         val sendToBackground = preferences.getSendToBackground()
         if (sendToBackground) {
-            launchAppHelper.sendEverythingToBackground(context)
+            launchAppHelper.launchDisconnectActivity()
         }
     }
 

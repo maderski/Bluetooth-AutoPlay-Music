@@ -9,7 +9,6 @@ import android.util.Log
 
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver
-import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 

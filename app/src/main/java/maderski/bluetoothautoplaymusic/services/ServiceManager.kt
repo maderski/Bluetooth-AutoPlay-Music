@@ -49,37 +49,43 @@ class ServiceManager (private val context: Context) {
                                   @DrawableRes icon: Int,
                                   isOngoing: Boolean) {
 
-        val notification = getNotification(title, message, channelId, channelName, icon, isOngoing)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notification = getNotification(notificationManager, title, message, channelId, channelName, icon, isOngoing)
         service.startForeground(id, notification)
     }
 
-    private fun getNotification(title: String,
+    private fun getNotification(notificationManager: NotificationManager,
+                                title: String,
                                 message: String,
                                 channelId: String,
                                 channelName: String,
                                 @DrawableRes icon: Int,
                                 isOngoing: Boolean): Notification {
-        val builder: NotificationCompat.Builder
 
-        builder = if (Build.VERSION.SDK_INT < 26) {
+        val builder = if (Build.VERSION.SDK_INT < 26) {
             NotificationCompat.Builder(context, channelId)
         } else {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = getNotificationChannel(channelId, channelName)
             notificationManager.createNotificationChannel(channel)
-
             NotificationCompat.Builder(context, channelId)
         }
 
-        val notification = builder
-                .setSmallIcon(icon)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setOnlyAlertOnce(true)
-                .build()
+        with(builder) {
+            setSmallIcon(icon)
+            setContentTitle(title)
+            setContentText(message)
+            setOnlyAlertOnce(true)
 
-        if (isOngoing) {
-            notification.flags = NotificationCompat.FLAG_FOREGROUND_SERVICE
+            if (Build.VERSION.SDK_INT < 26 && !isOngoing)
+                priority = NotificationCompat.PRIORITY_MIN
+        }
+
+        val notification = builder.build()
+
+        notification.flags = if (isOngoing) {
+            NotificationCompat.FLAG_FOREGROUND_SERVICE
+        } else {
+            NotificationCompat.PRIORITY_DEFAULT
         }
 
         return notification

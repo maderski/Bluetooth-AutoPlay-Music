@@ -5,11 +5,8 @@ import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.KeyEventControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
-import maderski.bluetoothautoplaymusic.helpers.MediaSessionTokenHelper
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper
-import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
+import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
@@ -25,7 +22,8 @@ object KoinModules {
             firebaseModule,
             serviceModule,
             helperModules,
-            notificationModule
+            notificationModule,
+            permissionModule
     )
 }
 
@@ -59,5 +57,9 @@ val helperModules = module {
 
 val notificationModule = module {
     single { BAPMNotification(androidContext()) }
+}
+
+val permissionModule = module {
+    single { BAPMPermissionHelper() }
 }
 

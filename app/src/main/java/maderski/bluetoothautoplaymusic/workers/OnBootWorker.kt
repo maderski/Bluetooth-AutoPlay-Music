@@ -5,7 +5,6 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import maderski.bluetoothautoplaymusic.services.BAPMService
 import maderski.bluetoothautoplaymusic.services.ServiceManager
-import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 

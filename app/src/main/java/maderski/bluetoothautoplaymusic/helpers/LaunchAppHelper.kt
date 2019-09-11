@@ -10,10 +10,9 @@ import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import java.util.*
 
 
@@ -139,11 +138,11 @@ class LaunchAppHelper(
         handler.postDelayed(runnable, 750)
     }
 
-    fun sendEverythingToBackground(context: Context) {
-        val i = Intent(Intent.ACTION_MAIN)
-        i.addCategory(Intent.CATEGORY_HOME)
-        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(i)
+    fun launchDisconnectActivity() {
+        val launchIntent = Intent(context, DisconnectActivity::class.java).also {
+            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(launchIntent)
     }
 
     fun canMapsLaunchNow(): Boolean {

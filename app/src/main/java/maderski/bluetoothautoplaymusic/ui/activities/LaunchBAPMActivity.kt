@@ -20,13 +20,13 @@ class LaunchBAPMActivity : AppCompatActivity() {
     private val preferences: BAPMPreferences by inject()
     private val screenONLock: ScreenONLock by inject()
     private val launchAppHelper: LaunchAppHelper by inject()
+    private val firebaseHelper: FirebaseHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_launch_bapm)
 
         // Create Firebase Event
-        val firebaseHelper = FirebaseHelper(this)
         firebaseHelper.activityLaunched(ActivityNameConstants.LAUNCH_BAPM)
 
         // Dismiss the keyguard
@@ -70,7 +70,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
             val handler = Handler()
             val runnable = Runnable {
                 finish()
-                launchAppHelper.sendEverythingToBackground(context)
+                launchAppHelper.launchDisconnectActivity()
             }
             handler.postDelayed(runnable, milliSeconds.toLong())
         }

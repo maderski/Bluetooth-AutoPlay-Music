@@ -27,15 +27,14 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.bus.BusProvider
 import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
+import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
 import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.utils.serviceManager
 import org.koin.android.ext.android.inject
-import org.koin.core.inject
 import java.util.*
 
 class MainActivity : AppCompatActivity(),
@@ -44,6 +43,7 @@ class MainActivity : AppCompatActivity(),
         WifiOffFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
+    private val permissionHelper: BAPMPermissionHelper by inject()
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
@@ -106,6 +106,8 @@ class MainActivity : AppCompatActivity(),
         checkIfBAPMServiceRunning()
 
         PermissionUtils.checkNotificationListenerPermission(this)
+
+        permissionHelper.checkToLaunchSystemOverlaySettings(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -197,7 +199,7 @@ class MainActivity : AppCompatActivity(),
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("PlayStoreLink",
                     "https://play.google.com/store/apps/details?id=maderski.bluetoothautoplaymusic")
-            clipboard.primaryClip = clip
+            clipboard.setPrimaryClip(clip)
             showClipboardToast()
         }
         alertDialog.show()
