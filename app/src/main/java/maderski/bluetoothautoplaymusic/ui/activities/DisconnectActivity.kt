@@ -1,18 +1,27 @@
 package maderski.bluetoothautoplaymusic.ui.activities
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import org.koin.android.ext.android.inject
 
 class DisconnectActivity : AppCompatActivity() {
+    private val btDisconnectActions: BTDisconnectActions by inject()
+    private val preferences: BAPMPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_disconnect)
 
-        sendEverythingToBackground()
+        btDisconnectActions.actionsOnBTDisconnect()
+
+        val sendToBackground = preferences.getSendToBackground()
+        if (sendToBackground) {
+            sendEverythingToBackground()
+        }
 
         finish()
     }

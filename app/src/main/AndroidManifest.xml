@@ -61,7 +61,6 @@
         <service android:name=".services.OnBTConnectService" />
         <service android:name=".services.BTStateChangedService" />
         <service android:name=".services.WakeLockService" />
-        <service android:name=".services.BTDisconnectService" />
         <service
             android:name=".services.BAPMNotificationListenerService"
             android:label="@string/app_name"

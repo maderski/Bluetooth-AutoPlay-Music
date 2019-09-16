@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic.di
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
+import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.KeyEventControl
@@ -24,7 +25,8 @@ object KoinModules {
             serviceModule,
             helperModules,
             notificationModule,
-            permissionModule
+            permissionModule,
+            btActionsModules
     )
 }
 
@@ -63,5 +65,9 @@ val notificationModule = module {
 
 val permissionModule = module {
     single { BAPMPermissionHelper() }
+}
+
+val btActionsModules = module {
+    single { BTDisconnectActions(androidContext()) }
 }
 

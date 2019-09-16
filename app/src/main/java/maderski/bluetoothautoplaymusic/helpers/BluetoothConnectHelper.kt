@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothProfile
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.util.Log
 
@@ -11,11 +12,11 @@ import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.services.BTStateChangedService
-import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -74,7 +75,10 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
         stopAdditionalServices()
 
         if (dataPreferences.getRanActionsOnBtConnect()) {
-            serviceManager.startService(BTDisconnectService::class.java, BTDisconnectService.TAG)
+            val disconnectIntent = Intent(context, DisconnectActivity::class.java).also {
+                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            context.startActivity(disconnectIntent)
         }
 
         if (preferences.getWaitTillOffPhone() && dataPreferences.getLaunchNotifPresent()) {

@@ -1,10 +1,7 @@
 package maderski.bluetoothautoplaymusic.bluetoothactions
 
 import android.content.Context
-import android.content.Intent
 import android.media.AudioManager
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
@@ -15,7 +12,6 @@ import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.services.BTDisconnectService
 import maderski.bluetoothautoplaymusic.services.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
@@ -42,7 +38,6 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     fun actionsOnBTDisconnect() {
         removeBAPMNotification()
         pauseMusic()
-        sendAppToBackground(launchAppHelper)
         turnOffPriorityMode(ringerControl)
         closeWaze(launchAppHelper)
         setWifiOn(launchAppHelper)
@@ -50,12 +45,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
 
         setVolumeBack(ringerControl)
 
-        stopService()
-    }
-
-    private fun stopService() {
         dataPreferences.setRanActionsOnBtConnect(false)
-        Handler().postDelayed({ serviceManager.stopService(BTDisconnectService::class.java, BTDisconnectService.TAG) }, 5000)
     }
 
     private fun removeBAPMNotification() {
@@ -70,13 +60,6 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
         val playMusic = preferences.getAutoPlayMusic()
         if (playMusic) {
             mediaPlayerControlManager.pause()
-        }
-    }
-
-    private fun sendAppToBackground(launchAppHelper: LaunchAppHelper) {
-        val sendToBackground = preferences.getSendToBackground()
-        if (sendToBackground) {
-            launchAppHelper.launchDisconnectActivity()
         }
     }
 
