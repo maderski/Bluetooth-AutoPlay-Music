@@ -44,8 +44,6 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
         stopKeepingScreenOn()
 
         setVolumeBack(ringerControl)
-
-        dataPreferences.setRanActionsOnBtConnect(false)
     }
 
     private fun removeBAPMNotification() {

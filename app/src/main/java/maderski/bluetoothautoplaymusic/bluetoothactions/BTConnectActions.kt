@@ -85,7 +85,6 @@ class BTConnectActions(private val context: Context): KoinComponent {
             putPhoneInDoNotDisturb()
         }
 
-        dataPreferences.setRanActionsOnBtConnect(true)
         serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
     }
 

@@ -68,27 +68,22 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
     fun btDisconnectActions() {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Device disconnected: $deviceName")
-            Log.i(TAG, "Ran actionOnBTConnect: ${dataPreferences.getRanActionsOnBtConnect()}")
             Log.i(TAG, "LaunchNotifPresent: ${dataPreferences.getLaunchNotifPresent()}")
         }
 
         stopAdditionalServices()
 
-        if (dataPreferences.getRanActionsOnBtConnect()) {
-            val disconnectIntent = Intent(context, DisconnectActivity::class.java).also {
-                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            context.startActivity(disconnectIntent)
+        val disconnectIntent = Intent(context, DisconnectActivity::class.java).also {
+            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
+        context.startActivity(disconnectIntent)
 
         if (preferences.getWaitTillOffPhone() && dataPreferences.getLaunchNotifPresent()) {
             val bapmNotification = BAPMNotification(context)
             bapmNotification.removeBAPMMessage()
         }
 
-        if (!dataPreferences.getRanActionsOnBtConnect()) {
-            checkForWifiTurnOffDevice(false)
-        }
+        checkForWifiTurnOffDevice(false)
     }
 
     private fun startAdditionalServices() {
@@ -97,13 +92,7 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
     }
 
     private fun stopAdditionalServices() {
-        val didNotLaunchBAPM = !dataPreferences.getRanActionsOnBtConnect()
-        Log.d(TAG, "Did not launch BAPM: $didNotLaunchBAPM")
-
-        if (didNotLaunchBAPM) {
-            serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
-        }
-
+        serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
         serviceManager.stopService(BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 

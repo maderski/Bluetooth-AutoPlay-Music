@@ -18,14 +18,10 @@ class BAPMDataPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
 
     fun setCurrentRingerSet(ringerSetting: Int) = sharedPrefsAccess.putInt(CURRENT_RINGER_SET, ringerSetting)
     fun getCurrentRingerSet(): Int = sharedPrefsAccess.getInt(CURRENT_RINGER_SET, 2)
-
-    fun setRanActionsOnBtConnect(enabled: Boolean) = sharedPrefsAccess.putBoolean(RAN_ACTIONS_ON_BT_CONNECT_KEY, enabled)
-    fun getRanActionsOnBtConnect(): Boolean = sharedPrefsAccess.getBoolean(RAN_ACTIONS_ON_BT_CONNECT_KEY, false)
-
+    
     companion object {
         const val MY_PREFS_NAME = "BAPMDataPreference"
 
-        private const val RAN_ACTIONS_ON_BT_CONNECT_KEY = "RanActionsOnBTConnect"
         private const val CURRENT_RINGER_SET = "CurrentRingerSet"
         private const val ORIGINAL_MEDIA_VOLUME = "OriginalMediaVolume"
         private const val LAUNCH_NOTIF_PRESENT = "LaunchNotifPresent"
