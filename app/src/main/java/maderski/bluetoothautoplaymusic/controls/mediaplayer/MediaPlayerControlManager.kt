@@ -14,63 +14,40 @@ class MediaPlayerControlManager(
         mediaSessionTokenHelper: MediaSessionTokenHelper,
         preferences: BAPMPreferences,
         private val launchAppHelper: LaunchAppHelper,
-        private val keyEventControl: KeyEventControl
-): MediaControllerHelper.PlayBackStateCallback {
+        private val keyEventControl: KeyEventControl,
+        private val playAttempter: PlayAttempter
+) : MediaControllerHelper.PlayBackStateCallback {
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val selectedMusicPlayerPackageName = preferences.getPkgSelectedMusicPlayer()
     private val token = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
     private val mediaControllerHelper = if (token != null) MediaControllerHelper(context, token, this) else null
 
-    private var playAgainHandler: Handler? = null
-    private var playAgainRunnable: Runnable? = null
 
     fun play() {
-        mediaControllerHelper?.play()
-        startDelayedPlayAgain()
-    }
-
-    private fun startDelayedPlayAgain() {
-        playAgainHandler = Handler(Looper.getMainLooper())
-        playAgainRunnable = Runnable {
-            // launch the app
+        playAttempter.attemptToPlay({
+            // Initial attempt to play
+            mediaControllerHelper?.play()
+        }, {
+            // If after delay and music still isn't playing launch music player
             if (!audioManager.isMusicActive) {
                 launchAppHelper.launchApp(selectedMusicPlayerPackageName)
-                // attempt to play again after app has been launched
-                playAgainHandler?.postDelayed({
-                    if (!audioManager.isMusicActive) {
-                        keyEventControl.playMediaButton(selectedMusicPlayerPackageName)
-                    }
-                }, DELAY)
             }
-        }
-        playAgainRunnable?.let {
-            playAgainHandler?.postDelayed(it, DELAY)
-        }
-    }
-
-    private fun cancelDelayedPlayAgain() {
-        if (playAgainHandler != null && playAgainRunnable != null) {
-            playAgainRunnable?.let {
-                playAgainHandler?.removeCallbacks(it)
+        }, {
+            // If music still isn't playing try using MediaButton Play
+            if (!audioManager.isMusicActive) {
+                keyEventControl.playMediaButton(selectedMusicPlayerPackageName)
             }
-
-            playAgainHandler = null
-            playAgainRunnable = null
-        }
+        })
     }
 
     override fun onStartedPlaying() {
-        cancelDelayedPlayAgain()
+        playAttempter.cancelPlayAgain()
     }
 
     fun pause() {
-        cancelDelayedPlayAgain()
+        playAttempter.cancelPlayAgain()
         if (audioManager.isMusicActive) {
             mediaControllerHelper?.pause() ?: keyEventControl.pauseKeyEvent()
         }
-    }
-
-    companion object {
-        const val DELAY = 3000L
     }
 }
