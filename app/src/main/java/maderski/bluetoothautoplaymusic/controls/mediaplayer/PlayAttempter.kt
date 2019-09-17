@@ -20,12 +20,12 @@ class PlayAttempter {
         runnable = Runnable {
             playAgainTask()
             // Set Final Task to try to play
-            handler?.postDelayed(finalPlayTask, ONE_SECOND_DELAY)
+            handler?.postDelayed(finalPlayTask, DELAY)
         }
 
         // Run set task after delay
         runnable?.let {
-            handler?.postDelayed(it, ONE_SECOND_DELAY)
+            handler?.postDelayed(it, DELAY)
         }
     }
 
@@ -41,6 +41,6 @@ class PlayAttempter {
     }
 
     companion object {
-        const val ONE_SECOND_DELAY = 1000L
+        const val DELAY = 1500L
     }
 }
