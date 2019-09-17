@@ -22,7 +22,6 @@ class MediaPlayerControlManager(
     private val token = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
     private val mediaControllerHelper = if (token != null) MediaControllerHelper(context, token, this) else null
 
-
     fun play() {
         playAttempter.attemptToPlay({
             // Initial attempt to play

@@ -18,7 +18,7 @@ class BAPMDataPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
 
     fun setCurrentRingerSet(ringerSetting: Int) = sharedPrefsAccess.putInt(CURRENT_RINGER_SET, ringerSetting)
     fun getCurrentRingerSet(): Int = sharedPrefsAccess.getInt(CURRENT_RINGER_SET, 2)
-    
+
     companion object {
         const val MY_PREFS_NAME = "BAPMDataPreference"
 

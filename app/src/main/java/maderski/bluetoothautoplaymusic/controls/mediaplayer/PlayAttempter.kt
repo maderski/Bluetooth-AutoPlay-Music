@@ -15,14 +15,17 @@ class PlayAttempter {
         // Attempt to play
         playTask()
 
-        // Set a delay and attempt to play again
+        // Set a delay and an task attempt to play again
         handler = Handler(Looper.getMainLooper())
         runnable = Runnable {
             playAgainTask()
-            handler?.postDelayed(finalPlayTask, DELAY)
+            // Set Final Task to try to play
+            handler?.postDelayed(finalPlayTask, ONE_SECOND_DELAY)
         }
+
+        // Run set task after delay
         runnable?.let {
-            handler?.postDelayed(it, DELAY)
+            handler?.postDelayed(it, ONE_SECOND_DELAY)
         }
     }
 
@@ -38,6 +41,6 @@ class PlayAttempter {
     }
 
     companion object {
-        const val DELAY = 1000L
+        const val ONE_SECOND_DELAY = 1000L
     }
 }
