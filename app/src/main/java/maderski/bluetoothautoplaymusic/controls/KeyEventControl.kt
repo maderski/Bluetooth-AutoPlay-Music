@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.controls.mediaplayer
+package maderski.bluetoothautoplaymusic.controls
 
 import android.content.Context
 import android.content.Intent

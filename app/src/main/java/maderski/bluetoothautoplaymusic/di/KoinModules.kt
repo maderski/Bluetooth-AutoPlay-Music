@@ -4,7 +4,7 @@ import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
-import maderski.bluetoothautoplaymusic.controls.mediaplayer.KeyEventControl
+import maderski.bluetoothautoplaymusic.controls.KeyEventControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.controls.playattempers.BasicPlayAttempter
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock

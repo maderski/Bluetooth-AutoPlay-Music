@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.controls.mediaplayer
 
 import android.content.Context
 import android.media.AudioManager
+import maderski.bluetoothautoplaymusic.controls.KeyEventControl
 import maderski.bluetoothautoplaymusic.controls.playattempers.BasicPlayAttempter
 import maderski.bluetoothautoplaymusic.controls.playattempers.PlayTaskHolder
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
@@ -29,10 +30,18 @@ class MediaPlayerControlManager(
         val secondAttempt = PlayTaskHolder {
             if (!audioManager.isMusicActive) {
                 launchAppHelper.launchApp(selectedMusicPlayerPackageName)
+            } else {
+                playAttempter.cancelPlayAgain()
             }
         }
         // If music still isn't playing try using mediaController again since app should be open now
-        val thirdAttempt = PlayTaskHolder { mediaControllerHelper?.play() }
+        val thirdAttempt = PlayTaskHolder {
+            if (!audioManager.isMusicActive) {
+                mediaControllerHelper?.play()
+            } else {
+                playAttempter.cancelPlayAgain()
+            }
+        }
         // If music still isn't playing try using MediaButton Play
         val finalAttempt = PlayTaskHolder {
             if (!audioManager.isMusicActive) {
