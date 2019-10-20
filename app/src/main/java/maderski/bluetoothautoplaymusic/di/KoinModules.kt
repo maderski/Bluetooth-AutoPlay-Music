@@ -41,7 +41,7 @@ val controlModules = module {
     single { VolumeControl(androidContext()) }
     single { RingerControl(androidContext()) }
     single { PlayAttempter() }
-    single { MediaPlayerControlManager(androidContext(), get(), get(), get(), get(), get())}
+    factory { MediaPlayerControlManager(androidContext(), get(), get(), get(), get(), get())}
 }
 
 val firebaseModule = module {
@@ -54,7 +54,8 @@ val serviceModule = module {
 
 val helperModules = module {
     single { PackageHelper(androidContext()) }
-    single { TelephoneHelper(androidContext()) }
+    single { PowerHelper(androidContext()) }
+    single { TelephoneHelper(androidContext(), get()) }
     single { LaunchAppHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
 }

@@ -68,7 +68,7 @@ class MediaBrowserManager(
                     mediaBrowserIntent,
                     PackageManager.GET_RESOLVED_FILTER
             )
-            services?.firstOrNull()?.serviceInfo
+            services.firstOrNull()?.serviceInfo
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e(TAG, "Unable to load package details", e)
             null

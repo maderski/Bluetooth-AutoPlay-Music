@@ -34,7 +34,8 @@ class MediaPlayerControlManager(
         }, {
             // If music still isn't playing try using MediaButton Play
             if (!audioManager.isMusicActive) {
-                keyEventControl.playMediaButton(selectedMusicPlayerPackageName)
+                keyEventControl.playKeyEvent()
+                playAttempter.cancelPlayAgain()
             }
         })
     }

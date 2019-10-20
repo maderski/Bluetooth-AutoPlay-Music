@@ -25,7 +25,7 @@ import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.utils.PowerUtils
+import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -41,6 +41,8 @@ class BTConnectActions(private val context: Context): KoinComponent {
     private val launchAppHelper: LaunchAppHelper by inject()
     private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
     private val serviceManager: ServiceManager by inject()
+    private val powerHelper: PowerHelper by inject()
+    private val telephoneHelper: TelephoneHelper by inject()
 
     fun onBTConnect() {
         val waitTillOffPhone = preferences.getWaitTillOffPhone()
@@ -52,9 +54,8 @@ class BTConnectActions(private val context: Context): KoinComponent {
     }
 
     private fun actionsWhileOnCall() {
-        val telephoneHelper = TelephoneHelper(context)
         val isOnCall = telephoneHelper.isOnCall
-        val isPluggedIn = PowerUtils.isPluggedIn(context)
+        val isPluggedIn = powerHelper.isPluggedIn()
 
         if (isOnCall) {
             Log.d(TAG, "ON a call")

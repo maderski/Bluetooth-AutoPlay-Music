@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.utils
+package maderski.bluetoothautoplaymusic.helpers
 
 import android.content.Context
 import android.content.Intent
@@ -11,10 +11,10 @@ import android.util.Log
 /**
  * Created by Jason on 2/21/16.
  */
-object PowerUtils {
+class PowerHelper(private val context: Context) {
 
     // Returns true or false depending if battery is plugged in
-    fun isPluggedIn(context: Context): Boolean {
+    fun isPluggedIn(): Boolean {
         val batteryStatus = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         var chargePlug = 0
         if (batteryStatus != null) {
@@ -29,7 +29,7 @@ object PowerUtils {
     }
 
     // Return false if in settings "Not optimized" and true if "Optimizing battery use"
-    fun isBatteryOptimized(context: Context): Boolean {
+    fun isBatteryOptimized(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
             val packageName = context.packageName
