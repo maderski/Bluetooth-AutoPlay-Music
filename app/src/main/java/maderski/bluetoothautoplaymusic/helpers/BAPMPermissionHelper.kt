@@ -31,7 +31,23 @@ class BAPMPermissionHelper : PermissionHelper {
         }
     }
 
+    override fun checkToLaunchNotificationListenerSettings(activity: Activity) {
+        val hasNotificationListenerAccess = hasNotificationListenerAccessPermission(activity)
+        if (!hasNotificationListenerAccess) {
+            launchNotificationListenerSettings(activity)
+        }
+    }
+
+    override fun hasNotificationListenerAccessPermission(context: Context): Boolean =
+        Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").contains(context.packageName)
+
+    override fun launchNotificationListenerSettings(activity: Activity) {
+        val launchSettingsIntent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS, Uri.parse("package:${activity.packageName}"))
+        activity.startActivityForResult(launchSettingsIntent, NOTIFICATION_LISTENER_ACCESS_PERMISSION)
+    }
+
     companion object {
         const val DRAW_OVER_OTHER_APPS_PERMISSION = 1000
+        const val NOTIFICATION_LISTENER_ACCESS_PERMISSION = 2000
     }
 }

@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.ui.activities
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -106,8 +107,13 @@ class MainActivity : AppCompatActivity(),
         checkIfBAPMServiceRunning()
 
         PermissionUtils.checkNotificationListenerPermission(this)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        // TODO: Handle checking of permissions better
         permissionHelper.checkToLaunchSystemOverlaySettings(this)
+        permissionHelper.checkToLaunchNotificationListenerSettings(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
