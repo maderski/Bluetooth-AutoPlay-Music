@@ -10,45 +10,46 @@ import android.view.Gravity
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.annotation.StringDef
+import androidx.fragment.app.DialogFragment
 
 /**
  * Created by Jason on 9/17/16.
  */
-class TimePickerFragment : androidx.fragment.app.DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     interface TimePickerDialogListener {
         fun onTimeSet(typeOfTimeSet: String, isEndTime: Boolean, view: TimePicker, hourOfDay: Int, minute: Int)
         fun onTimeCancel(typeOfTimeSet: String, isEndTime: Boolean)
     }
 
-    private var mIsEndTime: Boolean = false
-    private var mPreviouslySetTime: Int = 0
-    private var mPickerTitle: String = ""
-    private var mTypeOfTimeSet: String = ""
+    private var isEndTime: Boolean = false
+    private var previouslySetTime: Int = 0
+    private var pickerTitle: String = ""
+    private var typeOfTimeSet: String = ""
 
-    var dialogListener: TimePickerDialogListener? = null
+    private var dialogListener: TimePickerDialogListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         arguments?.let {
-            mIsEndTime = it.getBoolean("picker_isDim")
-            mPreviouslySetTime = it.getInt("picker_previouslySetTime")
-            mPickerTitle = it.getString("picker_title") ?: ""
-            mTypeOfTimeSet = it.getString("type_of_time_set") ?: ""
+            isEndTime = it.getBoolean(PICKER_IS_DIM)
+            previouslySetTime = it.getInt(PICKER_PREVIOUSLY_SET_TIME)
+            pickerTitle = it.getString(PICKER_TITLE) ?: ""
+            typeOfTimeSet = it.getString(TYPE_OF_TIME_SET) ?: ""
             dialogListener = if (requireActivity() is TimePickerDialogListener) requireActivity() as TimePickerDialogListener? else null
         }
 
         //Create and set Title
         val tpfTitle = TextView(requireActivity())
-        tpfTitle.text = mPickerTitle
+        tpfTitle.text = pickerTitle
         tpfTitle.gravity = Gravity.CENTER_HORIZONTAL
 
         //Get minutes
-        var tempToGetMinutes = mPreviouslySetTime
+        var tempToGetMinutes = previouslySetTime
         while (tempToGetMinutes > 60) {
             tempToGetMinutes -= 100
         }
         val minute = tempToGetMinutes
         //Get hour
-        val hour = (mPreviouslySetTime - tempToGetMinutes) / 100
+        val hour = (previouslySetTime - tempToGetMinutes) / 100
 
         // Create a new instance of TimePickerDialog
         val timePickerDialog = TimePickerDialog(activity, this, hour, minute,
@@ -61,8 +62,8 @@ class TimePickerFragment : androidx.fragment.app.DialogFragment(), TimePickerDia
 
     override fun onCancel(dialog: DialogInterface) {
         if (dialogListener != null) {
-            dialogListener?.onTimeCancel(mTypeOfTimeSet, mIsEndTime)
-            Log.d(TAG, "Cancelled " + mTypeOfTimeSet + " time set...isEndTime: " + java.lang.Boolean.toString(mIsEndTime))
+            dialogListener?.onTimeCancel(typeOfTimeSet, isEndTime)
+            Log.d(TAG, "Cancelled " + typeOfTimeSet + " time set...isEndTime: " + java.lang.Boolean.toString(isEndTime))
         }
         super.onCancel(dialog)
 
@@ -72,10 +73,10 @@ class TimePickerFragment : androidx.fragment.app.DialogFragment(), TimePickerDia
         // Do something with the time chosen by the user
         val setTime = hourOfDay * 100 + minute
         Log.d(TAG, "Set time: " + Integer.toString(setTime))
-        Log.d(TAG, "Is Dim: " + java.lang.Boolean.toString(mIsEndTime))
+        Log.d(TAG, "Is Dim: " + java.lang.Boolean.toString(isEndTime))
 
         if (dialogListener != null)
-            dialogListener?.onTimeSet(mTypeOfTimeSet, mIsEndTime, view, hourOfDay, minute)
+            dialogListener?.onTimeSet(typeOfTimeSet, isEndTime, view, hourOfDay, minute)
 
 
     }
@@ -97,12 +98,17 @@ class TimePickerFragment : androidx.fragment.app.DialogFragment(), TimePickerDia
         const val EVENING_TIMESPAN = "evening_time_span"
         const val CUSTOM_TIMESPAN = "custom_time_span"
 
+        private const val PICKER_IS_DIM = "picker_isDim"
+        private const val PICKER_PREVIOUSLY_SET_TIME = "picker_previouslySetTime"
+        private const val PICKER_TITLE = "picker_title"
+        private const val TYPE_OF_TIME_SET = "type_of_time_set"
+
         fun newInstance(@TypeOfTimeSet typeOfTimeSet: String, isEndTime: Boolean, previouslySetTime: Int, title: String): TimePickerFragment {
             val args = Bundle()
-            args.putBoolean("picker_isDim", isEndTime)
-            args.putInt("picker_previouslySetTime", previouslySetTime)
-            args.putString("picker_title", title)
-            args.putString("type_of_time_set", typeOfTimeSet)
+            args.putBoolean(PICKER_IS_DIM, isEndTime)
+            args.putInt(PICKER_PREVIOUSLY_SET_TIME, previouslySetTime)
+            args.putString(PICKER_TITLE, title)
+            args.putString(TYPE_OF_TIME_SET, typeOfTimeSet)
             val fragment = TimePickerFragment()
             fragment.arguments = args
             return fragment
