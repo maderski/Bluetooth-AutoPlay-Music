@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic.ui.activities
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -19,15 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.otto.Subscribe
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.bus.BusProvider
-import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
-import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
 import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
@@ -41,7 +36,8 @@ import java.util.*
 class MainActivity : AppCompatActivity(),
         HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener,
-        WifiOffFragment.OnFragmentInteractionListener {
+        WifiOffFragment.OnFragmentInteractionListener,
+        MapsFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
     private val permissionHelper: BAPMPermissionHelper by inject()
@@ -141,16 +137,6 @@ class MainActivity : AppCompatActivity(),
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        BusProvider.busInstance.register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        BusProvider.busInstance.unregister(this)
     }
 
     // Starts BAPMService if it is not running
@@ -344,14 +330,12 @@ class MainActivity : AppCompatActivity(),
         preferences.setTurnWifiOffDevices(wifiOffDevices)
     }
 
-    @Subscribe
-    fun onUseHeadphonesA2DP(a2DPSetSwitchEvent: A2DPSetSwitchEvent) {
-        preferences.setUseA2dpHeadphones(a2DPSetSwitchEvent.isUsingA2DP)
+    override fun onUseHeadphonesA2DP(isUsingA2DP: Boolean) {
+        preferences.setUseA2dpHeadphones(isUsingA2DP)
     }
 
-    @Subscribe
-    fun onLocationNameSet(locationNameSetEvent: LocationNameSetEvent) {
-        preferences.setCustomLocationName(locationNameSetEvent.locationName)
+    override fun onLocationNameSet(locationName: String) {
+        preferences.setCustomLocationName(locationName)
     }
 
     companion object {

@@ -52,6 +52,7 @@ dependencies {
     implementation dep.androidx.app_compat
     implementation dep.androidx.legacy
     implementation dep.androidx.core
+    implementation dep.androidx.constraintlayout
     // google
     implementation dep.google.material
     implementation dep.google.gson
@@ -60,16 +61,12 @@ dependencies {
     implementation dep.firebase.crash
     // luckycatlabs
     implementation dep.luckycatlabs.sunrise_sunset_calc
-    // squareup
-    implementation dep.squareup.otto
     // koin
     implementation dep.koin.koin_android
     // debug
     implementation(dep.debug.crashlytics) {
         transitive = true
     }
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     debugImplementation dep.debug.leak_canary
     // junit
     testImplementation dep.junit.junit

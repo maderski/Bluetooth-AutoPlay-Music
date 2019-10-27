@@ -15,18 +15,22 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.bus.BusProvider
-import maderski.bluetoothautoplaymusic.bus.events.mapsevents.LocationNameSetEvent
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
+import java.lang.RuntimeException
 import java.util.*
 
-class MapsFragment : androidx.fragment.app.Fragment() {
+class MapsFragment : Fragment() {
+    interface OnFragmentInteractionListener {
+        fun onLocationNameSet(locationName: String)
+    }
+
     private val preferences: BAPMPreferences by inject()
     private val launchAppHelper: LaunchAppHelper by inject()
 
@@ -34,10 +38,26 @@ class MapsFragment : androidx.fragment.app.Fragment() {
     private var mCanLaunchDirections = false
 
     private var mLocationNameEditText: EditText? = null
+    private var fragmentInteractionListener: OnFragmentInteractionListener? = null
+
     private val mTextChangeHandler = Handler(Looper.getMainLooper())
     private val mTextChangeRunnable = Runnable {
         val enteredText = mLocationNameEditText?.text.toString()
-        BusProvider.busInstance.post(LocationNameSetEvent(enteredText))
+        fragmentInteractionListener?.onLocationNameSet(enteredText)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            fragmentInteractionListener = context
+        } else {
+            throw RuntimeException("$context must OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        fragmentInteractionListener = null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -223,14 +243,6 @@ class MapsFragment : androidx.fragment.app.Fragment() {
                 Log.d(TAG, "LaunchTimesSwitch is OFF")
             }
         }
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
     }
 
     private fun setMapChoice(view: View, context: Context?) {

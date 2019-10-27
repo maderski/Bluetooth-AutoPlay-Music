@@ -14,8 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.CompoundButtonCompat
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.bus.BusProvider
-import maderski.bluetoothautoplaymusic.bus.events.A2DPSetSwitchEvent
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 import org.koin.android.ext.android.inject
@@ -25,9 +23,6 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
     private val preferences: BAPMPreferences by inject()
 
     private val removedDevices = HashSet<String>()
-
-    private var mListener: OnFragmentInteractionListener? = null
-
     private val nonHeadphoneDevices: Set<String>
         get() {
             val btDevices = preferences.getBTDevices()
@@ -41,6 +36,8 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
 
             return btDevices
         }
+
+    private var fragmentInteractionListener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -69,14 +66,14 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
 
         val doneButton = rootView.findViewById<View>(R.id.autoplay_done) as Button
         doneButton.setOnClickListener {
-            mListener?.headphonesDoneClicked(removedDevices)
+            fragmentInteractionListener?.headphonesDoneClicked(removedDevices)
             dismiss()
         }
 
         val a2dpSwitch = rootView.findViewById<View>(R.id.sw_headphones_a2dp) as Switch
         val useA2dp = preferences.getUseA2dpHeadphones()
         a2dpSwitch.isChecked = useA2dp
-        a2dpSwitch.setOnCheckedChangeListener { _, isChecked -> BusProvider.busInstance.post(A2DPSetSwitchEvent(isChecked)) }
+        a2dpSwitch.setOnCheckedChangeListener { _, isChecked -> fragmentInteractionListener?.onUseHeadphonesA2DP(isChecked) }
 
         removedDevices.clear()
         return rootView
@@ -144,15 +141,15 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
                 if (BuildConfig.DEBUG)
                     Log.i(TAG, "SAVED")
             }
-            mListener?.setHeadphoneDevices(savedHeadphoneDevices)
-            mListener?.headDeviceSelection(BTDevice, checkBox.isChecked)
+            fragmentInteractionListener?.setHeadphoneDevices(savedHeadphoneDevices)
+            fragmentInteractionListener?.headDeviceSelection(BTDevice, checkBox.isChecked)
         }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
-            mListener = context
+            fragmentInteractionListener = context
         } else {
             throw RuntimeException("$context must implement OnFragmentInteractionListener")
         }
@@ -160,7 +157,7 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        fragmentInteractionListener = null
     }
 
     /**
@@ -176,6 +173,7 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
         fun setHeadphoneDevices(headphoneDevices: HashSet<String>)
         fun headphonesDoneClicked(removedDevices: HashSet<String>)
         fun headDeviceSelection(deviceName: String, addDevice: Boolean)
+        fun onUseHeadphonesA2DP(isUsingA2DP: Boolean)
     }
 
     companion object {

@@ -4,16 +4,12 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.annotation.StringDef
-import androidx.fragment.app.DialogFragment
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.Gravity
 import android.widget.TextView
 import android.widget.TimePicker
-
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
+import androidx.annotation.StringDef
 
 /**
  * Created by Jason on 9/17/16.
@@ -63,12 +59,13 @@ class TimePickerFragment : androidx.fragment.app.DialogFragment(), TimePickerDia
         return timePickerDialog
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         if (dialogListener != null) {
             dialogListener?.onTimeCancel(mTypeOfTimeSet, mIsEndTime)
             Log.d(TAG, "Cancelled " + mTypeOfTimeSet + " time set...isEndTime: " + java.lang.Boolean.toString(mIsEndTime))
         }
         super.onCancel(dialog)
+
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
