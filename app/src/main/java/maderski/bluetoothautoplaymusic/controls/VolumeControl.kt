@@ -8,7 +8,7 @@ import android.os.Looper
 import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
-import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.actions.BTConnectActions
 
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences

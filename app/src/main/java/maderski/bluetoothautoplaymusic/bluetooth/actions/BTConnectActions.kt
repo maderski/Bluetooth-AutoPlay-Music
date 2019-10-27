@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.bluetoothactions
+package maderski.bluetoothautoplaymusic.bluetooth.actions
 
 import android.app.KeyguardManager
 import android.app.NotificationManager

@@ -7,7 +7,7 @@ import android.os.Handler
 import android.util.Log
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.actions.BTConnectActions
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
@@ -88,12 +88,12 @@ class BluetoothConnectHelper(private val context: Context, private val deviceNam
 
     private fun startAdditionalServices() {
         serviceManager.startService(OnBTConnectService::class.java, OnBTConnectService.TAG)
-        serviceManager.startService(BTStateChangedService::class.java, BTStateChangedService.TAG)
+        //serviceManager.startService(BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 
     private fun stopAdditionalServices() {
         serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
-        serviceManager.stopService(BTStateChangedService::class.java, BTStateChangedService.TAG)
+        //serviceManager.stopService(BTStateChangedService::class.java, BTStateChangedService.TAG)
     }
 
     private fun checksBeforeLaunch() {

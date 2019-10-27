@@ -6,7 +6,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
-import maderski.bluetoothautoplaymusic.bluetoothactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.actions.BTConnectActions
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 import org.koin.core.KoinComponent

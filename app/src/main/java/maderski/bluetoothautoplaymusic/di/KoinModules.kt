@@ -1,7 +1,7 @@
 package maderski.bluetoothautoplaymusic.di
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.bluetoothactions.BTDisconnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.actions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
