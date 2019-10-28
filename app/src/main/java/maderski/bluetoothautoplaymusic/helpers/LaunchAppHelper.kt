@@ -78,7 +78,7 @@ class LaunchAppHelper(
                 } else {
                     determineIfLaunchWithDrivingMode(mapAppName)
                 }
-                Log.d(TAG, "delayLaunchmaps started")
+                Log.d(TAG, "delay Launch maps started")
 
             }
             handler.postDelayed(runnable, mills)
