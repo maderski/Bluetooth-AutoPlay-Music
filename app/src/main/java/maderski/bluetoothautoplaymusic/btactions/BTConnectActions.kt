@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.bluetooth.actions
+package maderski.bluetoothautoplaymusic.btactions
 
 import android.app.KeyguardManager
 import android.app.NotificationManager
@@ -20,7 +20,7 @@ import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.OnBTConnectService
-import maderski.bluetoothautoplaymusic.services.ServiceManager
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -67,7 +67,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
         }
     }
 
-    //Creates mNotification and if set turns screen ON, puts the phone in priority mode,
+    //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     fun actionsOnBTConnect() {

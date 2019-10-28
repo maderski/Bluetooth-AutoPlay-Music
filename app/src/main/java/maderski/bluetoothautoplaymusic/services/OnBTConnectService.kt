@@ -2,12 +2,15 @@ package maderski.bluetoothautoplaymusic.services
 
 import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.workers.OnPowerConnectedWorker
 import org.koin.core.KoinComponent
@@ -20,6 +23,7 @@ import org.koin.core.inject
 class OnBTConnectService : Service(), KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
+    private val btStateChangedReceiver: BTStateChangedReceiver by inject()
 
     private var waitTillPowerConnected = false
 
@@ -40,6 +44,8 @@ class OnBTConnectService : Service(), KoinComponent {
             // enqueue work request
             WorkManager.getInstance().enqueue(onPowerConnectedWorkRequest)
         }
+
+        registerBTOnStateChangedReceiver()
 
         val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
         val title = getString(resId)
@@ -66,7 +72,20 @@ class OnBTConnectService : Service(), KoinComponent {
             WorkManager.getInstance().cancelAllWorkByTag(OnPowerConnectedWorker.TAG)
         }
 
+        unregisterBTOnStateChangedReceiver()
+
         stopForeground(true)
+    }
+
+    private fun registerBTOnStateChangedReceiver() {
+        Log.d(TAG, "START BT STATE CHANGED RECEIVER")
+        val btStateChangedFilter = IntentFilter("android.bluetooth.adapter.action.STATE_CHANGED")
+        registerReceiver(btStateChangedReceiver, btStateChangedFilter)
+    }
+
+    private fun unregisterBTOnStateChangedReceiver() {
+        Log.d(TAG, "STOP BT STATE CHANGED RECEIVER")
+        unregisterReceiver(btStateChangedReceiver)
     }
 
     companion object {

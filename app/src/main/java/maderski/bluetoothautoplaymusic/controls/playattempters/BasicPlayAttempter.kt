@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.controls.playattempers
+package maderski.bluetoothautoplaymusic.controls.playattempters
 
 import android.os.Handler
 import android.os.Looper
@@ -15,15 +15,20 @@ class BasicPlayAttempter : PlayAttempter {
             if (playTasksIterator.hasNext()) {
                 val playTaskHolder = playTasksIterator.next()
                 handler?.postDelayed({
-                    Log.d(TAG, "Attempt to play!")
-                    playTaskHolder.playTask
+                    Log.d(TAG, "Attempt to play! ${playTasksIterator.nextIndex()}")
+                    handler?.post(playTaskHolder.playTask)
                     playTasksIteratively?.let {
                         handler?.postDelayed(it, DELAY)
                     }
                 }, DELAY)
             } else {
+                Log.d(TAG, "CANCEL ATTEMPT TO PLAY")
                 cancelPlayAgain()
             }
+        }
+
+        playTasksIteratively?.let {
+            handler?.post(it)
         }
     }
 

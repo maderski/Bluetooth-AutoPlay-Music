@@ -2,9 +2,11 @@ package maderski.bluetoothautoplaymusic.controls.mediaplayer
 
 import android.content.Context
 import android.media.AudioManager
+import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
-import maderski.bluetoothautoplaymusic.controls.playattempers.BasicPlayAttempter
-import maderski.bluetoothautoplaymusic.controls.playattempers.PlayTaskHolder
+import maderski.bluetoothautoplaymusic.controls.playattempters.BasicPlayAttempter
+import maderski.bluetoothautoplaymusic.controls.playattempters.PlayTaskHolder
+import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaControllerHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaSessionTokenHelper
@@ -22,34 +24,57 @@ class MediaPlayerControlManager(
     private val selectedMusicPlayerPackageName = preferences.getPkgSelectedMusicPlayer()
     private val token = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
     private val mediaControllerHelper = if (token != null) MediaControllerHelper(context, token, this) else null
+    private val playerControls = PlayerControlsFactory.getPlayerControl(context, selectedMusicPlayerPackageName)
 
     fun play() {
         // Initial attempt to play
-        val firstAttempt = PlayTaskHolder { mediaControllerHelper?.play() }
-        // If after delay and music still isn't playing launch music player
+        val firstAttempt = PlayTaskHolder {
+            Log.d(TAG, "ATTEMPT MEDIA CONTROLLER HELPER PLAY")
+            mediaControllerHelper?.play()
+        }
+        // If after delay and music still isn't playing try to play with player controls
         val secondAttempt = PlayTaskHolder {
             if (!audioManager.isMusicActive) {
+                Log.d(TAG, "ATTEMPT PLAYER CONTROLS PLAY")
+                playerControls?.play()
+            } else {
+                playAttempter.cancelPlayAgain()
+            }
+        }
+        // If after delay and music still isn't playing launch music player
+        val thirdAttempt = PlayTaskHolder {
+            if (!audioManager.isMusicActive) {
+                Log.d(TAG, "ATTEMPT LAUNCHING APP")
                 launchAppHelper.launchApp(selectedMusicPlayerPackageName)
             } else {
                 playAttempter.cancelPlayAgain()
             }
         }
         // If music still isn't playing try using mediaController again since app should be open now
-        val thirdAttempt = PlayTaskHolder {
+        val fourthAttempt = PlayTaskHolder {
             if (!audioManager.isMusicActive) {
+                Log.d(TAG, "ATTEMPT MEDIA CONTROLLER HELPER PLAY")
                 mediaControllerHelper?.play()
             } else {
                 playAttempter.cancelPlayAgain()
             }
         }
+
         // If music still isn't playing try using MediaButton Play
         val finalAttempt = PlayTaskHolder {
             if (!audioManager.isMusicActive) {
-                keyEventControl.playKeyEvent()
+                Log.d(TAG, "ATTEMPT KEY EVENT CONTROL PLAY")
+                keyEventControl.playMediaButton(selectedMusicPlayerPackageName)
             }
         }
-        // Queue up play attemps
-        val playTasks = listOf(firstAttempt, secondAttempt, thirdAttempt, finalAttempt)
+        // Queue up play attempts
+        val playTasks = listOf(
+                firstAttempt,
+                secondAttempt,
+                thirdAttempt,
+                fourthAttempt,
+                finalAttempt
+        )
         // Start attempting to play
         playAttempter.attemptToPlay(playTasks)
     }
@@ -63,5 +88,9 @@ class MediaPlayerControlManager(
         if (audioManager.isMusicActive) {
             mediaControllerHelper?.pause() ?: keyEventControl.pauseKeyEvent()
         }
+    }
+
+    companion object {
+        private const val TAG = "MediaPlayerControlManag"
     }
 }

@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.services
+package maderski.bluetoothautoplaymusic.services.manager
 
 import android.app.*
 import android.content.Context

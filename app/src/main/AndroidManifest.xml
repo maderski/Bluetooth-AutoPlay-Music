@@ -48,7 +48,7 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.BluetoothReceiver">
+        <receiver android:name=".receivers.BTConnectionReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
@@ -59,7 +59,6 @@
 
         <service android:name=".services.BAPMService" />
         <service android:name=".services.OnBTConnectService" />
-        <service android:name=".services.BTStateChangedService" />
         <service android:name=".services.WakeLockService" />
         <service
             android:name=".services.BAPMNotificationListenerService"

@@ -6,8 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.services.BTStateChangedService
-import maderski.bluetoothautoplaymusic.services.ServiceManager
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -33,8 +32,6 @@ class BTStateChangedReceiver : BroadcastReceiver(), KoinComponent {
                     BluetoothAdapter.ERROR)
             when (state) {
                 BluetoothAdapter.STATE_OFF -> {
-                    Log.d(TAG, "Bluetooth off")
-                    serviceManager.stopService(BTStateChangedService::class.java, BTStateChangedService.TAG)
                     val disconnectIntent = Intent(context, DisconnectActivity::class.java).also {
                         it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     }

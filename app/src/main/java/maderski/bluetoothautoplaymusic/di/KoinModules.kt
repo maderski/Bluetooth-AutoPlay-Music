@@ -1,16 +1,20 @@
 package maderski.bluetoothautoplaymusic.di
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.bluetooth.actions.BTDisconnectActions
+import maderski.bluetoothautoplaymusic.btactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.btactions.BTDisconnectActions
+import maderski.bluetoothautoplaymusic.btactions.BTHeadphonesActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
-import maderski.bluetoothautoplaymusic.controls.playattempers.BasicPlayAttempter
+import maderski.bluetoothautoplaymusic.controls.playattempters.BasicPlayAttempter
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
 import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.services.ServiceManager
+import maderski.bluetoothautoplaymusic.receivers.BTConnectionReceiver
+import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMSharedPrefsAccess
@@ -23,6 +27,7 @@ object KoinModules {
             controlModules,
             firebaseModule,
             serviceModule,
+            receiverModule,
             helperModules,
             notificationModule,
             permissionModule,
@@ -52,12 +57,18 @@ val serviceModule = module {
     single { ServiceManager(androidContext()) }
 }
 
+val receiverModule = module {
+    single { BTConnectionReceiver() }
+    single { BTStateChangedReceiver() }
+}
+
 val helperModules = module {
     single { PackageHelper(androidContext()) }
     single { PowerHelper(androidContext()) }
     single { TelephoneHelper(androidContext(), get()) }
     single { LaunchAppHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
+    single { BluetoothConnectHelper() }
 }
 
 val notificationModule = module {
@@ -70,5 +81,7 @@ val permissionModule = module {
 
 val btActionsModules = module {
     single { BTDisconnectActions(androidContext()) }
+    single { BTConnectActions(androidContext()) }
+    single { BTHeadphonesActions(androidContext()) }
 }
 

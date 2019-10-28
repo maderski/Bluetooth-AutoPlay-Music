@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.bluetooth.actions
+package maderski.bluetoothautoplaymusic.btactions
 
 import android.content.Context
 import android.media.AudioManager
@@ -12,7 +12,7 @@ import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.services.ServiceManager
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences

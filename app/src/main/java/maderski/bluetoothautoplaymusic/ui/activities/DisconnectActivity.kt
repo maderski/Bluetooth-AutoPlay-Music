@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.bluetooth.actions.BTDisconnectActions
+import maderski.bluetoothautoplaymusic.btactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 

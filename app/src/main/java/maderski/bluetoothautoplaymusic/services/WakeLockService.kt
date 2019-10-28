@@ -9,6 +9,7 @@ import android.widget.Toast
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -19,7 +20,7 @@ import org.koin.core.inject
 class WakeLockService : Service(), KoinComponent {
     private val screenONLock: ScreenONLock by inject()
     private val serviceManager: ServiceManager by inject()
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Get wakelock instance
 
         // Release wakelock if it is still held for some reason

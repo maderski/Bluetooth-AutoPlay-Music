@@ -26,7 +26,7 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
-import maderski.bluetoothautoplaymusic.services.ServiceManager
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils

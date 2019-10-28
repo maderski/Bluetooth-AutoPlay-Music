@@ -16,18 +16,20 @@ import org.koin.core.inject
 /**
  * Created by Jason on 1/5/16.
  */
-class BluetoothReceiver : BroadcastReceiver(), KoinComponent {
+class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
     private val preferences: BAPMPreferences by inject()
+    private val bluetoothConnectHelper: BluetoothConnectHelper by inject()
+    private val headphonesConnectHelper: HeadphonesConnectHelper by inject()
 
     //On receive of Broadcast
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             val btDevice = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-            if (btDevice != null) {
-                val action: String = intent.action ?: ""
-                Log.d(TAG, "ACTION: $action")
+            val action = intent.action
+            Log.d(TAG, "ACTION: $action")
 
-                val btDeviceName = btDevice.name ?: "None"
+            if (btDevice != null && action != null) {
+                val btDeviceName = btDevice.name
                 val appContext = context.applicationContext
                 val isASelectedBTDevice = preferences.getBTDevices().contains(btDeviceName)
                 val isAHeadphonesBTDevice = preferences.getHeadphoneDevices().contains(btDeviceName)
@@ -37,15 +39,10 @@ class BluetoothReceiver : BroadcastReceiver(), KoinComponent {
 
                 if (isASelectedBTDevice || isAHeadphonesBTDevice) {
                     val state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0)
-
                     if (isAHeadphonesBTDevice) {
-                        val headphonesConnectHelper = HeadphonesConnectHelper(appContext, action, state)
-
-                        headphonesConnectHelper.performActions()
+                        headphonesConnectHelper.performActions(action, state)
                     } else if (action == BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED) {
-                        val bluetoothConnectHelper = BluetoothConnectHelper(appContext, btDeviceName)
-
-                        bluetoothConnectHelper.a2dpActions(state)
+                        bluetoothConnectHelper.a2dpActions(appContext, state, btDeviceName)
                     }
                 }
             }

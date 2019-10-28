@@ -10,7 +10,8 @@ import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.receivers.BluetoothReceiver
+import maderski.bluetoothautoplaymusic.receivers.BTConnectionReceiver
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -19,8 +20,7 @@ import org.koin.core.inject
  */
 class BAPMService : Service(), KoinComponent {
     private val serviceManager: ServiceManager by inject()
-
-    private val mBluetoothReceiver = BluetoothReceiver()
+    private val btConnectionReceiver: BTConnectionReceiver by inject()
 
     //Start the Bluetooth receiver as a service
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -36,7 +36,7 @@ class BAPMService : Service(), KoinComponent {
 
         // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         val filter = IntentFilter()
-        registerReceiver(mBluetoothReceiver, filter)
+        registerReceiver(btConnectionReceiver, filter)
 
         // Bring service out of the foreground state
         stopForeground(true)
@@ -70,7 +70,7 @@ class BAPMService : Service(), KoinComponent {
         }
 
         // Stop Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
-        unregisterReceiver(mBluetoothReceiver)
+        unregisterReceiver(btConnectionReceiver)
     }
 
     override fun onBind(intent: Intent): IBinder? {
