@@ -7,11 +7,11 @@ import android.os.Handler
 import android.util.Log
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.btactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.services.OnBTConnectService
+import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences

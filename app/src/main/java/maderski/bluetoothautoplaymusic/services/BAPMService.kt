@@ -10,7 +10,7 @@ import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.receivers.BTConnectionReceiver
+import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject

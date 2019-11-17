@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothProfile
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.btactions.BTHeadphonesActions
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTHeadphonesActions
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences

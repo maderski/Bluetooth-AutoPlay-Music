@@ -1,9 +1,9 @@
 package maderski.bluetoothautoplaymusic.di
 
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.btactions.BTConnectActions
-import maderski.bluetoothautoplaymusic.btactions.BTDisconnectActions
-import maderski.bluetoothautoplaymusic.btactions.BTHeadphonesActions
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTHeadphonesActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
@@ -12,8 +12,9 @@ import maderski.bluetoothautoplaymusic.controls.playattempters.BasicPlayAttempte
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
 import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.receivers.BTConnectionReceiver
-import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
+import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -60,6 +61,7 @@ val serviceModule = module {
 val receiverModule = module {
     single { BTConnectionReceiver() }
     single { BTStateChangedReceiver() }
+    single { PowerConnectionReceiver() }
 }
 
 val helperModules = module {

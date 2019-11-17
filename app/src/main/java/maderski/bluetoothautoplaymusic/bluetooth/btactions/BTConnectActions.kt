@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.btactions
+package maderski.bluetoothautoplaymusic.bluetooth.btactions
 
 import android.app.KeyguardManager
 import android.app.NotificationManager
@@ -19,7 +19,7 @@ import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
-import maderski.bluetoothautoplaymusic.services.OnBTConnectService
+import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences

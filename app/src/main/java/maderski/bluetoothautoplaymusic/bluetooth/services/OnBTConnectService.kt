@@ -1,18 +1,15 @@
-package maderski.bluetoothautoplaymusic.services
+package maderski.bluetoothautoplaymusic.bluetooth.services
 
 import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
-import androidx.work.Constraints
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.workers.OnPowerConnectedWorker
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -24,25 +21,12 @@ class OnBTConnectService : Service(), KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
-
-    private var waitTillPowerConnected = false
+    private val powerConnectionReceiver: PowerConnectionReceiver by inject()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        waitTillPowerConnected = preferences.getPowerConnected()
-
+        val waitTillPowerConnected = preferences.getPowerConnected()
         if (waitTillPowerConnected) {
-            Log.d(TAG, "ENQUEUE POWER WORKER")
-            // set must be charging constraint
-            val constraints = Constraints.Builder()
-                    .setRequiresCharging(true)
-                    .build()
-            // create work request
-            val onPowerConnectedWorkRequest = OneTimeWorkRequestBuilder<OnPowerConnectedWorker>()
-                    .addTag(OnPowerConnectedWorker.TAG)
-                    .setConstraints(constraints)
-                    .build()
-            // enqueue work request
-            WorkManager.getInstance().enqueue(onPowerConnectedWorkRequest)
+            registerPowerConnectionReceiver()
         }
 
         registerBTOnStateChangedReceiver()
@@ -68,8 +52,9 @@ class OnBTConnectService : Service(), KoinComponent {
 
     override fun onDestroy() {
         super.onDestroy()
+        val waitTillPowerConnected = preferences.getPowerConnected()
         if (waitTillPowerConnected) {
-            WorkManager.getInstance().cancelAllWorkByTag(OnPowerConnectedWorker.TAG)
+            unregisterPowerConnectionReceiver()
         }
 
         unregisterBTOnStateChangedReceiver()
@@ -86,6 +71,19 @@ class OnBTConnectService : Service(), KoinComponent {
     private fun unregisterBTOnStateChangedReceiver() {
         Log.d(TAG, "STOP BT STATE CHANGED RECEIVER")
         unregisterReceiver(btStateChangedReceiver)
+    }
+
+    private fun registerPowerConnectionReceiver() {
+        val intentFilter = IntentFilter()
+        intentFilter.addAction("android.intent.action.ACTION_POWER_CONNECTED")
+        intentFilter.addAction("android.intent.action.ACTION_POWER_DISCONNECTED")
+
+        registerReceiver(powerConnectionReceiver, intentFilter)
+    }
+
+    private fun unregisterPowerConnectionReceiver() {
+        Log.d(TAG, "STOP POWER CONNECTION RECIEVER")
+        unregisterReceiver(powerConnectionReceiver)
     }
 
     companion object {

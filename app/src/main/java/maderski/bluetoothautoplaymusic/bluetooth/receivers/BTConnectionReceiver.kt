@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.receivers
+package maderski.bluetoothautoplaymusic.bluetooth.receivers
 
 import android.bluetooth.BluetoothA2dp
 import android.bluetooth.BluetoothDevice

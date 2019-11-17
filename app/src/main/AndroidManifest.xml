@@ -48,17 +48,17 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.BTConnectionReceiver">
+        <receiver android:name=".bluetooth.receivers.BTConnectionReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
                 <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.BTStateChangedReceiver" />
+        <receiver android:name=".bluetooth.receivers.BTStateChangedReceiver" />
 
         <service android:name=".services.BAPMService" />
-        <service android:name=".services.OnBTConnectService" />
+        <service android:name=".bluetooth.services.OnBTConnectService" />
         <service android:name=".services.WakeLockService" />
         <service
             android:name=".services.BAPMNotificationListenerService"

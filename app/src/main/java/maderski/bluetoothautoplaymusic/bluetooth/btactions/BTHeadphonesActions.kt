@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.btactions
+package maderski.bluetoothautoplaymusic.bluetooth.btactions
 
 import android.content.Context
 import android.os.Handler
