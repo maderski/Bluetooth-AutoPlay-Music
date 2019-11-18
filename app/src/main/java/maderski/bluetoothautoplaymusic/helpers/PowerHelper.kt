@@ -16,16 +16,13 @@ class PowerHelper(private val context: Context) {
     // Returns true or false depending if battery is plugged in
     fun isPluggedIn(): Boolean {
         val batteryStatus = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-        var chargePlug = 0
-        if (batteryStatus != null) {
-            chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
-        }
-
-        val usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
-        val acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
-        val wirelessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS
-
-        return usbCharge || acCharge || wirelessCharge
+        return batteryStatus?.let {
+            val chargePlug = it.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
+            val usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
+            val acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC
+            val wirelessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS
+            usbCharge || acCharge || wirelessCharge
+        } ?: false
     }
 
     // Return false if in settings "Not optimized" and true if "Optimizing battery use"

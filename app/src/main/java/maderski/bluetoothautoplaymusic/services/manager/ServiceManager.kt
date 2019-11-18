@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 
 class ServiceManager (private val context: Context) {
 
@@ -17,7 +18,7 @@ class ServiceManager (private val context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             context.startService(intent)
         } else {
-            context.startForegroundService(intent)
+            ContextCompat.startForegroundService(context, intent)
         }
     }
 

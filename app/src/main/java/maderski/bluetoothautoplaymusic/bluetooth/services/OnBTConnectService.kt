@@ -7,11 +7,14 @@ import android.os.IBinder
 import android.util.Log
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.helpers.PowerConnectedHelper
+import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import java.lang.IllegalArgumentException
 
 /**
  * Created by Jason on 6/6/17.
@@ -20,16 +23,13 @@ import org.koin.core.inject
 class OnBTConnectService : Service(), KoinComponent {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
+    private val powerHelper: PowerHelper by inject()
+    private val powerConnectedHelper: PowerConnectedHelper by inject()
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
     private val powerConnectionReceiver: PowerConnectionReceiver by inject()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val waitTillPowerConnected = preferences.getPowerConnected()
-        if (waitTillPowerConnected) {
-            registerPowerConnectionReceiver()
-        }
-
-        registerBTOnStateChangedReceiver()
 
         val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
         val title = getString(resId)
@@ -42,6 +42,17 @@ class OnBTConnectService : Service(), KoinComponent {
                 ServiceManager.CHANNEL_NAME_FOREGROUND_SERVICE,
                 R.drawable.ic_notif_icon,
                 false)
+
+        registerBTOnStateChangedReceiver()
+
+        if (waitTillPowerConnected) {
+            val isPluggedIn = powerHelper.isPluggedIn()
+            if (isPluggedIn) {
+                powerConnectedHelper.performConnectActions()
+            } else {
+                registerPowerConnectionReceiver()
+            }
+        }
 
         return START_STICKY
     }
@@ -69,8 +80,12 @@ class OnBTConnectService : Service(), KoinComponent {
     }
 
     private fun unregisterBTOnStateChangedReceiver() {
-        Log.d(TAG, "STOP BT STATE CHANGED RECEIVER")
-        unregisterReceiver(btStateChangedReceiver)
+        try {
+            Log.d(TAG, "STOP BT STATE CHANGED RECEIVER")
+            unregisterReceiver(btStateChangedReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        }
     }
 
     private fun registerPowerConnectionReceiver() {
@@ -82,8 +97,12 @@ class OnBTConnectService : Service(), KoinComponent {
     }
 
     private fun unregisterPowerConnectionReceiver() {
-        Log.d(TAG, "STOP POWER CONNECTION RECIEVER")
-        unregisterReceiver(powerConnectionReceiver)
+        try {
+            Log.d(TAG, "STOP POWER CONNECTION RECEIVER")
+            unregisterReceiver(powerConnectionReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        }
     }
 
     companion object {

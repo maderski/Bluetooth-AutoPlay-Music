@@ -71,6 +71,7 @@ val helperModules = module {
     single { LaunchAppHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
+    single { PowerConnectedHelper(androidContext()) }
 }
 
 val notificationModule = module {
