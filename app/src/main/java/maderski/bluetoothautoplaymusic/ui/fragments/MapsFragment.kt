@@ -18,12 +18,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
-import java.lang.RuntimeException
 import java.util.*
 
 class MapsFragment : Fragment() {

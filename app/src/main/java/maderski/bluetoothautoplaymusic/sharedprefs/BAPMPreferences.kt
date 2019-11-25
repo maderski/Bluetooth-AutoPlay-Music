@@ -1,7 +1,8 @@
 package maderski.bluetoothautoplaymusic.sharedprefs
 
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.GOOGLE_PLAY_MUSIC
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MUSIC
+
 
 /**
  * Created by Jason on 1/5/16.

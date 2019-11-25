@@ -14,7 +14,6 @@ import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
@@ -26,6 +25,7 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.helpers.PowerHelper
+import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 

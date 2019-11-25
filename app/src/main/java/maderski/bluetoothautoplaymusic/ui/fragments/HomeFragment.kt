@@ -20,9 +20,9 @@ import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.APPLE_MUSIC
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.APPLE_MUSIC
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils

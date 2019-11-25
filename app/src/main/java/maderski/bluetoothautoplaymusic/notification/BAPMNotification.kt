@@ -11,7 +11,7 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.core.KoinComponent

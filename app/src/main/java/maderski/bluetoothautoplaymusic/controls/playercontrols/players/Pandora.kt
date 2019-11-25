@@ -3,7 +3,7 @@ package maderski.bluetoothautoplaymusic.controls.playercontrols.players
 import android.content.Context
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.PANDORA
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.*
 
 class Pandora(context: Context) : PlayerControls(context) {
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.GOOGLE_PLAY_MUSIC
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MUSIC
 
 class GooglePlayMusic(context: Context) : PlayerControls(context) {
 

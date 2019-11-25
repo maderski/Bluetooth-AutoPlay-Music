@@ -6,9 +6,9 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper.DirectionLocation.*
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
+import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation.*
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.*
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
@@ -236,13 +236,6 @@ class LaunchAppHelper(
     }
 
     fun isAbleToLaunch(packageName: String) = packageHelper.isPackageOnPhone(packageName)
-
-    enum class DirectionLocation(val location: String) {
-        NONE("None"),
-        HOME("Home"),
-        WORK("Work"),
-        CUSTOM("Custom")
-    }
 
     companion object {
         private const val TAG = "LaunchAppHelper"

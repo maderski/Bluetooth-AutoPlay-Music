@@ -6,7 +6,7 @@ import android.content.Intent
 import android.util.Log
 import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.SPOTIFY
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.SPOTIFY
 
 class Spotify(context: Context) : PlayerControls(context) {
 

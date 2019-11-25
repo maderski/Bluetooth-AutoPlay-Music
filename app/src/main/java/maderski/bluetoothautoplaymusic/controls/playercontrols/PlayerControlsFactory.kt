@@ -3,7 +3,7 @@ package maderski.bluetoothautoplaymusic.controls.playercontrols
 import android.content.Context
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.players.*
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MediaPlayers.*
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.*
 
 object PlayerControlsFactory {
     @JvmStatic

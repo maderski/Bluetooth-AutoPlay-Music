@@ -10,12 +10,11 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
-import android.view.WindowManager
-import android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 import android.widget.Toast
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 
 /**
@@ -96,10 +95,10 @@ class PackageHelper(private val context: Context) {
         try {
             val appInfo = context.packageManager.getApplicationInfo(packageName, 0)
             val applicationLabel = context.packageManager.getApplicationLabel(appInfo).toString()
-            mapAppName = if (applicationLabel.equals("MAPS", ignoreCase = true)) {
-                "WAZE"
+            mapAppName = if (applicationLabel.equals(MAPS.applicationLabel, ignoreCase = true)) {
+                WAZE.uiDisplayName
             } else {
-                "GOOGLE MAPS"
+                MAPS.uiDisplayName
             }
         } catch (e: Exception) {
             Log.e(TAG, e.message)
@@ -140,41 +139,10 @@ class PackageHelper(private val context: Context) {
 
     fun sendBroadcast(intent: Intent) = context.sendBroadcast(intent)
 
-    enum class MediaPlayers(val packageName: String) {
-        GOOGLE_PLAY_MUSIC("com.google.android.music"),
-        SPOTIFY("com.spotify.music"),
-        PANDORA("com.pandora.android"),
-        BEYOND_POD("mobi.beyondpod"),
-        APPLE_MUSIC("com.apple.android.music"),
-        FM_INDIA("com.fmindia.activities"),
-        POWER_AMP("com.maxmpz.audioplayer"),
-        DOUBLE_TWIST("com.doubleTwist.androidPlayer"),
-        LISTEN_AUDIO_BOOK("com.acmeandroid.listen"),
-        GOOGLE_PODCASTS("com.google.android.apps.podcasts"),
-        DEEZERMUSIC("deezer.android.app"),
-        POCKET_CASTS("au.com.shiftyjelly.pocketcasts"),
-        RADIO_PARADISE("com.earthflare.android.radioparadisewidget.gpv2"),
-        TUNE_IN_RADIO_PRO("radiotime.player"),
-        FOOBAR_2000("com.foobar2000.foobar2000"),
-        VANILLA_MUSIC("ch.blinkenlights.android.vanilla"),
-        JIO_MUSIC("com.jio.media.jiobeats"),
-        YOUTUBE_MUSIC("com.google.android.apps.youtube.music"),
-        NOT_ON_LIST("not_on_list");
-
-        companion object {
-            fun getEnumForMediaPlayerPkg(packageName: String): MediaPlayers =
-                    values().firstOrNull { it.packageName == packageName } ?: NOT_ON_LIST
-        }
-    }
-
-    enum class MapApps(val packageName: String) {
-        MAPS("com.google.android.apps.maps"),
-        WAZE("com.waze")
-    }
-
     companion object {
         private const val TAG = "PackageHelper"
 
         const val PACKAGE_NOT_FOUND = "packageNotFound"
+
     }
 }
