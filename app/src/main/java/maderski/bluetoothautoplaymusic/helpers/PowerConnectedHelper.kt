@@ -10,16 +10,15 @@ import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
 
 class PowerConnectedHelper(
         private val context: Context,
-        private val preferencesHelper: PreferencesHelper
+        private val preferencesHelper: PreferencesHelper,
+        private val btConnectActions: BTConnectActions,
+        private val firebaseHelper: FirebaseHelper
 ) {
     fun performConnectActions() {
         val isBTConnected = BluetoothUtils.isBluetoothA2DPOnCompat(context.applicationContext)
         val isHeadphones = preferencesHelper.isHeadphonesDevice
         Log.d(PowerConnectionReceiver.TAG, "is BTConnected: $isBTConnected")
         if (isBTConnected && !isHeadphones) {
-            val btConnectActions = BTConnectActions(context)
-            val firebaseHelper = FirebaseHelper(context)
-
             Log.d(PowerConnectionReceiver.TAG, "POWER_LAUNCH")
             btConnectActions.onBTConnect()
             firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.POWER)

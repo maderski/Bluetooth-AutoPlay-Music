@@ -68,13 +68,13 @@ class VolumeControl(
     }
 
     //Wait 3 seconds before getting the Original Volume
-    fun delayGetOrigVol(seconds: Int) {
+    fun delayGetOrigVol(seconds: Int, taskAfterVolumeCaptured: () -> Unit) {
         val milliseconds = seconds * 1000
         val handler = Handler()
         val runnable = Runnable {
             preferencesHelper.originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-
             Log.d(TAG, "Original Media Volume is: " + preferencesHelper.originalMediaVolume.toString())
+            taskAfterVolumeCaptured()
         }
 
         handler.postDelayed(runnable, milliseconds.toLong())

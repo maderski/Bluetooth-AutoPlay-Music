@@ -67,11 +67,11 @@ val receiverModule = module {
 val helperModules = module {
     single { PackageHelper(androidContext()) }
     single { PowerHelper(androidContext()) }
-    single { TelephoneHelper(androidContext(), get()) }
+    single { TelephoneHelper(get(), get(), get(), get()) }
     single { LaunchAppHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
-    single { PowerConnectedHelper(androidContext(), get()) }
+    single { PowerConnectedHelper(androidContext(), get(), get(), get()) }
     single { PreferencesHelper(get(), get()) }
     single { AndroidSystemServicesHelper(androidContext()) }
 }

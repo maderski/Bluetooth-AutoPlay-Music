@@ -1,19 +1,23 @@
 package maderski.bluetoothautoplaymusic.helpers
 
-import android.content.Context
 import android.os.CountDownTimer
 import android.telephony.TelephonyManager
 import android.util.Log
-
+import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
+import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 
 /**
  * Created by Jason on 6/1/16.
  */
-class TelephoneHelper(context: Context,
-                      private val powerHelper: PowerHelper) {
-    private val telephonyManager: TelephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-
+class TelephoneHelper(
+        androidSystemServicesHelper: AndroidSystemServicesHelper,
+        private val powerHelper: PowerHelper,
+        private val btConnectActions: BTConnectActions,
+        private val firebaseHelper: FirebaseHelper
+) {
+    private val telephonyManager = androidSystemServicesHelper.telephonyManager
     val isOnCall: Boolean
         get() {
             val currentCallState = telephonyManager.callState
@@ -41,7 +45,11 @@ class TelephoneHelper(context: Context,
                         Log.d(TAG, "Off Call, Launching Bluetooth Autoplay music")
                         cancel()
                         //Get Original Volume and Launch Bluetooth Autoplay Music
-                        volumeControl.delayGetOrigVol(3)
+                        volumeControl.delayGetOrigVol(3) {
+                            //Calling actionsOnBTConnect cause onBTConnect already ran
+                            btConnectActions.actionsOnBTConnect()
+                            firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE)
+                        }
                     }
                 } else {
                     //Bailing cause phone is not plugged in
