@@ -8,6 +8,7 @@ import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
@@ -24,7 +25,6 @@ import org.koin.core.inject
  */
 
 class BTDisconnectActions(private val context: Context): KoinComponent {
-    private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
     private val mBAPMNotification: BAPMNotification by inject()
     private val mVolumeControl: VolumeControl by inject()
@@ -32,6 +32,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     private val ringerControl: RingerControl by inject()
     private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
     private val serviceManager: ServiceManager by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
 
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
@@ -47,7 +48,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     }
 
     private fun removeBAPMNotification() {
-        val canShowNotification = preferences.getShowNotification()
+        val canShowNotification = preferencesHelper.canShowNotification
 
         if (canShowNotification) {
             mBAPMNotification.removeBAPMMessage()
@@ -55,7 +56,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     }
 
     private fun pauseMusic() {
-        val playMusic = preferences.getAutoPlayMusic()
+        val playMusic = preferencesHelper.canAutoPlayMusic
         if (playMusic) {
             mediaPlayerControlManager.pause()
         }
@@ -63,14 +64,14 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
 
     private fun turnOffPriorityMode(ringerControl: RingerControl) {
 
-        val priorityMode = preferences.getPriorityMode()
+        val priorityMode = preferencesHelper.priorityMode
         if (priorityMode) {
             val currentRinger = dataPreferences.getCurrentRingerSet()
             try {
                 when (currentRinger) {
                     AudioManager.RINGER_MODE_SILENT -> Log.d(TAG, "Phone is on Silent")
                     AudioManager.RINGER_MODE_VIBRATE -> ringerControl.vibrateOnly()
-                    AudioManager.RINGER_MODE_NORMAL -> ringerControl.soundsON()
+                    AudioManager.RINGER_MODE_NORMAL -> ringerControl.soundsON(context)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.message)
@@ -80,9 +81,9 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     }
 
     private fun closeWaze(launchAppHelper: LaunchAppHelper) {
-        val closeWaze = (preferences.getCloseWazeOnDisconnect()
+        val closeWaze = (preferencesHelper.shouldCloseWaze
                 && launchAppHelper.isAbleToLaunch(WAZE.packageName)
-                && preferences.getMapsChoice() == WAZE.packageName)
+                && preferencesHelper.mapAppChosen == WAZE.packageName)
         if (closeWaze) {
             launchAppHelper.closeWazeOnDisconnect()
         }
@@ -91,8 +92,8 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     private fun setWifiOn(launchAppHelper: LaunchAppHelper) {
         val isWifiOffDevice = dataPreferences.getIsTurnOffWifiDevice()
         if (isWifiOffDevice) {
-            val eveningStartTime = preferences.getEveningStartTime()
-            val eveningEndTime = preferences.getEveningEndTime()
+            val eveningStartTime = preferencesHelper.eveningStartTime
+            val eveningEndTime = preferencesHelper.eveningEndTime
 
             val current24hrTime = TimeHelper.current24hrTime
 
@@ -100,7 +101,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
             val canLaunch = timeHelperEvening.isWithinTimeSpan
             val directionLocation = if (canLaunch) DirectionLocation.HOME else DirectionLocation.WORK
 
-            val canChangeWifiState = preferences.getWifiUseMapTimeSpans().not() || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
+            val canChangeWifiState = !preferencesHelper.isUsingWifiMapTimeSpans || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true)
             }
@@ -109,17 +110,17 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     }
 
     private fun stopKeepingScreenOn() {
-        val screenON = preferences.getKeepScreenON()
+        val screenON = preferencesHelper.keepScreenON
         if (screenON) {
             serviceManager.stopService(WakeLockService::class.java, WakeLockService.TAG)
         }
     }
 
     private fun setVolumeBack(ringerControl: RingerControl) {
-        val volumeMAX = preferences.getMaxVolume()
-        val setOriginalVolume = preferences.getRestoreNotificationVolume()
+        val volumeMAX = preferencesHelper.volumeMAX
+        val originalVolume = preferencesHelper.originalVolume
 
-        if (volumeMAX && setOriginalVolume) {
+        if (volumeMAX && originalVolume) {
             mVolumeControl.setToOriginalVolume(ringerControl)
         }
     }

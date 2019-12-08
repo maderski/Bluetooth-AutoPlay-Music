@@ -32,7 +32,7 @@ object KoinModules {
             helperModules,
             notificationModule,
             permissionModule,
-            btActionsModules
+            btActionsModule
     )
 }
 
@@ -45,7 +45,7 @@ val controlModules = module {
     single { ScreenONLock(get()) }
     single { KeyEventControl(androidContext()) }
     single { VolumeControl(androidContext()) }
-    single { RingerControl(androidContext()) }
+    single { RingerControl(get(), get()) }
     single { BasicPlayAttempter() }
     factory { MediaPlayerControlManager(androidContext(), get(), get(), get(), get(), get())}
 }
@@ -73,6 +73,7 @@ val helperModules = module {
     single { BluetoothConnectHelper() }
     single { PowerConnectedHelper(androidContext()) }
     single { PreferencesHelper(get()) }
+    single { AndroidSystemServicesHelper(androidContext()) }
 }
 
 val notificationModule = module {
@@ -83,7 +84,7 @@ val permissionModule = module {
     single { BAPMPermissionHelper() }
 }
 
-val btActionsModules = module {
+val btActionsModule = module {
     single { BTDisconnectActions(androidContext()) }
     single { BTConnectActions(androidContext()) }
     single { BTHeadphonesActions(androidContext()) }

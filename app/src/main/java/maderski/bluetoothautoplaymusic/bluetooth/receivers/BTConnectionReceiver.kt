@@ -9,6 +9,7 @@ import android.util.Log
 
 import maderski.bluetoothautoplaymusic.helpers.BluetoothConnectHelper
 import maderski.bluetoothautoplaymusic.helpers.HeadphonesConnectHelper
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -17,9 +18,9 @@ import org.koin.core.inject
  * Created by Jason on 1/5/16.
  */
 class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
-    private val preferences: BAPMPreferences by inject()
     private val bluetoothConnectHelper: BluetoothConnectHelper by inject()
     private val headphonesConnectHelper: HeadphonesConnectHelper by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
 
     //On receive of Broadcast
     override fun onReceive(context: Context, intent: Intent?) {
@@ -30,9 +31,8 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
 
             if (btDevice != null && action != null) {
                 val btDeviceName = btDevice.name
-                val appContext = context.applicationContext
-                val isASelectedBTDevice = preferences.getBTDevices().contains(btDeviceName)
-                val isAHeadphonesBTDevice = preferences.getHeadphoneDevices().contains(btDeviceName)
+                val isASelectedBTDevice = preferencesHelper.isASelectedBTDevice(btDevice)
+                val isAHeadphonesBTDevice = preferencesHelper.isASelectedBTDevice(btDevice)
                 Log.d(TAG, "Device: " + btDeviceName +
                         "\nis SelectedBTDevice: " + java.lang.Boolean.toString(isASelectedBTDevice) +
                         "\nis A Headphone device: " + java.lang.Boolean.toString(isAHeadphonesBTDevice))
@@ -42,7 +42,7 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
                     if (isAHeadphonesBTDevice) {
                         headphonesConnectHelper.performActions(action, state)
                     } else if (action == BluetoothA2dp.ACTION_CONNECTION_STATE_CHANGED) {
-                        bluetoothConnectHelper.a2dpActions(appContext, state, btDeviceName)
+                        bluetoothConnectHelper.a2dpActions(context, state, btDeviceName)
                     }
                 }
             }

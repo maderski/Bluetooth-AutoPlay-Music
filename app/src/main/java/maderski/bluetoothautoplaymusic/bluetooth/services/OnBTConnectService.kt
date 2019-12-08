@@ -9,6 +9,7 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
 import maderski.bluetoothautoplaymusic.helpers.PowerConnectedHelper
 import maderski.bluetoothautoplaymusic.helpers.PowerHelper
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -21,15 +22,15 @@ import java.lang.IllegalArgumentException
  */
 
 class OnBTConnectService : Service(), KoinComponent {
-    private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
     private val powerHelper: PowerHelper by inject()
     private val powerConnectedHelper: PowerConnectedHelper by inject()
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
     private val powerConnectionReceiver: PowerConnectionReceiver by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val waitTillPowerConnected = preferences.getPowerConnected()
+        val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
 
         val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
         val title = getString(resId)
@@ -63,7 +64,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     override fun onDestroy() {
         super.onDestroy()
-        val waitTillPowerConnected = preferences.getPowerConnected()
+        val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
         if (waitTillPowerConnected) {
             unregisterPowerConnectionReceiver()
         }

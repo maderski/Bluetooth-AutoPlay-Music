@@ -15,12 +15,12 @@ import org.koin.core.inject
 
 class NotifPolicyAccessChangedReceiver : BroadcastReceiver(), KoinComponent {
     private val dataPreferences: BAPMDataPreferences by inject()
+    private val ringerControl: RingerControl by inject()
 
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             if (intent.action != null) {
                 Log.d(TAG, "ACTION: ${intent.action}")
-                val ringerControl = RingerControl(context)
                 dataPreferences.setCurrentRingerSet(ringerControl.ringerSetting())
                 ringerControl.soundsOFF()
                 context.applicationContext.unregisterReceiver(this)

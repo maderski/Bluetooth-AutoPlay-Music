@@ -79,4 +79,13 @@ object PermissionUtils {
         val mode = appOpsManager.checkOpNoThrow(GET_USAGE_STATS, Process.myUid(), context.packageName)
         return mode == AppOpsManager.MODE_ALLOWED
     }
+
+    fun hasNotificationAccessPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY
+            isPermissionGranted(context, permission)
+        } else {
+            true
+        }
+    }
 }

@@ -40,6 +40,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
     private val powerHelper: PowerHelper by inject()
     private val telephoneHelper: TelephoneHelper by inject()
     private val preferencesHelper: PreferencesHelper by inject()
+    private val ringerControl: RingerControl by inject()
 
     fun onBTConnect() {
         val waitTillOffPhone = preferencesHelper.waitTillOffPhone
@@ -196,7 +197,6 @@ class BTConnectActions(private val context: Context): KoinComponent {
     }
 
     private fun putPhoneInDoNotDisturb() {
-        val ringerControl = RingerControl(context)
         val priorityMode = preferencesHelper.priorityMode
 
         if (priorityMode) {

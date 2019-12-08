@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.helpers
 
+import android.bluetooth.BluetoothDevice
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
@@ -40,4 +41,17 @@ class PreferencesHelper(private val preferences: BAPMPreferences) {
     val isLaunchingMaps get() = preferences.getLaunchGoogleMaps()
     val isUsingWifiMapTimeSpans get() = preferences.getWifiUseMapTimeSpans()
     val priorityMode get() = preferences.getPriorityMode()
+    val shouldCloseWaze get() = preferences.getCloseWazeOnDisconnect()
+    val originalVolume get() = preferences.getRestoreNotificationVolume()
+    val headphoneVolume get() = preferences.getHeadphonePreferredVolume()
+    val waitTillPowerConnected = preferences.getPowerConnected()
+
+    private val selectedBTDevices get() = preferences.getBTDevices()
+    private val selectedHeadphoneDevices get() = preferences.getHeadphoneDevices()
+
+    fun isASelectedBTDevice(bluetoothDevice: BluetoothDevice): Boolean =
+            selectedBTDevices.contains(bluetoothDevice.name)
+
+    fun isASelectedHeadphonesBT(bluetoothDevice: BluetoothDevice): Boolean =
+            selectedHeadphoneDevices.contains(bluetoothDevice.name)
 }

@@ -8,6 +8,7 @@ import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -19,12 +20,11 @@ import org.koin.core.inject
  */
 
 class BTHeadphonesActions(private val context: Context): KoinComponent {
-    private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
     private val volumeControl: VolumeControl by inject()
     private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
-    private val serviceManager: ServiceManager by inject()
     private val ringerControl: RingerControl by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
 
     fun connectActionsWithDelay() {
         val handler = Handler()
@@ -34,7 +34,7 @@ class BTHeadphonesActions(private val context: Context): KoinComponent {
 
     fun connectActions() {
         // Get headphone preferred volume
-        val preferredVolume = preferences.getHeadphonePreferredVolume()
+        val preferredVolume = preferencesHelper.headphoneVolume
         // Set headphone preferred volume
         volumeControl.setSpecifiedVolume(preferredVolume)
         // Start checking if music is playing
