@@ -71,13 +71,13 @@ val helperModules = module {
     single { LaunchAppHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
-    single { PowerConnectedHelper(androidContext()) }
+    single { PowerConnectedHelper(androidContext(), get()) }
     single { PreferencesHelper(get(), get()) }
     single { AndroidSystemServicesHelper(androidContext()) }
 }
 
 val notificationModule = module {
-    single { BAPMNotification(androidContext()) }
+    single { BAPMNotification(androidContext(), get(), get()) }
 }
 
 val permissionModule = module {

@@ -29,6 +29,7 @@ class BluetoothConnectHelper: KoinComponent {
     private val volumeControl: VolumeControl by inject()
     private val btConnectActions: BTConnectActions by inject()
     private val preferencesHelper: PreferencesHelper by inject()
+    private val bapmNotification: BAPMNotification by inject()
 
     fun a2dpActions(context: Context, state: Int, deviceName: String) {
         val isHeadphones = preferencesHelper.isHeadphonesDevice
@@ -77,7 +78,6 @@ class BluetoothConnectHelper: KoinComponent {
         context.startActivity(disconnectIntent)
 
         if (preferencesHelper.waitTillOffPhone && preferencesHelper.isLaunchBTAPMNotifShowing) {
-            val bapmNotification = BAPMNotification(context)
             bapmNotification.removeBAPMMessage()
         }
 

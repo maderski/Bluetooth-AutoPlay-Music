@@ -11,26 +11,26 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 
 /**
  * Created by Jason on 12/8/15.
  */
-class BAPMNotification(val context: Context): KoinComponent {
-    private val preferences: BAPMPreferences by inject()
-    private val dataPreferences: BAPMDataPreferences by inject()
-
-    private val nManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+class BAPMNotification(
+        private val context: Context,
+        private val preferencesHelper: PreferencesHelper,
+        androidSystemServicesHelper: AndroidSystemServicesHelper
+) {
+    private val nManager = androidSystemServicesHelper.notificationManager
 
     //Create notification message for BAPM
     fun bapmMessage(mapChoicePkg: String) {
         val color = ContextCompat.getColor(context, R.color.colorAccent)
-        val mapAppName = if (preferences.getMapsChoice().equals(WAZE.packageName, ignoreCase = true)) {
+        val mapAppName = if (preferencesHelper.mapAppChosen.equals(WAZE.packageName, ignoreCase = true)) {
             "WAZE"
         } else {
             "GOOGLE MAPS"
@@ -65,7 +65,7 @@ class BAPMNotification(val context: Context): KoinComponent {
         val title = context.getString(R.string.launch_bluetooth_autoplay)
         val message = context.getString(R.string.bluetooth_device_connected)
 
-        dataPreferences.setLaunchNotifPresent(true)
+        preferencesHelper.isLaunchBTAPMNotifShowing = true
 
         val launchBAPMIntent = Intent()
         launchBAPMIntent.action = "maderski.bluetoothautoplaymusic.offtelephonelaunch"
@@ -105,7 +105,8 @@ class BAPMNotification(val context: Context): KoinComponent {
     fun removeBAPMMessage() {
         nManager?.let { notificationManager ->
             notificationManager.cancel(TAG, NOTIFICATION_ID)
-            dataPreferences.setLaunchNotifPresent(false)
+
+            preferencesHelper.isLaunchBTAPMNotifShowing = false
         }
     }
 

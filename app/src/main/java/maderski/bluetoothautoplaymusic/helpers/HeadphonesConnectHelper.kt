@@ -18,18 +18,16 @@ import org.koin.core.inject
  */
 
 class HeadphonesConnectHelper: KoinComponent {
-    private val preferences: BAPMPreferences by inject()
-    private val dataPreferences: BAPMDataPreferences by inject()
-    private val serviceManager: ServiceManager by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
     private val btHeadphonesActions: BTHeadphonesActions by inject()
     private val volumeControl: VolumeControl by inject()
 
     fun performActions(action: String, state: Int) {
-        val doesRequireA2DP = preferences.getUseA2dpHeadphones()
+        val doesRequireA2DP = preferencesHelper.useA2dpHeadphones
 
         // Get Original volume
         volumeControl.saveOriginalVolume()
-        Log.i(TAG, "Original Media Volume is: ${dataPreferences.getOriginalMediaVolume()}")
+        Log.i(TAG, "Original Media Volume is: ${preferencesHelper.originalMediaVolume}")
 
         if (doesRequireA2DP) {
             checkA2dpConnectionState(action, state)

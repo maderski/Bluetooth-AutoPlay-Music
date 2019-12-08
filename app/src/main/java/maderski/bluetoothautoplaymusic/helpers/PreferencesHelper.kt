@@ -52,6 +52,7 @@ class PreferencesHelper(
     val headphoneVolume get() = preferences.getHeadphonePreferredVolume()
     val waitTillPowerConnected = preferences.getPowerConnected()
     val turnWifiOffDevices get() = preferences.getTurnWifiOffDevices()
+    val useA2dpHeadphones get() = preferences.getUseA2dpHeadphones()
 
     private val selectedBTDevices get() = preferences.getBTDevices()
     private val selectedHeadphoneDevices get() = preferences.getHeadphoneDevices()

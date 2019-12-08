@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.RingerControl
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -14,14 +15,14 @@ import org.koin.core.inject
  */
 
 class NotifPolicyAccessChangedReceiver : BroadcastReceiver(), KoinComponent {
-    private val dataPreferences: BAPMDataPreferences by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
     private val ringerControl: RingerControl by inject()
 
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             if (intent.action != null) {
                 Log.d(TAG, "ACTION: ${intent.action}")
-                dataPreferences.setCurrentRingerSet(ringerControl.ringerSetting())
+                preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
                 ringerControl.soundsOFF()
                 context.applicationContext.unregisterReceiver(this)
             }
