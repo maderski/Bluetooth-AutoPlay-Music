@@ -13,18 +13,15 @@ import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
-import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
-import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
+import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -34,7 +31,6 @@ import org.koin.core.inject
  */
 
 class BTConnectActions(private val context: Context): KoinComponent {
-    private val preferences: BAPMPreferences by inject()
     private val dataPreferences: BAPMDataPreferences by inject()
     private val volumeControl: VolumeControl by inject()
     private val bapmNotification: BAPMNotification by inject()
@@ -43,9 +39,10 @@ class BTConnectActions(private val context: Context): KoinComponent {
     private val serviceManager: ServiceManager by inject()
     private val powerHelper: PowerHelper by inject()
     private val telephoneHelper: TelephoneHelper by inject()
+    private val preferencesHelper: PreferencesHelper by inject()
 
     fun onBTConnect() {
-        val waitTillOffPhone = preferences.getWaitTillOffPhone()
+        val waitTillOffPhone = preferencesHelper.waitTillOffPhone
         if (waitTillOffPhone) {
             actionsWhileOnCall()
         } else {
@@ -71,7 +68,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     fun actionsOnBTConnect() {
-        val unlockScreen = preferences.getUnlockScreen()
+        val unlockScreen = preferencesHelper.unlockScreen
 
         showBTAMNotification()
         setVolumeToMax()
@@ -90,42 +87,51 @@ class BTConnectActions(private val context: Context): KoinComponent {
     }
 
     private fun performActionsDelay() {
-        Handler(Looper.getMainLooper()).post {
-            val milliSeconds = 30000
-            object : CountDownTimer(milliSeconds.toLong(), 1000) {
+        val isAtLeastAndroid10 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        if (isAtLeastAndroid10) {
+            performActions()
+        } else {
+            Handler(Looper.getMainLooper()).post {
+                val milliSeconds = 30000
+                object : CountDownTimer(milliSeconds.toLong(), 1000) {
 
-                override fun onTick(millisUntilFinished: Long) {
-                    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-                    val isDeviceLocked = keyguardManager.isDeviceLocked
-                    Log.d(TAG, "IS DEVICE LOCKED: $isDeviceLocked")
-                    if (!isDeviceLocked && millisUntilFinished < 28000) {
-                        cancel()
-                        onFinish()
+                    override fun onTick(millisUntilFinished: Long) {
+                        val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                        val isDeviceLocked = keyguardManager.isDeviceLocked
+                        Log.d(TAG, "IS DEVICE LOCKED: $isDeviceLocked")
+                        if (!isDeviceLocked && millisUntilFinished < 28000) {
+                            cancel()
+                            onFinish()
+                        }
+                        Log.d(TAG, "LOCKED mills left to check: $millisUntilFinished")
                     }
-                    Log.d(TAG, "LOCKED mills left to check: $millisUntilFinished")
-                }
 
-                override fun onFinish() {
-                    unlockTheScreen()
-                    launchMusicMapApp()
-                    autoPlayMusic()
-                    setWifiOff()
-                    putPhoneInDoNotDisturb()
-                }
-            }.start()
+                    override fun onFinish() {
+                        performActions()
+                    }
+                }.start()
+            }
         }
     }
 
+    private fun performActions() {
+        unlockTheScreen()
+        launchMusicMapApp()
+        autoPlayMusic()
+        setWifiOff()
+        putPhoneInDoNotDisturb()
+    }
+
     private fun showBTAMNotification() {
-        val mapChoice = preferences.getMapsChoice()
-        val canShowNotification = preferences.getShowNotification()
+        val mapChoice = preferencesHelper.mapAppName
+        val canShowNotification = preferencesHelper.canShowNotification
         if (canShowNotification) {
             bapmNotification.bapmMessage(mapChoice)
         }
     }
 
     private fun turnTheScreenOn() {
-        val screenON = preferences.getKeepScreenON()
+        val screenON = preferencesHelper.keepScreenON
         if (screenON) {
             serviceManager.startService(WakeLockService::class.java, WakeLockService.TAG)
         }
@@ -141,38 +147,40 @@ class BTConnectActions(private val context: Context): KoinComponent {
     }
 
     private fun setVolumeToMax() {
-        val volumeMAX = preferences.getMaxVolume()
+        val volumeMAX = preferencesHelper.volumeMAX
         if (volumeMAX) {
             volumeControl.checkSetMAXVol(4)
         }
     }
 
     private fun autoPlayMusic() {
-        val playMusic = preferences.getAutoPlayMusic()
+        val playMusic = preferencesHelper.canAutoPlayMusic
         if (playMusic) {
             mediaPlayerControlManager.play()
         }
     }
 
     private fun launchMusicMapApp() {
-        val launchMusicPlayer = preferences.getLaunchMusicPlayer()
-        val launchMaps = preferences.getLaunchGoogleMaps()
+        val launchMusicPlayer = preferencesHelper.isLaunchingMusicPlayer
+        val launchMaps = preferencesHelper.isLaunchingMaps
         val mapsCanLaunch = launchAppHelper.canMapsLaunchNow()
 
         if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
-            launchAppHelper.musicPlayerLaunch(3)
+            val musicPlayerPkg = preferencesHelper.musicPlayerPkgName
+            launchAppHelper.launchApp(musicPlayerPkg)
         }
 
         if (launchMaps) {
-            launchAppHelper.launchMaps(3)
+            launchAppHelper.mapsLaunch()
+            //launchAppHelper.launchMapsDelayed(3)
         }
     }
 
     private fun setWifiOff() {
         val isWifiOffDevice = dataPreferences.getIsTurnOffWifiDevice()
         if (isWifiOffDevice) {
-            val morningStartTime = preferences.getMorningStartTime()
-            val morningEndTime = preferences.getMorningEndTime()
+            val morningStartTime = preferencesHelper.morningStartTime
+            val morningEndTime = preferencesHelper.morningEndTime
 
             val current24hrTime = TimeHelper.current24hrTime
 
@@ -180,7 +188,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
             val canLaunch = timeHelperMorning.isWithinTimeSpan
             val directionLocation = if (canLaunch) DirectionLocation.WORK else DirectionLocation.HOME
 
-            val canChangeWifiState = !preferences.getWifiUseMapTimeSpans() || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
+            val canChangeWifiState = !preferencesHelper.isUsingWifiMapTimeSpans || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false)
             }
@@ -189,7 +197,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
 
     private fun putPhoneInDoNotDisturb() {
         val ringerControl = RingerControl(context)
-        val priorityMode = preferences.getPriorityMode()
+        val priorityMode = preferencesHelper.priorityMode
 
         if (priorityMode) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

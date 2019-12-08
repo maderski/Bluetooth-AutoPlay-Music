@@ -22,82 +22,55 @@ import java.util.*
 class LaunchAppHelper(
         private val context: Context,
         private val packageHelper: PackageHelper,
-        preferences: BAPMPreferences
+        private val preferencesHelper: PreferencesHelper
 ) {
-
     private val canLaunchThisTimeLocations = ArrayList<DirectionLocation>()
 
     private var directionLocation: DirectionLocation = NONE
 
-    // SharePrefs Info
-    private val mapAppChosen = preferences.getMapsChoice()
-    private val customLocationName = preferences.getCustomLocationName()
-    private val mapAppName = preferences.getMapsChoice()
-    private val canLaunchDirections = preferences.getCanLaunchDirections()
-    private val canLaunchDrivingMode = preferences.getLaunchMapsDrivingMode() &&
-            mapAppName == MAPS.packageName
-    private val isLaunchingWithDirections = preferences.getCanLaunchDirections()
-    private val isUsingTimesToLaunch = preferences.getUseTimesToLaunchMaps()
-
-    private val morningStartTime = preferences.getMorningStartTime()
-    private val morningEndTime = preferences.getMorningEndTime()
-
-    private val eveningStartTime = preferences.getEveningStartTime()
-    private val eveningEndTime = preferences.getEveningEndTime()
-
-    private val customStartTime = preferences.getCustomStartTime()
-    private val customEndTime = preferences.getCustomEndTime()
-
-    private val isUseLaunchTimeEnabled = preferences.getUseTimesToLaunchMaps()
-
-    private val musicPlayerPkgName = preferences.getPkgSelectedMusicPlayer()
-
-    private val daysToLaunchHome = preferences.getHomeDaysToLaunchMaps()
-    private val daysToLaunchWork = preferences.getWorkDaysToLaunchMaps()
-    private val daysToLaunchCustom = preferences.getCustomDaysToLaunchMaps()
-
     fun launchApp(packageName: String) = packageHelper.launchPackage(packageName)
 
-    //Create a delay before the Music App is launched and if enable launchPackage maps
-    fun musicPlayerLaunch(seconds: Int) {
-        packageHelper.launchPackage(musicPlayerPkgName)
-    }
-
-    //Launch Maps or Waze with a delay
-    fun launchMaps(seconds: Int) {
-        val canLaunchMapsNow = canMapsLaunchNow()
-
-        if (canLaunchMapsNow) {
-            val mills = seconds * 1000L
-
-            val handler = Handler(Looper.getMainLooper())
-            val runnable = Runnable {
-                if (canLaunchDirections) {
-                    val data = getMapsChoiceUri()
-                    packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
-                } else {
-                    determineIfLaunchWithDrivingMode(mapAppName)
-                }
-                Log.d(TAG, "delay Launch maps started")
-
+    fun mapsLaunch() {
+        val isMapsRunning = packageHelper.isAppRunning(MAPS.packageName)
+        val canLaunch = canMapsLaunchNow()
+        if (canLaunch && !isMapsRunning) {
+            val canLaunchDirections = preferencesHelper.canLaunchDirections
+            if (canLaunchDirections) {
+                val mapAppName = preferencesHelper.mapAppName
+                val data = getMapsChoiceUri()
+                packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
+            } else {
+                determineHowToLaunchMaps()
             }
-            handler.postDelayed(runnable, mills)
+            Log.d(TAG, "Launch maps started")
         }
     }
 
+    // Launch Maps or Waze with a delay
+    fun launchMapsDelayed(seconds: Int) {
+        val mills = seconds * 1000L
+
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = Runnable {
+            mapsLaunch()
+        }
+        handler.postDelayed(runnable, mills)
+    }
+
     private fun determineHowToLaunchMaps() {
-        val isMapsRunning = packageHelper.isAppRunning(MAPS.packageName)
-        if (canLaunchDirections && !isMapsRunning && directionLocation != NONE) {
+        val mapAppName = preferencesHelper.mapAppName
+        val canLaunchDirections = preferencesHelper.canLaunchDirections
+        if (canLaunchDirections && directionLocation != NONE) {
             val data = getMapsChoiceUri()
             packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
         } else {
             determineIfLaunchWithDrivingMode(mapAppName)
         }
-        Log.d(TAG, "delayLaunchmaps started")
     }
 
     // If driving mode is enabled and map choice is set to Google Maps, launch Maps in Driving Mode
     private fun determineIfLaunchWithDrivingMode(mapAppName: String) {
+        val canLaunchDrivingMode = preferencesHelper.canLaunchDrivingMode
         if (canLaunchDrivingMode) {
             Log.d(TAG, "LAUNCH DRIVING MODE")
             val data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls")
@@ -108,21 +81,21 @@ class LaunchAppHelper(
     }
 
     private fun getMapsChoiceUri(): Uri {
+        val customLocationName = preferencesHelper.customLocationName
         val location = if (directionLocation == CUSTOM)
             customLocationName
         else
             directionLocation.location
-
-        val uri: Uri
-        if (mapAppChosen == WAZE.packageName) {
+        val mapAppChosen = preferencesHelper.mapAppChosen
+        val uri = if (mapAppChosen == WAZE.packageName) {
             val wazeUri = "waze://?favorite=$location&navigate=yes"
-            uri = Uri.parse(wazeUri)
+            Uri.parse(wazeUri)
         } else {
-            val mapsUri = "google.navigation:q=" + location
-            uri = Uri.parse(mapsUri)
+            val mapsUri = "google.navigation:q=$location"
+            Uri.parse(mapsUri)
         }
 
-        Log.d(TAG, "MAPS CHOICE URI:" + uri.toString())
+        Log.d(TAG, "MAPS CHOICE URI:$uri")
         return uri
     }
 
@@ -146,32 +119,33 @@ class LaunchAppHelper(
     }
 
     fun canMapsLaunchNow(): Boolean {
-        val canLaunchDuringThisTime = canLaunchDuringThisTime()
+        setDirectionLocation()
+        val isLaunchingWithDirections = preferencesHelper.isLaunchingWithDirections
+        val isUsingTimesToLaunch = preferencesHelper.isUsingTimesToLaunch
+        return isLaunchingWithDirections || isUsingTimesToLaunch
+    }
 
-        var canLaunchMapsNow = false
-        if (isLaunchingWithDirections || isUsingTimesToLaunch) {
-            if (canLaunchDuringThisTime) {
-                directionLocation = canLaunchThisTimeLocations.find { directionLocation ->
-                    canLaunchOnThisDay(directionLocation)
-                } ?: NONE
-            }
-            canLaunchThisTimeLocations.clear()
-        } else {
-            canLaunchMapsNow = true
+    private fun setDirectionLocation() {
+        if (canLaunchDuringThisTime()) {
+            directionLocation = canLaunchThisTimeLocations.find { directionLocation ->
+                canLaunchOnThisDay(directionLocation)
+            } ?: NONE
         }
-
-        return canLaunchMapsNow
+        canLaunchThisTimeLocations.clear()
     }
 
     fun canLaunchOnThisDay(directionLocation: DirectionLocation): Boolean {
         val calendar = Calendar.getInstance()
-        val today = Integer.toString(calendar.get(Calendar.DAY_OF_WEEK))
-        var canLaunch = false
+        val today = calendar.get(Calendar.DAY_OF_WEEK).toString()
 
-        when (directionLocation) {
-            HOME -> canLaunch = daysToLaunchHome?.contains(today) ?: false
-            WORK -> canLaunch = daysToLaunchWork?.contains(today) ?: false
-            CUSTOM -> canLaunch = daysToLaunchCustom?.contains(today) ?: false
+        val daysToLaunchHome = preferencesHelper.daysToLaunchHome
+        val daysToLaunchWork = preferencesHelper.daysToLaunchWork
+        val daysToLaunchCustom = preferencesHelper.daysToLaunchCustom
+
+        val canLaunch = when (directionLocation) {
+            HOME -> daysToLaunchHome.contains(today)
+            WORK -> daysToLaunchWork.contains(today)
+            CUSTOM -> daysToLaunchCustom.contains(today)
             NONE -> false
         }
 
@@ -183,8 +157,15 @@ class LaunchAppHelper(
     }
 
     fun canLaunchDuringThisTime(): Boolean {
+        val isUseLaunchTimeEnabled = preferencesHelper.isUseLaunchTimeEnabled
         if (isUseLaunchTimeEnabled) {
             val current24hrTime = TimeHelper.current24hrTime
+            val morningStartTime = preferencesHelper.morningStartTime
+            val morningEndTime = preferencesHelper.morningEndTime
+            val eveningStartTime = preferencesHelper.eveningStartTime
+            val eveningEndTime = preferencesHelper.eveningEndTime
+            val customStartTime = preferencesHelper.customStartTime
+            val customEndTime = preferencesHelper.customEndTime
 
             val timeHelperMorning = TimeHelper(morningStartTime, morningEndTime, current24hrTime)
             val canLaunchWork = timeHelperMorning.isWithinTimeSpan
