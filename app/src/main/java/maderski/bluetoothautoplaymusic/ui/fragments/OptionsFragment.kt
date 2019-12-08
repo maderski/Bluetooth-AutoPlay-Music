@@ -23,11 +23,13 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 
 class OptionsFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
+    private val volumeControl: VolumeControl by inject()
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
@@ -270,11 +272,10 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun setMaxVolumeSeekBar(view: View) {
-        val audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val deviceMaxVolume = VolumeControl.getDeviceMaxVolume(requireActivity())
+        val deviceMaxVolume = volumeControl.getDeviceMaxVolume()
         val volumeSeekBar = view.findViewById<View>(R.id.max_volume_seekBar) as SeekBar
 
-        volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        volumeSeekBar.max = volumeControl.getDeviceMaxVolume()
         volumeSeekBar.progress = preferences.getUserSetMaxVolume(deviceMaxVolume)
         volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

@@ -1,10 +1,16 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothProfile
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
-class PreferencesHelper(private val preferences: BAPMPreferences) {
+class PreferencesHelper(
+        private val preferences: BAPMPreferences,
+        private val dataPreferences: BAPMDataPreferences
+) {
+    // BAPM Preferences
     val mapAppChosen get() = preferences.getMapsChoice()
     val customLocationName get() = preferences.getCustomLocationName()
     val canLaunchDirections get() = preferences.getCanLaunchDirections()
@@ -45,6 +51,7 @@ class PreferencesHelper(private val preferences: BAPMPreferences) {
     val originalVolume get() = preferences.getRestoreNotificationVolume()
     val headphoneVolume get() = preferences.getHeadphonePreferredVolume()
     val waitTillPowerConnected = preferences.getPowerConnected()
+    val turnWifiOffDevices get() = preferences.getTurnWifiOffDevices()
 
     private val selectedBTDevices get() = preferences.getBTDevices()
     private val selectedHeadphoneDevices get() = preferences.getHeadphoneDevices()
@@ -54,4 +61,23 @@ class PreferencesHelper(private val preferences: BAPMPreferences) {
 
     fun isASelectedHeadphonesBT(bluetoothDevice: BluetoothDevice): Boolean =
             selectedHeadphoneDevices.contains(bluetoothDevice.name)
+
+    fun getUserSetMaxVolume(deviceMaxVolume: Int): Int = preferences.getUserSetMaxVolume(deviceMaxVolume)
+
+    // BAPM Data Preferences
+    var originalMediaVolume
+        get() = dataPreferences.getOriginalMediaVolume()
+        set(value) = dataPreferences.setOriginalMediaVolume(value)
+    var isWifiOffDevice
+        get() = dataPreferences.getIsTurnOffWifiDevice()
+        set(value) = dataPreferences.setIsTurnOffWifiDevice(value)
+    var currentRingerSet
+        get() = dataPreferences.getCurrentRingerSet()
+        set(value) = dataPreferences.setCurrentRingerSet(value)
+    var isHeadphonesDevice
+        get() = dataPreferences.getIsAHeadphonesDevice()
+        set(value) = dataPreferences.setIsHeadphonesDevice(value)
+    var isLaunchBTAPMNotifShowing
+        get() = dataPreferences.getLaunchNotifPresent()
+        set(value) = dataPreferences.setLaunchNotifPresent(value)
 }

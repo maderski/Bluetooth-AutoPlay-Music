@@ -9,6 +9,8 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -18,11 +20,11 @@ import org.koin.core.inject
 /**
  * Created by Jason on 4/2/16.
  */
-class VolumeControl(private val context: Context): KoinComponent {
-    private val preferences: BAPMPreferences by inject()
-    private val dataPreferences: BAPMDataPreferences by inject()
-
-    private val am: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+class VolumeControl(
+        androidSystemServicesHelper: AndroidSystemServicesHelper,
+        private val preferencesHelper: PreferencesHelper
+) {
+    private val audioManager: AudioManager = androidSystemServicesHelper.audioManager
     private val mStreamType: Int =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 AudioManager.STREAM_NOTIFICATION
@@ -31,36 +33,36 @@ class VolumeControl(private val context: Context): KoinComponent {
 
     // Set Mediavolume to MAX
     fun volumeMAX() {
-        val maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         Log.d(TAG, "Max Media Volume is: $maxVolume")
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI)
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI)
     }
 
     fun saveOriginalVolume() {
-        val originalVolume = am.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
-        dataPreferences.setOriginalMediaVolume(originalVolume)
+        val originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
+        preferencesHelper.originalMediaVolume = originalVolume
     }
 
     // Set to specified media volume
     fun setSpecifiedVolume(volumeValue: Int) {
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, volumeValue, AudioManager.FLAG_SHOW_UI)
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeValue, AudioManager.FLAG_SHOW_UI)
         Log.d(TAG, "SET VOLUME TO: " + volumeValue.toString()
-                + "MAX VOL: " + am.getStreamMaxVolume(mStreamType).toString())
+                + "MAX VOL: " + audioManager.getStreamMaxVolume(mStreamType).toString())
     }
 
     // Set original media volume
     fun setToOriginalVolume(ringerControl: RingerControl) {
-        val originalMediaVolume = dataPreferences.getOriginalMediaVolume()
+        val originalMediaVolume = preferencesHelper.originalMediaVolume
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
-                am.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
+                audioManager.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
                 Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
             } else {
                 Log.d(TAG, "Did NOT set Media Volume")
             }
         } else {
-            am.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
+            audioManager.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
             Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
         }
     }
@@ -70,27 +72,21 @@ class VolumeControl(private val context: Context): KoinComponent {
         val milliseconds = seconds * 1000
         val handler = Handler()
         val runnable = Runnable {
-            dataPreferences.setOriginalMediaVolume(am.getStreamVolume(AudioManager.STREAM_MUSIC))
+            preferencesHelper.originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
 
-            Log.d(TAG, "Original Media Volume is: " + dataPreferences.getOriginalMediaVolume().toString())
-            // TODO: This belongs somewhere else
-            // Launch actionOnBTConnect cause off the Telephone
-            val btConnectActions = BTConnectActions(context)
-            val firebaseHelper = FirebaseHelper(context)
-            //Calling actionsOnBTConnect cause onBTConnect already ran
-            btConnectActions.actionsOnBTConnect()
-            firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE)
+            Log.d(TAG, "Original Media Volume is: " + preferencesHelper.originalMediaVolume.toString())
         }
 
         handler.postDelayed(runnable, milliseconds.toLong())
     }
 
     private fun setToMaxVol() {
-        val maxVolume = preferences.getUserSetMaxVolume(getDeviceMaxVolume(context))
-        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
-            am.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI)
+        val deviceMaxVolume = getDeviceMaxVolume()
+        val maxVolume = preferencesHelper.getUserSetMaxVolume(deviceMaxVolume)
+        if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) != maxVolume) {
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, maxVolume, AudioManager.FLAG_SHOW_UI)
             Log.d(TAG, "Set Volume To MAX")
-        } else if (am.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
+        } else if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == maxVolume) {
             Log.d(TAG, "Volume is at MAX!")
         }
     }
@@ -105,12 +101,9 @@ class VolumeControl(private val context: Context): KoinComponent {
         handler.postDelayed(runnable, milliseconds.toLong())
     }
 
+    fun getDeviceMaxVolume(): Int = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+
     companion object {
         private const val TAG = "VolumeControl"
-
-        fun getDeviceMaxVolume(context: Context): Int {
-            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        }
     }
 }

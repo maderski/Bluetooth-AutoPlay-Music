@@ -44,7 +44,7 @@ val prefsModules = module {
 val controlModules = module {
     single { ScreenONLock(get()) }
     single { KeyEventControl(androidContext()) }
-    single { VolumeControl(androidContext()) }
+    single { VolumeControl(get(), get()) }
     single { RingerControl(get(), get()) }
     single { BasicPlayAttempter() }
     factory { MediaPlayerControlManager(androidContext(), get(), get(), get(), get(), get())}
@@ -72,7 +72,7 @@ val helperModules = module {
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
     single { PowerConnectedHelper(androidContext()) }
-    single { PreferencesHelper(get()) }
+    single { PreferencesHelper(get(), get()) }
     single { AndroidSystemServicesHelper(androidContext()) }
 }
 

@@ -25,7 +25,6 @@ import org.koin.core.inject
  */
 
 class BTDisconnectActions(private val context: Context): KoinComponent {
-    private val dataPreferences: BAPMDataPreferences by inject()
     private val mBAPMNotification: BAPMNotification by inject()
     private val mVolumeControl: VolumeControl by inject()
     private val launchAppHelper: LaunchAppHelper by inject()
@@ -66,7 +65,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
 
         val priorityMode = preferencesHelper.priorityMode
         if (priorityMode) {
-            val currentRinger = dataPreferences.getCurrentRingerSet()
+            val currentRinger = preferencesHelper.currentRingerSet
             try {
                 when (currentRinger) {
                     AudioManager.RINGER_MODE_SILENT -> Log.d(TAG, "Phone is on Silent")
@@ -90,7 +89,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
     }
 
     private fun setWifiOn(launchAppHelper: LaunchAppHelper) {
-        val isWifiOffDevice = dataPreferences.getIsTurnOffWifiDevice()
+        val isWifiOffDevice = preferencesHelper.isWifiOffDevice
         if (isWifiOffDevice) {
             val eveningStartTime = preferencesHelper.eveningStartTime
             val eveningEndTime = preferencesHelper.eveningEndTime
@@ -105,7 +104,7 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
             if (canChangeWifiState && !WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, true)
             }
-            dataPreferences.setIsTurnOffWifiDevice(false)
+            preferencesHelper.isWifiOffDevice = false
         }
     }
 

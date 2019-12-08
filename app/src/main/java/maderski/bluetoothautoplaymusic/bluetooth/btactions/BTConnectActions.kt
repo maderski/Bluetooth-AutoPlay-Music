@@ -31,7 +31,6 @@ import org.koin.core.inject
  */
 
 class BTConnectActions(private val context: Context): KoinComponent {
-    private val dataPreferences: BAPMDataPreferences by inject()
     private val volumeControl: VolumeControl by inject()
     private val bapmNotification: BAPMNotification by inject()
     private val launchAppHelper: LaunchAppHelper by inject()
@@ -178,7 +177,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
     }
 
     private fun setWifiOff() {
-        val isWifiOffDevice = dataPreferences.getIsTurnOffWifiDevice()
+        val isWifiOffDevice = preferencesHelper.isWifiOffDevice
         if (isWifiOffDevice) {
             val morningStartTime = preferencesHelper.morningStartTime
             val morningEndTime = preferencesHelper.morningEndTime
@@ -203,7 +202,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, 10)
                 if (hasDoNotDisturbPerm) {
-                    dataPreferences.setCurrentRingerSet(ringerControl.ringerSetting())
+                    preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
                     ringerControl.soundsOFF()
                 } else {
                     val broadcastReceiver = NotifPolicyAccessChangedReceiver()
@@ -211,7 +210,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
                     context.applicationContext.registerReceiver(broadcastReceiver, intentFilter)
                 }
             } else {
-                dataPreferences.setCurrentRingerSet(ringerControl.ringerSetting())
+                preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
                 ringerControl.soundsOFF()
             }
         }

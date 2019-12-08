@@ -20,7 +20,6 @@ import org.koin.core.inject
  */
 
 class BTHeadphonesActions(private val context: Context): KoinComponent {
-    private val dataPreferences: BAPMDataPreferences by inject()
     private val volumeControl: VolumeControl by inject()
     private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
     private val ringerControl: RingerControl by inject()
@@ -40,7 +39,7 @@ class BTHeadphonesActions(private val context: Context): KoinComponent {
         // Start checking if music is playing
         mediaPlayerControlManager.play()
 
-        dataPreferences.setIsHeadphonesDevice(true)
+        preferencesHelper.isHeadphonesDevice = true
         if (BuildConfig.DEBUG)
             Toast.makeText(context, "Music Playing", Toast.LENGTH_SHORT).show()
     }
@@ -49,7 +48,7 @@ class BTHeadphonesActions(private val context: Context): KoinComponent {
         mediaPlayerControlManager.pause()
         volumeControl.setToOriginalVolume(ringerControl)
 
-        dataPreferences.setIsHeadphonesDevice(false)
+        preferencesHelper.isHeadphonesDevice = false
         if (BuildConfig.DEBUG)
             Toast.makeText(context, "Music Paused", Toast.LENGTH_SHORT).show()
     }
