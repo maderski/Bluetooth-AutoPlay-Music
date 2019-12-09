@@ -18,6 +18,7 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
+import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS

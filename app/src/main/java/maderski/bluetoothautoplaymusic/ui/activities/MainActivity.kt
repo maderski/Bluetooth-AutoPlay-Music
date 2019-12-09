@@ -41,8 +41,7 @@ class MainActivity : AppCompatActivity(),
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
     private val permissionHelper: BAPMPermissionHelper by inject()
-
-    private lateinit var mFirebaseHelper: FirebaseHelper
+    private val mFirebaseHelper: FirebaseHelper by inject()
 
     // Show version of the BAPM App
     private val version: String
@@ -62,8 +61,6 @@ class MainActivity : AppCompatActivity(),
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-
-        mFirebaseHelper = FirebaseHelper(this)
 
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
 
@@ -101,15 +98,12 @@ class MainActivity : AppCompatActivity(),
         }
 
         checkIfBAPMServiceRunning()
-
-        PermissionUtils.checkNotificationListenerPermission(this)
     }
 
     override fun onResume() {
         super.onResume()
         // TODO: Handle checking of permissions better
-        permissionHelper.checkToLaunchSystemOverlaySettings(this)
-        permissionHelper.checkToLaunchNotificationListenerSettings(this)
+        permissionHelper.checkAllRequiredPermissions(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

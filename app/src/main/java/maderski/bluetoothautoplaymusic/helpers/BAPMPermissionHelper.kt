@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 
 class BAPMPermissionHelper : PermissionHelper {
     override fun checkToLaunchSystemOverlaySettings(activity: Activity) {
@@ -43,7 +44,15 @@ class BAPMPermissionHelper : PermissionHelper {
 
     override fun launchNotificationListenerSettings(activity: Activity) {
         val launchSettingsIntent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS, Uri.parse("package:${activity.packageName}"))
-        activity.startActivityForResult(launchSettingsIntent, NOTIFICATION_LISTENER_ACCESS_PERMISSION)
+        activity.startActivity(launchSettingsIntent)
+    }
+
+    override fun checkNotificationListenerPermission(context: Context) = PermissionUtils.checkNotificationListenerPermission(context)
+
+    override fun checkAllRequiredPermissions(activity: Activity) {
+        checkToLaunchSystemOverlaySettings(activity)
+        checkToLaunchNotificationListenerSettings(activity)
+        checkNotificationListenerPermission(activity)
     }
 
     companion object {

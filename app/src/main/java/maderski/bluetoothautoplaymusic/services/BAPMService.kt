@@ -14,6 +14,7 @@ import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import java.lang.IllegalArgumentException
 
 /**
  * Created by Jason on 1/5/16.
@@ -35,8 +36,7 @@ class BAPMService : Service(), KoinComponent {
         }
 
         // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
-        val filter = IntentFilter()
-        registerReceiver(btConnectionReceiver, filter)
+        registerReceiver(btConnectionReceiver, IntentFilter())
 
         // Bring service out of the foreground state
         stopForeground(true)

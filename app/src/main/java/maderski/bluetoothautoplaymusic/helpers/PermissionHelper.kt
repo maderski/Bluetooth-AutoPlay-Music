@@ -10,4 +10,6 @@ interface PermissionHelper {
     fun checkToLaunchNotificationListenerSettings(activity: Activity)
     fun hasNotificationListenerAccessPermission(context: Context): Boolean
     fun launchNotificationListenerSettings(activity: Activity)
+    fun checkNotificationListenerPermission(context: Context)
+    fun checkAllRequiredPermissions(activity: Activity)
 }

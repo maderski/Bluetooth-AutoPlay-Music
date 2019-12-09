@@ -74,6 +74,7 @@ val helperModules = module {
     single { PowerConnectedHelper(androidContext(), get(), get(), get()) }
     single { PreferencesHelper(get(), get()) }
     single { AndroidSystemServicesHelper(androidContext()) }
+    single { HeadphonesConnectHelper() }
 }
 
 val notificationModule = module {
