@@ -18,8 +18,7 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
@@ -32,7 +31,7 @@ import java.util.*
 
 class HomeFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
-    private val launchAppHelper: LaunchAppHelper by inject()
+    private val launchHelper: LaunchHelper by inject()
     private val firebaseHelper: FirebaseHelper by inject()
     private val packageHelper: PackageHelper by inject()
 
@@ -75,7 +74,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private fun checkIfWazeRemoved(context: Context) {
         val mapAppChoice = preferences.getMapsChoice()
         if (mapAppChoice.equals(WAZE.packageName, ignoreCase = true)) {
-            val isWazeOnPhone = launchAppHelper.isAbleToLaunch(WAZE.packageName)
+            val isWazeOnPhone = launchHelper.isAbleToLaunch(WAZE.packageName)
             if (isWazeOnPhone.not()) {
                 Log.d(TAG, "Checked")
                 preferences.setMapsChoice(MAPS.packageName)

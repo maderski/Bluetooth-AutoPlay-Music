@@ -12,14 +12,14 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 
 class LaunchBAPMActivity : AppCompatActivity() {
     private val preferences: BAPMPreferences by inject()
     private val screenONLock: ScreenONLock by inject()
-    private val launchAppHelper: LaunchAppHelper by inject()
+    private val launchHelper: LaunchHelper by inject()
     private val firebaseHelper: FirebaseHelper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +70,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
             val handler = Handler()
             val runnable = Runnable {
                 finish()
-                launchAppHelper.launchDisconnectActivity()
+                launchHelper.launchDisconnectActivity()
             }
             handler.postDelayed(runnable, milliSeconds.toLong())
         }

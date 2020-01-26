@@ -19,10 +19,10 @@ import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
+import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -33,13 +33,14 @@ import org.koin.core.inject
 class BTConnectActions(private val context: Context): KoinComponent {
     private val volumeControl: VolumeControl by inject()
     private val bapmNotification: BAPMNotification by inject()
-    private val launchAppHelper: LaunchAppHelper by inject()
+    private val launchHelper: LaunchHelper by inject()
     private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
     private val serviceManager: ServiceManager by inject()
     private val powerHelper: PowerHelper by inject()
     private val telephoneHelper: TelephoneHelper by inject()
     private val preferencesHelper: PreferencesHelper by inject()
     private val ringerControl: RingerControl by inject()
+    private val mapAppLauncher: MapAppLauncher by inject()
 
     fun onBTConnect() {
         val waitTillOffPhone = preferencesHelper.waitTillOffPhone
@@ -77,7 +78,8 @@ class BTConnectActions(private val context: Context): KoinComponent {
         if (unlockScreen) {
             performActionsDelay()
         } else {
-            launchMusicMapApp()
+            launchMusicPlayer()
+            launchMapApp()
             autoPlayMusic()
             setWifiOff()
             putPhoneInDoNotDisturb()
@@ -116,7 +118,8 @@ class BTConnectActions(private val context: Context): KoinComponent {
 
     private fun performActions() {
         unlockTheScreen()
-        launchMusicMapApp()
+        launchMusicPlayer()
+        launchMapApp()
         autoPlayMusic()
         setWifiOff()
         putPhoneInDoNotDisturb()
@@ -142,7 +145,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
         val isKeyguardLocked = keyguardManager.isKeyguardLocked
         Log.d(TAG, "Is keyguard locked: " + java.lang.Boolean.toString(isKeyguardLocked))
         if (isKeyguardLocked) {
-            launchAppHelper.launchBAPMActivity()
+            launchHelper.launchBAPMActivity()
         }
     }
 
@@ -160,19 +163,19 @@ class BTConnectActions(private val context: Context): KoinComponent {
         }
     }
 
-    private fun launchMusicMapApp() {
-        val launchMusicPlayer = preferencesHelper.isLaunchingMusicPlayer
-        val launchMaps = preferencesHelper.isLaunchingMaps
-        val mapsCanLaunch = launchAppHelper.canMapsLaunchNow()
-
-        if (launchMusicPlayer && !launchMaps || launchMusicPlayer && !mapsCanLaunch) {
+    private fun launchMusicPlayer() {
+        val isLaunchingMaps = preferencesHelper.isLaunchingMaps && mapAppLauncher.canMapsLaunchNow()
+        val isLaunchingPlayer = preferencesHelper.isLaunchingMusicPlayer
+        if (isLaunchingPlayer && !isLaunchingMaps) {
             val musicPlayerPkg = preferencesHelper.musicPlayerPkgName
-            launchAppHelper.launchApp(musicPlayerPkg)
+            launchHelper.launchApp(musicPlayerPkg)
         }
+    }
 
-        if (launchMaps) {
-            launchAppHelper.mapsLaunch()
-            //launchAppHelper.launchMapsDelayed(3)
+    private fun launchMapApp() {
+        val isLaunchingMaps = preferencesHelper.isLaunchingMaps
+        if (isLaunchingMaps) {
+            mapAppLauncher.mapsLaunch()
         }
     }
 
@@ -188,7 +191,7 @@ class BTConnectActions(private val context: Context): KoinComponent {
             val canLaunch = timeHelperMorning.isWithinTimeSpan
             val directionLocation = if (canLaunch) DirectionLocation.WORK else DirectionLocation.HOME
 
-            val canChangeWifiState = !preferencesHelper.isUsingWifiMapTimeSpans || canLaunch && launchAppHelper.canLaunchOnThisDay(directionLocation)
+            val canChangeWifiState = !preferencesHelper.isUsingWifiMapTimeSpans || canLaunch && mapAppLauncher.canLaunchOnThisDay(directionLocation)
             if (canChangeWifiState && WifiControl.isWifiON(context)) {
                 WifiControl.wifiON(context, false)
             }

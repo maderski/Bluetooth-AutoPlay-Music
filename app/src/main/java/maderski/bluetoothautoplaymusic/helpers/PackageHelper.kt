@@ -91,19 +91,17 @@ class PackageHelper(private val context: Context) {
 
     // Returns Map App Name, intentionally only works with Google maps and Waze
     fun getMapAppName(packageName: String): String {
-        var mapAppName = "Not Found"
-        try {
+        return try {
             val appInfo = context.packageManager.getApplicationInfo(packageName, 0)
             val applicationLabel = context.packageManager.getApplicationLabel(appInfo).toString()
-            mapAppName = if (applicationLabel.equals(MAPS.applicationLabel, ignoreCase = true)) {
+            if (applicationLabel.equals(MAPS.applicationLabel, ignoreCase = true)) {
                 WAZE.uiDisplayName
             } else {
                 MAPS.uiDisplayName
             }
         } catch (e: Exception) {
-            Log.e(TAG, e.message)
-        } finally {
-            return mapAppName
+            e.printStackTrace()
+            "Not Found"
         }
     }
 

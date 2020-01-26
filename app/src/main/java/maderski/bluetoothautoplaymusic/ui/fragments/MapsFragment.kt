@@ -17,7 +17,7 @@ import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
@@ -31,7 +31,7 @@ class MapsFragment : Fragment() {
     }
 
     private val preferences: BAPMPreferences by inject()
-    private val launchAppHelper: LaunchAppHelper by inject()
+    private val launchHelper: LaunchHelper by inject()
 
     private val mMapChoicesAvailable = ArrayList<String>()
     private var mCanLaunchDirections = false
@@ -81,7 +81,7 @@ class MapsFragment : Fragment() {
         textView.typeface = typeface_bold
 
         mMapChoicesAvailable.add(MAPS.packageName)
-        val wazeInstalled = launchAppHelper.isAbleToLaunch(WAZE.packageName)
+        val wazeInstalled = launchHelper.isAbleToLaunch(WAZE.packageName)
         if (wazeInstalled) {
             mMapChoicesAvailable.add(WAZE.packageName)
         }

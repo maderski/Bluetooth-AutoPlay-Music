@@ -7,7 +7,7 @@ import maderski.bluetoothautoplaymusic.controls.KeyEventControl
 import maderski.bluetoothautoplaymusic.controls.playattempters.BasicPlayAttempter
 import maderski.bluetoothautoplaymusic.controls.playattempters.PlayTaskHolder
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
-import maderski.bluetoothautoplaymusic.helpers.LaunchAppHelper
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaControllerHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaSessionTokenHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -16,7 +16,7 @@ class MediaPlayerControlManager(
         context: Context,
         mediaSessionTokenHelper: MediaSessionTokenHelper,
         preferences: BAPMPreferences,
-        private val launchAppHelper: LaunchAppHelper,
+        private val launchHelper: LaunchHelper,
         private val keyEventControl: KeyEventControl,
         private val playAttempter: BasicPlayAttempter
 ) : MediaControllerHelper.PlayBackStateCallback {
@@ -45,7 +45,7 @@ class MediaPlayerControlManager(
         val thirdAttempt = PlayTaskHolder {
             if (!audioManager.isMusicActive) {
                 Log.d(TAG, "ATTEMPT LAUNCHING APP")
-                launchAppHelper.launchApp(selectedMusicPlayerPackageName)
+                launchHelper.launchApp(selectedMusicPlayerPackageName)
             } else {
                 playAttempter.cancelPlayAgain()
             }

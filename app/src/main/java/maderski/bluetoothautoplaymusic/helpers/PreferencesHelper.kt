@@ -1,7 +1,6 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothProfile
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences

@@ -14,6 +14,8 @@ import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
+import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
@@ -32,7 +34,8 @@ object KoinModules {
             helperModules,
             notificationModule,
             permissionModule,
-            btActionsModule
+            btActionsModule,
+            launcherModule
     )
 }
 
@@ -68,7 +71,7 @@ val helperModules = module {
     single { PackageHelper(androidContext()) }
     single { PowerHelper(androidContext()) }
     single { TelephoneHelper(get(), get(), get(), get()) }
-    single { LaunchAppHelper(androidContext(), get(), get()) }
+    single { LaunchHelper(androidContext(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
     single { PowerConnectedHelper(androidContext(), get(), get(), get()) }
@@ -89,5 +92,9 @@ val btActionsModule = module {
     single { BTDisconnectActions(androidContext()) }
     single { BTConnectActions(androidContext()) }
     single { BTHeadphonesActions(androidContext()) }
+}
+
+val launcherModule = module {
+    single { MapAppLauncher(get(), get()) }
 }
 

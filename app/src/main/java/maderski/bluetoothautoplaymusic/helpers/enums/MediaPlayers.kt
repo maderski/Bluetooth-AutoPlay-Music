@@ -21,6 +21,8 @@ enum class MediaPlayers(val packageName: String) {
     YOUTUBE_MUSIC("com.google.android.apps.youtube.music"),
     NOT_ON_LIST("not_on_list");
 
+    override fun toString(): String = packageName
+
     companion object {
         fun getEnumForMediaPlayerPkg(packageName: String): MediaPlayers =
                 values().firstOrNull { it.packageName == packageName } ?: NOT_ON_LIST
