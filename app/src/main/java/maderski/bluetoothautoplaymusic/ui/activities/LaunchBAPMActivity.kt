@@ -14,6 +14,7 @@ import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.wrappers.AndroidSystemServicesWrapper
 import org.koin.android.ext.android.inject
 
 class LaunchBAPMActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
     private val screenONLock: ScreenONLock by inject()
     private val launchHelper: LaunchHelper by inject()
     private val firebaseHelper: FirebaseHelper by inject()
+    private val systemServicesWrapper: AndroidSystemServicesWrapper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
             }
         } else {
-            val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            val keyguardManager = systemServicesWrapper.keyguardManager
             keyguardManager.requestDismissKeyguard(this, object : KeyguardManager.KeyguardDismissCallback() {
                 override fun onDismissCancelled() {
                     super.onDismissCancelled()

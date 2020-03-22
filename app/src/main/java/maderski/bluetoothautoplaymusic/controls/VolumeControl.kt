@@ -1,30 +1,21 @@
 package maderski.bluetoothautoplaymusic.controls
 
-import android.content.Context
 import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
-import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
-import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
-
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import maderski.bluetoothautoplaymusic.wrappers.AndroidSystemServicesWrapper
 
 /**
  * Created by Jason on 4/2/16.
  */
 class VolumeControl(
-        androidSystemServicesHelper: AndroidSystemServicesHelper,
+        systemServicesWrapper: AndroidSystemServicesWrapper,
         private val preferencesHelper: PreferencesHelper
 ) {
-    private val audioManager: AudioManager = androidSystemServicesHelper.audioManager
+    private val audioManager: AudioManager = systemServicesWrapper.audioManager
     private val mStreamType: Int =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 AudioManager.STREAM_NOTIFICATION

@@ -7,17 +7,18 @@ import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.wrappers.AndroidSystemServicesWrapper
 
 /**
  * Created by Jason on 6/1/16.
  */
 class TelephoneHelper(
-        androidSystemServicesHelper: AndroidSystemServicesHelper,
+        systemServicesWrapper: AndroidSystemServicesWrapper,
         private val powerHelper: PowerHelper,
         private val btConnectActions: BTConnectActions,
         private val firebaseHelper: FirebaseHelper
 ) {
-    private val telephonyManager = androidSystemServicesHelper.telephonyManager
+    private val telephonyManager = systemServicesWrapper.telephonyManager
     val isOnCall: Boolean
         get() {
             val currentCallState = telephonyManager.callState
