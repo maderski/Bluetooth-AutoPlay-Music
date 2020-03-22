@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothProfile
+import android.bluetooth.BluetoothProfile.*
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
@@ -38,13 +39,13 @@ class BluetoothConnectHelper: KoinComponent {
         }
 
         when (state) {
-            BluetoothProfile.STATE_CONNECTING -> {
+            STATE_CONNECTING -> {
                 Log.d(TAG, "A2DP CONNECTING")
                 // Get Original volume
                 volumeControl.saveOriginalVolume()
                 Log.i(TAG, "Original Media Volume is: " + preferencesHelper.originalMediaVolume.toString())
             }
-            BluetoothProfile.STATE_CONNECTED -> {
+            STATE_CONNECTED -> {
                 Log.d(TAG, "A2DP CONNECTED")
 
                 checkForWifiTurnOffDevice(state, deviceName)
@@ -56,8 +57,8 @@ class BluetoothConnectHelper: KoinComponent {
                     firebaseHelper.connectViaA2DP(deviceName, true)
                 }, 500)
             }
-            BluetoothProfile.STATE_DISCONNECTING -> Log.d(TAG, "A2DP DISCONNECTING")
-            BluetoothProfile.STATE_DISCONNECTED -> {
+            STATE_DISCONNECTING -> Log.d(TAG, "A2DP DISCONNECTING")
+            STATE_DISCONNECTED -> {
                 Log.d(TAG, "A2DP DISCONNECTED")
                 btDisconnectActions(context, deviceName, state)
             }
@@ -96,7 +97,7 @@ class BluetoothConnectHelper: KoinComponent {
         val turnOffWifiDevices = preferencesHelper.turnWifiOffDevices
         if (turnOffWifiDevices.isNotEmpty()) {
             if (turnOffWifiDevices.contains(deviceName)) {
-                val isConnected = state == BluetoothProfile.STATE_CONNECTED
+                val isConnected = state == STATE_CONNECTED
                 preferencesHelper.isWifiOffDevice = isConnected
                 Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: $isConnected")
             }

@@ -32,7 +32,7 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
             if (btDevice != null && action != null) {
                 val btDeviceName = btDevice.name
                 val isASelectedBTDevice = preferencesHelper.isASelectedBTDevice(btDevice)
-                val isAHeadphonesBTDevice = preferencesHelper.isASelectedBTDevice(btDevice)
+                val isAHeadphonesBTDevice = preferencesHelper.isASelectedHeadphonesBT(btDevice)
                 Log.d(TAG, "Device: " + btDeviceName +
                         "\nis SelectedBTDevice: " + java.lang.Boolean.toString(isASelectedBTDevice) +
                         "\nis A Headphone device: " + java.lang.Boolean.toString(isAHeadphonesBTDevice))

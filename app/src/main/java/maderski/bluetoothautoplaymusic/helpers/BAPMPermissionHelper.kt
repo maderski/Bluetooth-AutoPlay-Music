@@ -43,7 +43,7 @@ class BAPMPermissionHelper : PermissionHelper {
         Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").contains(context.packageName)
 
     override fun launchNotificationListenerSettings(activity: Activity) {
-        val launchSettingsIntent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS, Uri.parse("package:${activity.packageName}"))
+        val launchSettingsIntent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
         activity.startActivity(launchSettingsIntent)
     }
 
