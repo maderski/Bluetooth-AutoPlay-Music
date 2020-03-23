@@ -1,26 +1,23 @@
 package maderski.bluetoothautoplaymusic.controls
 
-import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
 import android.os.Build
 import android.util.Log
-import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
-
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import org.koin.core.KoinComponent
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 12/8/15.
  */
 class RingerControl(
-        androidSystemServicesHelper: AndroidSystemServicesHelper,
+        systemServicesWrapper: SystemServicesWrapper,
         private val preferencesHelper: PreferencesHelper) {
 
-    private val audioManager = androidSystemServicesHelper.audioManager
-    private val mNotificationManager = androidSystemServicesHelper.notificationManager
+    private val audioManager = systemServicesWrapper.audioManager
+    private val notificationManager = systemServicesWrapper.notificationManager
 
     //turns phone sounds OFF & initialize AudioManager
     fun soundsOFF() {
@@ -28,9 +25,9 @@ class RingerControl(
         if (!isAlreadySilent) {
             val usePriorityMode = preferencesHelper.priorityMode
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val hasNAPPermission = mNotificationManager.isNotificationPolicyAccessGranted
+                val hasNAPPermission = notificationManager.isNotificationPolicyAccessGranted
                 if (usePriorityMode && hasNAPPermission) {
-                    mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+                    notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
                     Log.d(TAG, "RingerControl: " + "Priority")
                 } else {
                     putPhoneInSilentMode()
@@ -54,7 +51,7 @@ class RingerControl(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasNAPPermission = PermissionUtils.hasNotificationAccessPermission(context)
             if (usePriorityMode && hasNAPPermission) {
-                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
                 Log.d(TAG, "RingerControl: " + "Normal")
             } else {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL

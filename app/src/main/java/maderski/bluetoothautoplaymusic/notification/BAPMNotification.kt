@@ -11,10 +11,9 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.R
-import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
-import org.koin.core.KoinComponent
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 
 /**
@@ -23,9 +22,9 @@ import org.koin.core.KoinComponent
 class BAPMNotification(
         private val context: Context,
         private val preferencesHelper: PreferencesHelper,
-        androidSystemServicesHelper: AndroidSystemServicesHelper
+        systemServicesWrapper: SystemServicesWrapper
 ) {
-    private val nManager = androidSystemServicesHelper.notificationManager
+    private val notificationManager = systemServicesWrapper.notificationManager
 
     //Create notification message for BAPM
     fun bapmMessage(mapChoicePkg: String) {
@@ -90,24 +89,19 @@ class BAPMNotification(
         if (Build.VERSION.SDK_INT > 25) {
             val notificationChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            nManager?.createNotificationChannel(notificationChannel)
+            notificationManager?.createNotificationChannel(notificationChannel)
         }
     }
 
     private fun postNotification(builder: NotificationCompat.Builder) {
-        nManager?.let { notificationManager ->
-            createNotificationChannel()
-            notificationManager.notify(TAG, NOTIFICATION_ID, builder.build())
-        }
+        createNotificationChannel()
+        notificationManager.notify(TAG, NOTIFICATION_ID, builder.build())
     }
 
     //Remove notification that was created by BAPM
     fun removeBAPMMessage() {
-        nManager?.let { notificationManager ->
-            notificationManager.cancel(TAG, NOTIFICATION_ID)
-
-            preferencesHelper.isLaunchBTAPMNotifShowing = false
-        }
+        notificationManager.cancel(TAG, NOTIFICATION_ID)
+        preferencesHelper.isLaunchBTAPMNotifShowing = false
     }
 
     companion object {
