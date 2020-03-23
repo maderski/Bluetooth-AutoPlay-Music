@@ -1,24 +1,26 @@
 package maderski.bluetoothautoplaymusic.controls
 
+import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
 import android.os.Build
 import android.util.Log
+import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.wrappers.AndroidSystemServicesWrapper
+import org.koin.core.KoinComponent
 
 /**
  * Created by Jason on 12/8/15.
  */
 class RingerControl(
-        systemServicesWrapper: AndroidSystemServicesWrapper,
+        androidSystemServicesHelper: AndroidSystemServicesHelper,
         private val preferencesHelper: PreferencesHelper) {
 
-    private val audioManager = systemServicesWrapper.audioManager
-    private val mNotificationManager = systemServicesWrapper.notificationManager
+    private val audioManager = androidSystemServicesHelper.audioManager
+    private val mNotificationManager = androidSystemServicesHelper.notificationManager
 
     //turns phone sounds OFF & initialize AudioManager
     fun soundsOFF() {

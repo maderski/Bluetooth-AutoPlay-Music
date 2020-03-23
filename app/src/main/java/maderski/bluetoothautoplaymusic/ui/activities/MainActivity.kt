@@ -30,7 +30,6 @@ import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.wrappers.AndroidSystemServicesWrapper
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -43,7 +42,6 @@ class MainActivity : AppCompatActivity(),
     private val serviceManager: ServiceManager by inject()
     private val permissionHelper: BAPMPermissionHelper by inject()
     private val mFirebaseHelper: FirebaseHelper by inject()
-    private val systemServicesWrapper: AndroidSystemServicesWrapper by inject()
 
     // Show version of the BAPM App
     private val version: String
@@ -184,7 +182,7 @@ class MainActivity : AppCompatActivity(),
         ) { dialog, _ -> dialog.dismiss() }
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Copy Link"
         ) { _, _ ->
-            val clipboard = systemServicesWrapper.clipboardManager
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("PlayStoreLink",
                     "https://play.google.com/store/apps/details?id=maderski.bluetoothautoplaymusic")
             clipboard.setPrimaryClip(clip)

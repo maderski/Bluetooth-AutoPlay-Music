@@ -16,21 +16,16 @@ import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.wrappers.AndroidSystemServicesWrapper
 
 /**
  * Created by Jason on 7/28/16.
  */
-class PackageHelper(
-        private val context: Context,
-        private val systemServicesWrapper: AndroidSystemServicesWrapper
-) {
+class PackageHelper(private val context: Context) {
     // Get all Installed Packages that are on the device
-    private val allInstalledPackages: List<ApplicationInfo>
-        get() {
-            val packageManager: PackageManager = context.packageManager
-            return packageManager.getInstalledApplications(0).toList()
-        }
+    private val allInstalledPackages: List<ApplicationInfo> get() {
+        val packageManager: PackageManager = context.packageManager
+        return packageManager.getInstalledApplications(0).toList()
+    }
 
     // Launches App that is associated with that package that was put into method
     fun launchPackage(packageName: String) {
@@ -57,7 +52,7 @@ class PackageHelper(
 
     private fun showUnableToLaunchToast(packageName: String) {
         val unableToLaunchMsg = context.getString(R.string.unable_to_launch)
-        val toastMsg = when (packageName) {
+        val toastMsg = when(packageName) {
             MAPS.packageName -> "$unableToLaunchMsg MAPS"
             WAZE.packageName -> "$unableToLaunchMsg WAZE"
             else -> "$unableToLaunchMsg Media Player"
@@ -112,15 +107,15 @@ class PackageHelper(
 
     // Is app running on phone
     fun isAppRunning(packageName: String): Boolean {
-        val activityManager = systemServicesWrapper.activityManager
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val processInfos = activityManager.runningAppProcesses
-        return processInfos.any { processInfo -> processInfo.processName == packageName }
+        return processInfos.any { processInfo-> processInfo.processName == packageName }
     }
 
     fun getCurrentForegroundPackageName(): String {
         val hasUsageStatsPermission = PermissionUtils.hasUsageStatsPermission(context)
         if (hasUsageStatsPermission) {
-            val usageStatsManager = systemServicesWrapper.usageStats
+            val usageStatsManager = context.getSystemService(Service.USAGE_STATS_SERVICE) as UsageStatsManager
             val endTime = System.currentTimeMillis()
             val beginTime = endTime - 1000 * 3600
             val usageEvents = usageStatsManager.queryEvents(beginTime, endTime)

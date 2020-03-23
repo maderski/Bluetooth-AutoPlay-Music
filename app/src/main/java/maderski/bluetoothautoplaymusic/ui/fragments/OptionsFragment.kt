@@ -3,8 +3,10 @@ package maderski.bluetoothautoplaymusic.ui.fragments
 import android.Manifest
 import android.content.Context
 import android.graphics.Typeface
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +23,7 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.helpers.AndroidSystemServicesHelper
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 
