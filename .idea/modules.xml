@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Bluetooth-AutoPlay-Music.iml" filepath="$PROJECT_DIR$/Bluetooth-AutoPlay-Music.iml" group="Bluetooth-AutoPlay-Music" />
+      <module fileurl="file://$PROJECT_DIR$/app/Bluetooth-AutoPlay-Music-app.iml" filepath="$PROJECT_DIR$/app/Bluetooth-AutoPlay-Music-app.iml" group="Bluetooth-AutoPlay-Music/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="bluetooth_autoplay_music/app" />
       <module fileurl="file://$PROJECT_DIR$/bluetooth_autoplay_music.iml" filepath="$PROJECT_DIR$/bluetooth_autoplay_music.iml" group="bluetooth_autoplay_music" />
     </modules>
