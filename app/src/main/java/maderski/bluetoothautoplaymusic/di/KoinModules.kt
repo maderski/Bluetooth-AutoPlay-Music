@@ -21,6 +21,8 @@ import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMSharedPrefsAccess
+import maderski.bluetoothautoplaymusic.wrappers.PackageManagerWrapper
+import maderski.bluetoothautoplaymusic.wrappers.StringResourceWrapper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -70,10 +72,10 @@ val receiverModule = module {
 }
 
 val helperModules = module {
-    single { PackageHelper(androidContext()) }
+    single { PackageHelper(get(), get()) }
     single { PowerHelper(androidContext()) }
     single { TelephoneHelper(get(), get(), get(), get()) }
-    single { LaunchHelper(androidContext(), get()) }
+    single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
     single { PowerConnectedHelper(androidContext(), get(), get(), get()) }
@@ -100,6 +102,8 @@ val launcherModule = module {
 }
 
 val wrapperModule = module {
-    single { SystemServicesWrapper(androidContext()) }
+    factory { SystemServicesWrapper(androidContext()) }
+    factory { PackageManagerWrapper(androidContext()) }
+    factory { StringResourceWrapper(androidContext()) }
 }
 

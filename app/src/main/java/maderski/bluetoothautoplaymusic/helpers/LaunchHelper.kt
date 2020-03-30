@@ -2,11 +2,15 @@ package maderski.bluetoothautoplaymusic.helpers
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
+import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
+import maderski.bluetoothautoplaymusic.wrappers.StringResourceWrapper
 
 
 /**
@@ -14,9 +18,28 @@ import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
  */
 class LaunchHelper(
         private val context: Context,
-        private val packageHelper: PackageHelper
+        private val packageHelper: PackageHelper,
+        private val stringResourceWrapper: StringResourceWrapper
 ) {
-    fun launchApp(packageName: String) = packageHelper.launchPackage(packageName)
+    fun launchApp(packageName: String)  {
+        val launchIntent = packageHelper.getLaunchIntent(packageName)
+        if (launchIntent != null) {
+            context.startActivity(launchIntent)
+        } else {
+            showUnableToLaunchToast(packageName)
+        }
+    }
+
+    fun launchApp(packageName: String, data: Uri, action: String) {
+        val launchIntent = packageHelper.getLaunchIntent(packageName)
+        if (launchIntent != null) {
+            launchIntent.action = action
+            launchIntent.data = data
+            context.startActivity(launchIntent)
+        } else {
+            showUnableToLaunchToast(packageName)
+        }
+    }
 
     fun launchBAPMActivity() {
         val handler = Handler(Looper.getMainLooper())
@@ -38,5 +61,23 @@ class LaunchHelper(
     }
 
     fun isAbleToLaunch(packageName: String) = packageHelper.isPackageOnPhone(packageName)
+
+    private fun showUnableToLaunchToast(packageName: String) {
+        val toastMsg = when(packageName) {
+            MapApps.MAPS.packageName -> stringResourceWrapper.unableToLaunchMaps
+            MapApps.WAZE.packageName -> stringResourceWrapper.unableToLaunchWaze
+            else -> stringResourceWrapper.unableToLaunchMediaPlayer
+        }
+        Toast.makeText(context, toastMsg, Toast.LENGTH_LONG).show()
+    }
+
+    fun sendBroadcast(intent: Intent) = context.sendBroadcast(intent)
+
+    // Is app running on phone
+    fun isAppRunning(packageName: String): Boolean {
+        val activityManager = packageHelper.getActivityManager()
+        val processInfos = activityManager.runningAppProcesses
+        return processInfos.any { processInfo-> processInfo.processName == packageName }
+    }
 }
 

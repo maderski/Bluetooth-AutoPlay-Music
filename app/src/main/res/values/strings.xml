@@ -94,4 +94,7 @@
     <string name="wifi_turned_off">Wifi turned OFF</string>
     <string name="no_music_players_msg">No music players found</string>
     <string name="unable_to_launch">Unable to launch</string>
+    <string name="unable_to_launch_maps">Unable to launch MAPS</string>
+    <string name="unable_to_launch_waze">Unable to launch WAZE</string>
+    <string name="unable_to_launch_media_player">Unable to launch Media Player</string>
 </resources>

@@ -10,7 +10,7 @@ import android.net.wifi.WifiManager
 import android.os.PowerManager
 import android.telephony.TelephonyManager
 
-class SystemServicesWrapper(private val context: Context) {
+class SystemServicesWrapper(context: Context) {
     val usageStats = context.getSystemService(Service.USAGE_STATS_SERVICE) as UsageStatsManager
     val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager

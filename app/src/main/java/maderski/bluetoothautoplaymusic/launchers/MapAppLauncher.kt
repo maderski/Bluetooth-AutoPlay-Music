@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.util.Log
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
@@ -12,11 +13,11 @@ import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
 import java.util.*
 
 class MapAppLauncher(
-        private val packageHelper: PackageHelper,
+        private val launchHelper: LaunchHelper,
         private val preferencesHelper: PreferencesHelper
 ) {
     fun mapsLaunch() {
-        val isMapsRunning = packageHelper.isAppRunning(MapApps.MAPS.packageName)
+        val isMapsRunning = launchHelper.isAppRunning(MapApps.MAPS.packageName)
         val canLaunch = canMapsLaunchNow()
         if (canLaunch && !isMapsRunning) {
             val canLaunchDirections = preferencesHelper.canLaunchDirections
@@ -24,7 +25,7 @@ class MapAppLauncher(
                 val mapAppName = preferencesHelper.mapAppName
                 val directionLocations = getDirectionLocations()
                 val data = getMapsChoiceUri(directionLocations)
-                packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
+                launchHelper.launchApp(mapAppName, data, Intent.ACTION_VIEW)
             } else {
                 determineHowToLaunchMaps()
             }
@@ -41,7 +42,7 @@ class MapAppLauncher(
         } ?: DirectionLocation.NONE
         if (canLaunchDirections && directionLocation != DirectionLocation.NONE) {
             val data = getMapsChoiceUri(directionLocations)
-            packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
+            launchHelper.launchApp(mapAppName, data, Intent.ACTION_VIEW)
         } else {
             determineIfLaunchWithDrivingMode(mapAppName)
         }
@@ -53,9 +54,9 @@ class MapAppLauncher(
         if (canLaunchDrivingMode) {
             Log.d(TAG, "LAUNCH DRIVING MODE")
             val data = Uri.parse("google.navigation:/?free=1&mode=d&entry=fnls")
-            packageHelper.launchPackage(mapAppName, data, Intent.ACTION_VIEW)
+            launchHelper.launchApp(mapAppName, data, Intent.ACTION_VIEW)
         } else {
-            packageHelper.launchPackage(mapAppName)
+            launchHelper.launchApp(mapAppName)
         }
     }
 
@@ -163,7 +164,7 @@ class MapAppLauncher(
             val uri = Uri.parse(uriString)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = uri
-            packageHelper.sendBroadcast(intent)
+            launchHelper.sendBroadcast(intent)
         }
 
         handler.postDelayed(runnable, 4000)
@@ -174,7 +175,7 @@ class MapAppLauncher(
         val runnable = Runnable {
             val intent = Intent()
             intent.action = "Eliran_Close_Intent"
-            packageHelper.sendBroadcast(intent)
+            launchHelper.sendBroadcast(intent)
         }
 
         handler.postDelayed(runnable, 2000)
