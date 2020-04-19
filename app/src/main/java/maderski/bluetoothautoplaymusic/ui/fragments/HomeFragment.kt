@@ -24,7 +24,7 @@ import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.APPLE_MUSIC
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import org.koin.android.ext.android.inject
 import java.util.*
@@ -34,6 +34,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val launchHelper: LaunchHelper by inject()
     private val firebaseHelper: FirebaseHelper by inject()
     private val packageHelper: PackageHelper by inject()
+    private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -103,7 +104,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
         val btDeviceCkBoxLL = view.findViewById<View>(R.id.checkBoxLL) as LinearLayout
         btDeviceCkBoxLL.removeAllViews()
-        val listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(requireActivity())
+        val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
         val noBTDeviceFoundMsg = resources.getString(R.string.no_BT_found)
         val isNoBTDevice = listOfBTDevices.contains(noBTDeviceFoundMsg) || listOfBTDevices.isEmpty()
         if (isNoBTDevice) {

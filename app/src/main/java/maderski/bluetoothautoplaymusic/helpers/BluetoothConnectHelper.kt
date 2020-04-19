@@ -1,21 +1,17 @@
 package maderski.bluetoothautoplaymusic.helpers
 
-import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothProfile.*
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.util.Log
-
+import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
-import maderski.bluetoothautoplaymusic.BuildConfig
+import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
-import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import org.koin.core.KoinComponent
 import org.koin.core.inject

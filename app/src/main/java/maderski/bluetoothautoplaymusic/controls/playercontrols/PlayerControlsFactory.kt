@@ -4,21 +4,26 @@ import android.content.Context
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.players.*
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.*
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-object PlayerControlsFactory {
-    @JvmStatic
-    fun getPlayerControl(context: Context, selectedPlayerPkgName: String): PlayerControls? =
-        when(selectedPlayerPkgName) {
-            SPOTIFY.packageName -> Spotify(context)
-            BEYOND_POD.packageName -> BeyondPod(context)
-            FM_INDIA.packageName -> FMIndia(context, selectedPlayerPkgName)
-            GOOGLE_PLAY_MUSIC.packageName -> GooglePlayMusic(context)
-            PANDORA.packageName -> Pandora(context)
-            else -> {
-                Log.d(TAG, "APP does not have player controls setup")
-                null
+class PlayerControlsFactory(
+        private val context: Context,
+        private val systemServicesWrapper: SystemServicesWrapper
+) {
+    fun getPlayerControl(selectedPlayerPkgName: String): PlayerControls? =
+            when (selectedPlayerPkgName) {
+                SPOTIFY.packageName -> Spotify(context, systemServicesWrapper)
+                BEYOND_POD.packageName -> BeyondPod(context, systemServicesWrapper)
+                FM_INDIA.packageName -> FMIndia(context, systemServicesWrapper, selectedPlayerPkgName)
+                GOOGLE_PLAY_MUSIC.packageName -> GooglePlayMusic(context, systemServicesWrapper)
+                PANDORA.packageName -> Pandora(context, systemServicesWrapper)
+                else -> {
+                    Log.d(TAG, "APP does not have player controls setup")
+                    null
+                }
             }
-        }
 
-    private const val TAG = "PlayerControlsFactory"
+    companion object {
+        private const val TAG = "PlayerControlsFactory"
+    }
 }

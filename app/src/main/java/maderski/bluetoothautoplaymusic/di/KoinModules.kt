@@ -14,6 +14,7 @@ import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
@@ -50,11 +51,20 @@ val prefsModules = module {
 
 val controlModules = module {
     single { ScreenONLock(get()) }
-    single { KeyEventControl(androidContext()) }
+    single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
     single { RingerControl(get(), get()) }
     single { BasicPlayAttempter() }
-    factory { MediaPlayerControlManager(androidContext(), get(), get(), get(), get(), get())}
+    factory { MediaPlayerControlManager(
+            androidContext(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+    ) }
 }
 
 val firebaseModule = module {
@@ -62,7 +72,7 @@ val firebaseModule = module {
 }
 
 val serviceModule = module {
-    single { ServiceManager(androidContext()) }
+    single { ServiceManager(androidContext(), get()) }
 }
 
 val receiverModule = module {
@@ -78,9 +88,11 @@ val helperModules = module {
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext()) }
     single { BluetoothConnectHelper() }
-    single { PowerConnectedHelper(androidContext(), get(), get(), get()) }
+    single { PowerConnectedHelper(get(), get(), get(), get()) }
     single { PreferencesHelper(get(), get()) }
     single { HeadphonesConnectHelper() }
+    single { ToastHelper(androidContext()) }
+    single { BluetoothDeviceHelper(get(), get()) }
 }
 
 val notificationModule = module {
@@ -92,8 +104,37 @@ val permissionModule = module {
 }
 
 val btActionsModule = module {
-    single { BTDisconnectActions(androidContext()) }
-    single { BTConnectActions(androidContext()) }
+    single {
+        BTDisconnectActions(
+                androidContext(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get()
+        )
+    }
+    single {
+        BTConnectActions(
+                androidContext(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get()
+        )
+    }
     single { BTHeadphonesActions(androidContext()) }
 }
 
@@ -105,5 +146,9 @@ val wrapperModule = module {
     factory { SystemServicesWrapper(androidContext()) }
     factory { PackageManagerWrapper(androidContext()) }
     factory { StringResourceWrapper(androidContext()) }
+}
+
+val factoryModule = module {
+    single { PlayerControlsFactory(androidContext(), get()) }
 }
 

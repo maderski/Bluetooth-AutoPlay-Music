@@ -23,16 +23,18 @@ import org.koin.core.inject
  * Created by Jason on 6/3/17.
  */
 
-class BTDisconnectActions(private val context: Context): KoinComponent {
-    private val mBAPMNotification: BAPMNotification by inject()
-    private val mVolumeControl: VolumeControl by inject()
-    private val launchHelper: LaunchHelper by inject()
-    private val ringerControl: RingerControl by inject()
-    private val mediaPlayerControlManager: MediaPlayerControlManager by inject()
-    private val serviceManager: ServiceManager by inject()
-    private val preferencesHelper: PreferencesHelper by inject()
-    private val mapAppLauncher: MapAppLauncher by inject()
-
+class BTDisconnectActions(
+        private val context: Context,
+        private val mBAPMNotification: BAPMNotification,
+        private val mVolumeControl: VolumeControl,
+        private val launchHelper: LaunchHelper,
+        private val ringerControl: RingerControl,
+        private val mediaPlayerControlManager: MediaPlayerControlManager,
+        private val serviceManager: ServiceManager,
+        private val preferencesHelper: PreferencesHelper,
+        private val mapAppLauncher: MapAppLauncher,
+        private val wifiControl: WifiControl
+) {
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     fun actionsOnBTDisconnect() {
@@ -101,8 +103,8 @@ class BTDisconnectActions(private val context: Context): KoinComponent {
             val directionLocation = if (canLaunch) DirectionLocation.HOME else DirectionLocation.WORK
 
             val canChangeWifiState = !preferencesHelper.isUsingWifiMapTimeSpans || canLaunch && mapAppLauncher.canLaunchOnThisDay(directionLocation)
-            if (canChangeWifiState && !WifiControl.isWifiON(context)) {
-                WifiControl.wifiON(context, true)
+            if (canChangeWifiState && !wifiControl.isWifiON()) {
+                wifiControl.wifiON(true)
             }
             preferencesHelper.isWifiOffDevice = false
         }

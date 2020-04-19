@@ -15,12 +15,15 @@ import androidx.core.widget.CompoundButtonCompat
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 import org.koin.android.ext.android.inject
 import java.util.*
 
 class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
     private val preferences: BAPMPreferences by inject()
+    private val systemServicesWrapper: SystemServicesWrapper by inject()
+    private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
 
     private val removedDevices = HashSet<String>()
     private val nonHeadphoneDevices: Set<String>
@@ -45,7 +48,7 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
         val rootView = inflater.inflate(R.layout.fragment_headphones, container, false)
         checkboxCreator(rootView)
 
-        val audioManager = requireActivity().getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val audioManager = systemServicesWrapper.audioManager
         val volumeSeekBar = rootView.findViewById<View>(R.id.volume_seekBar) as SeekBar
         volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         volumeSeekBar.progress = preferences.getHeadphonePreferredVolume()
@@ -87,7 +90,7 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
 
         val autoplayCkBoxLL = view.findViewById<View>(R.id.autoplay_only_ll) as LinearLayout
         autoplayCkBoxLL.removeAllViews()
-        val listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(requireActivity())
+        val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
         if (listOfBTDevices.contains("No Bluetooth Device found") || listOfBTDevices.isEmpty()) {
             textView = TextView(activity)
             textView.setText(R.string.no_BT_found)

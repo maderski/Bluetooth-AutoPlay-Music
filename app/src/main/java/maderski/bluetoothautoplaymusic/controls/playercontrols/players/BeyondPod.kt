@@ -4,8 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class BeyondPod(context: Context) : PlayerControls(context) {
+class BeyondPod(
+        private val context: Context,
+        systemServicesWrapper: SystemServicesWrapper
+) : PlayerControls(systemServicesWrapper) {
     override fun play() {
         Log.d(TAG, "Play Music")
         val intent = Intent()

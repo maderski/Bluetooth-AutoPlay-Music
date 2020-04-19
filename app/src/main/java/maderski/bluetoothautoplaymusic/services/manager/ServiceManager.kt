@@ -8,8 +8,12 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class ServiceManager (private val context: Context) {
+class ServiceManager(
+        private val context: Context,
+        private val systemServicesWrapper: SystemServicesWrapper
+) {
 
     fun startService(serviceClass: Class<*>, tag: String) {
         val intent = Intent(context, serviceClass)
@@ -33,7 +37,7 @@ class ServiceManager (private val context: Context) {
     }
 
     fun isServiceRunning(serviceClass: Class<*>): Boolean {
-        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val activityManager = systemServicesWrapper.activityManager
         val services = activityManager.getRunningServices(Integer.MAX_VALUE)
 
         return services.any { runningServiceInfo ->

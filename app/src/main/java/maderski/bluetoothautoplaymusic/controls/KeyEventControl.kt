@@ -4,9 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.view.KeyEvent
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class KeyEventControl(private val context: Context) {
-    private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+class KeyEventControl(
+        private val context: Context, systemServicesWrapper: SystemServicesWrapper
+) {
+    private val audioManager: AudioManager = systemServicesWrapper.audioManager
 
     @Synchronized
     fun playKeyEvent() {

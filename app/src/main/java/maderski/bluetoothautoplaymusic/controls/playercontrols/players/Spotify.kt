@@ -7,8 +7,12 @@ import android.util.Log
 import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.SPOTIFY
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class Spotify(context: Context) : PlayerControls(context) {
+class Spotify(
+        private val context: Context,
+        systemServicesWrapper: SystemServicesWrapper
+) : PlayerControls(systemServicesWrapper) {
 
     override fun play() {
         Log.d(TAG, "Play Music")
@@ -23,7 +27,6 @@ class Spotify(context: Context) : PlayerControls(context) {
         upIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
         upIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY))
         context.sendOrderedBroadcast(upIntent, null)
-
     }
 
     companion object {

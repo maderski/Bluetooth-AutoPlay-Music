@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.view.KeyEvent
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 8/1/16.
  */
-abstract class PlayerControls(val context: Context) {
+abstract class PlayerControls(systemServicesWrapper: SystemServicesWrapper) {
 
-    private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val audioManager: AudioManager = systemServicesWrapper.audioManager
 
     abstract fun play()
 
@@ -41,7 +42,7 @@ abstract class PlayerControls(val context: Context) {
         audioManager.dispatchMediaKeyEvent(upEvent)
     }
 
-    fun playMediaButton(packageName: String) {
+    fun playMediaButton(context: Context, packageName: String) {
         val downIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         val downEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY)
         downIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND)

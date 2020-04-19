@@ -1,24 +1,27 @@
 package maderski.bluetoothautoplaymusic.controls
 
-import android.content.Context
-import android.net.wifi.WifiManager
-import android.widget.Toast
-import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.helpers.ToastHelper
+import maderski.bluetoothautoplaymusic.wrappers.StringResourceWrapper
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 2/26/17.
  */
 
-object WifiControl {
-    fun wifiON(context: Context, enable: Boolean) {
-        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+class WifiControl(
+        private val systemServicesWrapper: SystemServicesWrapper,
+        private val stringResourceWrapper: StringResourceWrapper,
+        private val toastHelper: ToastHelper
+) {
+    fun wifiON(enable: Boolean) {
+        val wifiManager = systemServicesWrapper.wifiManager
         wifiManager.isWifiEnabled = enable
-        val toastMessage = if (enable) context.getString(R.string.wifi_turned_on) else context.getString(R.string.wifi_turned_off)
-        Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
+        val toastMessage = if (enable) stringResourceWrapper.wifiTurnedOn else stringResourceWrapper.wifiTurnedOff
+        toastHelper.displayMessage(toastMessage)
     }
 
-    fun isWifiON(context: Context): Boolean {
-        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    fun isWifiON(): Boolean {
+        val wifiManager = systemServicesWrapper.wifiManager
         return wifiManager.isWifiEnabled
     }
 }

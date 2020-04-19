@@ -4,12 +4,16 @@ import android.content.Context
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.*
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class Pandora(context: Context) : PlayerControls(context) {
+class Pandora(
+        private val context: Context,
+        systemServicesWrapper: SystemServicesWrapper
+) : PlayerControls(systemServicesWrapper) {
 
     override fun play() {
         Log.d(TAG, "Play Music")
-        playMediaButton(PANDORA.packageName)
+        playMediaButton(context, PANDORA.packageName)
         playKeyEvent()
     }
 

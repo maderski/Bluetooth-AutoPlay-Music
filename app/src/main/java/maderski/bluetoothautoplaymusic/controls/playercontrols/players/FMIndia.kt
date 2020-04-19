@@ -6,8 +6,13 @@ import android.util.Log
 import android.view.KeyEvent
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class FMIndia(context: Context, private val packageName: String) : PlayerControls(context) {
+class FMIndia(
+        private val context: Context,
+        systemServicesWrapper: SystemServicesWrapper,
+        private val packageName: String
+) : PlayerControls(systemServicesWrapper) {
 
     override fun play() {
         Log.d(TAG, "Play Music")

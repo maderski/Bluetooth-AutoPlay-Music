@@ -5,8 +5,12 @@ import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControls
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MUSIC
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class GooglePlayMusic(context: Context) : PlayerControls(context) {
+class GooglePlayMusic(
+        private val context: Context,
+        systemServicesWrapper: SystemServicesWrapper
+) : PlayerControls(systemServicesWrapper) {
 
     override fun play() {
         Log.d(TAG, "Play Music")

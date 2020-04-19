@@ -1,25 +1,25 @@
-package maderski.bluetoothautoplaymusic.utils
+package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
 
 import java.util.ArrayList
 
-import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.wrappers.StringResourceWrapper
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 1/14/17.
  */
 
-object BluetoothUtils {
-    const val TAG = "BluetoothDeviceUtils"
-
+class BluetoothDeviceHelper(
+        private val systemServicesWrapper: SystemServicesWrapper,
+        private val stringResourceWrapper: StringResourceWrapper
+) {
     // List of bluetooth devices on the phone
-    fun listOfBluetoothDevices(context: Context): List<String> {
+    fun listOfBluetoothDevices(): List<String> {
         val btDevices = ArrayList<String>()
 
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -30,7 +30,7 @@ object BluetoothUtils {
             for (bt in pairedDevices)
                 btDevices.add(bt.name)
         } else {
-            btDevices.add(0, context.getString(R.string.no_bluetooth_device))
+            btDevices.add(0, stringResourceWrapper.noBluetoothDevice)
         }
 
         return btDevices
@@ -45,8 +45,8 @@ object BluetoothUtils {
         }
     }
 
-    fun isBluetoothA2DPOnCompat(context: Context): Boolean {
-        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    fun isBluetoothA2DPOnCompat(): Boolean {
+        val audioManager = systemServicesWrapper.audioManager
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             audioManager.isBluetoothA2dpOn
         } else {

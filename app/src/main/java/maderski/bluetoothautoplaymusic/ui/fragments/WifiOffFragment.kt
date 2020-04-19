@@ -3,7 +3,6 @@ package maderski.bluetoothautoplaymusic.ui.fragments
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +13,14 @@ import android.widget.TextView
 
 import java.util.HashSet
 
-import maderski.bluetoothautoplaymusic.utils.BluetoothUtils
+import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 
 class WifiOffFragment : androidx.fragment.app.DialogFragment() {
     private val preferences: BAPMPreferences by inject()
+    private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
 
     private var mListener: OnFragmentInteractionListener? = null
 
@@ -62,7 +62,7 @@ class WifiOffFragment : androidx.fragment.app.DialogFragment() {
 
         val wifiOffCkBoxLL = view.findViewById<View>(R.id.wifi_off_ll) as LinearLayout
         wifiOffCkBoxLL.removeAllViews()
-        val listOfBTDevices = BluetoothUtils.listOfBluetoothDevices(fragmentActivity)
+        val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
         if (listOfBTDevices.contains("No Bluetooth Device found") || listOfBTDevices.isEmpty()) {
             textView = TextView(fragmentActivity)
             textView.setText(R.string.no_BT_found)
