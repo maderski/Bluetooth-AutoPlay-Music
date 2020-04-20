@@ -14,7 +14,7 @@ def firebase_crash_version = '16.2.1'
 // lucky cat labs
 def sunrise_sunset_calc_version = '1.2'
 //koin
-def koin_version = '2.0.1'
+def koin_version = '2.1.5'
 // debugging and testing
 def junit_version = '4.12'
 def leakcanary_version = '2.0-alpha-1'
