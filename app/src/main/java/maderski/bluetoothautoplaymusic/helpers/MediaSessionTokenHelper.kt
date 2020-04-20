@@ -6,12 +6,16 @@ import android.media.session.MediaSession
 import android.media.session.MediaSessionManager
 import android.util.Log
 import maderski.bluetoothautoplaymusic.services.BAPMNotificationListenerService
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
-class MediaSessionTokenHelper(private val context: Context) {
+class MediaSessionTokenHelper(
+        private val context: Context,
+        private val systemServicesWrapper: SystemServicesWrapper
+) {
     fun getMediaSessionToken(packageName: String): MediaSession.Token? {
 
         val componentName = ComponentName(context, BAPMNotificationListenerService::class.java)
-        val mediaSessionManager = context.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
+        val mediaSessionManager = systemServicesWrapper.mediaSessionManager
         val activeSessions = mediaSessionManager.getActiveSessions(componentName)
         activeSessions.forEach {
             Log.d(TAG, "MediaController FOUND: ${it.packageName}")

@@ -207,7 +207,7 @@ class BTConnectActions(
 
         if (priorityMode) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, 10)
+                val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, systemServicesWrapper, 10)
                 if (hasDoNotDisturbPerm) {
                     preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
                     ringerControl.soundsOFF()

@@ -72,7 +72,7 @@ class PackageHelper(
     }
 
     fun getCurrentForegroundPackageName(context: Context): String {
-        val hasUsageStatsPermission = PermissionUtils.hasUsageStatsPermission(context)
+        val hasUsageStatsPermission = PermissionUtils.hasUsageStatsPermission(context, systemServicesWrapper)
         if (hasUsageStatsPermission) {
             val usageStatsManager = systemServicesWrapper.usageStats
             val endTime = System.currentTimeMillis()

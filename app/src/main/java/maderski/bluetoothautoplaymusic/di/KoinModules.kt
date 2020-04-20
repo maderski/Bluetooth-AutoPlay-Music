@@ -50,7 +50,7 @@ val prefsModules = module {
 }
 
 val controlModules = module {
-    single { ScreenONLock(get()) }
+    single { ScreenONLock(get(), get()) }
     single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
     single { RingerControl(get(), get()) }
@@ -83,10 +83,10 @@ val receiverModule = module {
 
 val helperModules = module {
     single { PackageHelper(get(), get()) }
-    single { PowerHelper(androidContext()) }
+    single { PowerHelper(androidContext(), get()) }
     single { TelephoneHelper(get(), get(), get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
-    single { MediaSessionTokenHelper(androidContext()) }
+    single { MediaSessionTokenHelper(androidContext(), get()) }
     single { BluetoothConnectHelper() }
     single { PowerConnectedHelper(get(), get(), get(), get()) }
     single { PreferencesHelper(get(), get()) }

@@ -26,6 +26,7 @@ import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.APPLE_MUSIC
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -35,6 +36,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val firebaseHelper: FirebaseHelper by inject()
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
+    private val systemServicesWrapper: SystemServicesWrapper by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -365,7 +367,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             firebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on)
             if (on) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
+                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(),  systemServicesWrapper, 0)
                 }
                 preferences.setPriorityMode(true)
                 Log.d(TAG, "Priority Button is ON")
@@ -383,7 +385,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             firebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on)
             if (on) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(), 0)
+                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(), systemServicesWrapper, 0)
                 }
                 preferences.setMaxVolume(true)
                 Log.d(TAG, "Max Volume Button is ON")

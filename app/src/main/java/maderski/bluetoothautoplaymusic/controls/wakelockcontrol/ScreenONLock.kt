@@ -7,13 +7,17 @@ import android.util.Log
 import java.util.Calendar
 
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 1/5/16.
  */
 
 //Uses the singleton pattern, only want one instance of ScreenONLock
-class ScreenONLock(private val preferences: BAPMPreferences) {
+class ScreenONLock(
+        private val preferences: BAPMPreferences,
+        private val systemServicesWrapper: SystemServicesWrapper
+) {
 
     private var mWakeLock: PowerManager.WakeLock? = null
 
@@ -26,7 +30,7 @@ class ScreenONLock(private val preferences: BAPMPreferences) {
             getManualScreenBrightness(context)
         }
 
-        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val powerManager = systemServicesWrapper.powerManager
         mWakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP or screenBrightness, WAKELOCK_TAG)
 
         try {

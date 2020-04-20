@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringDef
 import androidx.core.app.ActivityCompat
 import maderski.bluetoothautoplaymusic.services.BAPMNotificationListenerService
+import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 9/10/16.
@@ -51,8 +52,12 @@ object PermissionUtils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    fun checkDoNotDisturbPermission(context: Context, seconds: Int): Boolean {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun checkDoNotDisturbPermission(
+            context: Context,
+            systemServicesWrapper: SystemServicesWrapper,
+            seconds: Int
+    ): Boolean {
+        val notificationManager = systemServicesWrapper.notificationManager
         val hasDoNotDisturbPerm = notificationManager.isNotificationPolicyAccessGranted
         if (!hasDoNotDisturbPerm) {
             val milliseconds = (seconds * 1000).toLong()
@@ -74,8 +79,8 @@ object PermissionUtils {
         }
     }
 
-    fun hasUsageStatsPermission(context: Context): Boolean {
-        val appOpsManager = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    fun hasUsageStatsPermission(context: Context, systemServicesWrapper: SystemServicesWrapper): Boolean {
+        val appOpsManager = systemServicesWrapper.appOpsManager
         val mode = appOpsManager.checkOpNoThrow(GET_USAGE_STATS, Process.myUid(), context.packageName)
         return mode == AppOpsManager.MODE_ALLOWED
     }
