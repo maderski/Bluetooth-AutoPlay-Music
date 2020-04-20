@@ -26,7 +26,7 @@ class DisconnectActivity : AppCompatActivity() {
         finish()
     }
 
-    fun sendEverythingToBackground() {
+    private fun sendEverythingToBackground() {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_HOME)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
