@@ -7,6 +7,9 @@ import android.os.IBinder
 import android.util.Log
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.constants.ActionConstants.BT_STATE_CHANGED
+import maderski.bluetoothautoplaymusic.constants.ActionConstants.POWER_CONNECTED
+import maderski.bluetoothautoplaymusic.constants.ActionConstants.POWER_DISCONNECTED
 import maderski.bluetoothautoplaymusic.helpers.PowerConnectedHelper
 import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
@@ -58,9 +61,7 @@ class OnBTConnectService : Service(), KoinComponent {
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
     override fun onDestroy() {
         super.onDestroy()
@@ -76,7 +77,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     private fun registerBTOnStateChangedReceiver() {
         Log.d(TAG, "START BT STATE CHANGED RECEIVER")
-        val btStateChangedFilter = IntentFilter("android.bluetooth.adapter.action.STATE_CHANGED")
+        val btStateChangedFilter = IntentFilter(BT_STATE_CHANGED)
         registerReceiver(btStateChangedReceiver, btStateChangedFilter)
     }
 
@@ -91,8 +92,8 @@ class OnBTConnectService : Service(), KoinComponent {
 
     private fun registerPowerConnectionReceiver() {
         val intentFilter = IntentFilter()
-        intentFilter.addAction("android.intent.action.ACTION_POWER_CONNECTED")
-        intentFilter.addAction("android.intent.action.ACTION_POWER_DISCONNECTED")
+        intentFilter.addAction(POWER_CONNECTED)
+        intentFilter.addAction(POWER_DISCONNECTED)
 
         registerReceiver(powerConnectionReceiver, intentFilter)
     }

@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic.bluetooth.btactions
 
-import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.IntentFilter
@@ -9,23 +8,20 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.WifiControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
+import maderski.bluetoothautoplaymusic.helpers.*
+import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
+import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
-import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
-import maderski.bluetoothautoplaymusic.helpers.*
-import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.services.WakeLockService
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
-import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
-import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * Created by Jason on 6/3/17.
