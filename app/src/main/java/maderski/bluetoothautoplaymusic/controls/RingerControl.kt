@@ -13,8 +13,10 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  * Created by Jason on 12/8/15.
  */
 class RingerControl(
-        systemServicesWrapper: SystemServicesWrapper,
-        private val preferencesHelper: PreferencesHelper) {
+        private val context: Context,
+        private val preferencesHelper: PreferencesHelper,
+        systemServicesWrapper: SystemServicesWrapper
+) {
 
     private val audioManager = systemServicesWrapper.audioManager
     private val notificationManager = systemServicesWrapper.notificationManager
@@ -46,7 +48,7 @@ class RingerControl(
     }
 
     //turns phone sounds ON
-    fun soundsON(context: Context) {
+    fun soundsON() {
         val usePriorityMode = preferencesHelper.priorityMode
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasNAPPermission = PermissionUtils.hasNotificationAccessPermission(context)

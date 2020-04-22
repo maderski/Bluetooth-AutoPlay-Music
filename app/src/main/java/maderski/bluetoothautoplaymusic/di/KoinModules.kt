@@ -53,7 +53,7 @@ val controlModules = module {
     single { ScreenONLock(get(), get()) }
     single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
-    single { RingerControl(get(), get()) }
+    single { RingerControl(androidContext(), get(), get()) }
     single { BasicPlayAttempter() }
     factory { MediaPlayerControlManager(
             androidContext(),
@@ -106,7 +106,6 @@ val permissionModule = module {
 val btActionsModule = module {
     single {
         BTDisconnectActions(
-                androidContext(),
                 get(),
                 get(),
                 get(),

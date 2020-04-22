@@ -24,7 +24,6 @@ import org.koin.core.inject
  */
 
 class BTDisconnectActions(
-        private val context: Context,
         private val mBAPMNotification: BAPMNotification,
         private val mVolumeControl: VolumeControl,
         private val launchHelper: LaunchHelper,
@@ -40,12 +39,12 @@ class BTDisconnectActions(
     fun actionsOnBTDisconnect() {
         removeBAPMNotification()
         pauseMusic()
-        turnOffPriorityMode(ringerControl)
-        closeWaze(launchHelper)
-        setWifiOn(launchHelper)
+        turnOffPriorityMode()
+        closeWaze()
+        setWifiOn()
         stopKeepingScreenOn()
 
-        setVolumeBack(ringerControl)
+        setVolumeBack()
     }
 
     private fun removeBAPMNotification() {
@@ -63,7 +62,7 @@ class BTDisconnectActions(
         }
     }
 
-    private fun turnOffPriorityMode(ringerControl: RingerControl) {
+    private fun turnOffPriorityMode() {
 
         val priorityMode = preferencesHelper.priorityMode
         if (priorityMode) {
@@ -72,16 +71,17 @@ class BTDisconnectActions(
                 when (currentRinger) {
                     AudioManager.RINGER_MODE_SILENT -> Log.d(TAG, "Phone is on Silent")
                     AudioManager.RINGER_MODE_VIBRATE -> ringerControl.vibrateOnly()
-                    AudioManager.RINGER_MODE_NORMAL -> ringerControl.soundsON(context)
+                    AudioManager.RINGER_MODE_NORMAL -> ringerControl.soundsON()
                 }
             } catch (e: Exception) {
-                Log.e(TAG, e.message)
+                e.message?.let {
+                    Log.e(TAG, it)
+                }
             }
-
         }
     }
 
-    private fun closeWaze(launchHelper: LaunchHelper) {
+    private fun closeWaze() {
         val closeWaze = (preferencesHelper.shouldCloseWaze
                 && launchHelper.isAbleToLaunch(WAZE.packageName)
                 && preferencesHelper.mapAppChosen == WAZE.packageName)
@@ -90,7 +90,7 @@ class BTDisconnectActions(
         }
     }
 
-    private fun setWifiOn(launchHelper: LaunchHelper) {
+    private fun setWifiOn() {
         val isWifiOffDevice = preferencesHelper.isWifiOffDevice
         if (isWifiOffDevice) {
             val eveningStartTime = preferencesHelper.eveningStartTime
@@ -117,7 +117,7 @@ class BTDisconnectActions(
         }
     }
 
-    private fun setVolumeBack(ringerControl: RingerControl) {
+    private fun setVolumeBack() {
         val volumeMAX = preferencesHelper.volumeMAX
         val originalVolume = preferencesHelper.originalVolume
 
