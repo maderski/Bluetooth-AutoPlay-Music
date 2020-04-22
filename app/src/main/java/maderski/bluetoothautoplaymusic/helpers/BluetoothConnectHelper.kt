@@ -1,9 +1,12 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothProfile.*
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Handler
+import android.os.IBinder
 import android.util.Log
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
@@ -20,20 +23,19 @@ import org.koin.core.inject
  * Created by Jason on 6/1/17.
  */
 
-class BluetoothConnectHelper: KoinComponent {
-    private val serviceManager: ServiceManager by inject()
-    private val firebaseHelper: FirebaseHelper by inject()
-    private val volumeControl: VolumeControl by inject()
-    private val btConnectActions: BTConnectActions by inject()
-    private val preferencesHelper: PreferencesHelper by inject()
-    private val bapmNotification: BAPMNotification by inject()
-
+class BluetoothConnectHelper(
+        private val serviceManager: ServiceManager,
+        private val firebaseHelper: FirebaseHelper,
+        private val volumeControl: VolumeControl,
+        private val btConnectActions: BTConnectActions,
+        private val preferencesHelper: PreferencesHelper,
+        private val bapmNotification: BAPMNotification
+) : ServiceConnection {
     fun a2dpActions(context: Context, state: Int, deviceName: String) {
         val isHeadphones = preferencesHelper.isHeadphonesDevice
         if (isHeadphones) {
             preferencesHelper.isHeadphonesDevice = false
         }
-
         when (state) {
             STATE_CONNECTING -> {
                 Log.d(TAG, "A2DP CONNECTING")
@@ -43,15 +45,11 @@ class BluetoothConnectHelper: KoinComponent {
             }
             STATE_CONNECTED -> {
                 Log.d(TAG, "A2DP CONNECTED")
+                firebaseHelper.connectViaA2DP(deviceName, true)
 
                 checkForWifiTurnOffDevice(state, deviceName)
 
-                serviceManager.startService(OnBTConnectService::class.java, OnBTConnectService.TAG)
-
-                Handler().postDelayed({
-                    checksBeforeLaunch()
-                    firebaseHelper.connectViaA2DP(deviceName, true)
-                }, 500)
+                serviceManager.startService(OnBTConnectService::class.java, OnBTConnectService.TAG, this)
             }
             STATE_DISCONNECTING -> Log.d(TAG, "A2DP DISCONNECTING")
             STATE_DISCONNECTED -> {
@@ -83,7 +81,6 @@ class BluetoothConnectHelper: KoinComponent {
 
     private fun checksBeforeLaunch() {
         val powerRequired = preferencesHelper.waitTillPowerConnected
-
         if (!powerRequired) {
             btConnectActions.onBTConnect()
         }
@@ -98,6 +95,14 @@ class BluetoothConnectHelper: KoinComponent {
                 Log.d(TAG, "TURN OFF WIFI DEVICE SET TO: $isConnected")
             }
         }
+    }
+
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        checksBeforeLaunch()
+    }
+
+    override fun onServiceDisconnected(name: ComponentName?) {
+        // no-op
     }
 
     companion object {

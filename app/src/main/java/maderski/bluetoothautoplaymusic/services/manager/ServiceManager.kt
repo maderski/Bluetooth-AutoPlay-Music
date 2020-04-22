@@ -2,7 +2,9 @@ package maderski.bluetoothautoplaymusic.services.manager
 
 import android.app.*
 import android.content.Context
+import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -14,15 +16,21 @@ class ServiceManager(
         private val context: Context,
         private val systemServicesWrapper: SystemServicesWrapper
 ) {
+    private val tagToServiceConnectionMap = mutableMapOf<String, ServiceConnection>()
 
-    fun startService(serviceClass: Class<*>, tag: String) {
+    fun startService(serviceClass: Class<*>, tag: String, serviceConnection: ServiceConnection? = null) {
         val intent = Intent(context, serviceClass)
         intent.addCategory(tag)
-
+        // Start Foreground Service
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             context.startService(intent)
         } else {
             ContextCompat.startForegroundService(context, intent)
+        }
+        // If a Service Connection Callback is present add it
+        serviceConnection?.let {
+            tagToServiceConnectionMap[tag] = it
+            context.bindService(intent, it, BIND_AUTO_CREATE)
         }
     }
 
@@ -31,6 +39,12 @@ class ServiceManager(
             val intent = Intent(context, serviceClass)
             intent.addCategory(tag)
             context.stopService(intent)
+
+            val serviceConnection = tagToServiceConnectionMap[tag]
+            serviceConnection?.let {
+                context.unbindService(it)
+                tagToServiceConnectionMap.remove(tag)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
