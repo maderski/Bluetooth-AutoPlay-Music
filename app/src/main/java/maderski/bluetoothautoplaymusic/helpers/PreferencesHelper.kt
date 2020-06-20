@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothDevice
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -53,14 +54,14 @@ class PreferencesHelper(
     val turnWifiOffDevices get() = preferences.getTurnWifiOffDevices()
     val useA2dpHeadphones get() = preferences.getUseA2dpHeadphones()
 
-    private val selectedBTDevices get() = preferences.getBTDevices()
+    private val selectedBAPMDevices get() = preferences.getBAPMDevices()
     private val selectedHeadphoneDevices get() = preferences.getHeadphoneDevices()
 
     fun isASelectedBTDevice(bluetoothDevice: BluetoothDevice): Boolean =
-            selectedBTDevices.contains(bluetoothDevice.name)
+        selectedBAPMDevices.contains(BAPMDevice(bluetoothDevice.name, bluetoothDevice.address))
 
     fun isASelectedHeadphonesBT(bluetoothDevice: BluetoothDevice): Boolean =
-            selectedHeadphoneDevices.contains(bluetoothDevice.name)
+            selectedHeadphoneDevices.contains(BAPMDevice(bluetoothDevice.name, bluetoothDevice.address))
 
     fun getUserSetMaxVolume(deviceMaxVolume: Int): Int = preferences.getUserSetMaxVolume(deviceMaxVolume)
 

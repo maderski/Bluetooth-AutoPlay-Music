@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.sharedprefs
 
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MUSIC
 
@@ -67,7 +68,7 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun getUseTimesToLaunchMaps(): Boolean = sharedPrefsAccess.getBoolean(USE_TIMES_TO_LAUNCH_MAPS, false)
 
     fun setTurnWifiOffDevices(turnWifiOffDevices: MutableSet<String>) = sharedPrefsAccess.putStringSet(TURN_WIFI_OFF_DEVICES, turnWifiOffDevices)
-    fun getTurnWifiOffDevices(): MutableSet<String> = sharedPrefsAccess.getStringSet(TURN_WIFI_OFF_DEVICES, mutableSetOf()) ?: mutableSetOf()
+    fun getTurnWifiOffDevices(): Set<String> = sharedPrefsAccess.getStringSet(TURN_WIFI_OFF_DEVICES, mutableSetOf()) ?: mutableSetOf()
 
     fun setCloseWazeOnDisconnect(enabled: Boolean) = sharedPrefsAccess.putBoolean(CLOSE_WAZE_ON_DISCONNECT, enabled)
     fun getCloseWazeOnDisconnect(): Boolean = sharedPrefsAccess.getBoolean(CLOSE_WAZE_ON_DISCONNECT, true)
@@ -85,13 +86,13 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun getDimTime(): Int = sharedPrefsAccess.getInt(DIM_TIME_KEY, 2000)
 
     fun setCustomDaysToLaunchMaps(customDays: MutableSet<String>) = sharedPrefsAccess.putStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, customDays)
-    fun getCustomDaysToLaunchMaps(): MutableSet<String>? = sharedPrefsAccess.getStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, mutableSetOf())
+    fun getCustomDaysToLaunchMaps(): Set<String>? = sharedPrefsAccess.getStringSet(CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY, mutableSetOf())
 
     fun setWorkDaysToLaunchMaps(_stringSet: MutableSet<String>) = sharedPrefsAccess.putStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, _stringSet)
-    fun getWorkDaysToLaunchMaps(): MutableSet<String>? = sharedPrefsAccess.getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
+    fun getWorkDaysToLaunchMaps(): Set<String>? = sharedPrefsAccess.getStringSet(WORK_DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
 
     fun setHomeDaysToLaunchMaps(_stringSet: MutableSet<String>) = sharedPrefsAccess.putStringSet(DAYS_TO_LAUNCH_MAPS_KEY, _stringSet)
-    fun getHomeDaysToLaunchMaps(): MutableSet<String>? = sharedPrefsAccess.getStringSet(DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
+    fun getHomeDaysToLaunchMaps(): Set<String>? = sharedPrefsAccess.getStringSet(DAYS_TO_LAUNCH_MAPS_KEY, launchDays)
 
     fun setAutoBrightness(enabled: Boolean) = sharedPrefsAccess.putBoolean(AUTO_BRIGHTNESS_KEY, enabled)
     fun getAutoBrightness(): Boolean = sharedPrefsAccess.getBoolean(AUTO_BRIGHTNESS_KEY, false)
@@ -117,12 +118,6 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun setUnlockScreen(enabled: Boolean) = sharedPrefsAccess.putBoolean(UNLOCK_SCREEN_KEY, enabled)
     fun getUnlockScreen(): Boolean = sharedPrefsAccess.getBoolean(UNLOCK_SCREEN_KEY, false)
 
-    fun setHeadphoneDevices(headphoneDevices: MutableSet<String>) = sharedPrefsAccess.putStringSet(HEADPHONE_DEVICES_KEY, headphoneDevices)
-    fun getHeadphoneDevices(): MutableSet<String> = sharedPrefsAccess.getStringSet(HEADPHONE_DEVICES_KEY, mutableSetOf()) ?: mutableSetOf()
-
-    fun setBTDevices(_stringSet: MutableSet<String>) = sharedPrefsAccess.putStringSet(BTDEVICES_KEY, _stringSet)
-    fun getBTDevices(): MutableSet<String> = sharedPrefsAccess.getStringSet(BTDEVICES_KEY, mutableSetOf()) ?: mutableSetOf()
-
     fun setMapsChoice(SelectedMapsApp: String) = sharedPrefsAccess.putString(MAPS_CHOICE_KEY, SelectedMapsApp)
     fun getMapsChoice(): String = sharedPrefsAccess.getString(MAPS_CHOICE_KEY, MAPS.packageName)
 
@@ -138,10 +133,16 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun setWaitTillOffPhone(enabled: Boolean) = sharedPrefsAccess.putBoolean(WAIT_TILL_OFF_PHONE_KEY, enabled)
     fun getWaitTillOffPhone(): Boolean = sharedPrefsAccess.getBoolean(WAIT_TILL_OFF_PHONE_KEY, true)
 
+    fun setHeadphoneDevices(headphoneDevices: Set<BAPMDevice>) = sharedPrefsAccess.putBAPMDeviceSet(HEADPHONE_DEVICES_KEY, headphoneDevices)
+    fun getHeadphoneDevices(): Set<BAPMDevice> = sharedPrefsAccess.getBAPMDeviceSet(HEADPHONE_DEVICES_KEY, setOf())
+
+    fun setBAPMDevices(bapmDevices: Set<BAPMDevice>) = sharedPrefsAccess.putBAPMDeviceSet(BTDEVICES_KEY, bapmDevices)
+    fun getBAPMDevices(): Set<BAPMDevice> = sharedPrefsAccess.getBAPMDeviceSet(BTDEVICES_KEY, setOf())
+
     companion object {
         const val MY_PREFS_NAME = "BAPMPreference"
 
-        //Keys for enabling/disabling things
+        // Keys for enabling/disabling things
         private const val LAUNCH_MAPS_KEY = "googleMaps"
         private const val KEEP_SCREEN_ON_KEY = "keepScreenON"
         private const val PRIORITY_MODE_KEY = "priorityMode"
@@ -149,7 +150,6 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
         private const val LAUNCH_MUSIC_PLAYER_KEY = "launchMusic"
         private const val PKG_SELECTED_MUSIC_PLAYER_KEY = "PkgSelectedMusicPlayer"
         private const val UNLOCK_SCREEN_KEY = "UnlockScreen"
-        private const val BTDEVICES_KEY = "BTDevices"
         private const val MAPS_CHOICE_KEY = "MapsChoice"
         private const val AUTOPLAY_MUSIC_KEY = "AutoPlayMusic"
         private const val POWER_CONNECTED_KEY = "PowerConnected"
@@ -161,7 +161,6 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
         private const val CUSTOM_DAYS_TO_LAUNCH_MAPS_KEY = "CustomDaysToLaunchMaps"
         private const val DIM_TIME_KEY = "DimTime"
         private const val BRIGHT_TIME_KEY = "BrightTime"
-        private const val HEADPHONE_DEVICES_KEY = "HeadphoneDevices"
         private const val HEADPHONE_PREFERRED_VOLUME_KEY = "HeadphonePreferredVolumeKey"
         private const val USER_SET_MAX_VOLUME_KEY = "UserSetMaxVolumeKey"
         private const val CLOSE_WAZE_ON_DISCONNECT = "CloseWazeOnDisconnect"
@@ -184,5 +183,8 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
         private const val UPDATE_HOME_WORK_DAYS_SYNC = "updateHomeDaysSync"
         private const val USE_FIREBASE_ANALYTICS = "UseFirebaseAnalytics"
         private const val ASKED_FIREBASE_OPT_IN = "AskedFirebaseOptIn"
+        // Bluetooth devices
+        private const val HEADPHONE_DEVICES_KEY = "HeadphoneDevicesKey"
+        private const val BTDEVICES_KEY = "BluetoothDevicesKey"
     }
 }

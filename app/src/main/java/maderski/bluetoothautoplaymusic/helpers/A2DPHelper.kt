@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.util.Log
-import maderski.bluetoothautoplaymusic.bluetooth.models.BTDevice
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 
 /**
  * Created by Jason on 6/25/17.
@@ -13,7 +13,7 @@ import maderski.bluetoothautoplaymusic.bluetooth.models.BTDevice
 class A2DPHelper(private val callback: A2DPCallback) : BluetoothProfile.ServiceListener {
 
     interface A2DPCallback {
-        fun connectedDeviceNames(deviceNames: Set<BTDevice>)
+        fun connectedDeviceNames(deviceNames: Set<BAPMDevice>)
     }
 
     // Get List of currently connected bluetooth devices
@@ -24,7 +24,7 @@ class A2DPHelper(private val callback: A2DPCallback) : BluetoothProfile.ServiceL
 
     override fun onServiceConnected(profile: Int, proxy: BluetoothProfile) {
         val deviceNames = proxy.connectedDevices.map{ device ->
-            BTDevice(device.name, device.address)
+            BAPMDevice(device.name, device.address)
         }.toSet()
         Log.d(TAG, "CONNECTED DEVICES: $deviceNames")
         callback.connectedDeviceNames(deviceNames)

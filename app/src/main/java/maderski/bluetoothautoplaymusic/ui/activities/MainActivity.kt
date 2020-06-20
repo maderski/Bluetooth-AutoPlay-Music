@@ -1,8 +1,6 @@
 package maderski.bluetoothautoplaymusic.ui.activities
 
 import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,6 +21,7 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.services.BAPMService
@@ -283,7 +282,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun setHeadphoneDevices(headphoneDevices: HashSet<String>) {
+    override fun setHeadphoneDevices(headphoneDevices: Set<BAPMDevice>) {
         preferences.setHeadphoneDevices(headphoneDevices)
         if (BuildConfig.DEBUG) {
             for (deviceName in headphoneDevices) {
@@ -292,14 +291,11 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun headphonesDoneClicked(removedDevices: HashSet<String>) {
-        val headphoneDevices = preferences.getHeadphoneDevices()
-        val btDevices = preferences.getBTDevices()
-
-        for (deviceName in removedDevices) {
-            if (headphoneDevices.contains(deviceName))
-                headphoneDevices.remove(deviceName)
-        }
+    override fun headphonesDoneClicked(removedDevices: Set<BAPMDevice>) {
+        val headphoneDevices = preferences.getHeadphoneDevices().toMutableSet()
+        val btDevices = preferences.getBAPMDevices().toMutableSet()
+        // remove devices from list that have been unchecked
+        headphoneDevices.removeAll(removedDevices)
 
         if (BuildConfig.DEBUG) {
             for (deviceName in headphoneDevices) {
@@ -308,7 +304,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         btDevices.addAll(headphoneDevices)
-        preferences.setBTDevices(btDevices)
+        preferences.setBAPMDevices(btDevices)
 
         val homeFragment = supportFragmentManager.findFragmentByTag(TAG_HOME_FRAGMENT) as HomeFragment?
         if (homeFragment != null) {

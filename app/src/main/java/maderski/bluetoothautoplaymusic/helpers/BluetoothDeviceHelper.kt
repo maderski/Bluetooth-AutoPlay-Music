@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 
 import java.util.ArrayList
 
@@ -19,21 +20,15 @@ class BluetoothDeviceHelper(
         private val stringResourceWrapper: StringResourceWrapper
 ) {
     // List of bluetooth devices on the phone
-    fun listOfBluetoothDevices(): List<String> {
-        val btDevices = ArrayList<String>()
-
+    fun listOfBluetoothDevices(): List<BAPMDevice> {
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-        if (bluetoothAdapter != null) {
+        return if (bluetoothAdapter != null) {
             val pairedDevices = bluetoothAdapter.bondedDevices
-
-            for (bt in pairedDevices)
-                btDevices.add(bt.name)
+            pairedDevices.map { BAPMDevice(it.name, it.address) }
         } else {
-            btDevices.add(0, stringResourceWrapper.noBluetoothDevice)
+            emptyList()
         }
-
-        return btDevices
     }
 
     fun enableDisabledBluetooth() {

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.CompoundButtonCompat
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
@@ -25,17 +26,13 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
     private val systemServicesWrapper: SystemServicesWrapper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
 
-    private val removedDevices = HashSet<String>()
-    private val nonHeadphoneDevices: Set<String>
+    private val removedDevices = mutableSetOf<BAPMDevice>()
+    private val nonHeadphoneDevices:  Set<BAPMDevice>
         get() {
-            val btDevices = preferences.getBTDevices()
+            val btDevices = preferences.getBAPMDevices().toMutableSet()
             val headphoneDevices = preferences.getHeadphoneDevices()
 
-            for (headphoneDevice in headphoneDevices) {
-                if (btDevices.contains(headphoneDevice)) {
-                    btDevices.remove(headphoneDevice)
-                }
-            }
+            btDevices.removeAll(headphoneDevices)
 
             return btDevices
         }
@@ -91,30 +88,30 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
         val autoplayCkBoxLL = view.findViewById<View>(R.id.autoplay_only_ll) as LinearLayout
         autoplayCkBoxLL.removeAllViews()
         val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
-        if (listOfBTDevices.contains("No Bluetooth Device found") || listOfBTDevices.isEmpty()) {
+        if (listOfBTDevices.isEmpty()) {
             textView = TextView(activity)
             textView.setText(R.string.no_BT_found)
             autoplayCkBoxLL.addView(textView)
         } else {
-            for (BTDevice in listOfBTDevices) {
+            for (bapmDevice in listOfBTDevices) {
                 var textColor = R.color.colorPrimary
                 checkBox = CheckBox(activity)
-                checkBox.text = BTDevice
-                if (nonHeadphoneDevices.contains(BTDevice)) {
+                checkBox.text = bapmDevice.name
+                if (nonHeadphoneDevices.contains(bapmDevice)) {
                     textColor = R.color.lightGray
                     val states = arrayOf(intArrayOf(android.R.attr.state_checked))
                     val colors = intArrayOf(textColor, textColor)
                     CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList(states, colors))
                     checkBox.isClickable = false
                     checkBox.isChecked = true
-                } else if (preferences.getBTDevices().isNotEmpty()) {
-                    checkBox.isChecked = preferences.getHeadphoneDevices().contains(BTDevice)
+                } else if (preferences.getBAPMDevices().isNotEmpty()) {
+                    checkBox.isChecked = preferences.getHeadphoneDevices().contains(bapmDevice)
                 }
                 checkBox.setTextColor(ContextCompat.getColor(requireActivity(), textColor))
                 checkBox.typeface = Typeface.createFromAsset(requireActivity().assets, "fonts/TitilliumText400wt.otf")
 
-                if (!nonHeadphoneDevices.contains(BTDevice)) {
-                    checkboxListener(checkBox, BTDevice)
+                if (!nonHeadphoneDevices.contains(bapmDevice)) {
+                    checkboxListener(checkBox, bapmDevice)
                 }
                 autoplayCkBoxLL.addView(checkBox)
             }
@@ -123,29 +120,29 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
     }
 
     //Get Selected Checkboxes
-    private fun checkboxListener(checkBox: CheckBox, BTDevice: String) {
+    private fun checkboxListener(checkBox: CheckBox, bapmDevice: BAPMDevice) {
 
         checkBox.setOnClickListener {
-            val savedHeadphoneDevices = HashSet(preferences.getHeadphoneDevices())
+            val savedHeadphoneDevices = preferences.getHeadphoneDevices().toMutableSet()
             if (checkBox.isChecked) {
-                savedHeadphoneDevices.add(BTDevice)
-                if (removedDevices.contains(BTDevice)) {
-                    removedDevices.remove(BTDevice)
+                savedHeadphoneDevices.add(bapmDevice)
+                if (removedDevices.contains(bapmDevice)) {
+                    removedDevices.remove(bapmDevice)
                 }
                 if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "TRUE $BTDevice")
+                    Log.i(TAG, "TRUE $bapmDevice")
                     Log.i(TAG, "SAVED")
                 }
             } else {
-                savedHeadphoneDevices.remove(BTDevice)
-                removedDevices.add(BTDevice)
+                savedHeadphoneDevices.remove(bapmDevice)
+                removedDevices.add(bapmDevice)
                 if (BuildConfig.DEBUG)
-                    Log.i(TAG, "FALSE $BTDevice")
+                    Log.i(TAG, "FALSE $bapmDevice")
                 if (BuildConfig.DEBUG)
                     Log.i(TAG, "SAVED")
             }
             fragmentInteractionListener?.setHeadphoneDevices(savedHeadphoneDevices)
-            fragmentInteractionListener?.headDeviceSelection(BTDevice, checkBox.isChecked)
+            fragmentInteractionListener?.headDeviceSelection(bapmDevice.name, checkBox.isChecked)
         }
     }
 
@@ -173,8 +170,8 @@ class HeadphonesFragment : androidx.fragment.app.DialogFragment() {
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
     interface OnFragmentInteractionListener {
-        fun setHeadphoneDevices(headphoneDevices: HashSet<String>)
-        fun headphonesDoneClicked(removedDevices: HashSet<String>)
+        fun setHeadphoneDevices(headphoneDevices:  Set<BAPMDevice>)
+        fun headphonesDoneClicked(removedDevices:  Set<BAPMDevice>)
         fun headDeviceSelection(deviceName: String, addDevice: Boolean)
         fun onUseHeadphonesA2DP(isUsingA2DP: Boolean)
     }

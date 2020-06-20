@@ -63,19 +63,19 @@ class WifiOffFragment : androidx.fragment.app.DialogFragment() {
         val wifiOffCkBoxLL = view.findViewById<View>(R.id.wifi_off_ll) as LinearLayout
         wifiOffCkBoxLL.removeAllViews()
         val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
-        if (listOfBTDevices.contains("No Bluetooth Device found") || listOfBTDevices.isEmpty()) {
+        if (listOfBTDevices.isEmpty()) {
             textView = TextView(fragmentActivity)
             textView.setText(R.string.no_BT_found)
             wifiOffCkBoxLL.addView(textView)
         } else {
-            for (BTDevice in listOfBTDevices) {
+            for (bapmDevice in listOfBTDevices) {
                 val textColor = R.color.colorPrimary
                 checkBox = CheckBox(fragmentActivity)
-                checkBox.text = BTDevice
+                checkBox.text = bapmDevice.name
                 checkBox.setTextColor(resources.getColor(textColor))
                 checkBox.typeface = Typeface.createFromAsset(fragmentActivity.assets, "fonts/TitilliumText400wt.otf")
-                checkBox.isChecked = preferences.getTurnWifiOffDevices().contains(BTDevice)
-                checkboxListener(fragmentActivity, checkBox, BTDevice)
+                checkBox.isChecked = preferences.getTurnWifiOffDevices().contains(bapmDevice.name)
+                checkboxListener(fragmentActivity, checkBox, bapmDevice.name)
                 wifiOffCkBoxLL.addView(checkBox)
             }
         }

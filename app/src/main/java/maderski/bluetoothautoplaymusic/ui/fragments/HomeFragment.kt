@@ -18,6 +18,7 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
+import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
@@ -107,9 +108,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val btDeviceCkBoxLL = view.findViewById<View>(R.id.checkBoxLL) as LinearLayout
         btDeviceCkBoxLL.removeAllViews()
         val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
-        val noBTDeviceFoundMsg = resources.getString(R.string.no_BT_found)
-        val isNoBTDevice = listOfBTDevices.contains(noBTDeviceFoundMsg) || listOfBTDevices.isEmpty()
-        if (isNoBTDevice) {
+        if (listOfBTDevices.isEmpty()) {
             textView = TextView(context)
             textView.setText(R.string.no_BT_found)
             btDeviceCkBoxLL.addView(textView)
@@ -117,7 +116,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             listOfBTDevices.forEach { btDevice ->
                 var textColor = R.color.colorPrimary
                 checkBox = CheckBox(context)
-                checkBox.text = btDevice
+                checkBox.text = btDevice.name
 
                 val isHeadphonesDevice = preferences.getHeadphoneDevices().contains(btDevice)
                 if (isHeadphonesDevice) {
@@ -128,7 +127,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                     checkBox.isClickable = false
                     checkBox.isChecked = true
                 } else {
-                    val isSelectedBTDevice = preferences.getBTDevices().contains(btDevice)
+                    val isSelectedBTDevice = preferences.getHeadphoneDevices().contains(btDevice)
                     checkBox.isChecked = isSelectedBTDevice
                     checkboxListener(checkBox, btDevice)
                 }
@@ -142,30 +141,30 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     }
 
     //Get Selected Checkboxes
-    private fun checkboxListener(checkBox: CheckBox, BTDevice: String) {
+    private fun checkboxListener(checkBox: CheckBox, bapmDevice: BAPMDevice) {
 
-        val saveBTDevices = HashSet(preferences.getBTDevices())
+        val saveBTDevices = preferences.getBAPMDevices().toMutableSet()
 
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
-                saveBTDevices.add(BTDevice)
+                saveBTDevices.add(bapmDevice)
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "TRUE $BTDevice")
+                    Log.d(TAG, "TRUE $bapmDevice")
                 }
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "SAVED")
                 }
             } else {
-                saveBTDevices.remove(BTDevice)
+                saveBTDevices.remove(bapmDevice)
                 if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "FALSE $BTDevice")
+                    Log.d(TAG, "FALSE $bapmDevice")
                 }
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "SAVED")
                 }
             }
-            preferences.setBTDevices(saveBTDevices)
-            firebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, BTDevice, checkBox.isChecked)
+            preferences.setBAPMDevices(saveBTDevices)
+            firebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, bapmDevice.name, checkBox.isChecked)
         }
     }
 
@@ -219,7 +218,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         if (packageName == APPLE_MUSIC.packageName) {
             val autoplayOnly = preferences.getHeadphoneDevices()
             if (autoplayOnly.isNotEmpty()) {
-                preferences.setHeadphoneDevices(HashSet())
+                preferences.setHeadphoneDevices(emptySet())
                 checkboxCreator(view, requireActivity())
                 Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show()
             }

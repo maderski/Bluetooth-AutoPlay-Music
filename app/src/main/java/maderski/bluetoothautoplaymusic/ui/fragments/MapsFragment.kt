@@ -305,20 +305,20 @@ class MapsFragment : Fragment() {
 
         when (linearLayoutId) {
             R.id.ll_home_chk_boxes -> {
-                daysToLaunchSet = preferences.getHomeDaysToLaunchMaps() ?: mutableSetOf()
+                daysToLaunchSet = preferences.getHomeDaysToLaunchMaps()?.toMutableSet() ?: mutableSetOf()
 
                 val checkboxLabelText = if (mCanLaunchDirections) "Home" else "Evening"
                 val checkboxLabel = view.findViewById<View>(R.id.tv_home_location_label) as TextView
                 checkboxLabel.text = checkboxLabelText
             }
             R.id.ll_work_days_chk_boxes -> {
-                daysToLaunchSet = preferences.getWorkDaysToLaunchMaps() ?: mutableSetOf()
+                daysToLaunchSet = preferences.getWorkDaysToLaunchMaps()?.toMutableSet() ?: mutableSetOf()
 
                 val checkboxLabelText = if (mCanLaunchDirections) "Work" else "Morning"
                 val checkboxLabel = view.findViewById<View>(R.id.tv_work_location_label) as TextView
                 checkboxLabel.text = checkboxLabelText
             }
-            else -> daysToLaunchSet = preferences.getCustomDaysToLaunchMaps() ?: mutableSetOf()
+            else -> daysToLaunchSet = preferences.getCustomDaysToLaunchMaps()?.toMutableSet() ?: mutableSetOf()
         }
 
         val params = RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
