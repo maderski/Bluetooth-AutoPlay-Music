@@ -189,26 +189,6 @@
                     android:textSize="12sp" />
 
                 <Switch
-                    android:id="@+id/show_notification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="20dp"
-                    android:switchPadding="100dp"
-                    android:text="@string/show_notification"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/show_notification_explanation"
-                    android:layout_width="264dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/show_notification_explanation"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="12sp" />
-
-                <Switch
                     android:id="@+id/auto_brightness"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -275,61 +255,7 @@
                             android:text="@string/dim_time_button_text"
                             android:textColor="@color/white" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/wifi_off_Label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="20dp"
-                        android:text="@string/wifi_off"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_wifi" />
-
-                        <Button
-                            android:id="@+id/wifi_off_button"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:text="@string/set_devices_to_turn_wifi_off"
-                            android:textColor="@color/colorAccent" />
-                    </LinearLayout>
                 </LinearLayout>
-
-                <Switch
-                    android:id="@+id/wifi_use_time_spans"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="20dp"
-                    android:switchPadding="100dp"
-                    android:text="@string/wifi_off_use_time_spans"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/wifi_use_time_spans_desc"
-                    android:layout_width="264dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/wifi_use_time_spans_caption_morning_evening"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

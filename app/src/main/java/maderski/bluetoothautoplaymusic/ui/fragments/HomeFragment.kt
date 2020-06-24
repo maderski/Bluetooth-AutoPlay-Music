@@ -53,7 +53,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
         mapsToggleButton(rootView)
         launchMusicPlayerToggleButton(rootView)
-        autoplayOnlyButton(rootView)
         keepONToggleButton(rootView)
         priorityToggleButton(rootView)
         volumeMAXToggleButton(rootView)
@@ -114,27 +113,11 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             btDeviceCkBoxLL.addView(textView)
         } else {
             listOfBTDevices.forEach { btDevice ->
-                var textColor = R.color.colorPrimary
-                checkBox = CheckBox(context)
-                checkBox.text = btDevice.name
-
-                val isHeadphonesDevice = preferences.getHeadphoneDevices().contains(btDevice)
-                if (isHeadphonesDevice) {
-                    textColor = R.color.lightGray
-                    val states = arrayOf(intArrayOf(android.R.attr.state_checked))
-                    val colors = intArrayOf(textColor, textColor)
-                    CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList(states, colors))
-                    checkBox.isClickable = false
-                    checkBox.isChecked = true
-                } else {
-                    val isSelectedBTDevice = preferences.getHeadphoneDevices().contains(btDevice)
-                    checkBox.isChecked = isSelectedBTDevice
-                    checkboxListener(checkBox, btDevice)
+                checkBox = CheckBox(context).apply {
+                    text = btDevice.name
+                    setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                    typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
                 }
-
-                checkBox.setTextColor(ContextCompat.getColor(context, textColor))
-                checkBox.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
-
                 btDeviceCkBoxLL.addView(checkBox)
             }
         }
@@ -216,13 +199,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private fun setAppleMusicRequirements(view: View, context: Context, packageName: String) {
         // Set Launch App and Unlock screen to true since it is required by Apple Music to play
         if (packageName == APPLE_MUSIC.packageName) {
-            val autoplayOnly = preferences.getHeadphoneDevices()
-            if (autoplayOnly.isNotEmpty()) {
-                preferences.setHeadphoneDevices(emptySet())
-                checkboxCreator(view, requireActivity())
-                Toast.makeText(getContext(), "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show()
-            }
-
             val launchMusicPlayerToggleButton = view.findViewById<View>(R.id.LaunchMusicPlayerToggleButton) as ToggleButton
             val unlockScreenToggleButton = view.findViewById<View>(R.id.UnlockToggleButton) as ToggleButton
             val launchMapsToggleButton = view.findViewById<View>(R.id.MapsToggleButton) as ToggleButton
@@ -310,21 +286,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             Log.e(TAG, error)
         }
 
-    }
-
-    fun autoplayOnlyButton(view: View) {
-        val autoplayOnlyButton = view.findViewById<View>(R.id.autoplay_only_button) as Button
-        autoplayOnlyButton.setOnClickListener(View.OnClickListener {
-            // Display message that Apple Music not supported by autoplay only
-            if (preferences.getPkgSelectedMusicPlayer() == APPLE_MUSIC.packageName) {
-                Toast.makeText(context, "Autoplay ONLY not supported with Apple Music", Toast.LENGTH_LONG).show()
-                return@OnClickListener
-            }
-
-            firebaseHelper.selectionMade(SelectionConstants.SET_AUTOPLAY_ONLY)
-            val newFragment = HeadphonesFragment.newInstance()
-            newFragment.show(requireActivity().supportFragmentManager, "autoplayOnlyFragment")
-        })
     }
 
     //***Toggle button actions are below, basically set SharedPref value for specified button***

@@ -11,10 +11,8 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
-import maderski.bluetoothautoplaymusic.controls.WifiControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.helpers.*
-import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
@@ -39,8 +37,7 @@ class BTConnectActions(
         private val preferencesHelper: PreferencesHelper,
         private val ringerControl: RingerControl,
         private val mapAppLauncher: MapAppLauncher,
-        private val systemServicesWrapper: SystemServicesWrapper,
-        private val wifiControl: WifiControl
+        private val systemServicesWrapper: SystemServicesWrapper
 ) {
     fun onBTConnect() {
         val waitTillOffPhone = preferencesHelper.waitTillOffPhone
@@ -81,7 +78,6 @@ class BTConnectActions(
             launchMusicPlayer()
             launchMapApp()
             autoPlayMusic()
-            setWifiOff()
             putPhoneInDoNotDisturb()
         }
 
@@ -121,7 +117,6 @@ class BTConnectActions(
         launchMusicPlayer()
         launchMapApp()
         autoPlayMusic()
-        setWifiOff()
         putPhoneInDoNotDisturb()
     }
 
@@ -179,25 +174,6 @@ class BTConnectActions(
         }
     }
 
-    private fun setWifiOff() {
-        val isWifiOffDevice = preferencesHelper.isWifiOffDevice
-        if (isWifiOffDevice) {
-            val morningStartTime = preferencesHelper.morningStartTime
-            val morningEndTime = preferencesHelper.morningEndTime
-
-            val current24hrTime = TimeHelper.current24hrTime
-
-            val timeHelperMorning = TimeHelper(morningStartTime, morningEndTime, current24hrTime)
-            val canLaunch = timeHelperMorning.isWithinTimeSpan
-            val directionLocation = if (canLaunch) DirectionLocation.WORK else DirectionLocation.HOME
-
-            val canChangeWifiState = !preferencesHelper.isUsingWifiMapTimeSpans || canLaunch && mapAppLauncher.canLaunchOnThisDay(directionLocation)
-            if (canChangeWifiState && wifiControl.isWifiON()) {
-                wifiControl.wifiON(false)
-            }
-        }
-    }
-
     private fun putPhoneInDoNotDisturb() {
         val priorityMode = preferencesHelper.priorityMode
 
@@ -205,7 +181,7 @@ class BTConnectActions(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, systemServicesWrapper, 10)
                 if (hasDoNotDisturbPerm) {
-                    preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
+                    ringerControl.saveCurrentRingerSetting()
                     ringerControl.soundsOFF()
                 } else {
                     val broadcastReceiver = NotifPolicyAccessChangedReceiver()
@@ -213,7 +189,7 @@ class BTConnectActions(
                     context.applicationContext.registerReceiver(broadcastReceiver, intentFilter)
                 }
             } else {
-                preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
+                ringerControl.saveCurrentRingerSetting()
                 ringerControl.soundsOFF()
             }
         }

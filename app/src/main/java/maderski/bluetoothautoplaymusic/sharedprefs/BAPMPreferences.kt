@@ -34,9 +34,6 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun setRestoreNotificationVolume(enable: Boolean) = sharedPrefsAccess.putBoolean(RESTORE_NOTIFICATION_VOLUME_KEY, enable)
     fun getRestoreNotificationVolume(): Boolean = sharedPrefsAccess.getBoolean(RESTORE_NOTIFICATION_VOLUME_KEY, true)
 
-    fun setWifiUseMapTimeSpans(enable: Boolean) = sharedPrefsAccess.putBoolean(WIFI_USE_MAP_TIME_SPANS, enable)
-    fun getWifiUseMapTimeSpans(): Boolean = sharedPrefsAccess.getBoolean(WIFI_USE_MAP_TIME_SPANS, false)
-
     fun setCanLaunchDirections(enable: Boolean) = sharedPrefsAccess.putBoolean(LAUNCH_DIRECTIONS, enable)
     fun getCanLaunchDirections(): Boolean = sharedPrefsAccess.getBoolean(LAUNCH_DIRECTIONS, false)
 
@@ -67,17 +64,11 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun setUseTimesToLaunchMaps(enabled: Boolean) = sharedPrefsAccess.putBoolean(USE_TIMES_TO_LAUNCH_MAPS, enabled)
     fun getUseTimesToLaunchMaps(): Boolean = sharedPrefsAccess.getBoolean(USE_TIMES_TO_LAUNCH_MAPS, false)
 
-    fun setTurnWifiOffDevices(turnWifiOffDevices: MutableSet<String>) = sharedPrefsAccess.putStringSet(TURN_WIFI_OFF_DEVICES, turnWifiOffDevices)
-    fun getTurnWifiOffDevices(): Set<String> = sharedPrefsAccess.getStringSet(TURN_WIFI_OFF_DEVICES, mutableSetOf()) ?: mutableSetOf()
-
     fun setCloseWazeOnDisconnect(enabled: Boolean) = sharedPrefsAccess.putBoolean(CLOSE_WAZE_ON_DISCONNECT, enabled)
     fun getCloseWazeOnDisconnect(): Boolean = sharedPrefsAccess.getBoolean(CLOSE_WAZE_ON_DISCONNECT, true)
 
     fun setUserSetMaxVolume(volume: Int) = sharedPrefsAccess.putInt(USER_SET_MAX_VOLUME_KEY, volume)
     fun getUserSetMaxVolume(deviceMaxVolume: Int): Int = sharedPrefsAccess.getInt(USER_SET_MAX_VOLUME_KEY, deviceMaxVolume)
-
-    fun setHeadphonePreferredVolume(volume: Int) = sharedPrefsAccess.putInt(HEADPHONE_PREFERRED_VOLUME_KEY, volume)
-    fun getHeadphonePreferredVolume(): Int = sharedPrefsAccess.getInt(HEADPHONE_PREFERRED_VOLUME_KEY, 7)
 
     fun setBrightTime(time: Int) = sharedPrefsAccess.putInt(BRIGHT_TIME_KEY, time)
     fun getBrightTime(): Int = sharedPrefsAccess.getInt(BRIGHT_TIME_KEY, 700)
@@ -132,9 +123,6 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
 
     fun setWaitTillOffPhone(enabled: Boolean) = sharedPrefsAccess.putBoolean(WAIT_TILL_OFF_PHONE_KEY, enabled)
     fun getWaitTillOffPhone(): Boolean = sharedPrefsAccess.getBoolean(WAIT_TILL_OFF_PHONE_KEY, true)
-
-    fun setHeadphoneDevices(headphoneDevices: Set<BAPMDevice>) = sharedPrefsAccess.putBAPMDeviceSet(HEADPHONE_DEVICES_KEY, headphoneDevices)
-    fun getHeadphoneDevices(): Set<BAPMDevice> = sharedPrefsAccess.getBAPMDeviceSet(HEADPHONE_DEVICES_KEY, setOf())
 
     fun setBAPMDevices(bapmDevices: Set<BAPMDevice>) = sharedPrefsAccess.putBAPMDeviceSet(BTDEVICES_KEY, bapmDevices)
     fun getBAPMDevices(): Set<BAPMDevice> = sharedPrefsAccess.getBAPMDeviceSet(BTDEVICES_KEY, setOf())

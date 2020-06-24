@@ -1,21 +1,19 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothDevice
-import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class PreferencesHelper(
-        private val preferences: BAPMPreferences,
-        private val dataPreferences: BAPMDataPreferences
+        private val preferences: BAPMPreferences
 ) {
     // BAPM Preferences
     val mapAppChosen get() = preferences.getMapsChoice()
     val customLocationName get() = preferences.getCustomLocationName()
     val canLaunchDirections get() = preferences.getCanLaunchDirections()
-    val canLaunchDrivingMode get() = preferences.getLaunchMapsDrivingMode() &&
-            mapAppName == MapApps.MAPS.packageName
+    val canLaunchDrivingMode
+        get() = preferences.getLaunchMapsDrivingMode() &&
+                mapAppName == MapApps.MAPS.packageName
     val isLaunchingWithDirections get() = preferences.getCanLaunchDirections()
     val isUsingTimesToLaunch get() = preferences.getUseTimesToLaunchMaps()
 
@@ -45,40 +43,21 @@ class PreferencesHelper(
     val canAutoPlayMusic get() = preferences.getAutoPlayMusic()
     val isLaunchingMusicPlayer get() = preferences.getLaunchMusicPlayer()
     val isLaunchingMaps get() = preferences.getLaunchGoogleMaps()
-    val isUsingWifiMapTimeSpans get() = preferences.getWifiUseMapTimeSpans()
     val priorityMode get() = preferences.getPriorityMode()
     val shouldCloseWaze get() = preferences.getCloseWazeOnDisconnect()
     val originalVolume get() = preferences.getRestoreNotificationVolume()
-    val headphoneVolume get() = preferences.getHeadphonePreferredVolume()
     val waitTillPowerConnected = preferences.getPowerConnected()
-    val turnWifiOffDevices get() = preferences.getTurnWifiOffDevices()
-    val useA2dpHeadphones get() = preferences.getUseA2dpHeadphones()
 
     private val selectedBAPMDevices get() = preferences.getBAPMDevices()
-    private val selectedHeadphoneDevices get() = preferences.getHeadphoneDevices()
 
-    fun isASelectedBTDevice(bluetoothDevice: BluetoothDevice): Boolean =
-        selectedBAPMDevices.contains(BAPMDevice(bluetoothDevice.name, bluetoothDevice.address))
-
-    fun isASelectedHeadphonesBT(bluetoothDevice: BluetoothDevice): Boolean =
-            selectedHeadphoneDevices.contains(BAPMDevice(bluetoothDevice.name, bluetoothDevice.address))
+    fun isASelectedBTDevice(bluetoothDevice: BluetoothDevice?): Boolean =
+            if (bluetoothDevice == null) {
+                false
+            } else {
+                selectedBAPMDevices.any {
+                    it.name == bluetoothDevice.name && it.macAddress == bluetoothDevice.address
+                }
+            }
 
     fun getUserSetMaxVolume(deviceMaxVolume: Int): Int = preferences.getUserSetMaxVolume(deviceMaxVolume)
-
-    // BAPM Data Preferences
-    var originalMediaVolume
-        get() = dataPreferences.getOriginalMediaVolume()
-        set(value) = dataPreferences.setOriginalMediaVolume(value)
-    var isWifiOffDevice
-        get() = dataPreferences.getIsTurnOffWifiDevice()
-        set(value) = dataPreferences.setIsTurnOffWifiDevice(value)
-    var currentRingerSet
-        get() = dataPreferences.getCurrentRingerSet()
-        set(value) = dataPreferences.setCurrentRingerSet(value)
-    var isHeadphonesDevice
-        get() = dataPreferences.getIsAHeadphonesDevice()
-        set(value) = dataPreferences.setIsHeadphonesDevice(value)
-    var isLaunchBTAPMNotifShowing
-        get() = dataPreferences.getLaunchNotifPresent()
-        set(value) = dataPreferences.setLaunchNotifPresent(value)
 }

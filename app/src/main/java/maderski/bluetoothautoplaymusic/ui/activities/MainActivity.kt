@@ -34,9 +34,7 @@ import org.koin.android.ext.android.inject
 import java.util.*
 
 class MainActivity : AppCompatActivity(),
-        HeadphonesFragment.OnFragmentInteractionListener,
         TimePickerFragment.TimePickerDialogListener,
-        WifiOffFragment.OnFragmentInteractionListener,
         MapsFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
@@ -280,50 +278,6 @@ class MainActivity : AppCompatActivity(),
             TimePickerFragment.EVENING_TIMESPAN -> {}
             TimePickerFragment.CUSTOM_TIMESPAN -> {}
         }
-    }
-
-    override fun setHeadphoneDevices(headphoneDevices: Set<BAPMDevice>) {
-        preferences.setHeadphoneDevices(headphoneDevices)
-        if (BuildConfig.DEBUG) {
-            for (deviceName in headphoneDevices) {
-                Log.d(TAG, "device name: $deviceName")
-            }
-        }
-    }
-
-    override fun headphonesDoneClicked(removedDevices: Set<BAPMDevice>) {
-        val headphoneDevices = preferences.getHeadphoneDevices().toMutableSet()
-        val btDevices = preferences.getBAPMDevices().toMutableSet()
-        // remove devices from list that have been unchecked
-        headphoneDevices.removeAll(removedDevices)
-
-        if (BuildConfig.DEBUG) {
-            for (deviceName in headphoneDevices) {
-                Log.d(TAG, "saveBTDevice: $deviceName")
-            }
-        }
-
-        btDevices.addAll(headphoneDevices)
-        preferences.setBAPMDevices(btDevices)
-
-        val homeFragment = supportFragmentManager.findFragmentByTag(TAG_HOME_FRAGMENT) as HomeFragment?
-        if (homeFragment != null) {
-            homeFragment.view?.let { homeFragmentView ->
-                homeFragment.checkboxCreator(homeFragmentView, this)
-            }
-        }
-    }
-
-    override fun headDeviceSelection(deviceName: String, addDevice: Boolean) {
-        mFirebaseHelper.deviceAdd(SelectionConstants.HEADPHONE_DEVICE, deviceName, addDevice)
-    }
-
-    override fun setWifiOffDevices(wifiOffDevices: HashSet<String>) {
-        preferences.setTurnWifiOffDevices(wifiOffDevices)
-    }
-
-    override fun onUseHeadphonesA2DP(isUsingA2DP: Boolean) {
-        preferences.setUseA2dpHeadphones(isUsingA2DP)
     }
 
     override fun onLocationNameSet(locationName: String) {

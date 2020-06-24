@@ -1,11 +1,13 @@
 package maderski.bluetoothautoplaymusic.helpers
 
+import android.media.AudioManager
 import android.os.CountDownTimer
 import android.telephony.TelephonyManager
 import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
@@ -16,7 +18,8 @@ class TelephoneHelper(
         systemServicesWrapper: SystemServicesWrapper,
         private val powerHelper: PowerHelper,
         private val btConnectActions: BTConnectActions,
-        private val firebaseHelper: FirebaseHelper
+        private val firebaseHelper: FirebaseHelper,
+        private val ringerControl: RingerControl
 ) {
     private val telephonyManager = systemServicesWrapper.telephonyManager
     val isOnCall: Boolean
@@ -34,8 +37,8 @@ class TelephoneHelper(
 
     fun checkIfOnPhone(volumeControl: VolumeControl) {
 
-        val totalSeconds = 43200000 //check for 12 hours
-        val countDownInterval = 2000 //2 second interval
+        val totalSeconds = 43200000 // check for 12 hours
+        val countDownInterval = 2000 // 2 second interval
 
         object : CountDownTimer(totalSeconds.toLong(), countDownInterval.toLong()) {
             override fun onTick(millisUntilFinished: Long) {
@@ -45,12 +48,13 @@ class TelephoneHelper(
                     } else {
                         Log.d(TAG, "Off Call, Launching Bluetooth Autoplay music")
                         cancel()
-                        //Get Original Volume and Launch Bluetooth Autoplay Music
-                        volumeControl.delayGetOrigVol(3) {
-                            //Calling actionsOnBTConnect cause onBTConnect already ran
-                            btConnectActions.actionsOnBTConnect()
-                            firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE)
+                        if (isRingerNotOnSilent()) {
+                            // Save the Original Volume and Launch Bluetooth Autoplay Music
+                            volumeControl.saveOriginalVolume()
                         }
+                        // Calling actionsOnBTConnect cause onBTConnect already ran
+                        btConnectActions.actionsOnBTConnect()
+                        firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE)
                     }
                 } else {
                     //Bailing cause phone is not plugged in
@@ -62,6 +66,8 @@ class TelephoneHelper(
             override fun onFinish() {}
         }.start()
     }
+
+    private fun isRingerNotOnSilent() = ringerControl.getCurrentRingerSetting() != AudioManager.RINGER_MODE_SILENT
 
     companion object {
         private const val TAG = "TelephoneHelper"

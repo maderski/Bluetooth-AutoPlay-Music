@@ -16,11 +16,8 @@ class VolumeControl(
         private val preferencesHelper: PreferencesHelper
 ) {
     private val audioManager: AudioManager = systemServicesWrapper.audioManager
-    private val mStreamType: Int =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                AudioManager.STREAM_NOTIFICATION
-            else
-                AudioManager.STREAM_MUSIC
+
+    private var originalMediaVolume: Int = 0
 
     // Set Mediavolume to MAX
     fun volumeMAX() {
@@ -30,45 +27,20 @@ class VolumeControl(
     }
 
     fun saveOriginalVolume() {
-        val originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
-        preferencesHelper.originalMediaVolume = originalVolume
+        originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
     }
 
     // Set to specified media volume
     fun setSpecifiedVolume(volumeValue: Int) {
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeValue, AudioManager.FLAG_SHOW_UI)
         Log.d(TAG, "SET VOLUME TO: " + volumeValue.toString()
-                + "MAX VOL: " + audioManager.getStreamMaxVolume(mStreamType).toString())
+                + "MAX VOL: " + audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toString())
     }
 
     // Set original media volume
-    fun setToOriginalVolume(ringerControl: RingerControl) {
-        val originalMediaVolume = preferencesHelper.originalMediaVolume
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ringerControl.ringerSetting() != AudioManager.RINGER_MODE_SILENT) {
-                audioManager.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
-                Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
-            } else {
-                Log.d(TAG, "Did NOT set Media Volume")
-            }
-        } else {
-            audioManager.setStreamVolume(mStreamType, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
-            Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
-        }
-    }
-
-    //Wait 3 seconds before getting the Original Volume
-    fun delayGetOrigVol(seconds: Int, taskAfterVolumeCaptured: () -> Unit) {
-        val milliseconds = seconds * 1000
-        val handler = Handler()
-        val runnable = Runnable {
-            preferencesHelper.originalMediaVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-            Log.d(TAG, "Original Media Volume is: " + preferencesHelper.originalMediaVolume.toString())
-            taskAfterVolumeCaptured()
-        }
-
-        handler.postDelayed(runnable, milliseconds.toLong())
+    fun setToOriginalVolume() {
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, originalMediaVolume, AudioManager.FLAG_SHOW_UI)
+        Log.d(TAG, "Media Volume is set to: $originalMediaVolume")
     }
 
     private fun setToMaxVol() {
@@ -83,13 +55,11 @@ class VolumeControl(
     }
 
     fun checkSetMAXVol(seconds: Int) {
-        val milliseconds = seconds * 1000
-
         setToMaxVol()
 
+        val milliseconds = seconds * 1000
         val handler = Handler(Looper.getMainLooper())
-        val runnable = Runnable { setToMaxVol() }
-        handler.postDelayed(runnable, milliseconds.toLong())
+        handler.postDelayed({ setToMaxVol() }, milliseconds.toLong())
     }
 
     fun getDeviceMaxVolume(): Int = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)

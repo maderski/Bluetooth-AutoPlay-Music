@@ -3,7 +3,6 @@ package maderski.bluetoothautoplaymusic.di
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
-import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTHeadphonesActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
@@ -19,7 +18,6 @@ import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMSharedPrefsAccess
 import maderski.bluetoothautoplaymusic.wrappers.PackageManagerWrapper
@@ -46,7 +44,6 @@ object KoinModules {
 
 val prefsModules = module {
     single { BAPMPreferences(BAPMSharedPrefsAccess(androidContext(), BAPMPreferences.MY_PREFS_NAME, get())) }
-    single { BAPMDataPreferences(BAPMSharedPrefsAccess(androidContext(), BAPMDataPreferences.MY_PREFS_NAME, get())) }
 }
 
 val controlModules = module {
@@ -84,13 +81,12 @@ val receiverModule = module {
 val helperModules = module {
     single { PackageHelper(get(), get()) }
     single { PowerHelper(androidContext(), get()) }
-    single { TelephoneHelper(get(), get(), get(), get()) }
+    single { TelephoneHelper(get(), get(), get(), get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext(), get()) }
     single { BluetoothConnectHelper(get(), get(), get(), get(), get(), get()) }
     single { PowerConnectedHelper(get(), get(), get(), get()) }
-    single { PreferencesHelper(get(), get()) }
-    single { HeadphonesConnectHelper() }
+    single { PreferencesHelper(get()) }
     single { ToastHelper(androidContext()) }
     single { BluetoothDeviceHelper(get(), get()) }
 }
@@ -106,7 +102,6 @@ val permissionModule = module {
 val btActionsModule = module {
     single {
         BTDisconnectActions(
-                get(),
                 get(),
                 get(),
                 get(),
@@ -130,11 +125,9 @@ val btActionsModule = module {
                 get(),
                 get(),
                 get(),
-                get(),
                 get()
         )
     }
-    single { BTHeadphonesActions(androidContext()) }
 }
 
 val launcherModule = module {

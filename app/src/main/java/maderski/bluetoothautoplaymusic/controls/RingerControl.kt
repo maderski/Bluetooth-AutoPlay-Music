@@ -21,6 +21,7 @@ class RingerControl(
     private val audioManager = systemServicesWrapper.audioManager
     private val notificationManager = systemServicesWrapper.notificationManager
 
+    private var currentRingerSetting = AudioManager.RINGER_MODE_NORMAL
     //turns phone sounds OFF & initialize AudioManager
     fun soundsOFF() {
         val isAlreadySilent = audioManager.ringerMode == AudioManager.RINGER_MODE_SILENT
@@ -69,9 +70,11 @@ class RingerControl(
         audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
     }
 
-    fun ringerSetting(): Int {
-        return audioManager.ringerMode
+    fun saveCurrentRingerSetting() {
+        currentRingerSetting = audioManager.ringerMode
     }
+
+    fun getCurrentRingerSetting() = currentRingerSetting
 
     companion object {
         private const val TAG = "RingerControl"

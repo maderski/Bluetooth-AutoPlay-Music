@@ -64,8 +64,6 @@ class BAPMNotification(
         val title = context.getString(R.string.launch_bluetooth_autoplay)
         val message = context.getString(R.string.bluetooth_device_connected)
 
-        preferencesHelper.isLaunchBTAPMNotifShowing = true
-
         val launchBAPMIntent = Intent()
         launchBAPMIntent.action = "maderski.bluetoothautoplaymusic.offtelephonelaunch"
         val appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -89,7 +87,7 @@ class BAPMNotification(
         if (Build.VERSION.SDK_INT > 25) {
             val notificationChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            notificationManager?.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 
@@ -101,7 +99,6 @@ class BAPMNotification(
     //Remove notification that was created by BAPM
     fun removeBAPMMessage() {
         notificationManager.cancel(TAG, NOTIFICATION_ID)
-        preferencesHelper.isLaunchBTAPMNotifShowing = false
     }
 
     companion object {

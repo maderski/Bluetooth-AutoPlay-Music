@@ -3,27 +3,19 @@ package maderski.bluetoothautoplaymusic.ui.fragments
 import android.Manifest
 import android.content.Context
 import android.graphics.Typeface
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.SeekBar
-import android.widget.Switch
-import android.widget.TextView
-
+import android.widget.*
+import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.OptionConstants
-import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
-import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import org.koin.android.ext.android.inject
 
 class OptionsFragment : androidx.fragment.app.Fragment() {
@@ -49,8 +41,6 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         powerConnectedSwitch(rootView)
         sendToBackgroundSwitch(rootView)
         waitTillOffPhoneSwitch(rootView)
-        showNotificationSwitch(rootView)
-        wifiOffUseTimeSpansSwitch(rootView)
         brightBrightnessButton(rootView)
         dimBrightnessButton(rootView)
         usePriorityModeSwitch(rootView)
@@ -60,22 +50,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         setMaxVolumeSeekBar(rootView)
         setupRestoreOriginalVolumeCheckBox(rootView)
 
-        wifiOffDeviceButton(rootView)
-
-        setWifiUseTimeSpansCaption(rootView)
-
         return rootView
-    }
-
-    private fun setWifiUseTimeSpansCaption(view: View) {
-        val captionText: String = if (preferences.getCanLaunchDirections()) {
-            view.resources.getString(R.string.wifi_use_time_spans_caption_work_home)
-        } else {
-            view.resources.getString(R.string.wifi_use_time_spans_caption_morning_evening)
-        }
-        val wifiUseTimeSpanCaption = view.findViewById<View>(R.id.wifi_use_time_spans_desc) as TextView
-
-        wifiUseTimeSpanCaption.text = captionText
     }
 
     private fun setButtonPreferences(view: View, context: Context) {
@@ -83,65 +58,42 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         var settingSwitch: Switch
 
         btnState = preferences.getAutoPlayMusic()
-        settingSwitch = view.findViewById<View>(R.id.auto_play) as Switch
+        settingSwitch = view.findViewById(R.id.auto_play)
         settingSwitch.isChecked = btnState
 
         btnState = preferences.getPowerConnected()
-        settingSwitch = view.findViewById<View>(R.id.power_connected) as Switch
+        settingSwitch = view.findViewById(R.id.power_connected)
         settingSwitch.isChecked = btnState
 
         btnState = preferences.getSendToBackground()
-        settingSwitch = view.findViewById<View>(R.id.send_to_background) as Switch
+        settingSwitch = view.findViewById(R.id.send_to_background)
         settingSwitch.isChecked = btnState
 
         btnState = preferences.getWaitTillOffPhone()
-        settingSwitch = view.findViewById<View>(R.id.wait_till_off_phone) as Switch
-        settingSwitch.isChecked = btnState
-
-        btnState = preferences.getShowNotification()
-        settingSwitch = view.findViewById<View>(R.id.show_notification) as Switch
-        settingSwitch.isChecked = btnState
-
-        btnState = preferences.getWifiUseMapTimeSpans()
-        settingSwitch = view.findViewById<View>(R.id.wifi_use_time_spans) as Switch
+        settingSwitch = view.findViewById(R.id.wait_till_off_phone)
         settingSwitch.isChecked = btnState
 
         if (!PermissionUtils.isPermissionGranted(context, PermissionUtils.COARSE_LOCATION))
             preferences.setAutoBrightness(false)
         btnState = preferences.getAutoBrightness()
-        settingSwitch = view.findViewById<View>(R.id.auto_brightness) as Switch
+        settingSwitch = view.findViewById(R.id.auto_brightness)
         settingSwitch.isChecked = btnState
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             btnState = preferences.getUsePriorityMode()
-            settingSwitch = view.findViewById<View>(R.id.sw_priority_mode) as Switch
-            val switch_explaination = view.findViewById<View>(R.id.tv_priority_mode_explaination) as TextView
+            settingSwitch = view.findViewById(R.id.sw_priority_mode)
+            val switchExplaination = view.findViewById<TextView>(R.id.tv_priority_mode_explaination)
 
             settingSwitch.visibility = View.VISIBLE
             settingSwitch.isChecked = btnState
 
-            switch_explaination.visibility = View.VISIBLE
+            switchExplaination.visibility = View.VISIBLE
         }
 
-    }
-
-    fun wifiOffUseTimeSpansSwitch(view: View) {
-        val wifiUseTimeSpansSwitch = view.findViewById<View>(R.id.wifi_use_time_spans) as Switch
-        wifiUseTimeSpansSwitch.setOnClickListener { wifiUseTimeSpansSwitchView ->
-            val on = (wifiUseTimeSpansSwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.WIFI_OFF_USE_TIME_SPANS, on)
-            if (on) {
-                preferences.setWifiUseMapTimeSpans(true)
-                Log.d(TAG, "WIFI OFF Use Time Spans Switch is ON")
-            } else {
-                preferences.setWifiUseMapTimeSpans(false)
-                Log.d(TAG, "WIFI OFF Use Time Spans Switch is OFF")
-            }
-        }
     }
 
     fun autoPlaySwitch(view: View) {
-        val autoPlaySwitch = view.findViewById<View>(R.id.auto_play) as Switch
+        val autoPlaySwitch = view.findViewById<Switch>(R.id.auto_play)
         autoPlaySwitch.setOnClickListener { autoPlaySwitchView ->
             val on = (autoPlaySwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.PLAY_MUSIC, on)
@@ -156,7 +108,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun powerConnectedSwitch(view: View) {
-        val powerConnectedSwitch = view.findViewById<View>(R.id.power_connected) as Switch
+        val powerConnectedSwitch = view.findViewById<Switch>(R.id.power_connected)
         powerConnectedSwitch.setOnClickListener { powerConnectedSwitchView ->
             val on = (powerConnectedSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.POWER_REQUIRED, on)
@@ -171,7 +123,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun sendToBackgroundSwitch(view: View) {
-        val sendToBackgroundSwitch = view.findViewById<View>(R.id.send_to_background) as Switch
+        val sendToBackgroundSwitch = view.findViewById<View>(R.id.send_to_background)
         sendToBackgroundSwitch.setOnClickListener { sendToBackgroundSwitchView ->
             val on = (sendToBackgroundSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.GO_HOME, on)
@@ -186,7 +138,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun waitTillOffPhoneSwitch(view: View) {
-        val waitTillOffPhoneSwitch = view.findViewById<View>(R.id.wait_till_off_phone) as Switch
+        val waitTillOffPhoneSwitch = view.findViewById<View>(R.id.wait_till_off_phone)
         waitTillOffPhoneSwitch.setOnClickListener { waitTillOffPhoneSwitchView ->
             val on = (waitTillOffPhoneSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.CALL_COMPLETED, on)
@@ -200,23 +152,8 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         }
     }
 
-    fun showNotificationSwitch(view: View) {
-        val autoBrightnessSwitch = view.findViewById<View>(R.id.show_notification) as Switch
-        autoBrightnessSwitch.setOnClickListener { showNotificationSwitchView ->
-            val on = (showNotificationSwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.SHOW_NOTIFICATION, on)
-            if (on) {
-                preferences.setShowNotification(true)
-                Log.d(TAG, "Show Notification Switch is ON")
-            } else {
-                preferences.setShowNotification(false)
-                Log.d(TAG, "Show Notification Switch is OFF")
-            }
-        }
-    }
-
     fun autoBrightnessSwitch(view: View) {
-        val autoBrightnessSwitch = view.findViewById<View>(R.id.auto_brightness) as Switch
+        val autoBrightnessSwitch = view.findViewById<View>(R.id.auto_brightness)
         autoBrightnessSwitch.setOnClickListener { autoBrightnessSwitchView ->
             val on = (autoBrightnessSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on)
@@ -235,7 +172,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
 
     fun usePriorityModeSwitch(view: View) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val priorityModeSwitch = view.findViewById<View>(R.id.sw_priority_mode) as Switch
+            val priorityModeSwitch = view.findViewById<View>(R.id.sw_priority_mode)
             priorityModeSwitch.setOnClickListener { priorityModeSwitchView ->
                 val on = (priorityModeSwitchView as Switch).isChecked
                 mFirebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on)
@@ -255,7 +192,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun dimBrightnessButton(view: View) {
-        val dimBrightnessButton = view.findViewById<View>(R.id.dimtimebutton) as Button
+        val dimBrightnessButton = view.findViewById<Button>(R.id.dimtimebutton)
         dimBrightnessButton.setOnClickListener {
             val newFragment = TimePickerFragment.newInstance(TimePickerFragment.SCREEN_BRIGHTNESS_TIME, true, preferences.getDimTime(), "Set Dim Time")
             newFragment.show(requireActivity().supportFragmentManager, "timePicker")
@@ -263,7 +200,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     }
 
     fun brightBrightnessButton(view: View) {
-        val brightBrightnessButton = view.findViewById<View>(R.id.brighttimebutton) as Button
+        val brightBrightnessButton = view.findViewById<Button>(R.id.brighttimebutton)
         brightBrightnessButton.setOnClickListener {
             val newFragment = TimePickerFragment.newInstance(TimePickerFragment.SCREEN_BRIGHTNESS_TIME, false, preferences.getBrightTime(), "Set Bright Time")
             newFragment.show(requireActivity().supportFragmentManager, "timePicker")
@@ -272,7 +209,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
 
     fun setMaxVolumeSeekBar(view: View) {
         val deviceMaxVolume = volumeControl.getDeviceMaxVolume()
-        val volumeSeekBar = view.findViewById<View>(R.id.max_volume_seekBar) as SeekBar
+        val volumeSeekBar = view.findViewById<SeekBar>(R.id.max_volume_seekBar)
 
         volumeSeekBar.max = volumeControl.getDeviceMaxVolume()
         volumeSeekBar.progress = preferences.getUserSetMaxVolume(deviceMaxVolume)
@@ -294,53 +231,38 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
 
     fun setupRestoreOriginalVolumeCheckBox(view: View) {
         val isEnabled = preferences.getRestoreNotificationVolume()
-        val restoreVolumeCheckBox = view.findViewById<View>(R.id.cb_restore_original_volume) as CheckBox
+        val restoreVolumeCheckBox = view.findViewById<CheckBox>(R.id.cb_restore_original_volume)
 
         restoreVolumeCheckBox.isChecked = isEnabled
 
         restoreVolumeCheckBox.setOnCheckedChangeListener { buttonView, isChecked -> preferences.setRestoreNotificationVolume(isChecked) }
     }
 
-    fun wifiOffDeviceButton(view: View) {
-        val wifiOffDeviceButton = view.findViewById<View>(R.id.wifi_off_button) as Button
-        wifiOffDeviceButton.setOnClickListener {
-            mFirebaseHelper!!.selectionMade(SelectionConstants.SET_WIFI_OFF_DEVICE)
-            val newFragment = WifiOffFragment.newInstance()
-            newFragment.show(requireActivity().supportFragmentManager, "wifiOffFragment")
-        }
-    }
-
     private fun setFonts(view: View, context: Context) {
         val typeface_bold = Typeface.createFromAsset(context.assets, "fonts/TitilliumText600wt.otf")
 
-        var textView = view.findViewById<View>(R.id.settingsText) as TextView
+        var textView = view.findViewById<TextView>(R.id.settingsText)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.auto_play) as TextView
+        textView = view.findViewById(R.id.auto_play)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.power_connected) as TextView
+        textView = view.findViewById(R.id.power_connected)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.send_to_background) as TextView
+        textView = view.findViewById(R.id.send_to_background)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.wait_till_off_phone) as TextView
+        textView = view.findViewById(R.id.wait_till_off_phone)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.auto_brightness) as TextView
+        textView = view.findViewById(R.id.auto_brightness)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.manualBrtLabel) as TextView
+        textView = view.findViewById(R.id.manualBrtLabel)
         textView.typeface = typeface_bold
 
-        textView = view.findViewById<View>(R.id.userSetMaxVolumeLabel) as TextView
-        textView.typeface = typeface_bold
-
-        textView = view.findViewById<View>(R.id.show_notification) as TextView
-        textView.typeface = typeface_bold
-
-        textView = view.findViewById<View>(R.id.wifi_use_time_spans) as TextView
+        textView = view.findViewById(R.id.userSetMaxVolumeLabel)
         textView.typeface = typeface_bold
     }
 

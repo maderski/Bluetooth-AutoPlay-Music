@@ -6,7 +6,6 @@ import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMDataPreferences
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -22,7 +21,7 @@ class NotifPolicyAccessChangedReceiver : BroadcastReceiver(), KoinComponent {
         if (intent != null) {
             if (intent.action != null) {
                 Log.d(TAG, "ACTION: ${intent.action}")
-                preferencesHelper.currentRingerSet = ringerControl.ringerSetting()
+                ringerControl.saveCurrentRingerSetting()
                 ringerControl.soundsOFF()
                 context.applicationContext.unregisterReceiver(this)
             }

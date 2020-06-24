@@ -14,9 +14,8 @@ class PowerConnectedHelper(
 ) {
     fun performConnectActions() {
         val isBTConnected = bluetoothDeviceHelper.isBluetoothA2DPOnCompat()
-        val isHeadphones = preferencesHelper.isHeadphonesDevice
         Log.d(PowerConnectionReceiver.TAG, "is BTConnected: $isBTConnected")
-        if (isBTConnected && !isHeadphones) {
+        if (isBTConnected) {
             Log.d(PowerConnectionReceiver.TAG, "POWER_LAUNCH")
             btConnectActions.onBTConnect()
             firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.POWER)

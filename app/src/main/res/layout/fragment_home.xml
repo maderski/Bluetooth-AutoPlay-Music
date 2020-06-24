@@ -1,12 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="maderski.bluetoothautoplaymusic.ui.fragments.HomeFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:id="@+id/content_main"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -289,26 +288,7 @@
                             android:layout_gravity="center_horizontal" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/headphones_dark_blue"/>
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/set_autoplay_only_devices_text"
-                            android:id="@+id/autoplay_only_button"
-                            android:background="@color/white"
-                            android:textColor="@color/colorAccent"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp" />
-                    </LinearLayout>
+
 
                 </LinearLayout>
 
