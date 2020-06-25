@@ -30,21 +30,12 @@ class BTDisconnectActions(
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     fun actionsOnBTDisconnect() {
-        removeBAPMNotification()
         pauseMusic()
         turnOffPriorityMode()
         closeWaze()
         stopKeepingScreenOn()
 
         setVolumeBack()
-    }
-
-    private fun removeBAPMNotification() {
-        val canShowNotification = preferencesHelper.canShowNotification
-
-        if (canShowNotification) {
-            mBAPMNotification.removeBAPMMessage()
-        }
     }
 
     private fun pauseMusic() {

@@ -55,7 +55,7 @@ class BTConnectActions(
         if (isOnCall) {
             Log.d(TAG, "ON a call")
             // if plugged in run on the phone check else launch notification
-            if (isPluggedIn) telephoneHelper.checkIfOnPhone(volumeControl) else bapmNotification.launchBAPM()
+            if (isPluggedIn) telephoneHelper.checkIfOnPhone(volumeControl) else bapmNotification.launchBAPMNotification()
         } else {
             Log.d(TAG, "NOT on a call")
             actionsOnBTConnect()
@@ -68,7 +68,6 @@ class BTConnectActions(
     fun actionsOnBTConnect() {
         val unlockScreen = preferencesHelper.unlockScreen
 
-        showBTAMNotification()
         setVolumeToMax()
         turnTheScreenOn()
 
@@ -118,14 +117,6 @@ class BTConnectActions(
         launchMapApp()
         autoPlayMusic()
         putPhoneInDoNotDisturb()
-    }
-
-    private fun showBTAMNotification() {
-        val mapChoice = preferencesHelper.mapAppName
-        val canShowNotification = preferencesHelper.canShowNotification
-        if (canShowNotification) {
-            bapmNotification.bapmMessage(mapChoice)
-        }
     }
 
     private fun turnTheScreenOn() {

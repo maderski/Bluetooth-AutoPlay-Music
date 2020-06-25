@@ -92,7 +92,7 @@ val helperModules = module {
 }
 
 val notificationModule = module {
-    single { BAPMNotification(androidContext(), get(), get()) }
+    single { BAPMNotification(androidContext(), get()) }
 }
 
 val permissionModule = module {

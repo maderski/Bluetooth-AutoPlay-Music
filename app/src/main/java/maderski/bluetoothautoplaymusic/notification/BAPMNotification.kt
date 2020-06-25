@@ -21,44 +21,11 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  */
 class BAPMNotification(
         private val context: Context,
-        private val preferencesHelper: PreferencesHelper,
         systemServicesWrapper: SystemServicesWrapper
 ) {
     private val notificationManager = systemServicesWrapper.notificationManager
 
-    //Create notification message for BAPM
-    fun bapmMessage(mapChoicePkg: String) {
-        val color = ContextCompat.getColor(context, R.color.colorAccent)
-        val mapAppName = if (preferencesHelper.mapAppChosen.equals(WAZE.packageName, ignoreCase = true)) {
-            "WAZE"
-        } else {
-            "GOOGLE MAPS"
-        }
-
-        val title = context.getString(R.string.click_to_launch) + mapAppName
-        val message = context.getString(R.string.bluetooth_device_connected)
-
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentText(message)
-                .setSmallIcon(R.drawable.ic_notif_icon)
-                .setAutoCancel(false)
-                .setColor(color)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-
-        val appLaunchIntent = context.packageManager.getLaunchIntentForPackage(mapChoicePkg)
-        if (appLaunchIntent != null) {
-            appLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val mapIntent = PendingIntent.getActivity(context, 0, appLaunchIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            builder.setContentIntent(mapIntent)
-            builder.setContentTitle(title)
-        } else {
-            builder.setContentTitle("Bluetooth Autoplay Music")
-        }
-
-        postNotification(builder)
-    }
-
-    fun launchBAPM() {
+    fun launchBAPMNotification() {
         val color = ContextCompat.getColor(context, R.color.colorAccent)
 
         val title = context.getString(R.string.launch_bluetooth_autoplay)
@@ -94,11 +61,6 @@ class BAPMNotification(
     private fun postNotification(builder: NotificationCompat.Builder) {
         createNotificationChannel()
         notificationManager.notify(TAG, NOTIFICATION_ID, builder.build())
-    }
-
-    //Remove notification that was created by BAPM
-    fun removeBAPMMessage() {
-        notificationManager.cancel(TAG, NOTIFICATION_ID)
     }
 
     companion object {
