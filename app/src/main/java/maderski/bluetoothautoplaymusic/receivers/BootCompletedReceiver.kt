@@ -13,24 +13,22 @@ import maderski.bluetoothautoplaymusic.workers.OnBootWorker
  */
 class BootCompletedReceiver : BroadcastReceiver() {
 
-    //Start BAPMService on phone boot
+    // Start BAPMService on phone boot
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             val action = intent.action
             if (action != null && action == Intent.ACTION_BOOT_COMPLETED) {
+                Log.d(TAG, "On Boot Completed, enqueue BAPM work!")
                 // Create and add work request to work manager
                 val workOnBootRequest = OneTimeWorkRequestBuilder<OnBootWorker>()
                         .addTag(OnBootWorker.TAG)
                         .build()
-                WorkManager.getInstance().enqueue(workOnBootRequest)
-
-                Log.d(TAG, "BAPM Service Started")
+                WorkManager.getInstance(context).enqueue(workOnBootRequest)
             }
         }
     }
 
     companion object {
-
         private const val TAG = "BootCompletedReceiver"
     }
 }
