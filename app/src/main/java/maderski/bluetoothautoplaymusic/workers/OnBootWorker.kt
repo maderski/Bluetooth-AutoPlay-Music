@@ -8,7 +8,10 @@ import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-class OnBootWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams), KoinComponent {
+class OnBootWorker(
+        context: Context,
+        workerParams: WorkerParameters
+) : Worker(context, workerParams), KoinComponent {
     private val serviceManager: ServiceManager by inject()
     override fun doWork(): Result {
         serviceManager.startService(BAPMService::class.java, BAPMService.TAG)
