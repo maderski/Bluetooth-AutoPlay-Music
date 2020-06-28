@@ -16,29 +16,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
-import maderski.bluetoothautoplaymusic.helpers.BAPMPermissionHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
+import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.services.BAPMService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.ui.fragments.*
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 import org.koin.android.ext.android.inject
-import java.util.*
 
 class MainActivity : AppCompatActivity(),
         TimePickerFragment.TimePickerDialogListener,
         MapsFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
-    private val permissionHelper: BAPMPermissionHelper by inject()
+    private val permissionManager: PermissionManager by inject()
     private val mFirebaseHelper: FirebaseHelper by inject()
     private val systemServicesWrapper: SystemServicesWrapper by inject()
 
@@ -64,7 +60,7 @@ class MainActivity : AppCompatActivity(),
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
 
         if (preferences.getAutoBrightness()) {
-            PermissionUtils.checkPermission(this, PermissionUtils.COARSE_LOCATION)
+            permissionManager.checkLocationPermission(this)
         }
 
         supportFragmentManager
@@ -102,7 +98,7 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         // TODO: Handle checking of permissions better
-        permissionHelper.checkAllRequiredPermissions(this)
+        permissionManager.checkAllRequiredPermissions(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

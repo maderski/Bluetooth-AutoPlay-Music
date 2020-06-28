@@ -14,13 +14,14 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.OptionConstants
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import org.koin.android.ext.android.inject
 
 class OptionsFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
     private val volumeControl: VolumeControl by inject()
+    private val permissionManager: PermissionManager by inject()
 
     private lateinit var mFirebaseHelper: FirebaseHelper
 
@@ -73,7 +74,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         settingSwitch = view.findViewById(R.id.wait_till_off_phone)
         settingSwitch.isChecked = btnState
 
-        if (!PermissionUtils.isPermissionGranted(context, PermissionUtils.COARSE_LOCATION))
+        if (!permissionManager.isLocationPermissionGranted())
             preferences.setAutoBrightness(false)
         btnState = preferences.getAutoBrightness()
         settingSwitch = view.findViewById(R.id.auto_brightness)
@@ -158,7 +159,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val on = (autoBrightnessSwitchView as Switch).isChecked
             mFirebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on)
             if (on) {
-                PermissionUtils.checkPermission(requireActivity(), PermissionUtils.COARSE_LOCATION)
+                permissionManager.checkLocationPermission(requireActivity())
 
                 preferences.setAutoBrightness(true)
 
@@ -177,8 +178,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
                 val on = (priorityModeSwitchView as Switch).isChecked
                 mFirebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on)
                 if (on) {
-                    val permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY
-                    PermissionUtils.checkPermission(requireActivity(), permission)
+                    permissionManager.checkAccessNotificationPolicyPermission(requireActivity())
 
                     preferences.setUsePriorityMode(true)
 

@@ -16,6 +16,7 @@ import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceive
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
+import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -50,7 +51,7 @@ val controlModules = module {
     single { ScreenONLock(get(), get()) }
     single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
-    single { RingerControl(androidContext(), get(), get()) }
+    single { RingerControl(get(), get(), get()) }
     single { BasicPlayAttempter() }
     factory { MediaPlayerControlManager(
             androidContext(),
@@ -79,7 +80,7 @@ val receiverModule = module {
 }
 
 val helperModules = module {
-    single { PackageHelper(get(), get()) }
+    single { PackageHelper(get(), get(), get()) }
     single { PowerHelper(androidContext(), get()) }
     single { TelephoneHelper(get(), get(), get(), get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
@@ -96,7 +97,7 @@ val notificationModule = module {
 }
 
 val permissionModule = module {
-    single { BAPMPermissionHelper() }
+    single { PermissionManager(androidContext(), get()) }
 }
 
 val btActionsModule = module {
@@ -115,6 +116,7 @@ val btActionsModule = module {
     single {
         BTConnectActions(
                 androidContext(),
+                get(),
                 get(),
                 get(),
                 get(),

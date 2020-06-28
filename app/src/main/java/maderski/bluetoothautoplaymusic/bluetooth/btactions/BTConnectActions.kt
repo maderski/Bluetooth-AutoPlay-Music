@@ -15,10 +15,10 @@ import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlMa
 import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
+import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
@@ -37,7 +37,8 @@ class BTConnectActions(
         private val preferencesHelper: PreferencesHelper,
         private val ringerControl: RingerControl,
         private val mapAppLauncher: MapAppLauncher,
-        private val systemServicesWrapper: SystemServicesWrapper
+        private val systemServicesWrapper: SystemServicesWrapper,
+        private val permissionManager: PermissionManager
 ) {
     fun onBTConnect() {
         val waitTillOffPhone = preferencesHelper.waitTillOffPhone
@@ -170,7 +171,7 @@ class BTConnectActions(
 
         if (priorityMode) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val hasDoNotDisturbPerm = PermissionUtils.checkDoNotDisturbPermission(context, systemServicesWrapper, 10)
+                val hasDoNotDisturbPerm = permissionManager.checkDoNotDisturbPermission()
                 if (hasDoNotDisturbPerm) {
                     ringerControl.saveCurrentRingerSetting()
                     ringerControl.soundsOFF()

@@ -7,7 +7,7 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
+import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.wrappers.PackageManagerWrapper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
@@ -16,7 +16,8 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  */
 class PackageHelper(
         private val systemServicesWrapper: SystemServicesWrapper,
-        private val packageManagerWrapper: PackageManagerWrapper
+        private val packageManagerWrapper: PackageManagerWrapper,
+        private val permissionManager: PermissionManager
 ) {
     // Launches App that is associated with that package that was put into method
     fun getLaunchIntent(packageName: String): Intent? {
@@ -71,8 +72,8 @@ class PackageHelper(
         }
     }
 
-    fun getCurrentForegroundPackageName(context: Context): String {
-        val hasUsageStatsPermission = PermissionUtils.hasUsageStatsPermission(context, systemServicesWrapper)
+    fun getCurrentForegroundPackageName(): String {
+        val hasUsageStatsPermission = permissionManager.hasUsageStatsPermission()
         if (hasUsageStatsPermission) {
             val usageStatsManager = systemServicesWrapper.usageStats
             val endTime = System.currentTimeMillis()

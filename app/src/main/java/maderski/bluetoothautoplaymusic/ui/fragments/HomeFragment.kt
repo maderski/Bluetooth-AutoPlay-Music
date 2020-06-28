@@ -1,7 +1,6 @@
 package maderski.bluetoothautoplaymusic.ui.fragments
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.widget.CompoundButtonCompat
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
@@ -26,10 +24,9 @@ import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.APPLE_MUSIC
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
-import maderski.bluetoothautoplaymusic.utils.PermissionUtils
+import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 import org.koin.android.ext.android.inject
-import java.util.*
 
 class HomeFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
@@ -38,6 +35,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
     private val systemServicesWrapper: SystemServicesWrapper by inject()
+    private val permissionManager: PermissionManager by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -326,9 +324,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val on = (view as ToggleButton).isChecked
             firebaseHelper.featureEnabled(FeatureConstants.PRIORITY_MODE, on)
             if (on) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(),  systemServicesWrapper, 0)
-                }
+                permissionManager.checkDoNotDisturbPermission()
                 preferences.setPriorityMode(true)
                 Log.d(TAG, "Priority Button is ON")
             } else {
@@ -344,9 +340,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val on = (keepOnToggleButtonViewView as ToggleButton).isChecked
             firebaseHelper.featureEnabled(FeatureConstants.MAX_VOLUME, on)
             if (on) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    PermissionUtils.checkDoNotDisturbPermission(requireActivity(), systemServicesWrapper, 0)
-                }
+                permissionManager.checkDoNotDisturbPermission()
                 preferences.setMaxVolume(true)
                 Log.d(TAG, "Max Volume Button is ON")
             } else {
