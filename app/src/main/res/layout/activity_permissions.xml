@@ -26,6 +26,45 @@
         app:layout_constraintTop_toBottomOf="@id/tv_permissions_title"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    
+    <ImageView
+        android:id="@+id/iv_usage_stats_perm_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/ic_no_permission"
+        app:layout_constraintTop_toBottomOf="@id/vw_divider"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_notification_access_perm_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/ic_no_permission"
+        app:layout_constraintTop_toBottomOf="@id/iv_usage_stats_perm_status"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_overlay_perm_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/ic_no_permission"
+        app:layout_constraintTop_toBottomOf="@id/iv_notification_access_perm_status"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/iv_notification_listener_perm_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/ic_no_permission"
+        app:layout_constraintTop_toBottomOf="@id/iv_overlay_perm_status"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
