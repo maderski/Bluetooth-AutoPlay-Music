@@ -27,14 +27,64 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
+        android:id="@+id/iv_location_perm_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
+        android:src="@drawable/ic_no_permission"
+        app:layout_constraintTop_toBottomOf="@id/vw_divider"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_location_perm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Course Location"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/iv_location_perm_status"
+        app:layout_constraintTop_toTopOf="@id/iv_location_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_location_perm_status"/>
+
+    <Switch
+        android:id="@+id/sw_location_perm_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_location_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_location_perm_status"/>
+
+    <ImageView
         android:id="@+id/iv_usage_stats_perm_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/vw_divider"
+        app:layout_constraintTop_toBottomOf="@id/iv_location_perm_status"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_usage_stats_perm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App usage stats"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/iv_usage_stats_perm_status"
+        app:layout_constraintTop_toTopOf="@id/iv_usage_stats_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_usage_stats_perm_status"/>
+
+    <Switch
+        android:id="@+id/sw_usage_stats_perm_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_usage_stats_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_usage_stats_perm_status"/>
 
     <ImageView
         android:id="@+id/iv_notification_access_perm_status"
@@ -42,9 +92,29 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
         app:layout_constraintTop_toBottomOf="@id/iv_usage_stats_perm_status"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_notification_access_perm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification Access"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/iv_notification_access_perm_status"
+        app:layout_constraintTop_toTopOf="@id/iv_notification_access_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification_access_perm_status"/>
+
+    <Switch
+        android:id="@+id/sw_notification_access_perm_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_notification_access_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification_access_perm_status"/>
 
     <ImageView
         android:id="@+id/iv_overlay_perm_status"
@@ -52,9 +122,29 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
         app:layout_constraintTop_toBottomOf="@id/iv_notification_access_perm_status"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_overlay_perm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Overlay"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/iv_overlay_perm_status"
+        app:layout_constraintTop_toTopOf="@id/iv_overlay_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_overlay_perm_status"/>
+
+    <Switch
+        android:id="@+id/sw_overlay_perm_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_overlay_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_overlay_perm_status"/>
 
     <ImageView
         android:id="@+id/iv_notification_listener_perm_status"
@@ -62,9 +152,40 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
         app:layout_constraintTop_toBottomOf="@id/iv_overlay_perm_status"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <TextView
+        android:id="@+id/tv_notification_listener_perm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification Listener"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/iv_notification_listener_perm_status"
+        app:layout_constraintTop_toTopOf="@id/iv_notification_listener_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification_listener_perm_status"/>
+
+    <Switch
+        android:id="@+id/sw_notification_listener_perm_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_notification_listener_perm_status"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification_listener_perm_status"/>
+
+    <Button
+        android:id="@+id/bn_perm_continue"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:background="@drawable/on_state"
+        android:textColor="@color/white"
+        android:enabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
