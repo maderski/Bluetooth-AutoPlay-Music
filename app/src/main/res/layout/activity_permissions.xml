@@ -184,7 +184,6 @@
         android:text="Continue"
         android:background="@drawable/on_state"
         android:textColor="@color/white"
-        android:enabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
