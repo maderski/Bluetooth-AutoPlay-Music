@@ -21,11 +21,13 @@ import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.ActivityNameConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
-import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.services.BAPMService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.ui.fragments.*
+import maderski.bluetoothautoplaymusic.ui.fragments.HomeFragment
+import maderski.bluetoothautoplaymusic.ui.fragments.MapsFragment
+import maderski.bluetoothautoplaymusic.ui.fragments.OptionsFragment
+import maderski.bluetoothautoplaymusic.ui.fragments.TimePickerFragment
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 import org.koin.android.ext.android.inject
 
@@ -34,21 +36,8 @@ class MainActivity : AppCompatActivity(),
         MapsFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
-    private val permissionManager: PermissionManager by inject()
     private val mFirebaseHelper: FirebaseHelper by inject()
     private val systemServicesWrapper: SystemServicesWrapper by inject()
-
-    // Show version of the BAPM App
-    private val version: String
-        get() {
-            return try {
-                val pkgInfo = packageManager.getPackageInfo(packageName, 0)
-                pkgInfo.versionName
-            } catch (e: Exception) {
-                Log.e(TAG, e.message)
-                "none"
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +47,6 @@ class MainActivity : AppCompatActivity(),
         setSupportActionBar(toolbar)
 
         mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
-
-        if (preferences.getAutoBrightness()) {
-            permissionManager.checkLocationPermission(this)
-        }
 
         supportFragmentManager
                 .beginTransaction()
@@ -93,12 +78,6 @@ class MainActivity : AppCompatActivity(),
         }
 
         checkIfBAPMServiceRunning()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // TODO: Handle checking of permissions better
-        permissionManager.checkAllRequiredPermissions(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -144,7 +123,7 @@ class MainActivity : AppCompatActivity(),
         bottomNavBar.animate().alpha(0f).start()
         val view = findViewById<View>(R.id.toolbar)
         val snackbar = Snackbar.make(view, "Created by: Jason Maderski" + "\n" +
-                "Version: " + version, Snackbar.LENGTH_LONG)
+                "Version: " + getBAPMAppVersion(), Snackbar.LENGTH_LONG)
         snackbar.view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(view: View) {}
 
@@ -278,6 +257,15 @@ class MainActivity : AppCompatActivity(),
 
     override fun onLocationNameSet(locationName: String) {
         preferences.setCustomLocationName(locationName)
+    }
+
+    // Show version of the BAPM App
+    private fun getBAPMAppVersion(): String = try {
+        val pkgInfo = packageManager.getPackageInfo(packageName, 0)
+        pkgInfo.versionName
+    } catch (e: Exception) {
+        Log.e(TAG, e.message ?: "Error getting BAPM App version")
+        "none"
     }
 
     companion object {

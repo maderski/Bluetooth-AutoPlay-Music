@@ -17,11 +17,31 @@ class PermissionManager(
         private val context: Context,
         private val systemServicesWrapper: SystemServicesWrapper
 ) {
+    //region Permission status
+    fun isLocationPermissionGranted() = isPermissionGranted(Permission.COARSE_LOCATION)
+
+    fun hasUsageStatsPermission(): Boolean {
+        val appOpsManager = systemServicesWrapper.appOpsManager
+        val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            appOpsManager.unsafeCheckOpNoThrow(Permission.GET_USAGE_STATS.value, Process.myUid(), context.packageName)
+        } else {
+            appOpsManager.checkOpNoThrow(Permission.GET_USAGE_STATS.value, Process.myUid(), context.packageName)
+        }
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    fun hasNotificationAccessPermission(): Boolean = isPermissionGranted(Permission.ACCESS_NOTIFICATION_POLICY)
+
+    fun hasOverlayPermission(): Boolean = Settings.canDrawOverlays(context)
+
+    fun hasNotificationListenerAccessPermission(): Boolean =
+            Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").contains(context.packageName)
+    //endRegion
+
+    //region Check Permission and if not granted launch
     fun checkLocationPermission(activity: Activity) {
         checkPermission(activity, Permission.COARSE_LOCATION)
     }
-
-    fun isLocationPermissionGranted() = isPermissionGranted(Permission.COARSE_LOCATION)
 
     fun checkAccessNotificationPolicyPermission(activity: Activity) {
         checkPermission(activity, Permission.ACCESS_NOTIFICATION_POLICY)
@@ -46,55 +66,29 @@ class PermissionManager(
         }
     }
 
-    fun hasUsageStatsPermission(): Boolean {
-        val appOpsManager = systemServicesWrapper.appOpsManager
-        val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appOpsManager.unsafeCheckOpNoThrow(Permission.GET_USAGE_STATS.value, Process.myUid(), context.packageName)
-        } else {
-            appOpsManager.checkOpNoThrow(Permission.GET_USAGE_STATS.value, Process.myUid(), context.packageName)
-        }
-        return mode == AppOpsManager.MODE_ALLOWED
-    }
-
-    fun hasNotificationAccessPermission(): Boolean = isPermissionGranted(Permission.ACCESS_NOTIFICATION_POLICY)
-
     fun checkToLaunchSystemOverlaySettings(activity: Activity) {
-        val hasOverlayPermission = hasOverlayPermission(activity)
+        val hasOverlayPermission = hasOverlayPermission()
         if (!hasOverlayPermission) {
             launchSystemOverlayPermissionSettings(activity)
         }
     }
 
-    fun hasOverlayPermission(context: Context): Boolean = Settings.canDrawOverlays(context)
-
-    fun launchSystemOverlayPermissionSettings(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val launchSettingsIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${activity.packageName}"))
-            activity.startActivityForResult(launchSettingsIntent, DRAW_OVER_OTHER_APPS_PERMISSION)
-        }
-    }
-
     fun checkToLaunchNotificationListenerSettings(activity: Activity) {
-        val hasNotificationListenerAccess = hasNotificationListenerAccessPermission(activity)
+        val hasNotificationListenerAccess = hasNotificationListenerAccessPermission()
         if (!hasNotificationListenerAccess) {
             launchNotificationListenerSettings(activity)
         }
     }
+    //endRegion
 
-    fun hasNotificationListenerAccessPermission(context: Context): Boolean =
-            Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").contains(context.packageName)
-
-    fun launchNotificationListenerSettings(activity: Activity) {
-        val launchSettingsIntent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-        activity.startActivity(launchSettingsIntent)
+    private fun launchSystemOverlayPermissionSettings(activity: Activity) {
+        val launchSettingsIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${activity.packageName}"))
+        activity.startActivityForResult(launchSettingsIntent, DRAW_OVER_OTHER_APPS_PERMISSION)
     }
 
-    fun checkNotificationListenerPermission(context: Context) = checkNotificationListenerPermission()
-
-    fun checkAllRequiredPermissions(activity: Activity) {
-        checkToLaunchSystemOverlaySettings(activity)
-        checkToLaunchNotificationListenerSettings(activity)
-        checkNotificationListenerPermission(activity)
+    private fun launchNotificationListenerSettings(activity: Activity) {
+        val launchSettingsIntent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+        activity.startActivity(launchSettingsIntent)
     }
 
     private fun checkPermission(activity: Activity, permission: Permission) {

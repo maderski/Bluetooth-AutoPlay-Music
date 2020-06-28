@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.activities.PermissionsActivity"></activity>
         <activity android:name=".ui.activities.DisconnectActivity" />
         <activity
             android:name=".ui.activities.MainActivity"
