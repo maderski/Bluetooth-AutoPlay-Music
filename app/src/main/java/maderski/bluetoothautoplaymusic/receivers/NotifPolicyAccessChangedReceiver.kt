@@ -14,7 +14,6 @@ import org.koin.core.inject
  */
 
 class NotifPolicyAccessChangedReceiver : BroadcastReceiver(), KoinComponent {
-    private val preferencesHelper: PreferencesHelper by inject()
     private val ringerControl: RingerControl by inject()
 
     override fun onReceive(context: Context, intent: Intent?) {

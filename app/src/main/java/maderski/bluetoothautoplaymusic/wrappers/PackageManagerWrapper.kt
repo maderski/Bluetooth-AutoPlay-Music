@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 
 class PackageManagerWrapper (private val context: Context) {
     // Get all Installed Packages that are on the device
@@ -15,10 +16,10 @@ class PackageManagerWrapper (private val context: Context) {
     fun getLaunchIntentForPackage(packageName: String) =
             context.packageManager.getLaunchIntentForPackage(packageName)
 
-    fun getActionMediaButtonReceivers() =
+    fun getActionMediaButtonReceivers(): MutableList<ResolveInfo> =
         context.packageManager.queryBroadcastReceivers(Intent(Intent.ACTION_MEDIA_BUTTON), 0)
 
-    fun getApplicationInfo(packageName: String) =
+    fun getApplicationInfo(packageName: String): ApplicationInfo =
             context.packageManager.getApplicationInfo(packageName, 0)
 
     fun getApplicationLabel(applicationInfo: ApplicationInfo) =

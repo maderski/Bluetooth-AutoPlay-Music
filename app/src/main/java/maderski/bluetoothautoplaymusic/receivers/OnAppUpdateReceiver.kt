@@ -16,36 +16,18 @@ import org.koin.core.inject
  * Created by Jason on 6/10/17.
  */
 
-class OnAppUpdateReceiver : BroadcastReceiver(), KoinComponent {
-    private val preferences: BAPMPreferences by inject()
-
+class OnAppUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             val action = intent.action
             if (action != null && action == Intent.ACTION_PACKAGE_REPLACED) {
-                val appContext = context.applicationContext
+                Log.d(TAG, "On Update BAPM, enqueue BAPM work!")
                 // Create and add work request to work manager
                 val workOnAppUpdateRequest = OneTimeWorkRequestBuilder<OnAppUpdateWorker>()
                         .addTag(OnBootWorker.TAG)
                         .build()
-                WorkManager.getInstance().enqueue(workOnAppUpdateRequest)
-
-                Log.d(TAG, "BAPM Service Started")
-
-
-                // Sync newly separated Home Work checkboxes
-                syncHomeWorkCheckboxes(appContext)
+                WorkManager.getInstance(context).enqueue(workOnAppUpdateRequest)
             }
-        }
-    }
-
-    private fun syncHomeWorkCheckboxes(context: Context) {
-        val hasRan = preferences.getUpdateHomeWorkDaysSync()
-        if (!hasRan) {
-            val daysHomeWorkRan = preferences.getHomeDaysToLaunchMaps() as MutableSet<String>
-            preferences.setWorkDaysToLaunchMaps(daysHomeWorkRan)
-            preferences.setUpdateHomeWorkDaysSync(true)
-            Log.d(TAG, "Work/Home Sync Complete")
         }
     }
 

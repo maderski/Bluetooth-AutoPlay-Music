@@ -12,7 +12,6 @@ import maderski.bluetoothautoplaymusic.workers.OnBootWorker
  * Created by Jason on 1/5/16.
  */
 class BootCompletedReceiver : BroadcastReceiver() {
-
     // Start BAPMService on phone boot
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
