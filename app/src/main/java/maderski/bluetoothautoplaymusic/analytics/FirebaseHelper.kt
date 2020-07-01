@@ -72,7 +72,7 @@ class FirebaseHelper(context: Context): KoinComponent {
             bundle.putInt(FirebaseAnalytics.Param.VALUE, if (musicChoiceChanged) 1 else 0)
             logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
         } catch (e: Exception) {
-            Log.e(TAG, e.message)
+            e.printStackTrace()
         }
     }
 

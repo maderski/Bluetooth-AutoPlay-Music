@@ -271,7 +271,7 @@ class MapsFragment : Fragment() {
                 }
 
             } catch (e: Exception) {
-                Log.e(TAG, e.message)
+                e.printStackTrace()
             }
 
             rdoButton = RadioButton(context)

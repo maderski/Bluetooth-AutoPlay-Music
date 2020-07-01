@@ -30,7 +30,7 @@ class CurrentLocation(context: Context) {
                     "28.4158"
                 }
             } catch (e: Exception) {
-                Log.e(TAG, e.message)
+                e.printStackTrace()
                 "28.4158"
             }
         }
@@ -47,7 +47,7 @@ class CurrentLocation(context: Context) {
                     "-81.2989"
                 }
             } catch (e: Exception) {
-                Log.e(TAG, e.message)
+                e.printStackTrace()
                 "-81.2989"
             }
         }

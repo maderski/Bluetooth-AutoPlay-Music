@@ -27,7 +27,7 @@ class ScreenONLock(
         val screenBrightness: Int = if (preferences.getAutoBrightness()) {
             isDark(context)
         } else {
-            getManualScreenBrightness(context)
+            getManualScreenBrightness()
         }
 
         val powerManager = systemServicesWrapper.powerManager
@@ -42,7 +42,7 @@ class ScreenONLock(
 
     }
 
-    private fun getManualScreenBrightness(context: Context): Int {
+    private fun getManualScreenBrightness(): Int {
         val screenBrightness: Int
 
         val c = Calendar.getInstance()

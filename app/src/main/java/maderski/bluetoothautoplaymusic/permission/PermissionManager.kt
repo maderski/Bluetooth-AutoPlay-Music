@@ -18,6 +18,11 @@ class PermissionManager(
         private val systemServicesWrapper: SystemServicesWrapper
 ) {
     //region Permission status
+    fun isAllRequiredPermissionsGranted() = hasUsageStatsPermission()
+            && hasNotificationAccessPermission()
+            && hasOverlayPermission()
+            && hasNotificationListenerAccessPermission()
+
     fun isLocationPermissionGranted() = isPermissionGranted(Permission.COARSE_LOCATION)
 
     fun hasUsageStatsPermission(): Boolean {
@@ -39,6 +44,9 @@ class PermissionManager(
     //endRegion
 
     //region Check Permission and if not granted launch
+    fun checkUsageStatPermission(activity: Activity) {
+        checkPermission(activity, Permission.GET_USAGE_STATS)
+    }
     fun checkLocationPermission(activity: Activity) {
         checkPermission(activity, Permission.COARSE_LOCATION)
     }
@@ -57,13 +65,6 @@ class PermissionManager(
             context.startActivity(intent)
         }
         return hasDoNotDisturbPerm
-    }
-
-    fun checkNotificationListenerPermission() {
-        val hasPermission = BAPMNotificationListenerService.isEnabled(context)
-        if (!hasPermission) {
-            context.startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
-        }
     }
 
     fun checkToLaunchSystemOverlaySettings(activity: Activity) {

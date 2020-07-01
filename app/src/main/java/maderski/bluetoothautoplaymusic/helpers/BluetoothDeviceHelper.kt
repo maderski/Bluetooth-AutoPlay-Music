@@ -45,7 +45,7 @@ class BluetoothDeviceHelper(
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             audioManager.isBluetoothA2dpOn
         } else {
-            audioManager.getDevices(AudioManager.GET_DEVICES_ALL).any {
+            audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).any {
                 it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP
             }
         }

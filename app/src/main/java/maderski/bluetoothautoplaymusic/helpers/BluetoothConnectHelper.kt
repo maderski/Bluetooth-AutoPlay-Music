@@ -45,7 +45,7 @@ class BluetoothConnectHelper(
                 STATE_DISCONNECTING -> Log.d(TAG, "A2DP DISCONNECTING")
                 STATE_DISCONNECTED -> {
                     Log.d(TAG, "A2DP DISCONNECTED")
-                    btDisconnectActions(bluetoothDevice, state)
+                    btDisconnectActions(bluetoothDevice)
                 }
             }
         }
@@ -59,7 +59,7 @@ class BluetoothConnectHelper(
         // no-op
     }
 
-    private fun btDisconnectActions(bluetoothDevice: BluetoothDevice, state: Int) {
+    private fun btDisconnectActions(bluetoothDevice: BluetoothDevice) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "Device disconnected: ${bluetoothDevice.name}")
         }

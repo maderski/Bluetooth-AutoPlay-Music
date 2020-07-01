@@ -2,7 +2,6 @@ package maderski.bluetoothautoplaymusic.ui.fragments
 
 import android.content.Context
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -17,15 +16,13 @@ import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
+import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
-import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.APPLE_MUSIC
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
-import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 
 class HomeFragment : androidx.fragment.app.Fragment() {
@@ -34,7 +31,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val firebaseHelper: FirebaseHelper by inject()
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
-    private val systemServicesWrapper: SystemServicesWrapper by inject()
     private val permissionManager: PermissionManager by inject()
 
     private val radioButtonIndex: Int
@@ -166,7 +162,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 rdoButton.typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
                 rdoMPGroup.addView(rdoButton)
             } catch (e: Exception) {
-                Log.e(TAG, e.message)
+                e.printStackTrace()
             }
         }
     }
@@ -186,34 +182,9 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val hasMusicPlayerChanged = selectedMusicPlayer.equals(packageName, ignoreCase = true).not()
             firebaseHelper.musicPlayerChoice(context, packageName, hasMusicPlayerChanged)
 
-            setAppleMusicRequirements(view, context, packageName)
-
             Log.d(TAG, Integer.toString(index))
             Log.d(TAG, "Selected Music Player: $selectedMusicPlayer")
             Log.d(TAG, Integer.toString(radioGroup.checkedRadioButtonId))
-        }
-    }
-
-    private fun setAppleMusicRequirements(view: View, context: Context, packageName: String) {
-        // Set Launch App and Unlock screen to true since it is required by Apple Music to play
-        if (packageName == APPLE_MUSIC.packageName) {
-            val launchMusicPlayerToggleButton = view.findViewById<View>(R.id.LaunchMusicPlayerToggleButton) as ToggleButton
-            val unlockScreenToggleButton = view.findViewById<View>(R.id.UnlockToggleButton) as ToggleButton
-            val launchMapsToggleButton = view.findViewById<View>(R.id.MapsToggleButton) as ToggleButton
-            if (!preferences.getLaunchMusicPlayer() || !preferences.getUnlockScreen()
-                    || preferences.getLaunchGoogleMaps()) {
-
-                if (preferences.getLaunchGoogleMaps()) {
-                    Toast.makeText(context, "Launching of Maps/Waze not supported with Apple music", Toast.LENGTH_LONG).show()
-                }
-
-                launchMusicPlayerToggleButton.isChecked = true
-                unlockScreenToggleButton.isChecked = true
-                launchMapsToggleButton.isChecked = false
-                preferences.setLaunchMusicPlayer(true)
-                preferences.setUnlockScreen(true)
-                preferences.setLaunchGoogleMaps(false)
-            }
         }
     }
 
@@ -225,7 +196,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             val appInfo = packageManager.getApplicationInfo(mapChoice, 0)
             packageManager.getApplicationLabel(appInfo).toString()
         } catch (e: Exception) {
-            Log.e(TAG, e.message)
+            e.printStackTrace()
             "Maps"
         }
 
@@ -280,8 +251,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 musicPlayersLL.addView(textView)
             }
         } catch (e: Exception) {
-            val error = if (e.message == null) "RadioButton Error" else e.message
-            Log.e(TAG, error)
+            e.printStackTrace()
         }
 
     }

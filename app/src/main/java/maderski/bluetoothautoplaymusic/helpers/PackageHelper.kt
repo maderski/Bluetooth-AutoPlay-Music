@@ -72,35 +72,27 @@ class PackageHelper(
         }
     }
 
-    fun getCurrentForegroundPackageName(): String {
-        val hasUsageStatsPermission = permissionManager.hasUsageStatsPermission()
-        if (hasUsageStatsPermission) {
-            val usageStatsManager = systemServicesWrapper.usageStats
-            val endTime = System.currentTimeMillis()
-            val beginTime = endTime - 1000 * 3600
-            val usageEvents = usageStatsManager.queryEvents(beginTime, endTime)
-            val eventOut = UsageEvents.Event()
+    fun getCurrentForegroundPackageName(): String? {
+        val usageStatsManager = systemServicesWrapper.usageStats
+        val endTime = System.currentTimeMillis()
+        val beginTime = endTime - 1000 * 3600
+        val usageEvents = usageStatsManager.queryEvents(beginTime, endTime)
+        val eventOut = UsageEvents.Event()
 
-            while (usageEvents.hasNextEvent()) {
-                usageEvents.getNextEvent(eventOut)
-                return if (eventOut.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-                    eventOut.packageName
-                } else {
-                    PACKAGE_NOT_FOUND
-                }
+        var packageName: String? = null
+        while (usageEvents.hasNextEvent()) {
+            usageEvents.getNextEvent(eventOut)
+            if (eventOut.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                packageName = eventOut.packageName
+                break
             }
-        } else {
-            //TODO: handle the case when usageStats permission is not granted
         }
-        return PACKAGE_NOT_FOUND
+        return packageName
     }
 
     fun getActivityManager() = systemServicesWrapper.activityManager
 
     companion object {
         private const val TAG = "PackageHelper"
-
-        const val PACKAGE_NOT_FOUND = "packageNotFound"
-
     }
 }
