@@ -16,8 +16,7 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  */
 
 class BluetoothDeviceHelper(
-        private val systemServicesWrapper: SystemServicesWrapper,
-        private val stringResourceWrapper: StringResourceWrapper
+        private val systemServicesWrapper: SystemServicesWrapper
 ) {
     // List of bluetooth devices on the phone
     fun listOfBluetoothDevices(): List<BAPMDevice> {

@@ -16,8 +16,7 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  */
 class PackageHelper(
         private val systemServicesWrapper: SystemServicesWrapper,
-        private val packageManagerWrapper: PackageManagerWrapper,
-        private val permissionManager: PermissionManager
+        private val packageManagerWrapper: PackageManagerWrapper
 ) {
     // Launches App that is associated with that package that was put into method
     fun getLaunchIntent(packageName: String): Intent? {
