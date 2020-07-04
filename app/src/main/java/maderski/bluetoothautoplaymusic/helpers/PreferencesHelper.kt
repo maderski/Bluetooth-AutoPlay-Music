@@ -37,7 +37,6 @@ class PreferencesHelper(
     val waitTillOffPhone get() = preferences.getWaitTillOffPhone()
     val unlockScreen get() = preferences.getUnlockScreen()
     val mapAppName get() = preferences.getMapsChoice()
-    val canShowNotification get() = preferences.getShowNotification()
     val keepScreenON get() = preferences.getKeepScreenON()
     val volumeMAX get() = preferences.getMaxVolume()
     val canAutoPlayMusic get() = preferences.getAutoPlayMusic()

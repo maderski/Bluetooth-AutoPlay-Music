@@ -37,9 +37,6 @@ class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
     fun setCanLaunchDirections(enable: Boolean) = sharedPrefsAccess.putBoolean(LAUNCH_DIRECTIONS, enable)
     fun getCanLaunchDirections(): Boolean = sharedPrefsAccess.getBoolean(LAUNCH_DIRECTIONS, false)
 
-    fun setShowNotification(enable: Boolean) = sharedPrefsAccess.putBoolean(SHOW_NOTIFICATION, enable)
-    fun getShowNotification(): Boolean = sharedPrefsAccess.getBoolean(SHOW_NOTIFICATION, false)
-
     fun setMorningStartTime(startTime: Int) = sharedPrefsAccess.putInt(MORNING_START_TIME, startTime)
     fun getMorningStartTime(): Int = sharedPrefsAccess.getInt(MORNING_START_TIME, 700)
 
