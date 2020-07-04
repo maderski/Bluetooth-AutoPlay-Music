@@ -10,6 +10,7 @@ import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceive
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.BT_STATE_CHANGED
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.POWER_CONNECTED
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.POWER_DISCONNECTED
+import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.helpers.PowerConnectedHelper
 import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
@@ -31,8 +32,11 @@ class OnBTConnectService : Service(), KoinComponent {
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
     private val powerConnectionReceiver: PowerConnectionReceiver by inject()
     private val preferencesHelper: PreferencesHelper by inject()
+    private val volumeControl: VolumeControl by inject()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        volumeControl.saveOriginalVolume()
+
         val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
 
         val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message

@@ -26,7 +26,6 @@ class BluetoothConnectHelper(
         private val appContext: WeakReference<Context>,
         private val serviceManager: ServiceManager,
         private val firebaseHelper: FirebaseHelper,
-        private val volumeControl: VolumeControl,
         private val btConnectActions: BTConnectActions,
         private val preferencesHelper: PreferencesHelper
 ) : ServiceConnection {
@@ -37,7 +36,6 @@ class BluetoothConnectHelper(
                 STATE_CONNECTING -> Log.d(TAG, "A2DP CONNECTING")
                 STATE_CONNECTED -> {
                     Log.d(TAG, "A2DP CONNECTED")
-                    volumeControl.saveOriginalVolume()
                     firebaseHelper.connectViaA2DP(bluetoothDevice.name, true)
 
                     serviceManager.startService(OnBTConnectService::class.java, OnBTConnectService.TAG, this)

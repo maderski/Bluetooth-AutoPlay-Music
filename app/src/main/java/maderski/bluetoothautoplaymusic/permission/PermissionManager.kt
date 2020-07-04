@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Process
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
-import maderski.bluetoothautoplaymusic.services.BAPMNotificationListenerService
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 class PermissionManager(
