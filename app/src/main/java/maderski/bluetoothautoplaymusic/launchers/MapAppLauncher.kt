@@ -2,10 +2,10 @@ package maderski.bluetoothautoplaymusic.launchers
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
 import android.util.Log
+import kotlinx.coroutines.*
+import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
-import maderski.bluetoothautoplaymusic.helpers.PackageHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.TimeHelper
 import maderski.bluetoothautoplaymusic.helpers.enums.DirectionLocation
@@ -15,7 +15,7 @@ import java.util.*
 class MapAppLauncher(
         private val launchHelper: LaunchHelper,
         private val preferencesHelper: PreferencesHelper
-) {
+) : CoroutineScope by AppScope() {
     fun mapsLaunch() {
         val isMapsRunning = launchHelper.isAppRunning(MapApps.MAPS.packageName)
         val canLaunch = canMapsLaunchNow()
@@ -157,28 +157,24 @@ class MapAppLauncher(
     }
 
     fun launchWazeDirections(location: String) {
-        val handler = Handler()
-        val runnable = Runnable {
-            val uriString = "waze://?favorite=$location&navigate=yes"
-            Log.d(TAG, "DIRECTIONS LOCATION: $uriString")
-            val uri = Uri.parse(uriString)
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = uri
-            launchHelper.sendBroadcast(intent)
+        launch {
+            delay(4000)
+            withContext(Dispatchers.Main) {
+                val uriString = "waze://?favorite=$location&navigate=yes"
+                Log.d(TAG, "DIRECTIONS LOCATION: $uriString")
+                val uri = Uri.parse(uriString)
+                launchHelper.sendBroadcast(Intent(Intent.ACTION_VIEW).apply { data = uri })
+            }
         }
-
-        handler.postDelayed(runnable, 4000)
     }
 
     fun closeWazeOnDisconnect() {
-        val handler = Handler()
-        val runnable = Runnable {
-            val intent = Intent()
-            intent.action = "Eliran_Close_Intent"
-            launchHelper.sendBroadcast(intent)
+        launch {
+            delay(2000)
+            withContext(Dispatchers.Main) {
+                launchHelper.sendBroadcast(Intent().apply { action = "Eliran_Close_Intent" })
+            }
         }
-
-        handler.postDelayed(runnable, 2000)
     }
 
     companion object {

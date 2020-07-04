@@ -6,6 +6,11 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
@@ -20,7 +25,7 @@ class LaunchHelper(
         private val context: Context,
         private val packageHelper: PackageHelper,
         private val stringResourceWrapper: StringResourceWrapper
-) {
+) : CoroutineScope by AppScope() {
     fun launchApp(packageName: String)  {
         val launchIntent = packageHelper.getLaunchIntent(packageName)
         if (launchIntent != null) {
@@ -42,20 +47,19 @@ class LaunchHelper(
     }
 
     fun launchBAPMActivity() {
-        val handler = Handler(Looper.getMainLooper())
-        val runnable = Runnable {
+        launch(Dispatchers.Main) {
+            delay(750)
             val intentArray = arrayOfNulls<Intent>(2)
             intentArray[0] = Intent(context, MainActivity::class.java)
             intentArray[0]?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             intentArray[1] = Intent(context, LaunchBAPMActivity::class.java)
             context.startActivities(intentArray)
         }
-        handler.postDelayed(runnable, 750)
     }
 
     fun launchDisconnectActivity() {
-        val launchIntent = Intent(context, DisconnectActivity::class.java).also {
-            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        val launchIntent = Intent(context, DisconnectActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
         context.startActivity(launchIntent)
     }
