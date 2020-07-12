@@ -19,6 +19,7 @@ import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
+import maderski.bluetoothautoplaymusic.helpers.BluetoothConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
@@ -35,8 +36,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
     private val permissionManager: PermissionManager by inject()
-    private val btConnectActions: BTConnectActions by inject()
-    private val btDisconnectActions: BTDisconnectActions by inject()
+    private val btConnectionManager: BluetoothConnectionManager by inject()
+
 
     private val radioButtonIndex: Int
         get() {
@@ -349,10 +350,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             bn_bluetooth_connected_test.visibility = View.VISIBLE
             bn_bluetooth_disconnected_test.visibility = View.VISIBLE
             bn_bluetooth_connected_test.setOnClickListener {
-                btConnectActions.actionsOnBTConnect()
+                btConnectionManager.onBTConnect()
             }
             bn_bluetooth_disconnected_test.setOnClickListener {
-                btDisconnectActions.actionsOnBTDisconnect()
+                btConnectionManager.onBTDisconnect()
             }
         }
     }

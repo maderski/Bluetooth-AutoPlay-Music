@@ -15,8 +15,7 @@ import org.koin.core.inject
  * Created by Jason on 1/28/17.
  */
 
-class BTStateChangedReceiver : BroadcastReceiver(), KoinComponent {
-    private val serviceManager: ServiceManager by inject()
+class BTStateChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             if (intent.action != null) {

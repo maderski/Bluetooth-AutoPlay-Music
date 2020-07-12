@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import maderski.bluetoothautoplaymusic.helpers.BluetoothConnectHelper
+import maderski.bluetoothautoplaymusic.helpers.BluetoothConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -15,7 +15,7 @@ import org.koin.core.inject
  */
 class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
     private val preferencesHelper: PreferencesHelper by inject()
-    private val bluetoothConnectHelper: BluetoothConnectHelper by inject()
+    private val bluetoothConnectionManager: BluetoothConnectionManager by inject()
 
     //On receive of Broadcast
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -25,7 +25,7 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
                 val btDevice = it.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 val isASelectedBTDevice = preferencesHelper.isASelectedBTDevice(btDevice)
                 if (isASelectedBTDevice) {
-                    bluetoothConnectHelper.a2dpActions(it, btDevice)
+                    bluetoothConnectionManager.a2dpActions(it, btDevice)
                 }
             }
         }

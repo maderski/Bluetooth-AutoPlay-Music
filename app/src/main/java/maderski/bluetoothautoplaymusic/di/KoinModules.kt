@@ -37,7 +37,7 @@ object KoinModules {
             helperModules,
             notificationModule,
             permissionModule,
-            btActionsModule,
+            bluetoothModule,
             launcherModule,
             wrapperModule,
             factoryModule,
@@ -46,7 +46,7 @@ object KoinModules {
 }
 
 val thirdPartyModule = module {
-    single { Gson() }
+    factory { Gson() }
 }
 
 val prefsModule = module {
@@ -59,16 +59,18 @@ val controlModule = module {
     single { VolumeControl(get(), get()) }
     single { RingerControl(get(), get(), get()) }
     single { BasicPlayAttempter() }
-    factory { MediaPlayerControlManager(
-            androidContext(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-    ) }
+    factory {
+        MediaPlayerControlManager(
+                androidContext(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get(),
+                get()
+        )
+    }
 }
 
 val serviceModule = module {
@@ -87,7 +89,6 @@ val helperModules = module {
     single { TelephoneHelper(get(), get(), get(), get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext(), get()) }
-    single { BluetoothConnectHelper(get(), get(), get(), get(), get()) }
     single { PowerConnectedHelper(get(), get(), get()) }
     single { PreferencesHelper(get()) }
     single { ToastHelper(androidContext()) }
@@ -104,10 +105,9 @@ val permissionModule = module {
     single { PermissionManager(androidContext(), get()) }
 }
 
-val btActionsModule = module {
+val bluetoothModule = module {
     single {
         BTDisconnectActions(
-                get(),
                 get(),
                 get(),
                 get(),
@@ -129,6 +129,14 @@ val btActionsModule = module {
                 get(),
                 get(),
                 get(),
+                get(),
+                get(),
+                get()
+        )
+    }
+    single {
+        BluetoothConnectionManager(
+                androidContext(),
                 get(),
                 get(),
                 get()

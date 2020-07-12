@@ -18,7 +18,6 @@ import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
  */
 
 class BTDisconnectActions(
-        private val mBAPMNotification: BAPMNotification,
         private val mVolumeControl: VolumeControl,
         private val launchHelper: LaunchHelper,
         private val ringerControl: RingerControl,
