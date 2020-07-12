@@ -10,11 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
@@ -32,6 +35,8 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
     private val permissionManager: PermissionManager by inject()
+    private val btConnectActions: BTConnectActions by inject()
+    private val btDisconnectActions: BTDisconnectActions by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -51,6 +56,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         priorityToggleButton(rootView)
         volumeMAXToggleButton(rootView)
         unlockScreenToggleButton(rootView)
+
+        if (BuildConfig.DEBUG) {
+            enableTestButtons(rootView)
+        }
 
         return rootView
     }
@@ -331,6 +340,19 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             } else {
                 preferences.setLaunchMusicPlayer(false)
                 Log.d(TAG, "Launch Music Player Button is OFF")
+            }
+        }
+    }
+
+    fun enableTestButtons(rootView: View) {
+        with(rootView) {
+            bn_bluetooth_connected_test.visibility = View.VISIBLE
+            bn_bluetooth_disconnected_test.visibility = View.VISIBLE
+            bn_bluetooth_connected_test.setOnClickListener {
+                btConnectActions.actionsOnBTConnect()
+            }
+            bn_bluetooth_disconnected_test.setOnClickListener {
+                btDisconnectActions.actionsOnBTDisconnect()
             }
         }
     }

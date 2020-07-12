@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(),
         MapsFragment.OnFragmentInteractionListener {
     private val preferences: BAPMPreferences by inject()
     private val serviceManager: ServiceManager by inject()
-    private val mFirebaseHelper: FirebaseHelper by inject()
+    private val firebaseHelper: FirebaseHelper by inject()
     private val systemServicesWrapper: SystemServicesWrapper by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(),
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        mFirebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
+        firebaseHelper.activityLaunched(ActivityNameConstants.MAIN)
 
         supportFragmentManager
                 .beginTransaction()
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(),
                 R.id.menu_options -> {
                     val optionsFragment = OptionsFragment.newInstance()
                     handleNavigationSelection(optionsFragment, TAG_OPTIONS_FRAGMENT)
-                    mFirebaseHelper.selectionMade(SelectionConstants.OPTIONS)
+                    firebaseHelper.selectionMade(SelectionConstants.OPTIONS)
                     true
                 }
                 else -> false
@@ -95,11 +95,11 @@ class MainActivity : AppCompatActivity(),
 
 
         if (id == R.id.about_menu) {
-            mFirebaseHelper.selectionMade(SelectionConstants.ABOUT)
+            firebaseHelper.selectionMade(SelectionConstants.ABOUT)
             aboutSelected()
             return true
         } else if (id == R.id.link_menu) {
-            mFirebaseHelper.selectionMade(SelectionConstants.RATE_ME)
+            firebaseHelper.selectionMade(SelectionConstants.RATE_ME)
             linkSelected()
             return true
         }
@@ -175,11 +175,11 @@ class MainActivity : AppCompatActivity(),
 
         when (typeOfTimeSet) {
             TimePickerFragment.SCREEN_BRIGHTNESS_TIME -> if (isEndTime) {
-                mFirebaseHelper.timeSetSelected(SelectionConstants.DIM_TIME, true)
+                firebaseHelper.timeSetSelected(SelectionConstants.DIM_TIME, true)
                 preferences.setDimTime(timeSet)
                 Log.d("Settings", "Dim brightness")
             } else {
-                mFirebaseHelper.timeSetSelected(SelectionConstants.BRIGHT_TIME, true)
+                firebaseHelper.timeSetSelected(SelectionConstants.BRIGHT_TIME, true)
                 preferences.setBrightTime(timeSet)
                 Log.d("Settings", "Bright brightness")
             }
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity(),
                     val timeDisplayed = findViewById<View>(R.id.morning_end_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
-                    mFirebaseHelper.timeSetSelected(SelectionConstants.MORNING_END_TIME, true)
+                    firebaseHelper.timeSetSelected(SelectionConstants.MORNING_END_TIME, true)
                 } else {
                     preferences.setMorningStartTime(timeSet)
 
@@ -199,7 +199,7 @@ class MainActivity : AppCompatActivity(),
                     val timeDisplayed = findViewById<View>(R.id.morning_start_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
-                    mFirebaseHelper.timeSetSelected(SelectionConstants.MORNING_START_TIME, true)
+                    firebaseHelper.timeSetSelected(SelectionConstants.MORNING_START_TIME, true)
                 }
                 Log.d("Map Options", typeOfTimeSet)
             }
@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity(),
                     val timeDisplayed = findViewById<View>(R.id.evening_end_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
-                    mFirebaseHelper.timeSetSelected(SelectionConstants.EVENING_END_TIME, true)
+                    firebaseHelper.timeSetSelected(SelectionConstants.EVENING_END_TIME, true)
                 } else {
                     preferences.setEveningStartTime(timeSet)
 
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity(),
                     val timeDisplayed = findViewById<View>(R.id.evening_start_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
-                    mFirebaseHelper.timeSetSelected(SelectionConstants.EVENING_START_TIME, true)
+                    firebaseHelper.timeSetSelected(SelectionConstants.EVENING_START_TIME, true)
                 }
                 Log.d("Map Options", typeOfTimeSet)
             }
@@ -231,7 +231,7 @@ class MainActivity : AppCompatActivity(),
                     val timeDisplayed = findViewById<View>(R.id.custom_end_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
-                    mFirebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_END_TIME, true)
+                    firebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_END_TIME, true)
                 } else {
                     preferences.setCustomStartTime(timeSet)
 
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity(),
                     val timeDisplayed = findViewById<View>(R.id.custom_start_time_displayed) as TextView
                     timeDisplayed.text = setTime
 
-                    mFirebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_START_TIME, true)
+                    firebaseHelper.timeSetSelected(SelectionConstants.CUSTOM_START_TIME, true)
                 }
                 Log.d("Map Options", typeOfTimeSet)
             }
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onTimeCancel(typeOfTimeSet: String, isEndTime: Boolean) {
         when (typeOfTimeSet) {
-            TimePickerFragment.SCREEN_BRIGHTNESS_TIME -> mFirebaseHelper.timeSetSelected(if (isEndTime) SelectionConstants.DIM_TIME else SelectionConstants.BRIGHT_TIME, false)
+            TimePickerFragment.SCREEN_BRIGHTNESS_TIME -> firebaseHelper.timeSetSelected(if (isEndTime) SelectionConstants.DIM_TIME else SelectionConstants.BRIGHT_TIME, false)
             TimePickerFragment.MORNING_TIMESPAN -> {}
             TimePickerFragment.EVENING_TIMESPAN -> {}
             TimePickerFragment.CUSTOM_TIMESPAN -> {}

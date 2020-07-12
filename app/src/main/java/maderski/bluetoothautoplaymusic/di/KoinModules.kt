@@ -1,5 +1,6 @@
 package maderski.bluetoothautoplaymusic.di
 
+import com.google.gson.Gson
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
@@ -29,9 +30,8 @@ import org.koin.dsl.module
 
 object KoinModules {
     val list = listOf(
-            prefsModules,
-            controlModules,
-            firebaseModule,
+            prefsModule,
+            controlModule,
             serviceModule,
             receiverModule,
             helperModules,
@@ -39,15 +39,21 @@ object KoinModules {
             permissionModule,
             btActionsModule,
             launcherModule,
-            wrapperModule
+            wrapperModule,
+            factoryModule,
+            thirdPartyModule
     )
 }
 
-val prefsModules = module {
+val thirdPartyModule = module {
+    single { Gson() }
+}
+
+val prefsModule = module {
     single { BAPMPreferences(BAPMSharedPrefsAccess(androidContext(), BAPMPreferences.MY_PREFS_NAME, get())) }
 }
 
-val controlModules = module {
+val controlModule = module {
     single { ScreenONLock(get(), get()) }
     single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
@@ -63,10 +69,6 @@ val controlModules = module {
             get(),
             get()
     ) }
-}
-
-val firebaseModule = module {
-    single { FirebaseHelper(androidContext()) }
 }
 
 val serviceModule = module {
@@ -86,10 +88,12 @@ val helperModules = module {
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext(), get()) }
     single { BluetoothConnectHelper(get(), get(), get(), get(), get()) }
-    single { PowerConnectedHelper(get(), get(), get(), get()) }
+    single { PowerConnectedHelper(get(), get(), get()) }
     single { PreferencesHelper(get()) }
     single { ToastHelper(androidContext()) }
     single { BluetoothDeviceHelper(get()) }
+    single { FirebaseHelper(androidContext()) }
+    single { SerializationHelper(get()) }
 }
 
 val notificationModule = module {

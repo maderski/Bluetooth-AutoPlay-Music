@@ -17,8 +17,7 @@ class PermissionManager(
         private val systemServicesWrapper: SystemServicesWrapper
 ) {
     //region Permission status
-    fun isAllRequiredPermissionsGranted() = hasUsageStatsPermission()
-            && hasNotificationAccessPermission()
+    fun isAllRequiredPermissionsGranted() = hasNotificationAccessPermission()
             && hasOverlayPermission()
             && hasNotificationListenerAccessPermission()
 

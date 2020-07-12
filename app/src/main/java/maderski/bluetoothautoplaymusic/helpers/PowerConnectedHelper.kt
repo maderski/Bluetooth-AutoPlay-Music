@@ -7,7 +7,6 @@ import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 
 class PowerConnectedHelper(
-        private val preferencesHelper: PreferencesHelper,
         private val btConnectActions: BTConnectActions,
         private val firebaseHelper: FirebaseHelper,
         private val bluetoothDeviceHelper: BluetoothDeviceHelper

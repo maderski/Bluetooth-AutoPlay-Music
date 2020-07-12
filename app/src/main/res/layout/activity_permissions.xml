@@ -38,24 +38,6 @@
         app:layout_constraintTop_toBottomOf="@id/vw_divider"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        android:id="@+id/tv_location_perm_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Course Location"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/iv_location_perm_status"
-        app:layout_constraintTop_toTopOf="@id/iv_location_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_location_perm_status"/>
-
-    <Switch
-        android:id="@+id/sw_location_perm_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_location_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_location_perm_status"/>
-
     <ImageView
         android:id="@+id/iv_usage_stats_perm_status"
         android:layout_width="wrap_content"
@@ -65,7 +47,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/iv_location_perm_status"
+        app:layout_constraintTop_toBottomOf="@id/vw_divider"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
@@ -178,12 +160,11 @@
 
     <Button
         android:id="@+id/bn_perm_continue"
-        style="?android:attr/borderlessButtonStyle"
+        style="@style/DefaultBTAPMButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Continue"
-        android:background="@drawable/on_state"
-        android:textColor="@color/white"
+        android:text="@string/continue_btn_text"
+        android:enabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
