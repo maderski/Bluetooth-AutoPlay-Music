@@ -31,7 +31,7 @@ class BTConnectActions(
         private val launchHelper: LaunchHelper,
         private val mediaPlayerControlManager: MediaPlayerControlManager,
         private val serviceManager: ServiceManager,
-//        private val telephoneHelper: TelephoneHelper,
+        private val telephoneHelper: TelephoneHelper,
         private val preferencesHelper: PreferencesHelper,
         private val ringerControl: RingerControl,
         private val mapAppLauncher: MapAppLauncher,
@@ -48,11 +48,11 @@ class BTConnectActions(
     }
 
     private fun actionsWhileOnCall() {
-        val isOnCall = false//telephoneHelper.isOnCall
+        val isOnCall = telephoneHelper.isOnCall()
 
         if (isOnCall) {
             Log.d(TAG, "ON a call")
-            //telephoneHelper.checkIfOnPhone(volumeControl)
+            telephoneHelper.checkIfOnPhone(volumeControl, ringerControl)
         } else {
             Log.d(TAG, "NOT on a call")
             actionsOnBTConnect()

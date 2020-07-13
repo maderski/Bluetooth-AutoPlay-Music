@@ -16,58 +16,47 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  */
 class TelephoneHelper(
         systemServicesWrapper: SystemServicesWrapper,
-        private val powerHelper: PowerHelper,
-        private val btConnectActions: BTConnectActions,
-        private val firebaseHelper: FirebaseHelper,
-        private val ringerControl: RingerControl
+        private val firebaseHelper: FirebaseHelper
 ) {
     private val telephonyManager = systemServicesWrapper.telephonyManager
-    val isOnCall: Boolean
-        get() {
-            val currentCallState = telephonyManager.callState
 
-            return if (currentCallState == TelephonyManager.CALL_STATE_OFFHOOK) {
-                Log.d(TAG, "ON CALL!")
-                true
-            } else {
-                Log.d(TAG, "Not on Call")
-                false
-            }
+    fun isOnCall(): Boolean {
+        val currentCallState = telephonyManager.callState
+        return if (currentCallState == TelephonyManager.CALL_STATE_OFFHOOK) {
+            Log.d(TAG, "ON CALL!")
+            true
+        } else {
+            Log.d(TAG, "Not on Call")
+            false
         }
+    }
 
-    fun checkIfOnPhone(volumeControl: VolumeControl) {
+    fun checkIfOnPhone(volumeControl: VolumeControl, ringerControl: RingerControl) {
 
         val totalSeconds = 43200000 // check for 12 hours
         val countDownInterval = 2000 // 2 second interval
 
         object : CountDownTimer(totalSeconds.toLong(), countDownInterval.toLong()) {
             override fun onTick(millisUntilFinished: Long) {
-                if (powerHelper.isPluggedIn()) {
-                    if (isOnCall) {
-                        Log.d(TAG, "On Call, check again in 3 sec")
-                    } else {
-                        Log.d(TAG, "Off Call, Launching Bluetooth Autoplay music")
-                        cancel()
-                        if (isRingerNotOnSilent()) {
-                            // Save the Original Volume and Launch Bluetooth Autoplay Music
-                            volumeControl.saveOriginalVolume()
-                        }
-                        // Calling actionsOnBTConnect cause onBTConnect already ran
-                        btConnectActions.actionsOnBTConnect()
-                        firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE)
-                    }
+                if (isOnCall()) {
+                    Log.d(TAG, "On Call, check again in 2 sec")
                 } else {
-                    //Bailing cause phone is not plugged in
-                    Log.d(TAG, "Phone is no longer plugged in to power")
+                    Log.d(TAG, "Off Call, Launching Bluetooth Autoplay music")
                     cancel()
+                    val isRingerNotOnSilent = ringerControl.getCurrentRingerSetting() != AudioManager.RINGER_MODE_SILENT
+                    if (isRingerNotOnSilent) {
+                        // Save the Original Volume and Launch Bluetooth Autoplay Music
+                        volumeControl.saveOriginalVolume()
+                    }
+                    // Calling actionsOnBTConnect cause onBTConnect already ran
+                    //btConnectActions.actionsOnBTConnect()
+                    firebaseHelper.bluetoothActionLaunch(BTActionsLaunchConstants.TELEPHONE)
                 }
             }
 
             override fun onFinish() {}
         }.start()
     }
-
-    private fun isRingerNotOnSilent() = ringerControl.getCurrentRingerSetting() != AudioManager.RINGER_MODE_SILENT
 
     companion object {
         private const val TAG = "TelephoneHelper"
