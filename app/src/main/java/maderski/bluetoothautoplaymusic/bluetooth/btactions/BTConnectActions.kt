@@ -8,13 +8,13 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
-import maderski.bluetoothautoplaymusic.helpers.*
+import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
+import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
-import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.WakeLockService
@@ -28,12 +28,10 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 class BTConnectActions(
         private val context: Context,
         private val volumeControl: VolumeControl,
-        private val bapmNotification: BAPMNotification,
         private val launchHelper: LaunchHelper,
         private val mediaPlayerControlManager: MediaPlayerControlManager,
         private val serviceManager: ServiceManager,
-        private val powerHelper: PowerHelper,
-        private val telephoneHelper: TelephoneHelper,
+//        private val telephoneHelper: TelephoneHelper,
         private val preferencesHelper: PreferencesHelper,
         private val ringerControl: RingerControl,
         private val mapAppLauncher: MapAppLauncher,
@@ -50,13 +48,11 @@ class BTConnectActions(
     }
 
     private fun actionsWhileOnCall() {
-        val isOnCall = telephoneHelper.isOnCall
-        val isPluggedIn = powerHelper.isPluggedIn()
+        val isOnCall = false//telephoneHelper.isOnCall
 
         if (isOnCall) {
             Log.d(TAG, "ON a call")
-            // if plugged in run on the phone check else launch notification
-            if (isPluggedIn) telephoneHelper.checkIfOnPhone(volumeControl) else bapmNotification.launchBAPMNotification()
+            //telephoneHelper.checkIfOnPhone(volumeControl)
         } else {
             Log.d(TAG, "NOT on a call")
             actionsOnBTConnect()
@@ -80,8 +76,6 @@ class BTConnectActions(
             autoPlayMusic()
             putPhoneInDoNotDisturb()
         }
-
-        serviceManager.stopService(OnBTConnectService::class.java, OnBTConnectService.TAG)
     }
 
     private fun performActionsDelay() {
@@ -151,7 +145,7 @@ class BTConnectActions(
     }
 
     private fun launchMusicPlayer() {
-        val isLaunchingMaps = preferencesHelper.isLaunchingMaps && mapAppLauncher.canMapsLaunchNow()
+        val isLaunchingMaps = preferencesHelper.isLaunchingMaps //&& mapAppLauncher.canMapsLaunchNow()
         val isLaunchingPlayer = preferencesHelper.isLaunchingMusicPlayer
         if (isLaunchingPlayer && !isLaunchingMaps) {
             val musicPlayerPkg = preferencesHelper.musicPlayerPkgName
@@ -178,7 +172,7 @@ class BTConnectActions(
                 } else {
                     val broadcastReceiver = NotifPolicyAccessChangedReceiver()
                     val intentFilter = IntentFilter(NotificationManager.ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED)
-                    context.applicationContext.registerReceiver(broadcastReceiver, intentFilter)
+                    context.registerReceiver(broadcastReceiver, intentFilter)
                 }
             } else {
                 ringerControl.saveCurrentRingerSetting()

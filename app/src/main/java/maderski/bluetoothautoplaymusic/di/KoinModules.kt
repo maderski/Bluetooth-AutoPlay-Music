@@ -89,7 +89,7 @@ val helperModule = module {
     single { TelephoneHelper(get(), get(), get(), get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext(), get()) }
-    single { PowerConnectedHelper(get(), get()) }
+    single { PowerConnectedHelper(get(), get(), get()) }
     single { PreferencesHelper(get()) }
     single { ToastHelper(androidContext()) }
     single { BluetoothDeviceHelper(get()) }
@@ -120,9 +120,6 @@ val bluetoothModule = module {
     single {
         BTConnectActions(
                 androidContext(),
-                get(),
-                get(),
-                get(),
                 get(),
                 get(),
                 get(),
