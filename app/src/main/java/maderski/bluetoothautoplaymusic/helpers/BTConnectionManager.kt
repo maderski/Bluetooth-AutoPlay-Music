@@ -20,7 +20,8 @@ class BTConnectionManager(
         private val serviceManager: ServiceManager,
         private val preferencesHelper: PreferencesHelper,
         private val powerHelper: PowerHelper,
-        private val powerConnectionReceiver: PowerConnectionReceiver
+        private val powerConnectionReceiver: PowerConnectionReceiver,
+        private val powerConnectedHelper: PowerConnectedHelper
 ) : ServiceConnection {
     private var isPowerConnectionReceiverRegistered = false
 
@@ -29,7 +30,7 @@ class BTConnectionManager(
         if (waitTillPowerConnected) {
             val isPluggedIn = powerHelper.isPluggedIn()
             if (isPluggedIn) {
-                //powerConnectedHelper.performConnectActions()
+                powerConnectedHelper.performConnectActions()
             } else {
                 registerPowerConnectionReceiver()
             }
