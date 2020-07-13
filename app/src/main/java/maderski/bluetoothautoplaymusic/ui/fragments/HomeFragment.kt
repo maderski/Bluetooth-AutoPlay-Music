@@ -16,10 +16,8 @@ import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
-import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
-import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
-import maderski.bluetoothautoplaymusic.helpers.BluetoothConnectionManager
+import maderski.bluetoothautoplaymusic.helpers.BTConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
@@ -36,8 +34,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
     private val permissionManager: PermissionManager by inject()
-    private val btConnectionManager: BluetoothConnectionManager by inject()
-
+    private val btConnectionManager: BTConnectionManager by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -129,9 +126,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     //Get Selected Checkboxes
     private fun checkboxListener(checkBox: CheckBox, bapmDevice: BAPMDevice) {
-
         val saveBTDevices = preferences.getBAPMDevices().toMutableSet()
-
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
                 saveBTDevices.add(bapmDevice)
@@ -350,10 +345,10 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             bn_bluetooth_connected_test.visibility = View.VISIBLE
             bn_bluetooth_disconnected_test.visibility = View.VISIBLE
             bn_bluetooth_connected_test.setOnClickListener {
-                btConnectionManager.onBTConnect()
+                btConnectionManager.startBTConnectService()
             }
             bn_bluetooth_disconnected_test.setOnClickListener {
-                btConnectionManager.onBTDisconnect()
+                btConnectionManager.stopBTDisconnectService()
             }
         }
     }

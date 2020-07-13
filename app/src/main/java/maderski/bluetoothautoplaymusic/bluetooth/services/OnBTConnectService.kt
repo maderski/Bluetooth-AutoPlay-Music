@@ -8,18 +8,11 @@ import android.util.Log
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.BT_STATE_CHANGED
-import maderski.bluetoothautoplaymusic.constants.ActionConstants.POWER_CONNECTED
-import maderski.bluetoothautoplaymusic.constants.ActionConstants.POWER_DISCONNECTED
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
-import maderski.bluetoothautoplaymusic.helpers.PowerConnectedHelper
-import maderski.bluetoothautoplaymusic.helpers.PowerHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
-import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.IllegalArgumentException
 
 /**
  * Created by Jason on 6/6/17.
@@ -27,10 +20,7 @@ import java.lang.IllegalArgumentException
 
 class OnBTConnectService : Service(), KoinComponent {
     private val serviceManager: ServiceManager by inject()
-    private val powerHelper: PowerHelper by inject()
-    private val powerConnectedHelper: PowerConnectedHelper by inject()
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
-    private val powerConnectionReceiver: PowerConnectionReceiver by inject()
     private val preferencesHelper: PreferencesHelper by inject()
     private val volumeControl: VolumeControl by inject()
 
@@ -53,15 +43,6 @@ class OnBTConnectService : Service(), KoinComponent {
 
         registerBTOnStateChangedReceiver()
 
-        if (waitTillPowerConnected) {
-            val isPluggedIn = powerHelper.isPluggedIn()
-            if (isPluggedIn) {
-                powerConnectedHelper.performConnectActions()
-            } else {
-                registerPowerConnectionReceiver()
-            }
-        }
-
         return START_STICKY
     }
 
@@ -69,13 +50,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     override fun onDestroy() {
         super.onDestroy()
-        val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
-        if (waitTillPowerConnected) {
-            unregisterPowerConnectionReceiver()
-        }
-
         unregisterBTOnStateChangedReceiver()
-
         stopForeground(true)
     }
 
@@ -89,23 +64,6 @@ class OnBTConnectService : Service(), KoinComponent {
         try {
             Log.d(TAG, "STOP BT STATE CHANGED RECEIVER")
             unregisterReceiver(btStateChangedReceiver)
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun registerPowerConnectionReceiver() {
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(POWER_CONNECTED)
-        intentFilter.addAction(POWER_DISCONNECTED)
-
-        registerReceiver(powerConnectionReceiver, intentFilter)
-    }
-
-    private fun unregisterPowerConnectionReceiver() {
-        try {
-            Log.d(TAG, "STOP POWER CONNECTION RECEIVER")
-            unregisterReceiver(powerConnectionReceiver)
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         }

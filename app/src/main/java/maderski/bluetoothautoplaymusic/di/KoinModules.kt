@@ -34,7 +34,7 @@ object KoinModules {
             controlModule,
             serviceModule,
             receiverModule,
-            helperModules,
+            helperModule,
             notificationModule,
             permissionModule,
             bluetoothModule,
@@ -83,7 +83,7 @@ val receiverModule = module {
     single { PowerConnectionReceiver() }
 }
 
-val helperModules = module {
+val helperModule = module {
     single { PackageHelper(get(), get()) }
     single { PowerHelper(androidContext(), get()) }
     single { TelephoneHelper(get(), get(), get(), get(), get()) }
@@ -135,8 +135,9 @@ val bluetoothModule = module {
         )
     }
     single {
-        BluetoothConnectionManager(
+        BTConnectionManager(
                 androidContext(),
+                get(),
                 get(),
                 get(),
                 get()
