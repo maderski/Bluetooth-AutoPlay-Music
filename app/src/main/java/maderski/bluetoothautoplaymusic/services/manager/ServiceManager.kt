@@ -68,7 +68,7 @@ class ServiceManager(
                                   @DrawableRes icon: Int,
                                   isOngoing: Boolean) {
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = systemServicesWrapper.notificationManager
         val notification = getNotification(notificationManager, title, message, channelId, channelName, icon, isOngoing)
         service.startForeground(id, notification)
     }
