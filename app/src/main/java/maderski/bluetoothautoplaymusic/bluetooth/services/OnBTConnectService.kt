@@ -3,6 +3,7 @@ package maderski.bluetoothautoplaymusic.bluetooth.services
 import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import maderski.bluetoothautoplaymusic.R
@@ -23,6 +24,8 @@ class OnBTConnectService : Service(), KoinComponent {
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
     private val preferencesHelper: PreferencesHelper by inject()
     private val volumeControl: VolumeControl by inject()
+
+    private val binder = OnBTConnectBinder()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         volumeControl.saveOriginalVolume()
@@ -46,7 +49,7 @@ class OnBTConnectService : Service(), KoinComponent {
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? = null
+    override fun onBind(intent: Intent): IBinder? = binder
 
     override fun onDestroy() {
         super.onDestroy()
@@ -67,6 +70,10 @@ class OnBTConnectService : Service(), KoinComponent {
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
         }
+    }
+
+    inner class OnBTConnectBinder: Binder() {
+        fun getService(): OnBTConnectService = this@OnBTConnectService
     }
 
     companion object {

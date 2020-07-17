@@ -5,6 +5,7 @@ import android.os.IBinder
 import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
+import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.constants.ActionConstants
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
@@ -21,11 +22,13 @@ class BTConnectionManager(
         private val preferencesHelper: PreferencesHelper,
         private val powerHelper: PowerHelper,
         private val powerConnectionReceiver: PowerConnectionReceiver,
-        private val powerConnectedHelper: PowerConnectedHelper
+        private val powerConnectedHelper: PowerConnectedHelper,
+        private val btConnectActions: BTConnectActions
 ) : ServiceConnection {
     private var isPowerConnectionReceiverRegistered = false
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        Log.d(TAG, "OnBTConnectService CONNECTED!")
         val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
         if (waitTillPowerConnected) {
             val isPluggedIn = powerHelper.isPluggedIn()
@@ -35,7 +38,7 @@ class BTConnectionManager(
                 registerPowerConnectionReceiver()
             }
         } else {
-
+            btConnectActions.onBTConnect()
         }
     }
 

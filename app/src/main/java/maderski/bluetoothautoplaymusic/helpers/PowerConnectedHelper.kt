@@ -12,7 +12,7 @@ class PowerConnectedHelper(
         private val bluetoothDeviceHelper: BluetoothDeviceHelper
 ) {
     fun performConnectActions() {
-        val isBTConnected = true//bluetoothDeviceHelper.isBluetoothA2DPOnCompat()
+        val isBTConnected = bluetoothDeviceHelper.isBluetoothA2DPOnCompat()
         Log.d(PowerConnectionReceiver.TAG, "is BTConnected: $isBTConnected")
         if (isBTConnected) {
             Log.d(PowerConnectionReceiver.TAG, "POWER_LAUNCH")
