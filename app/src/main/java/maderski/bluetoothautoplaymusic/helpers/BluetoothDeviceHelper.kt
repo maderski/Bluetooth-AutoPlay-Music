@@ -30,15 +30,6 @@ class BluetoothDeviceHelper(
         }
     }
 
-    fun enableDisabledBluetooth() {
-        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        if (bluetoothAdapter != null) {
-            if (!bluetoothAdapter.isEnabled) {
-                bluetoothAdapter.enable()
-            }
-        }
-    }
-
     fun isBluetoothA2DPOnCompat(): Boolean {
         val audioManager = systemServicesWrapper.audioManager
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {

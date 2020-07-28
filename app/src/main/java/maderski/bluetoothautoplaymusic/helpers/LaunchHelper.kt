@@ -81,7 +81,7 @@ class LaunchHelper(
     fun isAppRunning(packageName: String): Boolean {
         val activityManager = packageHelper.getActivityManager()
         val processInfos = activityManager.runningAppProcesses
-        return processInfos.any { processInfo-> processInfo.processName == packageName }
+        return processInfos.any { processInfo -> processInfo.processName == packageName }
     }
 }
 

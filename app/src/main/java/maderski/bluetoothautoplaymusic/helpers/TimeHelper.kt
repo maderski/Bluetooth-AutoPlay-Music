@@ -29,15 +29,15 @@ class TimeHelper(private var startTime: Int, private var endTime: Int, private v
             while (tempToGetMinutes > 60) {
                 tempToGetMinutes -= 100
             }
-            val minutes = if (tempToGetMinutes > 9) Integer.toString(tempToGetMinutes) else "0" + Integer.toString(tempToGetMinutes)
+            val minutes = if (tempToGetMinutes > 9) tempToGetMinutes.toString() else "0$tempToGetMinutes"
 
             // Get hour
             var tempToGetHour = (time - tempToGetMinutes) / 100
             if (tempToGetHour == 0) {
                 tempToGetHour = 24
             }
-            val hour = if (tempToGetHour > 12) Integer.toString(tempToGetHour - 12) else Integer.toString(tempToGetHour)
-            val AMPM = if (tempToGetHour > 11 && tempToGetHour < 24) "PM" else "AM"
+            val hour = if (tempToGetHour > 12) (tempToGetHour - 12) else tempToGetHour
+            val AMPM = if (tempToGetHour in 12..23) "PM" else "AM"
 
             return "$hour:$minutes $AMPM"
         }

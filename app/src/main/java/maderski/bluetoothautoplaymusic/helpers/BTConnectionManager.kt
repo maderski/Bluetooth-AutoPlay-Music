@@ -31,12 +31,7 @@ class BTConnectionManager(
         Log.d(TAG, "OnBTConnectService CONNECTED!")
         val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
         if (waitTillPowerConnected) {
-            val isPluggedIn = powerHelper.isPluggedIn()
-            if (isPluggedIn) {
-                powerConnectedHelper.performConnectActions()
-            } else {
-                registerPowerConnectionReceiver()
-            }
+            checkIfPluggedIn()
         } else {
             btConnectActions.onBTConnect()
         }
@@ -60,12 +55,21 @@ class BTConnectionManager(
         appContext.startActivity(disconnectIntent)
     }
 
+    private fun checkIfPluggedIn() {
+        val isPluggedIn = powerHelper.isPluggedIn()
+        if (isPluggedIn) {
+            powerConnectedHelper.performConnectActions()
+        } else {
+            registerPowerConnectionReceiver()
+        }
+    }
+
     private fun registerPowerConnectionReceiver() {
         isPowerConnectionReceiverRegistered = true
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(ActionConstants.POWER_CONNECTED)
-        intentFilter.addAction(ActionConstants.POWER_DISCONNECTED)
-
+        val intentFilter = IntentFilter().apply {
+            addAction(ActionConstants.POWER_CONNECTED)
+            addAction(ActionConstants.POWER_DISCONNECTED)
+        }
         appContext.registerReceiver(powerConnectionReceiver, intentFilter)
     }
 

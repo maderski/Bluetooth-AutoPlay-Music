@@ -8,9 +8,10 @@ class ToastHelper (private val context: Context) {
 
     fun displayMessage(message: String, isLongDisplayLength: Boolean = true) {
         toast?.cancel()
-        toast = Toast(context)
-        toast?.setText(message)
-        toast?.duration = if (isLongDisplayLength) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+        toast = Toast(context).apply {
+            setText(message)
+            duration = if (isLongDisplayLength) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+        }
         toast?.show()
         toast = null
     }
