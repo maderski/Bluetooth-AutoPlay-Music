@@ -6,8 +6,6 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
@@ -28,11 +26,6 @@ class BAPMService : Service(), KoinComponent {
         if (BuildConfig.DEBUG) {
             Log.d("BAPMService: ", "started")
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show()
-        }
-
-        // Initalize and start Crashlytics
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, Crashlytics())
         }
 
         // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
