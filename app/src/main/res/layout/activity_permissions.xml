@@ -11,32 +11,13 @@
         android:id="@+id/tv_permissions_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
+        android:paddingBottom="12dp"
         android:text="Required Permissions"
         android:textSize="30sp"
         android:textAlignment="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-    <View
-        android:id="@+id/vw_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_permissions_title"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <ImageView
-        android:id="@+id/iv_location_perm_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="0dp"
-        android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/vw_divider"
-        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
         android:id="@+id/iv_usage_stats_perm_status"
@@ -47,7 +28,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/vw_divider"
+        app:layout_constraintTop_toBottomOf="@id/tv_permissions_title"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView

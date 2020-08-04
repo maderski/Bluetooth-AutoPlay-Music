@@ -1,11 +1,9 @@
 package maderski.bluetoothautoplaymusic.ui.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_permissions.*
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
@@ -15,6 +13,8 @@ class PermissionsActivity : AppCompatActivity() {
     private val permissionManager: PermissionManager by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //viewModel = ViewModelProvider.NewInstanceFactory().create(PermissionsViewModel::class.java)
+
         // If all permissions are granted just launch main activity
         if (permissionManager.isAllRequiredPermissionsGranted()) {
             startActivity(Intent(this, MainActivity::class.java))
@@ -34,13 +34,13 @@ class PermissionsActivity : AppCompatActivity() {
 
     private fun setRequiredPermissionsUIState() {
         // Usage Stats
-        val hasUsageStatsPermission = permissionManager.hasUsageStatsPermission()
+        val hasUsageStatsPermission = permissionManager.hasUsageAccessPermission()
         setStatusIcon(iv_usage_stats_perm_status, hasUsageStatsPermission)
         sw_usage_stats_perm_toggle.isChecked = hasUsageStatsPermission
         sw_usage_stats_perm_toggle.isEnabled = !hasUsageStatsPermission
         if (!hasUsageStatsPermission) {
-            sw_usage_stats_perm_toggle.setOnCheckedChangeListener { buttonView, isChecked ->
-                permissionManager.checkUsageStatPermission(this)
+            sw_usage_stats_perm_toggle.setOnCheckedChangeListener { _, _ ->
+                permissionManager.checkToLaunchUsageAccessSettings(this)
                 sw_usage_stats_perm_toggle.setOnCheckedChangeListener(null)
             }
         }
@@ -51,7 +51,7 @@ class PermissionsActivity : AppCompatActivity() {
         sw_notification_access_perm_toggle.isChecked = hasNotificationAccessPermission
         sw_notification_access_perm_toggle.isEnabled = !hasNotificationAccessPermission
         if (!hasNotificationAccessPermission) {
-            sw_notification_access_perm_toggle.setOnCheckedChangeListener { buttonView, isChecked ->
+            sw_notification_access_perm_toggle.setOnCheckedChangeListener { _, _ ->
                 permissionManager.checkAccessNotificationPolicyPermission(this)
                 sw_notification_access_perm_toggle.setOnCheckedChangeListener(null)
             }
@@ -63,7 +63,7 @@ class PermissionsActivity : AppCompatActivity() {
         sw_overlay_perm_toggle.isChecked = hasOverlayPermission
         sw_overlay_perm_toggle.isEnabled = !hasOverlayPermission
         if (!hasOverlayPermission) {
-            sw_overlay_perm_toggle.setOnCheckedChangeListener { buttonView, isChecked ->
+            sw_overlay_perm_toggle.setOnCheckedChangeListener { _, _ ->
                 permissionManager.checkToLaunchSystemOverlaySettings(this)
                 sw_overlay_perm_toggle.setOnCheckedChangeListener(null)
             }
@@ -75,7 +75,7 @@ class PermissionsActivity : AppCompatActivity() {
         sw_notification_listener_perm_toggle.isChecked = hasNotificationListenerAccessPermission
         sw_notification_listener_perm_toggle.isEnabled = !hasNotificationListenerAccessPermission
         if (!hasNotificationListenerAccessPermission) {
-            sw_notification_listener_perm_toggle.setOnCheckedChangeListener { buttonView, isChecked ->
+            sw_notification_listener_perm_toggle.setOnCheckedChangeListener { _, _ ->
                 permissionManager.checkToLaunchNotificationListenerSettings(this)
                 sw_notification_access_perm_toggle.setOnCheckedChangeListener(null)
             }
