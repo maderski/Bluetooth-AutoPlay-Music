@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
-class ForegroundDetectorAPI29Minus(
+class ForegroundDetectorAPI29Plus(
         private val systemServicesWrapper: SystemServicesWrapper
 ) : ForegroundDetector {
     override fun getForegroundedApp(): String? {
