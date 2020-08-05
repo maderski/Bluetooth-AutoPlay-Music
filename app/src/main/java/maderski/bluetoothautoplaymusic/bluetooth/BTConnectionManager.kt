@@ -1,13 +1,14 @@
-package maderski.bluetoothautoplaymusic.helpers
+package maderski.bluetoothautoplaymusic.bluetooth
 
 import android.content.*
 import android.os.IBinder
 import android.util.Log
-import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.services.OnBTConnectService
 import maderski.bluetoothautoplaymusic.constants.ActionConstants
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
+import maderski.bluetoothautoplaymusic.power.OnPowerConnectedAction
+import maderski.bluetoothautoplaymusic.power.PowerInfo
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
@@ -20,9 +21,9 @@ class BTConnectionManager(
         private val appContext: Context,
         private val serviceManager: ServiceManager,
         private val preferencesHelper: PreferencesHelper,
-        private val powerHelper: PowerHelper,
+        private val powerInfo: PowerInfo,
         private val powerConnectionReceiver: PowerConnectionReceiver,
-        private val powerConnectedHelper: PowerConnectedHelper,
+        private val onPowerConnectedAction: OnPowerConnectedAction,
         private val btConnectActions: BTConnectActions
 ) : ServiceConnection {
     private var isPowerConnectionReceiverRegistered = false
@@ -56,9 +57,9 @@ class BTConnectionManager(
     }
 
     private fun checkIfPluggedIn() {
-        val isPluggedIn = powerHelper.isPluggedIn()
+        val isPluggedIn = powerInfo.isPluggedIn()
         if (isPluggedIn) {
-            powerConnectedHelper.performConnectActions()
+            onPowerConnectedAction.performBTConnectActions()
         } else {
             registerPowerConnectionReceiver()
         }

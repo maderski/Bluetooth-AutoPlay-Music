@@ -6,8 +6,10 @@ import android.content.IntentFilter
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.BT_STATE_CHANGED
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
@@ -23,20 +25,13 @@ class OnBTConnectService : Service(), KoinComponent {
     private val serviceManager: ServiceManager by inject()
     private val btStateChangedReceiver: BTStateChangedReceiver by inject()
     private val preferencesHelper: PreferencesHelper by inject()
-    private val volumeControl: VolumeControl by inject()
 
     private val binder = OnBTConnectBinder()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        volumeControl.saveOriginalVolume()
-
-        val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
-
-        val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
-        val title = getString(resId)
         val message = getString(R.string.app_name)
         serviceManager.createServiceNotification(3451,
-                title,
+                getTitle(),
                 message,
                 this,
                 ServiceManager.CHANNEL_ID_FOREGROUND_SERVICE,
@@ -55,6 +50,12 @@ class OnBTConnectService : Service(), KoinComponent {
         super.onDestroy()
         unregisterBTOnStateChangedReceiver()
         stopForeground(true)
+    }
+
+    private fun getTitle(): String {
+        val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
+        val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
+        return getString(resId)
     }
 
     private fun registerBTOnStateChangedReceiver() {

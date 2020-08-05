@@ -1,18 +1,16 @@
-package maderski.bluetoothautoplaymusic.helpers
+package maderski.bluetoothautoplaymusic.power
 
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Build
-import android.os.PowerManager
-import android.util.Log
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 /**
  * Created by Jason on 2/21/16.
  */
-class PowerHelper(
+class PowerInfo(
         private val context: Context,
         private val systemServicesWrapper: SystemServicesWrapper
 ) {

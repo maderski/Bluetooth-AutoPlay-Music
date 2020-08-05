@@ -17,7 +17,7 @@ import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.FeatureConstants
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
-import maderski.bluetoothautoplaymusic.helpers.BTConnectionManager
+import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
@@ -107,6 +107,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
         val btDeviceCkBoxLL = view.findViewById<View>(R.id.checkBoxLL) as LinearLayout
         btDeviceCkBoxLL.removeAllViews()
+        val savedBTDevices = preferences.getBAPMDevices().toMutableSet()
         val listOfBTDevices = bluetoothDeviceHelper.listOfBluetoothDevices()
         if (listOfBTDevices.isEmpty()) {
             textView = TextView(context)
@@ -118,18 +119,19 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                     text = btDevice.name
                     setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     typeface = Typeface.createFromAsset(context.assets, "fonts/TitilliumText400wt.otf")
+                    isChecked = savedBTDevices.contains(btDevice)
                 }
                 btDeviceCkBoxLL.addView(checkBox)
+                checkboxListener(checkBox, btDevice, savedBTDevices)
             }
         }
     }
 
     //Get Selected Checkboxes
-    private fun checkboxListener(checkBox: CheckBox, bapmDevice: BAPMDevice) {
-        val saveBTDevices = preferences.getBAPMDevices().toMutableSet()
+    private fun checkboxListener(checkBox: CheckBox, bapmDevice: BAPMDevice, savedBTDevices: MutableSet<BAPMDevice>) {
         checkBox.setOnClickListener {
             if (checkBox.isChecked) {
-                saveBTDevices.add(bapmDevice)
+                savedBTDevices.add(bapmDevice)
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "TRUE $bapmDevice")
                 }
@@ -137,7 +139,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                     Log.d(TAG, "SAVED")
                 }
             } else {
-                saveBTDevices.remove(bapmDevice)
+                savedBTDevices.remove(bapmDevice)
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "FALSE $bapmDevice")
                 }
@@ -145,7 +147,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                     Log.d(TAG, "SAVED")
                 }
             }
-            preferences.setBAPMDevices(saveBTDevices)
+            preferences.setBAPMDevices(savedBTDevices)
             firebaseHelper.deviceAdd(SelectionConstants.BLUETOOTH_DEVICE, bapmDevice.name, checkBox.isChecked)
         }
     }

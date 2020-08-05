@@ -8,7 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
-import maderski.bluetoothautoplaymusic.helpers.BTConnectionManager
+import maderski.bluetoothautoplaymusic.controls.VolumeControl
+import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -20,6 +21,7 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
     private val preferencesHelper: PreferencesHelper by inject()
     private val btConnectionManager: BTConnectionManager by inject()
     private val firebaseHelper: FirebaseHelper by inject()
+    private val volumeControl: VolumeControl by inject()
 
     //On receive of Broadcast
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -29,6 +31,7 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
                 val btDevice = it.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 val isASelectedBTDevice = preferencesHelper.isASelectedBTDevice(btDevice)
                 if (isASelectedBTDevice) {
+                    volumeControl.saveOriginalVolume()
                     a2dpActions(it, btDevice)
                 }
             }
@@ -37,8 +40,8 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
 
     private fun a2dpActions(intent: Intent?, bluetoothDevice: BluetoothDevice?) {
         if (intent != null && bluetoothDevice != null) {
-            val state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0)
-            when (state) {
+            val bluetoothState = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE, 0)
+            when (bluetoothState) {
                 BluetoothProfile.STATE_CONNECTING -> Log.d(TAG, "A2DP CONNECTING")
                 BluetoothProfile.STATE_CONNECTED -> {
                     Log.d(TAG, "A2DP CONNECTED")

@@ -55,7 +55,8 @@ buildscript {
                         'legacy_support_v4': "androidx.legacy:legacy-support-v4:${versions.androidx.legacy_support_v4}",
                         'core_ktx': "androidx.core:core-ktx:${versions.androidx.core_ktx}",
                         'constraintlayout': "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}",
-                        'lifecycle_viewmodel_ktx': "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.androidx.life_cycle}"
+                        'lifecycle_viewmodel_ktx': "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.androidx.life_cycle}",
+                        'lifecycle_livedata_ktx': "androidx.lifecycle:lifecycle-livedata-ktx:${versions.androidx.life_cycle}"
                 ],
                 'google': [
                         'material': "com.google.android.material:material:${versions.google.material}",
@@ -117,6 +118,7 @@ dependencies {
     implementation deps.androidx.core_ktx
     implementation deps.androidx.constraintlayout
     implementation deps.androidx.lifecycle_viewmodel_ktx
+    implementation deps.androidx.lifecycle_livedata_ktx
     // google
     implementation deps.google.material
     implementation deps.google.gson

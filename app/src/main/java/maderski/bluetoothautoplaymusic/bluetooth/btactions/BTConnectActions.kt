@@ -8,6 +8,11 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
@@ -37,13 +42,17 @@ class BTConnectActions(
         private val mapAppLauncher: MapAppLauncher,
         private val systemServicesWrapper: SystemServicesWrapper,
         private val permissionManager: PermissionManager
-) {
+) : CoroutineScope by AppScope() {
     fun onBTConnect() {
-        val waitTillOffPhone = preferencesHelper.waitTillOffPhone
-        if (waitTillOffPhone) {
-            actionsWhileOnCall()
-        } else {
-            actionsOnBTConnect()
+        launch {
+            withContext(Dispatchers.Default) {
+                val waitTillOffPhone = preferencesHelper.waitTillOffPhone
+                if (waitTillOffPhone) {
+                    actionsWhileOnCall()
+                } else {
+                    actionsOnBTConnect()
+                }
+            }
         }
     }
 
@@ -62,7 +71,7 @@ class BTConnectActions(
     //Creates notification and if set turns screen ON, puts the phone in priority mode,
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
-    fun actionsOnBTConnect() {
+    private fun actionsOnBTConnect() {
         val unlockScreen = preferencesHelper.unlockScreen
 
         setVolumeToMax()

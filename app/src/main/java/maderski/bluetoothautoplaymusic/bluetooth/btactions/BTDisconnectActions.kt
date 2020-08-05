@@ -2,6 +2,8 @@ package maderski.bluetoothautoplaymusic.bluetooth.btactions
 
 import android.media.AudioManager
 import android.util.Log
+import kotlinx.coroutines.*
+import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
@@ -25,16 +27,20 @@ class BTDisconnectActions(
         private val serviceManager: ServiceManager,
         private val preferencesHelper: PreferencesHelper,
         private val mapAppLauncher: MapAppLauncher
-) {
+) : CoroutineScope by AppScope() {
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
     fun actionsOnBTDisconnect() {
-        pauseMusic()
-        turnOffPriorityMode()
-        closeWaze()
-        stopKeepingScreenOn()
-
-        setVolumeBack()
+        launch {
+            withContext(Dispatchers.Default) {
+                pauseMusic()
+                turnOffPriorityMode()
+                closeWaze()
+                stopKeepingScreenOn()
+                delay(1000)
+                setVolumeBack()
+            }
+        }
     }
 
     private fun pauseMusic() {
@@ -45,7 +51,6 @@ class BTDisconnectActions(
     }
 
     private fun turnOffPriorityMode() {
-
         val priorityMode = preferencesHelper.priorityMode
         if (priorityMode) {
             val currentRinger = ringerControl.getCurrentRingerSetting()

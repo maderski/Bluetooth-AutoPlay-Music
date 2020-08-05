@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.di
 
 import com.google.gson.Gson
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
+import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
 import maderski.bluetoothautoplaymusic.controls.RingerControl
@@ -15,9 +16,12 @@ import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
+import maderski.bluetoothautoplaymusic.detector.foreground.ForegroundDetectorFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
+import maderski.bluetoothautoplaymusic.power.OnPowerConnectedAction
+import maderski.bluetoothautoplaymusic.power.PowerInfo
 import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -41,7 +45,9 @@ object KoinModules {
             launcherModule,
             wrapperModule,
             factoryModule,
-            thirdPartyModule
+            thirdPartyModule,
+            detectorModule,
+            powerModule
     )
 }
 
@@ -85,11 +91,9 @@ val receiverModule = module {
 
 val helperModule = module {
     single { PackageHelper(get(), get()) }
-    single { PowerHelper(androidContext(), get()) }
     single { TelephoneHelper(get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext(), get()) }
-    single { PowerConnectedHelper(get(), get(), get()) }
     single { PreferencesHelper(get()) }
     single { ToastHelper(androidContext()) }
     single { BluetoothDeviceHelper(get()) }
@@ -157,5 +161,14 @@ val wrapperModule = module {
 
 val factoryModule = module {
     single { PlayerControlsFactory(androidContext(), get()) }
+}
+
+val detectorModule = module {
+    single { ForegroundDetectorFactory(get()) }
+}
+
+val powerModule = module {
+    single { PowerInfo(androidContext(), get()) }
+    single { OnPowerConnectedAction(get(), get(), get()) }
 }
 
