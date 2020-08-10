@@ -21,8 +21,8 @@ import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PackageHelper
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.maps.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.maps.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject

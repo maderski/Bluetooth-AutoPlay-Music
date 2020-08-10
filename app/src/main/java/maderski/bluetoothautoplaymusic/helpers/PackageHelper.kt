@@ -1,13 +1,10 @@
 package maderski.bluetoothautoplaymusic.helpers
 
-import android.app.usage.UsageEvents
-import android.content.Context
 import android.content.Intent
 import android.util.Log
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.maps.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.maps.MapApps.WAZE
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers
-import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.wrappers.PackageManagerWrapper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 

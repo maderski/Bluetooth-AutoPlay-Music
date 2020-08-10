@@ -1,4 +1,4 @@
-package maderski.bluetoothautoplaymusic.helpers.enums
+package maderski.bluetoothautoplaymusic.maps
 
 enum class DirectionLocation(val location: String) {
     NONE("None"),

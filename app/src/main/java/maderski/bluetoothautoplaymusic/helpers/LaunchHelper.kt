@@ -3,15 +3,13 @@ package maderski.bluetoothautoplaymusic.helpers
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import maderski.bluetoothautoplaymusic.common.AppScope
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
+import maderski.bluetoothautoplaymusic.maps.MapApps
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 import maderski.bluetoothautoplaymusic.ui.activities.LaunchBAPMActivity
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity

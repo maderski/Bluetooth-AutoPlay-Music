@@ -1,7 +1,7 @@
 package maderski.bluetoothautoplaymusic.sharedprefs
 
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.MAPS
+import maderski.bluetoothautoplaymusic.maps.MapApps.MAPS
 import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MUSIC
 
 

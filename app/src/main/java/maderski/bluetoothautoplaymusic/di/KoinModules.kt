@@ -18,7 +18,7 @@ import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceive
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.detector.foreground.ForegroundDetectorFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
-import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
+import maderski.bluetoothautoplaymusic.maps.MapLauncherFactory
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.power.OnPowerConnectedAction
 import maderski.bluetoothautoplaymusic.power.PowerInfo
@@ -42,7 +42,6 @@ object KoinModules {
             notificationModule,
             permissionModule,
             bluetoothModule,
-            launcherModule,
             wrapperModule,
             factoryModule,
             thirdPartyModule,
@@ -149,10 +148,6 @@ val bluetoothModule = module {
     }
 }
 
-val launcherModule = module {
-    single { MapAppLauncher(get(), get()) }
-}
-
 val wrapperModule = module {
     factory { SystemServicesWrapper(androidContext()) }
     factory { PackageManagerWrapper(androidContext()) }
@@ -161,6 +156,7 @@ val wrapperModule = module {
 
 val factoryModule = module {
     single { PlayerControlsFactory(androidContext(), get()) }
+    single { MapLauncherFactory(get(), get()) }
 }
 
 val detectorModule = module {

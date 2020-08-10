@@ -1,7 +1,7 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothDevice
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps
+import maderski.bluetoothautoplaymusic.maps.MapApps
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class PreferencesHelper(
@@ -14,7 +14,6 @@ class PreferencesHelper(
     val canLaunchDrivingMode
         get() = preferences.getLaunchMapsDrivingMode() &&
                 mapAppName == MapApps.MAPS.packageName
-    val isLaunchingWithDirections get() = preferences.getCanLaunchDirections()
     val isUsingTimesToLaunch get() = preferences.getUseTimesToLaunchMaps()
 
     val morningStartTime get() = preferences.getMorningStartTime()
@@ -25,8 +24,6 @@ class PreferencesHelper(
 
     val customStartTime get() = preferences.getCustomStartTime()
     val customEndTime get() = preferences.getCustomEndTime()
-
-    val isUseLaunchTimeEnabled get() = preferences.getUseTimesToLaunchMaps()
 
     val musicPlayerPkgName get() = preferences.getPkgSelectedMusicPlayer()
 

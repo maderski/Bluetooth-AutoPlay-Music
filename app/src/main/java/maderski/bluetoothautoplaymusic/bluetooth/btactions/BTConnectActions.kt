@@ -19,7 +19,8 @@ import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlMa
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
-import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
+import maderski.bluetoothautoplaymusic.maps.MapApps
+import maderski.bluetoothautoplaymusic.maps.MapLauncherFactory
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.receivers.NotifPolicyAccessChangedReceiver
 import maderski.bluetoothautoplaymusic.services.WakeLockService
@@ -39,7 +40,7 @@ class BTConnectActions(
         private val telephoneHelper: TelephoneHelper,
         private val preferencesHelper: PreferencesHelper,
         private val ringerControl: RingerControl,
-        private val mapAppLauncher: MapAppLauncher,
+        private val mapAppLauncherFactory: MapLauncherFactory,
         private val systemServicesWrapper: SystemServicesWrapper,
         private val permissionManager: PermissionManager
 ) : CoroutineScope by AppScope() {
@@ -165,7 +166,9 @@ class BTConnectActions(
     private fun launchMapApp() {
         val isLaunchingMaps = preferencesHelper.isLaunchingMaps
         if (isLaunchingMaps) {
-            mapAppLauncher.mapsLaunch()
+            val mapApp = MapApps.getMapAppFrom(preferencesHelper.mapAppChosen)
+            val mapAppLauncher = mapAppLauncherFactory.getMapLauncher(mapApp)
+            mapAppLauncher.launchMaps()
         }
     }
 

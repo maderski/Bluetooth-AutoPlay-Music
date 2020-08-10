@@ -9,9 +9,8 @@ import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
-import maderski.bluetoothautoplaymusic.helpers.enums.MapApps.WAZE
-import maderski.bluetoothautoplaymusic.launchers.MapAppLauncher
-import maderski.bluetoothautoplaymusic.notification.BAPMNotification
+import maderski.bluetoothautoplaymusic.maps.MapApps.WAZE
+import maderski.bluetoothautoplaymusic.maps.MapLauncherFactory
 import maderski.bluetoothautoplaymusic.services.WakeLockService
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 
@@ -26,7 +25,7 @@ class BTDisconnectActions(
         private val mediaPlayerControlManager: MediaPlayerControlManager,
         private val serviceManager: ServiceManager,
         private val preferencesHelper: PreferencesHelper,
-        private val mapAppLauncher: MapAppLauncher
+        private val mapLauncherFactory: MapLauncherFactory
 ) : CoroutineScope by AppScope() {
     //Removes mNotification and if set releases wakelock, puts the ringer back to normal,
     //pauses the music
@@ -73,7 +72,8 @@ class BTDisconnectActions(
                 && launchHelper.isAbleToLaunch(WAZE.packageName)
                 && preferencesHelper.mapAppChosen == WAZE.packageName)
         if (closeWaze) {
-            mapAppLauncher.closeWazeOnDisconnect()
+            val mapAppLauncher = mapLauncherFactory.getMapLauncher(WAZE)
+            mapAppLauncher.closeMaps()
         }
     }
 
