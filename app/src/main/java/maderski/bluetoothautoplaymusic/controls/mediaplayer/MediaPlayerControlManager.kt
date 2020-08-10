@@ -14,20 +14,20 @@ import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 class MediaPlayerControlManager(
-        context: Context,
-        mediaSessionTokenHelper: MediaSessionTokenHelper,
-        preferences: BAPMPreferences,
-        systemServicesWrapper: SystemServicesWrapper,
+        private val context: Context,
+        private val mediaSessionTokenHelper: MediaSessionTokenHelper,
+        private val preferences: BAPMPreferences,
+        private val systemServicesWrapper: SystemServicesWrapper,
         private val launchHelper: LaunchHelper,
         private val keyEventControl: KeyEventControl,
         private val playAttempter: BasicPlayAttempter,
         private val playerControlsFactory: PlayerControlsFactory
 ) : MediaControllerHelper.PlayBackStateCallback {
-    private val audioManager = systemServicesWrapper.audioManager
-    private val selectedMusicPlayerPackageName = preferences.getPkgSelectedMusicPlayer()
-    private val token = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
-    private val mediaControllerHelper = if (token != null) MediaControllerHelper(context, token, this) else null
-    private val playerControls = playerControlsFactory.getPlayerControl(selectedMusicPlayerPackageName)
+    private val audioManager get() = systemServicesWrapper.audioManager
+    private val selectedMusicPlayerPackageName get() = preferences.getPkgSelectedMusicPlayer()
+    private val token get() = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
+    private val mediaControllerHelper get() = token?.let{ MediaControllerHelper(context, it, this) }
+    private val playerControls get() = playerControlsFactory.getPlayerControl(selectedMusicPlayerPackageName)
 
     fun play() {
         // Initial attempt to play
