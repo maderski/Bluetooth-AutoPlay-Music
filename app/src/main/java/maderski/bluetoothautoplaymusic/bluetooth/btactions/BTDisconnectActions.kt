@@ -70,7 +70,7 @@ class BTDisconnectActions(
     private fun closeWaze() {
         val closeWaze = (preferencesHelper.shouldCloseWaze
                 && launchHelper.isAbleToLaunch(WAZE.packageName)
-                && preferencesHelper.mapAppChosen == WAZE.packageName)
+                && preferencesHelper.mapAppName == WAZE.packageName)
         if (closeWaze) {
             val mapAppLauncher = mapLauncherFactory.getMapLauncher(WAZE)
             mapAppLauncher.closeMaps()

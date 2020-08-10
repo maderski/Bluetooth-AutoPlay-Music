@@ -73,24 +73,22 @@ class BTConnectActions(
     //sets the volume to MAX, dismisses the keyguard, Launches the Music Selected Music
     //Player and Launches Maps
     private fun actionsOnBTConnect() {
-        val unlockScreen = preferencesHelper.unlockScreen
+        val dismissKeyguard = preferencesHelper.unlockScreen
 
         setVolumeToMax()
         turnTheScreenOn()
 
-        if (unlockScreen) {
-            performActionsDelay()
+        if (dismissKeyguard) {
+            dismissKeyguardPerformActionsDelay()
         } else {
-            launchMusicPlayer()
-            launchMapApp()
-            autoPlayMusic()
-            putPhoneInDoNotDisturb()
+            performActions()
         }
     }
 
-    private fun performActionsDelay() {
+    private fun dismissKeyguardPerformActionsDelay() {
         val isAtLeastAndroid10 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         if (isAtLeastAndroid10) {
+            unlockTheScreen()
             performActions()
         } else {
             Handler(Looper.getMainLooper()).post {
@@ -117,7 +115,6 @@ class BTConnectActions(
     }
 
     private fun performActions() {
-        unlockTheScreen()
         launchMusicPlayer()
         launchMapApp()
         autoPlayMusic()
@@ -155,7 +152,7 @@ class BTConnectActions(
     }
 
     private fun launchMusicPlayer() {
-        val isLaunchingMaps = preferencesHelper.isLaunchingMaps //&& mapAppLauncher.canMapsLaunchNow()
+        val isLaunchingMaps = preferencesHelper.isLaunchingMaps
         val isLaunchingPlayer = preferencesHelper.isLaunchingMusicPlayer
         if (isLaunchingPlayer && !isLaunchingMaps) {
             val musicPlayerPkg = preferencesHelper.musicPlayerPkgName
@@ -166,7 +163,7 @@ class BTConnectActions(
     private fun launchMapApp() {
         val isLaunchingMaps = preferencesHelper.isLaunchingMaps
         if (isLaunchingMaps) {
-            val mapApp = MapApps.getMapAppFrom(preferencesHelper.mapAppChosen)
+            val mapApp = MapApps.getMapAppFrom(preferencesHelper.mapAppName)
             val mapAppLauncher = mapAppLauncherFactory.getMapLauncher(mapApp)
             mapAppLauncher.launchMaps()
         }

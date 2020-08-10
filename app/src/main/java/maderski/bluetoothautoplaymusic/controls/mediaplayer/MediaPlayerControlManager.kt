@@ -1,7 +1,6 @@
 package maderski.bluetoothautoplaymusic.controls.mediaplayer
 
 import android.content.Context
-import android.media.AudioManager
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
 import maderski.bluetoothautoplaymusic.controls.playattempters.BasicPlayAttempter
@@ -10,13 +9,13 @@ import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFac
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaControllerHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaSessionTokenHelper
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 class MediaPlayerControlManager(
         private val context: Context,
         private val mediaSessionTokenHelper: MediaSessionTokenHelper,
-        private val preferences: BAPMPreferences,
+        private val preferencesHelper: PreferencesHelper,
         private val systemServicesWrapper: SystemServicesWrapper,
         private val launchHelper: LaunchHelper,
         private val keyEventControl: KeyEventControl,
@@ -24,7 +23,7 @@ class MediaPlayerControlManager(
         private val playerControlsFactory: PlayerControlsFactory
 ) : MediaControllerHelper.PlayBackStateCallback {
     private val audioManager get() = systemServicesWrapper.audioManager
-    private val selectedMusicPlayerPackageName get() = preferences.getPkgSelectedMusicPlayer()
+    private val selectedMusicPlayerPackageName get() = preferencesHelper.musicPlayerPkgName
     private val token get() = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
     private val mediaControllerHelper get() = token?.let{ MediaControllerHelper(context, it, this) }
     private val playerControls get() = playerControlsFactory.getPlayerControl(selectedMusicPlayerPackageName)

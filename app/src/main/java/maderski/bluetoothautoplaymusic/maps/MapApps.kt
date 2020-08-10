@@ -10,5 +10,8 @@ enum class MapApps(val packageName: String, val uiDisplayName: String, val appli
             WAZE.packageName -> WAZE
             else -> MAPS // Return Maps if package name is not found
         }
+
+        fun isMapApp(packageName: String) =
+                packageName == MAPS.packageName || packageName == WAZE.packageName
     }
 }

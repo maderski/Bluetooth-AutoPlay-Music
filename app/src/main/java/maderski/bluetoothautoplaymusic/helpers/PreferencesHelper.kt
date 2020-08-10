@@ -8,7 +8,6 @@ class PreferencesHelper(
         private val preferences: BAPMPreferences
 ) {
     // BAPM Preferences
-    val mapAppChosen get() = preferences.getMapsChoice()
     val customLocationName get() = preferences.getCustomLocationName()
     val canLaunchDirections get() = preferences.getCanLaunchDirections()
     val canLaunchDrivingMode
