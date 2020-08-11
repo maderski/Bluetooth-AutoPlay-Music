@@ -15,6 +15,7 @@ import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.controls.playattempters.CoroutinePlayAttempter
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.detector.foreground.ForegroundDetectorFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
@@ -63,7 +64,7 @@ val controlModule = module {
     single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
     single { RingerControl(get(), get(), get()) }
-    single { BasicPlayAttempter() }
+    single { CoroutinePlayAttempter() }
     factory {
         MediaPlayerControlManager(
                 androidContext(),

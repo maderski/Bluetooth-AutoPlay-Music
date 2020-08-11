@@ -4,15 +4,13 @@ import android.content.Context
 import android.media.session.MediaController
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
+import android.util.Log
+import maderski.bluetoothautoplaymusic.controls.mediaplayer.PlayBackStateCallback
 
 class MediaControllerHelper(
         context: Context,
-        token: MediaSession.Token,
-        private val callback: PlayBackStateCallback
+        token: MediaSession.Token
 ): MediaController.Callback() {
-    interface PlayBackStateCallback {
-        fun onStartedPlaying()
-    }
     private val mediaController = MediaController(context, token)
 
     fun play() = mediaController.transportControls.play()
@@ -28,14 +26,16 @@ class MediaControllerHelper(
 
     override fun onPlaybackStateChanged(state: PlaybackState?) {
         super.onPlaybackStateChanged(state)
+        Log.d(TAG, "PLAYBACK STATE: $state")
         state?.let { playbackState ->
             if (playbackState.state == PlaybackState.STATE_PLAYING) {
-                callback.onStartedPlaying()
+                // TODO: See if I need to call register this callback with the MediaController
             }
         }
     }
 
     companion object {
+        private const val TAG = "MediaControllerHelper"
         const val VOLUME_UNKNOWN = -1
     }
 }

@@ -9,18 +9,20 @@ class BasicPlayAttempter : PlayAttempter {
     private var playTasksIteratively: Runnable? = null
 
     override fun attemptToPlay(playTasks: List<PlayTaskHolder>) {
+        var playDelay: Long = START_DELAY
         val playTasksIterator = playTasks.listIterator()
         handler = Handler(Looper.getMainLooper())
         playTasksIteratively = Runnable {
             if (playTasksIterator.hasNext()) {
                 val playTaskHolder = playTasksIterator.next()
                 handler?.postDelayed({
-                    Log.d(TAG, "Attempt to play! ${playTasksIterator.nextIndex()}")
+                    Log.d(TAG, "Attempt to play! ${playTasksIterator.nextIndex()}  Delay: $playDelay")
                     handler?.post(playTaskHolder.playTask)
                     playTasksIteratively?.let {
-                        handler?.postDelayed(it, DELAY)
+                        playDelay += START_DELAY
+                        handler?.postDelayed(it, playDelay)
                     }
-                }, DELAY)
+                }, START_DELAY)
             } else {
                 Log.d(TAG, "CANCEL ATTEMPT TO PLAY")
                 cancelPlayAgain()
@@ -43,6 +45,6 @@ class BasicPlayAttempter : PlayAttempter {
 
     companion object {
         const val TAG = "BasicPlayAttempter"
-        const val DELAY = 1500L
+        const val START_DELAY = 1000L
     }
 }

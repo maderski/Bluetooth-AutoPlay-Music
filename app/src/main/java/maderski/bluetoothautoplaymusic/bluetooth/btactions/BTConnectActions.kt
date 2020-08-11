@@ -16,6 +16,7 @@ import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.controls.RingerControl
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.controls.mediaplayer.MediaPlayerControlManager
+import maderski.bluetoothautoplaymusic.controls.mediaplayer.PlayBackStateCallback
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.helpers.TelephoneHelper
@@ -43,7 +44,7 @@ class BTConnectActions(
         private val mapAppLauncherFactory: MapLauncherFactory,
         private val systemServicesWrapper: SystemServicesWrapper,
         private val permissionManager: PermissionManager
-) : CoroutineScope by AppScope() {
+) : PlayBackStateCallback, CoroutineScope by AppScope() {
     fun onBTConnect() {
         launch {
             withContext(Dispatchers.Default) {
@@ -55,6 +56,11 @@ class BTConnectActions(
                 }
             }
         }
+    }
+
+    override fun onStartedPlaying() {
+        // Attempt to launch maps if enabled after music is playing
+        launchMapApp()
     }
 
     private fun actionsWhileOnCall() {
@@ -116,8 +122,14 @@ class BTConnectActions(
 
     private fun performActions() {
         launchMusicPlayer()
-        launchMapApp()
         autoPlayMusic()
+
+        // If play music is turned on don't attempt to launch maps
+        val playMusic = preferencesHelper.canAutoPlayMusic
+        if (!playMusic) {
+            launchMapApp()
+        }
+
         putPhoneInDoNotDisturb()
     }
 
@@ -147,7 +159,7 @@ class BTConnectActions(
     private fun autoPlayMusic() {
         val playMusic = preferencesHelper.canAutoPlayMusic
         if (playMusic) {
-            mediaPlayerControlManager.play()
+            mediaPlayerControlManager.play(this)
         }
     }
 
