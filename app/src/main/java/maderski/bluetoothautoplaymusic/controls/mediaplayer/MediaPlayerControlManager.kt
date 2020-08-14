@@ -3,7 +3,7 @@ package maderski.bluetoothautoplaymusic.controls.mediaplayer
 import android.content.Context
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.KeyEventControl
-import maderski.bluetoothautoplaymusic.controls.playattempters.PlayAttempter
+import maderski.bluetoothautoplaymusic.controls.playattempters.BasicPlayAttempter
 import maderski.bluetoothautoplaymusic.controls.playattempters.PlayTaskHolder
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
@@ -19,7 +19,7 @@ class MediaPlayerControlManager(
         private val systemServicesWrapper: SystemServicesWrapper,
         private val launchHelper: LaunchHelper,
         private val keyEventControl: KeyEventControl,
-        private val playAttempter: PlayAttempter,
+        private val playAttempter: BasicPlayAttempter,
         private val playerControlsFactory: PlayerControlsFactory
 ) {
     private val audioManager get() = systemServicesWrapper.audioManager
