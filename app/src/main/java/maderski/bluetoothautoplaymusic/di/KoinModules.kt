@@ -64,7 +64,7 @@ val controlModule = module {
     single { KeyEventControl(androidContext(), get()) }
     single { VolumeControl(get(), get()) }
     single { RingerControl(get(), get(), get()) }
-    single { CoroutinePlayAttempter() }
+    single { BasicPlayAttempter() }
     factory {
         MediaPlayerControlManager(
                 androidContext(),

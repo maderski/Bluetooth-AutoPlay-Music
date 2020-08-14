@@ -20,7 +20,7 @@ class BasicPlayAttempter : PlayAttempter {
                     handler?.post(playTaskHolder.playTask)
                     playTasksIteratively?.let {
                         playDelay += START_DELAY
-                        handler?.postDelayed(it, playDelay)
+                        handler?.postDelayed(it, playDelay.coerceAtMost(5000))
                     }
                 }, START_DELAY)
             } else {

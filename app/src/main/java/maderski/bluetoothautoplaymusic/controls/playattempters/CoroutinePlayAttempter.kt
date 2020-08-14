@@ -2,7 +2,7 @@ package maderski.bluetoothautoplaymusic.controls.playattempters
 
 import android.util.Log
 import kotlinx.coroutines.*
-
+// TODO: fix, not always running and improve code
 class CoroutinePlayAttempter : PlayAttempter {
     private val playAttempterScope = CoroutineScope(Dispatchers.Default) + Job()
     override fun attemptToPlay(playTasks: List<PlayTaskHolder>) {
