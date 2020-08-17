@@ -11,6 +11,7 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 
@@ -58,13 +59,12 @@ class BAPMNotification(
 
     private fun postNotification(builder: NotificationCompat.Builder) {
         createNotificationChannel()
-        notificationManager.notify(TAG, NOTIFICATION_ID, builder.build())
+        notificationManager.notify(TAG, ServiceManager.FOREGROUND_SERVICE_NOTIFICATION_ID, builder.build())
     }
 
     companion object {
         const val TAG = "BAPMNotification"
 
-        private const val NOTIFICATION_ID = 608
         private const val CHANNEL_ID = "BTAPMChannelIDNotification"
         private const val CHANNEL_NAME = "Bluetooth Autoplay Music Notification"
     }

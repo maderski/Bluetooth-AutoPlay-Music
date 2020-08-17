@@ -6,12 +6,9 @@ import android.content.IntentFilter
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
-import maderski.bluetoothautoplaymusic.common.AppScope
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.BT_STATE_CHANGED
-import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
@@ -30,7 +27,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val message = getString(R.string.app_name)
-        serviceManager.createServiceNotification(ServiceManager.SERVICE_NOTIFICATION_ID,
+        serviceManager.createServiceNotification(ServiceManager.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 getTitle(),
                 message,
                 this,

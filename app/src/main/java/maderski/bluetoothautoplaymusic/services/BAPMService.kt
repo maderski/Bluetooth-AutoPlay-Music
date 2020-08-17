@@ -9,11 +9,9 @@ import android.widget.Toast
 import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
-import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.lang.IllegalArgumentException
 
 /**
  * Created by Jason on 1/5/16.
@@ -45,7 +43,7 @@ class BAPMService : Service(), KoinComponent {
         super.onCreate()
         val title = getString(R.string.initializing)
         val message = getString(R.string.app_name)
-        serviceManager.createServiceNotification(ServiceManager.SERVICE_NOTIFICATION_ID,
+        serviceManager.createServiceNotification(ServiceManager.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 title,
                 message,
                 this,
