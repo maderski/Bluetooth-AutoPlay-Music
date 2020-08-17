@@ -26,6 +26,17 @@ class OnBTConnectService : Service(), KoinComponent {
     private val binder = OnBTConnectBinder()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        registerBTOnStateChangedReceiver()
+
+        // Updating the service Notification will cause it to compact
+        val title = getTitle()
+        serviceManager.updateServiceNotification(title)
+
+        return START_STICKY
+    }
+
+    override fun onCreate() {
+        super.onCreate()
         val message = getString(R.string.app_name)
         serviceManager.createServiceNotification(ServiceManager.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 getTitle(),
@@ -35,10 +46,6 @@ class OnBTConnectService : Service(), KoinComponent {
                 ServiceManager.CHANNEL_NAME_FOREGROUND_SERVICE,
                 R.drawable.ic_notif_icon,
                 false)
-
-        registerBTOnStateChangedReceiver()
-
-        return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? = binder
@@ -51,7 +58,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     private fun getTitle(): String {
         val waitTillPowerConnected = preferencesHelper.waitTillPowerConnected
-        val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.connect_message
+        val resId = if (waitTillPowerConnected) R.string.connect_to_power_msg else R.string.bluetooth_device_connected
         return getString(resId)
     }
 
