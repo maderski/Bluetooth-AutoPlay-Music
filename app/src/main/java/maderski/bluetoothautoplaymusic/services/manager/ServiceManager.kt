@@ -9,7 +9,9 @@ import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 class ServiceManager(
@@ -67,10 +69,30 @@ class ServiceManager(
                                   channelName: String,
                                   @DrawableRes icon: Int,
                                   isOngoing: Boolean) {
-
-        val notificationManager = systemServicesWrapper.notificationManager
-        val notification = getNotification(notificationManager, title, message, channelId, channelName, icon, isOngoing)
+        val notification = getNotification(
+                systemServicesWrapper.notificationManager,
+                title,
+                message,
+                channelId,
+                channelName,
+                icon,
+                isOngoing
+        )
         service.startForeground(id, notification)
+    }
+
+    fun updateServiceNotification(title: String) {
+        val notificationManager = systemServicesWrapper.notificationManager
+        val notification = getNotification(
+                notificationManager,
+                title,
+                context.getString(R.string.app_name),
+                CHANNEL_ID_FOREGROUND_SERVICE,
+                CHANNEL_NAME_FOREGROUND_SERVICE,
+                R.drawable.ic_notif_icon,
+                false
+        )
+        notificationManager.notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
     }
 
     private fun getNotification(notificationManager: NotificationManager,
@@ -93,33 +115,27 @@ class ServiceManager(
             setSmallIcon(icon)
             setContentTitle(title)
             setContentText(message)
-            setOnlyAlertOnce(true)
-
-            if (Build.VERSION.SDK_INT < 26 && !isOngoing)
-                priority = NotificationCompat.PRIORITY_MIN
+            priority = NotificationCompat.PRIORITY_MIN
+            setNotificationSilent()
         }
 
-        val notification = builder.build()
-
-        notification.flags = if (isOngoing) {
-            NotificationCompat.FLAG_FOREGROUND_SERVICE
-        } else {
-            NotificationCompat.PRIORITY_DEFAULT
+        return builder.build().also {
+            if (isOngoing) {
+                it.flags = NotificationCompat.FLAG_FOREGROUND_SERVICE
+            }
         }
-
-        return notification
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getNotificationChannel(channelId: String, channelName: String): NotificationChannel {
-        val notificationChannel = NotificationChannel(channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_MIN)
-        notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        notificationChannel.setSound(null, null)
-        notificationChannel.enableVibration(false)
-        return notificationChannel
-    }
+    private fun getNotificationChannel(channelId: String, channelName: String): NotificationChannel =
+            NotificationChannel(channelId,
+                    channelName,
+                    NotificationManager.IMPORTANCE_MIN).apply {
+                lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+                setSound(null, null)
+                enableVibration(false)
+                enableLights(false)
+            }
 
     companion object {
         const val FOREGROUND_SERVICE_NOTIFICATION_ID = 3453

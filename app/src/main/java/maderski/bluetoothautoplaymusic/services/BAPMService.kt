@@ -26,7 +26,9 @@ class BAPMService : Service(), KoinComponent {
             Log.d("BAPMService: ", "started")
             Toast.makeText(this, "BAPMService started", Toast.LENGTH_LONG).show()
         }
-
+        // Updating the service Notification will cause it to compact
+        val title = getString(R.string.initializing)
+        serviceManager.updateServiceNotification(title)
         // Start Bluetooth Connected, Disconnected and A2DP Broadcast Receivers
         registerReceiver(btConnectionReceiver, IntentFilter())
 

@@ -27,27 +27,22 @@ class BAPMNotification(
     fun launchBAPMNotification() {
         val color = ContextCompat.getColor(context, R.color.colorAccent)
 
-        val title = context.getString(R.string.launch_bluetooth_autoplay)
+        val title = context.getString(R.string.app_name)
         val message = context.getString(R.string.bluetooth_device_connected)
 
-        val launchBAPMIntent = Intent()
-        launchBAPMIntent.action = "maderski.bluetoothautoplaymusic.offtelephonelaunch"
-        val appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val builder = buildNotification(title, message, appIntent, color)
+        val builder = buildNotification(title, message, color)
         postNotification(builder)
     }
 
-    private fun buildNotification(title: String, message: String, appIntent: PendingIntent, @ColorInt color: Int): NotificationCompat.Builder =
+    private fun buildNotification(title: String, message: String, @ColorInt color: Int): NotificationCompat.Builder =
             NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(message)
             .setSmallIcon(R.drawable.ic_notif_icon)
             .setAutoCancel(false)
-            .setContentIntent(appIntent)
             .setColor(color)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setDefaults(android.app.Notification.DEFAULT_VIBRATE)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setDefaults(Notification.DEFAULT_VIBRATE)
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT > 25) {

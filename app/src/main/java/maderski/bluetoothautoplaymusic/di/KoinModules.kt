@@ -165,6 +165,6 @@ val detectorModule = module {
 
 val powerModule = module {
     single { PowerInfo(androidContext(), get()) }
-    single { OnPowerConnectedAction(get(), get(), get()) }
+    single { OnPowerConnectedAction(androidContext(), get(), get(), get(), get()) }
 }
 

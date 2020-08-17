@@ -20,6 +20,7 @@ import org.koin.core.inject
 class WakeLockService : Service(), KoinComponent {
     private val screenONLock: ScreenONLock by inject()
     private val serviceManager: ServiceManager by inject()
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Get wakelock instance
 
@@ -35,14 +36,17 @@ class WakeLockService : Service(), KoinComponent {
             Toast.makeText(this, "WAKELOCK HELD", Toast.LENGTH_LONG).show()
             Log.d(TAG, "WAKELOCK SERVICE STARTED")
         }
+        // Updating the service Notification will cause it to compact
+        val title = getString(R.string.wakelock_messge)
+        serviceManager.updateServiceNotification(title)
+
         return START_STICKY
     }
 
     override fun onCreate() {
         super.onCreate()
-        val title = getString(R.string.wakelock_messge)
         val message = getString(R.string.app_name)
-
+        val title = getString(R.string.wakelock_messge)
         serviceManager.createServiceNotification(ServiceManager.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 title,
                 message,

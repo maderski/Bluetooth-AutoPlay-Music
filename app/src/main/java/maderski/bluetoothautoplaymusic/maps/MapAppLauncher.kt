@@ -25,6 +25,7 @@ abstract class MapAppLauncher(
     fun launchMaps() {
         val isMapsRunning = launchHelper.isAppRunning(getMapAppPkgName())
         val mapLaunchState = getMapsLaunchState(getMapAppPkgName(), isMapsRunning)
+        Log.d(TAG, "Map Launch State: $mapLaunchState")
         when(mapLaunchState) {
             MAPS_IS_ALREADY_RUNNING -> onMapsIsAlreadyRunning()
             REGULAR_MAPS_LAUNCH -> onRegularMapsLaunch()
