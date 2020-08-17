@@ -9,7 +9,7 @@ import maderski.bluetoothautoplaymusic.constants.ActionConstants
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.power.OnPowerConnectedAction
 import maderski.bluetoothautoplaymusic.power.PowerInfo
-import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
+import maderski.bluetoothautoplaymusic.power.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
 

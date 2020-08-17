@@ -15,7 +15,6 @@ import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
-import maderski.bluetoothautoplaymusic.controls.playattempters.CoroutinePlayAttempter
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.detector.foreground.ForegroundDetectorFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
@@ -23,7 +22,7 @@ import maderski.bluetoothautoplaymusic.maps.MapLauncherFactory
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.power.OnPowerConnectedAction
 import maderski.bluetoothautoplaymusic.power.PowerInfo
-import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
+import maderski.bluetoothautoplaymusic.power.PowerConnectionReceiver
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMSharedPrefsAccess

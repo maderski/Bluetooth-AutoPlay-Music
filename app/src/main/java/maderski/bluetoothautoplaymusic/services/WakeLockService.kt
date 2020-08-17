@@ -43,7 +43,7 @@ class WakeLockService : Service(), KoinComponent {
         val title = getString(R.string.wakelock_messge)
         val message = getString(R.string.app_name)
 
-        serviceManager.createServiceNotification(3453,
+        serviceManager.createServiceNotification(ServiceManager.SERVICE_NOTIFICATION_ID,
                 title,
                 message,
                 this,

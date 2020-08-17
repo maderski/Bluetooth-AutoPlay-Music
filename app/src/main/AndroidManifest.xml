@@ -67,7 +67,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".bluetooth.receivers.BTStateChangedReceiver" />
-        <receiver android:name=".receivers.PowerConnectionReceiver" />
+        <receiver android:name=".power.PowerConnectionReceiver" />
         <!-- Services -->
         <service android:name=".services.BAPMService" />
         <service android:name=".bluetooth.services.OnBTConnectService" />

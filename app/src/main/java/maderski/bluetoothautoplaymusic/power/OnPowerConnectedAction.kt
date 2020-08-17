@@ -5,7 +5,6 @@ import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.BTActionsLaunchConstants
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.helpers.BluetoothDeviceHelper
-import maderski.bluetoothautoplaymusic.receivers.PowerConnectionReceiver
 
 class OnPowerConnectedAction(
         private val btConnectActions: BTConnectActions,

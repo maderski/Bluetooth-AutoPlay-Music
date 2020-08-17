@@ -122,6 +122,7 @@ class ServiceManager(
     }
 
     companion object {
+        const val SERVICE_NOTIFICATION_ID = 3453
         const val CHANNEL_ID_FOREGROUND_SERVICE = "BTAPMChannelID"
         const val CHANNEL_NAME_FOREGROUND_SERVICE = "Bluetooth Autoplay Music"
     }

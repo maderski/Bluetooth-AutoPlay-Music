@@ -30,7 +30,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val message = getString(R.string.app_name)
-        serviceManager.createServiceNotification(3451,
+        serviceManager.createServiceNotification(ServiceManager.SERVICE_NOTIFICATION_ID,
                 getTitle(),
                 message,
                 this,
