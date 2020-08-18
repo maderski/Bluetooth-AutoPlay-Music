@@ -70,7 +70,7 @@ abstract class MapAppLauncher(
     private fun onDrivingModeAndUseTimesMapsLaunch() {
         Log.d(TAG, "Driving mode and use times maps launch!")
         onWithinTimeSpansPerformAction {
-            launchGoogleMapsDrivingMode()
+            launchWithDirectionsAndUseTimes()
         }
     }
 
