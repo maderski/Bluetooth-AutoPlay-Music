@@ -34,7 +34,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
     private val packageHelper: PackageHelper by inject()
     private val bluetoothDeviceHelper: BluetoothDeviceHelper by inject()
     private val permissionManager: PermissionManager by inject()
-    private val btConnectionManager: BTConnectionManager by inject()
 
     private val radioButtonIndex: Int
         get() {
@@ -54,10 +53,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         priorityToggleButton(rootView)
         volumeMAXToggleButton(rootView)
         unlockScreenToggleButton(rootView)
-
-        if (BuildConfig.DEBUG) {
-            enableTestButtons(rootView)
-        }
 
         return rootView
     }
@@ -338,19 +333,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
             } else {
                 preferences.setLaunchMusicPlayer(false)
                 Log.d(TAG, "Launch Music Player Button is OFF")
-            }
-        }
-    }
-
-    fun enableTestButtons(rootView: View) {
-        with(rootView) {
-            bn_bluetooth_connected_test.visibility = View.VISIBLE
-            bn_bluetooth_disconnected_test.visibility = View.VISIBLE
-            bn_bluetooth_connected_test.setOnClickListener {
-                btConnectionManager.startBTConnectService()
-            }
-            bn_bluetooth_disconnected_test.setOnClickListener {
-                btConnectionManager.stopBTDisconnectService()
             }
         }
     }
