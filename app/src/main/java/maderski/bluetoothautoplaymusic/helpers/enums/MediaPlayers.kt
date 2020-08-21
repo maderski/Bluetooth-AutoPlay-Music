@@ -19,6 +19,8 @@ enum class MediaPlayers(val packageName: String) {
     VANILLA_MUSIC("ch.blinkenlights.android.vanilla"),
     JIO_MUSIC("com.jio.media.jiobeats"),
     YOUTUBE_MUSIC("com.google.android.apps.youtube.music"),
+    YOUTUBE("com.google.android.youtube"),
+    AUDIBLE("com.audible.application"),
     NOT_ON_LIST("not_on_list");
 
     override fun toString(): String = packageName
