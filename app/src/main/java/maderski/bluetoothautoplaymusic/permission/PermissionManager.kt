@@ -56,8 +56,9 @@ class PermissionManager(
         val hasDoNotDisturbPerm = notificationManager.isNotificationPolicyAccessGranted
         if (!hasDoNotDisturbPerm) {
             // Launch settings screen for Notification Policy access that is required for Do Not Disturbed
-            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             context.startActivity(intent)
         }
         return hasDoNotDisturbPerm
@@ -83,15 +84,24 @@ class PermissionManager(
     //endRegion
 
     private fun launchSystemOverlayPermissionSettings(activity: Activity) {
-        val launchSettingsIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${activity.packageName}"))
+        val launchSettingsIntent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:${activity.packageName}")
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
         activity.startActivityForResult(launchSettingsIntent, DRAW_OVER_OTHER_APPS_PERMISSION)
     }
 
     private fun launchNotificationListenerSettings(activity: Activity) =
-        activity.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+        activity.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        })
 
     private fun launchUsageAccessSettings(activity: Activity) =
-        activity.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        activity.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        })
 
     private fun checkPermission(activity: Activity, permission: Permission) {
         val packageManager = activity.packageManager
