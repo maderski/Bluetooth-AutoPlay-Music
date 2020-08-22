@@ -32,36 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_usage_stats_perm_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="0dp"
-        android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/tv_brief_explanation"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv_usage_stats_perm_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_usage_stats"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/iv_usage_stats_perm_status"
-        app:layout_constraintTop_toTopOf="@id/iv_usage_stats_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_usage_stats_perm_status"/>
-
-    <Switch
-        android:id="@+id/sw_usage_stats_perm_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_usage_stats_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_usage_stats_perm_status"/>
-
-    <ImageView
         android:id="@+id/iv_notification_access_perm_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,7 +40,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/iv_usage_stats_perm_status"
+        app:layout_constraintTop_toBottomOf="@id/tv_brief_explanation"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView

@@ -31,18 +31,6 @@ class PermissionsActivity : AppCompatActivity() {
     }
 
     private fun setRequiredPermissionsUIState() {
-        // Usage Stats
-        val hasUsageStatsPermission = permissionManager.hasUsageAccessPermission()
-        setStatusIcon(iv_usage_stats_perm_status, hasUsageStatsPermission)
-        sw_usage_stats_perm_toggle.isChecked = hasUsageStatsPermission
-        sw_usage_stats_perm_toggle.isEnabled = !hasUsageStatsPermission
-        if (!hasUsageStatsPermission) {
-            sw_usage_stats_perm_toggle.setOnCheckedChangeListener { _, _ ->
-                permissionManager.checkToLaunchUsageAccessSettings(this)
-                sw_usage_stats_perm_toggle.setOnCheckedChangeListener(null)
-            }
-        }
-
         // Notification Access
         val hasNotificationAccessPermission = permissionManager.hasNotificationAccessPermission()
         setStatusIcon(iv_notification_access_perm_status, hasNotificationAccessPermission)

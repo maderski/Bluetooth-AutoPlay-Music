@@ -20,19 +20,8 @@ class PermissionManager(
     fun isAllRequiredPermissionsGranted() = hasNotificationAccessPermission()
             && hasOverlayPermission()
             && hasNotificationListenerAccessPermission()
-            && hasUsageAccessPermission()
 
     fun isLocationPermissionGranted() = isPermissionGranted(Permission.COARSE_LOCATION)
-
-    fun hasUsageAccessPermission(): Boolean {
-        val appOpsManager = systemServicesWrapper.appOpsManager
-        val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appOpsManager.unsafeCheckOpNoThrow(Permission.GET_USAGE_STATS.value, Process.myUid(), context.packageName)
-        } else {
-            appOpsManager.checkOpNoThrow(Permission.GET_USAGE_STATS.value, Process.myUid(), context.packageName)
-        }
-        return mode == AppOpsManager.MODE_ALLOWED
-    }
 
     fun hasNotificationAccessPermission(): Boolean = isPermissionGranted(Permission.ACCESS_NOTIFICATION_POLICY)
 
@@ -75,12 +64,6 @@ class PermissionManager(
             launchNotificationListenerSettings(activity)
         }
     }
-
-    fun checkToLaunchUsageAccessSettings(activity: Activity) {
-        if (!hasUsageAccessPermission()) {
-            launchUsageAccessSettings(activity)
-        }
-    }
     //endRegion
 
     private fun launchSystemOverlayPermissionSettings(activity: Activity) {
@@ -95,11 +78,6 @@ class PermissionManager(
 
     private fun launchNotificationListenerSettings(activity: Activity) =
         activity.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        })
-
-    private fun launchUsageAccessSettings(activity: Activity) =
-        activity.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
 
