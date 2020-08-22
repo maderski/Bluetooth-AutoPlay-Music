@@ -43,9 +43,6 @@ class PermissionManager(
     //endRegion
 
     //region Check Permission and if not granted launch
-//    fun checkUsageStatPermission(activity: Activity) {
-//        checkPermission(activity, Permission.GET_USAGE_STATS)
-//    }
     fun checkLocationPermission(activity: Activity) {
         checkPermission(activity, Permission.COARSE_LOCATION)
     }

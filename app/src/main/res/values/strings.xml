@@ -98,4 +98,8 @@
     <string name="unable_to_launch_waze">Unable to launch WAZE</string>
     <string name="unable_to_launch_media_player">Unable to launch Media Player</string>
     <string name="continue_btn_text">Continue</string>
+    <string name="required_permissions">Required Permissions</string>
+    <string name="app_usage_stats">App usage stats</string>
+    <string name="notification_access">Notification Access</string>
+    <string name="brief_permission_explain">Unfortunately, the following permissions are now required for this app to work properly</string>
 </resources>

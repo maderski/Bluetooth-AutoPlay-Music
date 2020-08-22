@@ -22,13 +22,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
     private val preferences: BAPMPreferences by inject()
     private val volumeControl: VolumeControl by inject()
     private val permissionManager: PermissionManager by inject()
-
-    private lateinit var mFirebaseHelper: FirebaseHelper
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mFirebaseHelper = FirebaseHelper(requireActivity())
-    }
+    private val firebaseHelper: FirebaseHelper by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -97,7 +91,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         val autoPlaySwitch = view.findViewById<Switch>(R.id.auto_play)
         autoPlaySwitch.setOnClickListener { autoPlaySwitchView ->
             val on = (autoPlaySwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.PLAY_MUSIC, on)
+            firebaseHelper.featureEnabled(OptionConstants.PLAY_MUSIC, on)
             if (on) {
                 preferences.setAutoplayMusic(true)
                 Log.d(TAG, "AutoPlaySwitch is ON")
@@ -112,7 +106,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         val powerConnectedSwitch = view.findViewById<Switch>(R.id.power_connected)
         powerConnectedSwitch.setOnClickListener { powerConnectedSwitchView ->
             val on = (powerConnectedSwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.POWER_REQUIRED, on)
+            firebaseHelper.featureEnabled(OptionConstants.POWER_REQUIRED, on)
             if (on) {
                 preferences.setPowerConnected(true)
                 Log.d(TAG, "PowerConnected Switch is ON")
@@ -127,7 +121,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         val sendToBackgroundSwitch = view.findViewById<View>(R.id.send_to_background)
         sendToBackgroundSwitch.setOnClickListener { sendToBackgroundSwitchView ->
             val on = (sendToBackgroundSwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.GO_HOME, on)
+            firebaseHelper.featureEnabled(OptionConstants.GO_HOME, on)
             if (on) {
                 preferences.setSendToBackground(true)
                 Log.d(TAG, "SendToBackground Switch is ON")
@@ -142,7 +136,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         val waitTillOffPhoneSwitch = view.findViewById<View>(R.id.wait_till_off_phone)
         waitTillOffPhoneSwitch.setOnClickListener { waitTillOffPhoneSwitchView ->
             val on = (waitTillOffPhoneSwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.CALL_COMPLETED, on)
+            firebaseHelper.featureEnabled(OptionConstants.CALL_COMPLETED, on)
             if (on) {
                 preferences.setWaitTillOffPhone(true)
                 Log.d(TAG, "WaitTillOffPhone Switch is ON")
@@ -157,7 +151,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         val autoBrightnessSwitch = view.findViewById<View>(R.id.auto_brightness)
         autoBrightnessSwitch.setOnClickListener { autoBrightnessSwitchView ->
             val on = (autoBrightnessSwitchView as Switch).isChecked
-            mFirebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on)
+            firebaseHelper.featureEnabled(OptionConstants.AUTO_BRIGHTNESS, on)
             if (on) {
                 permissionManager.checkLocationPermission(requireActivity())
 
@@ -176,7 +170,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
             val priorityModeSwitch = view.findViewById<View>(R.id.sw_priority_mode)
             priorityModeSwitch.setOnClickListener { priorityModeSwitchView ->
                 val on = (priorityModeSwitchView as Switch).isChecked
-                mFirebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on)
+                firebaseHelper.featureEnabled(OptionConstants.PRIORITY_MODE, on)
                 if (on) {
                     permissionManager.checkAccessNotificationPolicyPermission(requireActivity())
 

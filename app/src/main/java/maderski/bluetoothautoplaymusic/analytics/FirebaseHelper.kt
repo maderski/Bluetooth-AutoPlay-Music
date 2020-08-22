@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
@@ -18,8 +17,14 @@ import org.koin.core.inject
 class FirebaseHelper(context: Context): KoinComponent {
     private val preferences: BAPMPreferences by inject()
 
-    private val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
     private val isFirebaseEnabled = preferences.getUseFirebaseAnalytics()
+
+    private val firebaseAnalytics: FirebaseAnalytics? =
+            if (isFirebaseEnabled) {
+                FirebaseAnalytics.getInstance(context)
+            } else {
+                null
+            }
 
     fun showAnalyticsCollectionsConsent(activity: Activity) {
         val dialogBuilder = AlertDialog.Builder(activity)
@@ -37,7 +42,7 @@ class FirebaseHelper(context: Context): KoinComponent {
 
     private fun setAnalyticsCollectionEnabled(isEnabled: Boolean) {
         preferences.setUseFirebaseAnalytics(isEnabled)
-        firebaseAnalytics.setAnalyticsCollectionEnabled(isEnabled)
+        firebaseAnalytics?.setAnalyticsCollectionEnabled(isEnabled)
     }
 
     fun featureEnabled(featureName: String, isEnabled: Boolean) {
@@ -99,7 +104,7 @@ class FirebaseHelper(context: Context): KoinComponent {
 
     private fun logEvent(eventName: String, bundle: Bundle?) {
         if (isFirebaseEnabled) {
-            firebaseAnalytics.logEvent(eventName, bundle)
+            firebaseAnalytics?.logEvent(eventName, bundle)
         }
     }
 

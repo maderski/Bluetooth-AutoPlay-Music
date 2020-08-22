@@ -13,8 +13,6 @@ class PermissionsActivity : AppCompatActivity() {
     private val permissionManager: PermissionManager by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //viewModel = ViewModelProvider.NewInstanceFactory().create(PermissionsViewModel::class.java)
-
         // If all permissions are granted just launch main activity
         if (permissionManager.isAllRequiredPermissionsGranted()) {
             startActivity(Intent(this, MainActivity::class.java))

@@ -94,4 +94,12 @@
     <string name="wifi_turned_on">" Wifi encendido"</string>
     <string name="no_music_players_msg">No se encontraron reproductores de música</string>
     <string name="unable_to_launch">Incapaz de lanzar</string>
+    <string name="unable_to_launch_maps">No se puede iniciar MAPS</string>
+    <string name="unable_to_launch_waze">No se puede iniciar WAZE</string>
+    <string name="continue_btn_text">Seguir</string>
+    <string name="unable_to_launch_media_player">No se puede iniciar Media Player</string>
+    <string name="brief_permission_explain">Desafortunadamente, ahora se requieren los siguientes permisos para que esta aplicación funcione correctamente</string>
+    <string name="required_permissions">Permisos requeridos</string>
+    <string name="app_usage_stats">Estadísticas de uso de la aplicación</string>
+    <string name="notification_access">" Acceso a notificaciones"</string>
 </resources>
