@@ -1,11 +1,13 @@
 package maderski.bluetoothautoplaymusic.helpers
 
 import android.bluetooth.BluetoothDevice
+import maderski.bluetoothautoplaymusic.bluetooth.legacy.LegacyDevicesConversionHelper
 import maderski.bluetoothautoplaymusic.maps.MapApps
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 
 class PreferencesHelper(
-        private val preferences: BAPMPreferences
+        private val preferences: BAPMPreferences,
+        private val legacyDevicesConversionHelper: LegacyDevicesConversionHelper
 ) {
     // BAPM Preferences
     val customLocationName get() = preferences.getCustomLocationName()
@@ -50,7 +52,15 @@ class PreferencesHelper(
                 false
             } else {
                 selectedBAPMDevices.any {
-                    it.name == bluetoothDevice.name && it.macAddress == bluetoothDevice.address
+                    // Check if connected device matches a Legacy Device, if so convert it and return true
+                    if (it.name == bluetoothDevice.name && it.macAddress.isEmpty()) {
+                        legacyDevicesConversionHelper.convertLegacyDevice(it, bluetoothDevice)
+                        true
+                    }
+                    // Check if it is a selected device
+                    else {
+                        it.name == bluetoothDevice.name && it.macAddress == bluetoothDevice.address
+                    }
                 }
             }
 

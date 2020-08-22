@@ -6,5 +6,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class BAPMDevice(
         val name: String,
-        val macAddress: String
+        val macAddress: String,
+        val volume: Int = 10
 ) : Parcelable

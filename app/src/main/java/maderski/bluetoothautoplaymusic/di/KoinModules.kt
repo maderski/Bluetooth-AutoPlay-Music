@@ -15,6 +15,8 @@ import maderski.bluetoothautoplaymusic.helpers.*
 import maderski.bluetoothautoplaymusic.notification.BAPMNotification
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTConnectionReceiver
 import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceiver
+import maderski.bluetoothautoplaymusic.bluetooth.legacy.LegacyBluetoothSharedPrefs
+import maderski.bluetoothautoplaymusic.bluetooth.legacy.LegacyDevicesConversionHelper
 import maderski.bluetoothautoplaymusic.controls.playercontrols.PlayerControlsFactory
 import maderski.bluetoothautoplaymusic.detector.foreground.ForegroundDetectorFactory
 import maderski.bluetoothautoplaymusic.helpers.LaunchHelper
@@ -46,7 +48,8 @@ object KoinModules {
             factoryModule,
             thirdPartyModule,
             detectorModule,
-            powerModule
+            powerModule,
+            legacyTransitionModule
     )
 }
 
@@ -55,7 +58,8 @@ val thirdPartyModule = module {
 }
 
 val prefsModule = module {
-    single { BAPMPreferences(BAPMSharedPrefsAccess(androidContext(), BAPMPreferences.MY_PREFS_NAME, get())) }
+    single { BAPMSharedPrefsAccess(androidContext(), BAPMPreferences.MY_PREFS_NAME, get()) }
+    single { BAPMPreferences(get()) }
 }
 
 val controlModule = module {
@@ -93,7 +97,7 @@ val helperModule = module {
     single { TelephoneHelper(get(), get()) }
     single { LaunchHelper(androidContext(), get(), get()) }
     single { MediaSessionTokenHelper(androidContext(), get()) }
-    single { PreferencesHelper(get()) }
+    single { PreferencesHelper(get(), get()) }
     single { ToastHelper(androidContext()) }
     single { BluetoothDeviceHelper(get()) }
     single { FirebaseHelper(androidContext()) }
@@ -166,5 +170,10 @@ val detectorModule = module {
 val powerModule = module {
     single { PowerInfo(androidContext(), get()) }
     single { OnPowerConnectedAction(androidContext(), get(), get(), get(), get()) }
+}
+
+val legacyTransitionModule = module {
+    single { LegacyBluetoothSharedPrefs(get()) }
+    single { LegacyDevicesConversionHelper(get(), get()) }
 }
 

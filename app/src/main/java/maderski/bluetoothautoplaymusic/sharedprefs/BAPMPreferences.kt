@@ -10,11 +10,11 @@ import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MU
  *
  * Save and read program settings using this class
  */
-class BAPMPreferences(private val sharedPrefsAccess: SharedPrefsAccess) {
+class BAPMPreferences(private val sharedPrefsAccess: BAPMSharedPrefsAccess) {
     private val launchDays = mutableSetOf("1", "2", "3", "4", "5", "6", "7")
 
     fun setAskedFirebaseOptIn(hasAsked: Boolean) = sharedPrefsAccess.putBoolean(ASKED_FIREBASE_OPT_IN, hasAsked)
-    fun getAskedFirebaseOptIn(): Boolean = sharedPrefsAccess.getBoolean(ASKED_FIREBASE_OPT_IN, false)
+    fun getAskedFirebaseOptIn(): Boolean = sharedPrefsAccess.getBoolean(ASKED_FIREBASE_OPT_IN, true)
 
     fun setUseFirebaseAnalytics(canUseFirebase: Boolean) = sharedPrefsAccess.putBoolean(USE_FIREBASE_ANALYTICS, canUseFirebase)
     fun getUseFirebaseAnalytics(): Boolean = sharedPrefsAccess.getBoolean(USE_FIREBASE_ANALYTICS, true)
