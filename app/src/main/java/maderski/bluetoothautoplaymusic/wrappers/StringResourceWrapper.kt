@@ -11,4 +11,5 @@ class StringResourceWrapper(context: Context) {
     val noBluetoothDevice = context.getString(R.string.no_bluetooth_device)
     val wifiTurnedOn = context.getString(R.string.wifi_turned_on)
     val wifiTurnedOff = context.getString(R.string.wifi_turned_off)
+    val newPermissionReqMsg = context.getString(R.string.new_permissions_required)
 }

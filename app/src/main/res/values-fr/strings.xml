@@ -102,4 +102,5 @@
     <string name="required_permissions">Autorisations requises</string>
     <string name="app_usage_stats">" Statistiques d'utilisation des applications"</string>
     <string name="notification_access">Accès aux notifications</string>
+    <string name="new_permissions_required">Nouvelles autorisations requises. Appuyez pour lancer</string>
 </resources>

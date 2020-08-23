@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
+import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 
@@ -24,13 +25,19 @@ class BAPMNotification(
 ) {
     private val notificationManager = systemServicesWrapper.notificationManager
 
-    fun launchBAPMNotification() {
+    fun launchBAPMNotification(message: String) {
         val color = ContextCompat.getColor(context, R.color.colorAccent)
 
         val title = context.getString(R.string.app_name)
-        val message = context.getString(R.string.bluetooth_device_connected)
 
         val builder = buildNotification(title, message, color)
+        builder.apply {
+            val launchBAPMIntent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            val appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            setContentIntent(appIntent)
+        }
         postNotification(builder)
     }
 

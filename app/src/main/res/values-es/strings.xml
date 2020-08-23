@@ -102,4 +102,5 @@
     <string name="required_permissions">Permisos requeridos</string>
     <string name="app_usage_stats">Estadísticas de uso de la aplicación</string>
     <string name="notification_access">" Acceso a notificaciones"</string>
+    <string name="new_permissions_required">" Se requieren nuevos permisos. Toca para iniciar"</string>
 </resources>
