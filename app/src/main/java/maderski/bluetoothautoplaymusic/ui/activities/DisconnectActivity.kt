@@ -23,7 +23,7 @@ class DisconnectActivity : AppCompatActivity() {
             sendEverythingToBackground()
         }
 
-        finish()
+        finishAffinity()
     }
 
     private fun sendEverythingToBackground() {
