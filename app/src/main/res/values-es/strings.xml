@@ -104,4 +104,7 @@
     <string name="notification_access">" Acceso a notificaciones"</string>
     <string name="new_permissions_required">" Se requieren nuevos permisos. Toca para iniciar"</string>
     <string name="notification_perm_explain">Los permisos de notificación son para el control de la música.</string>
+    <string name="notification_listener">Oyente de notificaciones</string>
+    <string name="optional_permissions">Permisos opcionales</string>
+    <string name="allow_use_of_firebase_analytics">Permitir el uso de Firebase Analytics</string>
 </resources>

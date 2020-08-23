@@ -104,4 +104,7 @@
     <string name="notification_access">Accès aux notifications</string>
     <string name="new_permissions_required">Nouvelles autorisations requises. Appuyez pour lancer</string>
     <string name="notification_perm_explain">" Les autorisations de notification concernent le contrôle de la musique"</string>
+    <string name="notification_listener">" Écouteur de notification"</string>
+    <string name="optional_permissions">" Autorisations facultatives"</string>
+    <string name="allow_use_of_firebase_analytics">" Autoriser l'utilisation de Firebase Analytics"</string>
 </resources>

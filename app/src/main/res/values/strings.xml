@@ -104,4 +104,7 @@
     <string name="brief_permission_explain">Unfortunately, the following permissions are now required for this app to work properly</string>
     <string name="notification_perm_explain">The notification permissions are for music control</string>
     <string name="new_permissions_required">New Permissions Required. Tap to launch</string>
+    <string name="notification_listener">Notification Listener</string>
+    <string name="optional_permissions">Optional Permissions</string>
+    <string name="allow_use_of_firebase_analytics">Allow use of Firebase Analytics</string>
 </resources>

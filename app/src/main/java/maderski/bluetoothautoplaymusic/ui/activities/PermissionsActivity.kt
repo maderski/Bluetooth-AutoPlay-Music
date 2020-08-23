@@ -7,10 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_permissions.*
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
+import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
 
 class PermissionsActivity : AppCompatActivity() {
     private val permissionManager: PermissionManager by inject()
+    private val preferences: BAPMPreferences by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // If all permissions are granted just launch main activity
@@ -65,6 +68,12 @@ class PermissionsActivity : AppCompatActivity() {
                 permissionManager.checkToLaunchNotificationListenerSettings(this)
                 sw_notification_access_perm_toggle.setOnCheckedChangeListener(null)
             }
+        }
+
+        val hasFirebasePermission = preferences.getUseFirebaseAnalytics()
+        sw_analytics_permissions_toggle.isChecked = hasFirebasePermission
+        sw_analytics_permissions_toggle.setOnCheckedChangeListener { _, isChecked ->
+            preferences.setUseFirebaseAnalytics(isChecked)
         }
 
         bn_perm_continue.isEnabled = permissionManager.isAllRequiredPermissionsGranted()
