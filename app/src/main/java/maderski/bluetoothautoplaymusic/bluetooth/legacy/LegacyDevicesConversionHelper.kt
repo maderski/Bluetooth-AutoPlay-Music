@@ -10,11 +10,8 @@ class LegacyDevicesConversionHelper (
 ) {
     fun convertToBAPMDevices() {
         val legacyDevices = mutableSetOf<String>()
-                .also {
-                    it.addAll(legacyBluetoothSharedPrefs.getBTDevicesLegacy())
-                    it.addAll(legacyBluetoothSharedPrefs.getHeadphoneDevicesLegacy())
-                }
-                .distinct()
+            legacyDevices.addAll(legacyBluetoothSharedPrefs.getBTDevicesLegacy())
+            legacyDevices.addAll(legacyBluetoothSharedPrefs.getHeadphoneDevicesLegacy())
         if (legacyDevices.isNotEmpty()) {
             val bapmDevices = legacyDevices
                     .map { BAPMDevice(it, "") }
@@ -31,10 +28,8 @@ class LegacyDevicesConversionHelper (
     }
 
     private fun updateBAPMDevice(bapmDevice: BAPMDevice) {
-        val updatedDeviceSet = preferences.getBAPMDevices()
-                .filterNot { it.name == bapmDevice.name && it.macAddress.isEmpty() }
-                .toMutableSet()
-                .also { it.add(bapmDevice) }
+        val updatedDeviceSet = mutableSetOf<BAPMDevice>()
+        updatedDeviceSet.add(bapmDevice)
         preferences.setBAPMDevices(updatedDeviceSet)
     }
 }
