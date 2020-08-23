@@ -138,9 +138,9 @@
         android:id="@+id/tv_optional_permissions_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="12dp"
+        android:paddingBottom="16dp"
         android:text="@string/optional_permissions"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/iv_notification_listener_perm_status"
         app:layout_constraintBottom_toTopOf="@id/bn_perm_continue"
@@ -152,8 +152,10 @@
         android:id="@+id/tv_analytics_permissions_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:paddingEnd="0dp"
         android:text="@string/allow_use_of_firebase_analytics"
-        android:textSize="20sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_optional_permissions_title" />
 
