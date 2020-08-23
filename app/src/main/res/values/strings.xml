@@ -102,5 +102,6 @@
     <string name="app_usage_stats">App usage stats</string>
     <string name="notification_access">Notification Access</string>
     <string name="brief_permission_explain">Unfortunately, the following permissions are now required for this app to work properly</string>
+    <string name="notification_perm_explain">The notification permissions are for music control</string>
     <string name="new_permissions_required">New Permissions Required. Tap to launch</string>
 </resources>

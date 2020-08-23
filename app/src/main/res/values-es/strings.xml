@@ -103,4 +103,5 @@
     <string name="app_usage_stats">Estadísticas de uso de la aplicación</string>
     <string name="notification_access">" Acceso a notificaciones"</string>
     <string name="new_permissions_required">" Se requieren nuevos permisos. Toca para iniciar"</string>
+    <string name="notification_perm_explain">Los permisos de notificación son para el control de la música.</string>
 </resources>

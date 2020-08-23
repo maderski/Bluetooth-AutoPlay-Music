@@ -6,11 +6,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import maderski.bluetoothautoplaymusic.workers.OnAppUpdateWorker
 import maderski.bluetoothautoplaymusic.workers.OnBootWorker
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * Created by Jason on 6/10/17.

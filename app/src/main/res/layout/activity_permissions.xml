@@ -31,6 +31,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_brief_notification_perm_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/notification_perm_explain"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/tv_brief_explanation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageView
         android:id="@+id/iv_notification_access_perm_status"
         android:layout_width="wrap_content"
@@ -40,7 +53,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="0dp"
         android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/tv_brief_explanation"
+        app:layout_constraintTop_toBottomOf="@id/tv_brief_notification_perm_explanation"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
