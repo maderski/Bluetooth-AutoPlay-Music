@@ -1,6 +1,7 @@
 package maderski.bluetoothautoplaymusic.ui.activities
 
 import android.app.KeyguardManager
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -64,17 +65,23 @@ class LaunchBAPMActivity : AppCompatActivity() {
     private fun sendHomeAppTimer(seconds: Int) {
         val launchMaps = preferences.getLaunchGoogleMaps()
         val launchPlayer = preferences.getLaunchMusicPlayer()
-
-        if (!launchMaps && !launchPlayer) {
-            val context = this
-            val milliSeconds = seconds * 1000
-            val handler = Handler()
-            val runnable = Runnable {
-                finish()
-                launchHelper.launchDisconnectActivity()
+        
+        val milliSeconds = seconds * 1000
+        val handler = Handler()
+        val runnable = Runnable {
+            finish()
+            if (!launchMaps && !launchPlayer) {
+                sendEverythingToBackground()
             }
-            handler.postDelayed(runnable, milliSeconds.toLong())
         }
+        handler.postDelayed(runnable, milliSeconds.toLong())
+    }
+
+    private fun sendEverythingToBackground() {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     companion object {
