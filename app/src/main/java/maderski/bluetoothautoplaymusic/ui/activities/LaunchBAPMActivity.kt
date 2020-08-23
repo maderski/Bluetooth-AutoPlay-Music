@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,7 @@ class LaunchBAPMActivity : AppCompatActivity() {
         dismissKeyGuard()
 
         // Hide the fake loading screen.  This is used to keep this activity alive while dismissing the keyguard
-        sendHomeAppTimer(3)
+        sendHomeAppTimer()
     }
 
     //Dismiss the KeyGuard
@@ -62,15 +63,17 @@ class LaunchBAPMActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendHomeAppTimer(seconds: Int) {
+    private fun sendHomeAppTimer() {
         val launchMaps = preferences.getLaunchGoogleMaps()
         val launchPlayer = preferences.getLaunchMusicPlayer()
-        
-        val milliSeconds = seconds * 1000
-        val handler = Handler()
+
+        val milliSeconds = 3000
+        val handler = Handler(Looper.getMainLooper())
         val runnable = Runnable {
-            finish()
+            Log.d(TAG, "Finish Affinity for LaunchBAPMActivity")
+            finishAffinity()
             if (!launchMaps && !launchPlayer) {
+                Log.d(TAG, "Sending Everything to the background")
                 sendEverythingToBackground()
             }
         }
