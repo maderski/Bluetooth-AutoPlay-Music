@@ -3,21 +3,26 @@ package maderski.bluetoothautoplaymusic.bluetooth.legacy
 import android.bluetooth.BluetoothDevice
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
+import java.lang.Exception
 
 class LegacyDevicesConversionHelper (
         private val preferences: BAPMPreferences,
         private val legacyBluetoothSharedPrefs: LegacyBluetoothSharedPrefs
 ) {
     fun convertToBAPMDevices() {
-        val legacyDevices = mutableSetOf<String>()
+        try {
+            val legacyDevices = mutableSetOf<String>()
             legacyDevices.addAll(legacyBluetoothSharedPrefs.getBTDevicesLegacy())
             legacyDevices.addAll(legacyBluetoothSharedPrefs.getHeadphoneDevicesLegacy())
-        if (legacyDevices.isNotEmpty()) {
-            val bapmDevices = legacyDevices
-                    .map { BAPMDevice(it, "") }
-                    .toSet()
-            preferences.setBAPMDevices(bapmDevices)
-            legacyBluetoothSharedPrefs.removeAllLegacyDevices()
+            if (legacyDevices.isNotEmpty()) {
+                val bapmDevices = legacyDevices
+                        .map { BAPMDevice(it, "") }
+                        .toSet()
+                preferences.setBAPMDevices(bapmDevices)
+                legacyBluetoothSharedPrefs.removeAllLegacyDevices()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

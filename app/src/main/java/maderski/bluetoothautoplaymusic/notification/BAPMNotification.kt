@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ class BAPMNotification(
             val appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             setContentIntent(appIntent)
         }
+        Log.d(TAG, "BAPMNotification shown with message: $message")
         postNotification(builder)
     }
 
