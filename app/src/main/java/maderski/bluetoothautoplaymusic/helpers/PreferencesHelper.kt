@@ -43,7 +43,7 @@ class PreferencesHelper(
     val priorityMode get() = preferences.getPriorityMode()
     val shouldCloseWaze get() = preferences.getCloseWazeOnDisconnect()
     val originalVolume get() = preferences.getRestoreNotificationVolume()
-    val waitTillPowerConnected = preferences.getPowerConnected()
+    val waitTillPowerConnected get() = preferences.getPowerConnected()
 
     private val selectedBAPMDevices get() = preferences.getBAPMDevices()
 

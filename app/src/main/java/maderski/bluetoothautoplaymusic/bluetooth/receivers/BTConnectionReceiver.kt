@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
+import maderski.bluetoothautoplaymusic.application.AppUpdateManager
 import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
@@ -22,6 +23,7 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
     private val btConnectionManager: BTConnectionManager by inject()
     private val firebaseHelper: FirebaseHelper by inject()
     private val volumeControl: VolumeControl by inject()
+    private val appUpdateManager: AppUpdateManager by inject()
 
     //On receive of Broadcast
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -33,6 +35,8 @@ class BTConnectionReceiver : BroadcastReceiver(), KoinComponent {
                 if (isASelectedBTDevice) {
                     volumeControl.saveOriginalVolume()
                     a2dpActions(it, btDevice)
+                } else {
+                    appUpdateManager.updateWorkCheck(true)
                 }
             }
         }

@@ -124,6 +124,9 @@ class BAPMPreferences(private val sharedPrefsAccess: BAPMSharedPrefsAccess) {
     fun setBAPMDevices(bapmDevices: Set<BAPMDevice>) = sharedPrefsAccess.putBAPMDeviceSet(BTDEVICES_KEY, bapmDevices)
     fun getBAPMDevices(): Set<BAPMDevice> = sharedPrefsAccess.getBAPMDeviceSet(BTDEVICES_KEY, setOf())
 
+    fun setLastAppVersion(version: Int) = sharedPrefsAccess.putInt(LAST_APP_VERSION, version)
+    fun getLastAppVersion() = sharedPrefsAccess.getInt(LAST_APP_VERSION, 0)
+
     companion object {
         const val MY_PREFS_NAME = "BAPMPreference"
 
@@ -171,5 +174,7 @@ class BAPMPreferences(private val sharedPrefsAccess: BAPMSharedPrefsAccess) {
         // Bluetooth devices
         private const val HEADPHONE_DEVICES_KEY = "HeadphoneDevicesKey"
         private const val BTDEVICES_KEY = "BluetoothDevicesKey"
+        // For app updates
+        private const val LAST_APP_VERSION = "LastAppVersion"
     }
 }

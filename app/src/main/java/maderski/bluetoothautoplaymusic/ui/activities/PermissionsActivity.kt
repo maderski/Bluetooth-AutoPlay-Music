@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_permissions.*
 import maderski.bluetoothautoplaymusic.R
+import maderski.bluetoothautoplaymusic.application.AppUpdateManager
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
 import org.koin.android.ext.android.inject
@@ -13,6 +14,7 @@ import org.koin.android.ext.android.inject
 class PermissionsActivity : AppCompatActivity() {
     private val permissionManager: PermissionManager by inject()
     private val preferences: BAPMPreferences by inject()
+    private val appUpdateManager: AppUpdateManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +23,7 @@ class PermissionsActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
+            appUpdateManager.updateWorkCheck(false)
             setContentView(R.layout.activity_permissions)
             bn_perm_continue.setOnClickListener {
                 startActivity(Intent(this, MainActivity::class.java))

@@ -2,6 +2,7 @@ package maderski.bluetoothautoplaymusic.di
 
 import com.google.gson.Gson
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
+import maderski.bluetoothautoplaymusic.application.AppUpdateManager
 import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTConnectActions
 import maderski.bluetoothautoplaymusic.bluetooth.btactions.BTDisconnectActions
@@ -47,7 +48,8 @@ object KoinModules {
             factoryModule,
             thirdPartyModule,
             powerModule,
-            legacyTransitionModule
+            legacyTransitionModule,
+            appUpdateModule
     )
 }
 
@@ -103,7 +105,7 @@ val helperModule = module {
 }
 
 val notificationModule = module {
-    single { BAPMNotification(androidContext(), get()) }
+    single { BAPMNotification(androidContext(), get(), get()) }
 }
 
 val permissionModule = module {
@@ -169,5 +171,9 @@ val powerModule = module {
 val legacyTransitionModule = module {
     single { LegacyBluetoothSharedPrefs(get()) }
     single { LegacyDevicesConversionHelper(get(), get()) }
+}
+
+val appUpdateModule = module {
+    single { AppUpdateManager(get(), get(), get(), get()) }
 }
 

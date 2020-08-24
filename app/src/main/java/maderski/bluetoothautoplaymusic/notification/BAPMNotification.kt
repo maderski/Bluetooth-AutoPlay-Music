@@ -1,9 +1,6 @@
 package maderski.bluetoothautoplaymusic.notification
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -14,6 +11,7 @@ import androidx.core.content.ContextCompat
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.ui.activities.MainActivity
+import maderski.bluetoothautoplaymusic.wrappers.PackageManagerWrapper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
 
 
@@ -22,7 +20,8 @@ import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
  */
 class BAPMNotification(
         private val context: Context,
-        systemServicesWrapper: SystemServicesWrapper
+        systemServicesWrapper: SystemServicesWrapper,
+        private val packageManagerWrapper: PackageManagerWrapper
 ) {
     private val notificationManager = systemServicesWrapper.notificationManager
 
@@ -32,12 +31,13 @@ class BAPMNotification(
         val title = context.getString(R.string.app_name)
 
         val builder = buildNotification(title, message, color)
+        val launchBAPMIntent = packageManagerWrapper.getLaunchIntentForPackage(context.packageName)?.apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+        val pendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(launchBAPMIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
         builder.apply {
-            val launchBAPMIntent = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            val appIntent = PendingIntent.getBroadcast(context, 0, launchBAPMIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            setContentIntent(appIntent)
+            setContentIntent(pendingIntent)
         }
         Log.d(TAG, "BAPMNotification shown with message: $message")
         postNotification(builder)

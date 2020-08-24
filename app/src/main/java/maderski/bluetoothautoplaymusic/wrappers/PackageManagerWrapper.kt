@@ -27,4 +27,9 @@ class PackageManagerWrapper (private val context: Context) {
 
     fun getApplicationLabel(packageName: String) =
             context.packageManager.getApplicationLabel(getApplicationInfo(packageName)).toString()
+
+    fun getBAPMVersionCode(): Int {
+        val pkgInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        return pkgInfo.versionCode
+    }
 }
