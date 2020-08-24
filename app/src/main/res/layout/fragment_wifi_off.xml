@@ -22,7 +22,7 @@
                 android:background="@color/lightGray"
                 android:paddingBottom="4dp"
                 android:paddingTop="4dp"
-                android:text="Turn Wifi Off"
+                android:text="@string/turn_wifi_off"
                 android:textAlignment="center"
                 android:textColor="@color/darkGray"
                 android:textSize="14sp" />

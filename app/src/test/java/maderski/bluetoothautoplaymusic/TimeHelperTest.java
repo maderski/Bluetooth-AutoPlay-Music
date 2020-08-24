@@ -103,26 +103,26 @@ public class TimeHelperTest {
         String time12hr4 = "4:30 PM";
         String time12hr5 = "10:15 PM";
 
-        String convertedTo12hrTime = TimeHelper.get12hrTime(time24hr1);
+        String convertedTo12hrTime = TimeHelper.Companion.get12hrTime(time24hr1);
         assertEquals(convertedTo12hrTime, time12hr1);
 
-        convertedTo12hrTime = TimeHelper.get12hrTime(time24hr2);
+        convertedTo12hrTime = TimeHelper.Companion.get12hrTime(time24hr2);
         assertEquals(convertedTo12hrTime, time12hr2);
 
-        convertedTo12hrTime = TimeHelper.get12hrTime(time24hr3);
+        convertedTo12hrTime = TimeHelper.Companion.get12hrTime(time24hr3);
         assertEquals(convertedTo12hrTime, time12hr3);
 
-        convertedTo12hrTime = TimeHelper.get12hrTime(time24hr4);
+        convertedTo12hrTime = TimeHelper.Companion.get12hrTime(time24hr4);
         assertEquals(convertedTo12hrTime, time12hr4);
 
-        convertedTo12hrTime = TimeHelper.get12hrTime(time24hr5);
+        convertedTo12hrTime = TimeHelper.Companion.get12hrTime(time24hr5);
         assertEquals(convertedTo12hrTime, time12hr5);
 
     }
 
     @Test
     public void testGettingCurrentTimeIn24hrTime() {
-        int currentTime = TimeHelper.getCurrent24hrTime();
+        int currentTime = TimeHelper.Companion.getCurrent24hrTime();
         System.out.println(currentTime);
         // TODO:// Figure out a way to check this
     }

@@ -26,5 +26,4 @@
             <solid android:color="@color/colorAccent"/>
         </shape>
     </item>
-
 </selector>

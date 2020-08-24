@@ -11,17 +11,22 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
+        android:name=".application.BAPMApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.activities.ForDebugAndTestActivity"/>
+        <!-- Activities -->
+        <activity android:name=".ui.activities.PermissionsActivity" />
+        <activity android:name=".ui.activities.DisconnectActivity" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
@@ -30,51 +35,44 @@
         <activity
             android:name=".ui.activities.LaunchBAPMActivity"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".ui.activities.SplashActivity"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
+        </activity> <!-- Broadcast Receivers -->
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.OnAppUpdateReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".receivers.BluetoothReceiver">
+        <receiver android:name=".bluetooth.receivers.BTConnectionReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
                 <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
                 <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.BTStateChangedReceiver" />
-        <receiver android:name=".receivers.PowerReceiver" />
-        <receiver android:name=".receivers.CustomReceiver" />
-
+        <receiver android:name=".bluetooth.receivers.BTStateChangedReceiver" />
+        <receiver android:name=".power.PowerConnectionReceiver" /> <!-- Services -->
         <service android:name=".services.BAPMService" />
-        <service android:name=".services.OnBTConnectService" />
-        <service android:name=".services.BTStateChangedService" />
+        <service android:name=".bluetooth.services.OnBTConnectService" />
         <service android:name=".services.WakeLockService" />
-        <service android:name=".services.BTDisconnectService" />
         <service
-            android:name=".services.jobservices.StartBAPMServiceJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="e566223fc86888153c9df6a37b823a8a3c1510e9" />
+            android:name=".services.BAPMNotificationListenerService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

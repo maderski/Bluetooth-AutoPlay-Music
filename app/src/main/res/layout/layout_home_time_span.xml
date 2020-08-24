@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
         android:paddingTop="20dp"
-        android:text="Evening Time Span"
+        android:text="@string/evening_time_span_label"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -43,7 +43,7 @@
                 android:background="@drawable/on_state"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="Start"
+                android:text="@string/start"
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -68,7 +68,7 @@
                 android:background="@drawable/on_state"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
-                android:text="End"
+                android:text="@string/end"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>

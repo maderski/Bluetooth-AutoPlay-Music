@@ -1,12 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="maderski.bluetoothautoplaymusic.ui.fragments.HomeFragment">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:id="@+id/content_main"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -63,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:paddingLeft="20dp">
+                        android:paddingStart="20dp">
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -88,8 +87,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/launch_maps"
                                 android:id="@+id/textView4"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
                         </LinearLayout>
 
@@ -115,8 +114,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/keep_screen_on"
                                 android:id="@+id/textView5"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
                         </LinearLayout>
 
@@ -141,8 +140,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/put_phone_in_priority_mode"
                                 android:id="@+id/textView6"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
                         </LinearLayout>
 
@@ -167,8 +166,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/set_media_volume_to_max"
                                 android:id="@+id/textView7"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
 
                         </LinearLayout>
@@ -193,8 +192,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/launch_music_player"
                                 android:id="@+id/textView8"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
 
                         </LinearLayout>
@@ -219,8 +218,8 @@
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/dismiss_keyguard"
                                 android:id="@+id/textView9"
-                                android:textSize="16dp"
-                                android:paddingLeft="4dp"
+                                android:textSize="16sp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/colorPrimary"/>
 
                         </LinearLayout>
@@ -289,26 +288,7 @@
                             android:layout_gravity="center_horizontal" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/headphones_dark_blue"/>
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/set_autoplay_only_devices_text"
-                            android:id="@+id/autoplay_only_button"
-                            android:background="@color/white"
-                            android:textColor="@color/colorAccent"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp" />
-                    </LinearLayout>
+
 
                 </LinearLayout>
 

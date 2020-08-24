@@ -15,7 +15,7 @@
             android:id="@+id/tv_custom_location_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Custom"
+            android:text="@string/custom"
             android:textAlignment="center"
             android:paddingBottom="8dp"/>
 
@@ -57,7 +57,7 @@
             android:id="@+id/tv_work_location_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Work"
+            android:text="@string/work"
             android:textAlignment="center"
             android:paddingBottom="8dp"/>
 
@@ -94,7 +94,7 @@
             android:id="@+id/tv_home_location_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home"
+            android:text="@string/home"
             android:paddingBottom="8dp"/>
 
         <LinearLayout
