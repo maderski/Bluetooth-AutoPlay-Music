@@ -47,7 +47,7 @@ class BTConnectActions(
 ) : PlayBackStateCallback, CoroutineScope by AppScope() {
     fun onBTConnect() {
         launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.Main) {
                 val waitTillOffPhone = preferencesHelper.waitTillOffPhone
                 if (waitTillOffPhone) {
                     actionsWhileOnCall()
