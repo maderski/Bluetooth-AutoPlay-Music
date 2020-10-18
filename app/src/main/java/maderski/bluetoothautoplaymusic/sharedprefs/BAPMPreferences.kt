@@ -1,8 +1,8 @@
 package maderski.bluetoothautoplaymusic.sharedprefs
 
 import maderski.bluetoothautoplaymusic.bluetooth.models.BAPMDevice
+import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers
 import maderski.bluetoothautoplaymusic.maps.MapApps.MAPS
-import maderski.bluetoothautoplaymusic.helpers.enums.MediaPlayers.GOOGLE_PLAY_MUSIC
 
 
 /**
@@ -101,7 +101,7 @@ class BAPMPreferences(private val sharedPrefsAccess: BAPMSharedPrefsAccess) {
     fun getLaunchMusicPlayer(): Boolean = sharedPrefsAccess.getBoolean(LAUNCH_MUSIC_PLAYER_KEY, false)
 
     fun setPkgSelectedMusicPlayer(packageName: String) = sharedPrefsAccess.putString(PKG_SELECTED_MUSIC_PLAYER_KEY, packageName)
-    fun getPkgSelectedMusicPlayer(): String = sharedPrefsAccess.getString(PKG_SELECTED_MUSIC_PLAYER_KEY, GOOGLE_PLAY_MUSIC.packageName)
+    fun getPkgSelectedMusicPlayer(): String = sharedPrefsAccess.getString(PKG_SELECTED_MUSIC_PLAYER_KEY, MediaPlayers.YOUTUBE_MUSIC.packageName)
 
     fun setUnlockScreen(enabled: Boolean) = sharedPrefsAccess.putBoolean(UNLOCK_SCREEN_KEY, enabled)
     fun getUnlockScreen(): Boolean = sharedPrefsAccess.getBoolean(UNLOCK_SCREEN_KEY, false)
