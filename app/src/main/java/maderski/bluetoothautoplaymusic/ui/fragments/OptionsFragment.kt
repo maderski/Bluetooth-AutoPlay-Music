@@ -10,6 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import kotlinx.android.synthetic.main.activity_permissions.*
+import kotlinx.android.synthetic.main.fragment_options.*
+import kotlinx.android.synthetic.main.fragment_options.view.*
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
 import maderski.bluetoothautoplaymusic.analytics.constants.OptionConstants
@@ -39,6 +42,7 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
         brightBrightnessButton(rootView)
         dimBrightnessButton(rootView)
         usePriorityModeSwitch(rootView)
+        setFirebaseAnalyticsSwitchState(rootView)
 
         setFonts(rootView, fragmentActivity)
         setButtonPreferences(rootView, fragmentActivity)
@@ -182,6 +186,14 @@ class OptionsFragment : androidx.fragment.app.Fragment() {
                     Log.d(TAG, "AutoBrightness Switch is OFF")
                 }
             }
+        }
+    }
+
+    fun setFirebaseAnalyticsSwitchState(view: View) {
+        val hasFirebasePermission = preferences.getUseFirebaseAnalytics()
+        view.sw_options_use_firebase.isChecked = hasFirebasePermission
+        view.sw_options_use_firebase.setOnCheckedChangeListener { _, isChecked ->
+            preferences.setUseFirebaseAnalytics(isChecked)
         }
     }
 
