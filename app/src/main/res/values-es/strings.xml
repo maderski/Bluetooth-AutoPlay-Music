@@ -98,12 +98,12 @@
     <string name="unable_to_launch_waze">No se puede iniciar WAZE</string>
     <string name="continue_btn_text">Seguir</string>
     <string name="unable_to_launch_media_player">No se puede iniciar Media Player</string>
-    <string name="brief_permission_explain">Desafortunadamente, ahora se requieren los siguientes permisos para que esta aplicación funcione correctamente</string>
+    <string name="brief_permission_explain">"Ahora se requieren los siguientes permisos para que esta aplicación funcione correctamente"</string>
     <string name="required_permissions">Permisos requeridos</string>
     <string name="app_usage_stats">Estadísticas de uso de la aplicación</string>
     <string name="notification_access">" Acceso a notificaciones"</string>
     <string name="new_permissions_required">" Se requieren nuevos permisos. Toca para iniciar"</string>
-    <string name="notification_perm_explain">Los permisos de notificación son para la reproducción de música.</string>
+    <string name="notification_perm_explain">Los PERMISOS DE NOTIFICACIÓN son necesarios para que esta aplicación obtenga el token de medios para la reproducción de música de otras aplicaciones.</string>
     <string name="notification_listener">Oyente de notificaciones</string>
     <string name="optional_permissions">Permisos opcionales</string>
     <string name="allow_use_of_firebase_analytics">Permitir el uso de Firebase Analytics</string>

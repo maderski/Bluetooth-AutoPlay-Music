@@ -101,8 +101,8 @@
     <string name="required_permissions">Required Permissions</string>
     <string name="app_usage_stats">App usage stats</string>
     <string name="notification_access">Notification Access</string>
-    <string name="brief_permission_explain">Unfortunately, the following permissions are now required for this app to work properly</string>
-    <string name="notification_perm_explain">The notification permissions are for music playback</string>
+    <string name="brief_permission_explain">The following permissions are now required for this app to work properly</string>
+    <string name="notification_perm_explain">The NOTIFICATION PERMISSIONS are required for this app to get the media token for music playback of other apps.</string>
     <string name="new_permissions_required">New Permissions Required. Tap to launch</string>
     <string name="notification_listener">Notification Listener</string>
     <string name="optional_permissions">Optional Permissions</string>
