@@ -1,6 +1,5 @@
 package maderski.bluetoothautoplaymusic.ui.fragments
 
-import android.Manifest
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
@@ -10,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import kotlinx.android.synthetic.main.activity_permissions.*
-import kotlinx.android.synthetic.main.fragment_options.*
 import kotlinx.android.synthetic.main.fragment_options.view.*
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.analytics.FirebaseHelper
