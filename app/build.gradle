@@ -10,7 +10,7 @@ buildscript {
                 'build_tools': '30.0.0',
                 'min_sdk': 23,
                 'target_sdk': 30,
-                'version_code': 90,
+                'version_code': 91,
                 'version_name': '4.0'
         ]
 

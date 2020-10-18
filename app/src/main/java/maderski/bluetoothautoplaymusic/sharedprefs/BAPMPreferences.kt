@@ -13,17 +13,8 @@ import maderski.bluetoothautoplaymusic.maps.MapApps.MAPS
 class BAPMPreferences(private val sharedPrefsAccess: BAPMSharedPrefsAccess) {
     private val launchDays = mutableSetOf("1", "2", "3", "4", "5", "6", "7")
 
-    fun setAskedFirebaseOptIn(hasAsked: Boolean) = sharedPrefsAccess.putBoolean(ASKED_FIREBASE_OPT_IN, hasAsked)
-    fun getAskedFirebaseOptIn(): Boolean = sharedPrefsAccess.getBoolean(ASKED_FIREBASE_OPT_IN, true)
-
     fun setUseFirebaseAnalytics(canUseFirebase: Boolean) = sharedPrefsAccess.putBoolean(USE_FIREBASE_ANALYTICS, canUseFirebase)
     fun getUseFirebaseAnalytics(): Boolean = sharedPrefsAccess.getBoolean(USE_FIREBASE_ANALYTICS, true)
-
-    fun setUpdateHomeWorkDaysSync(hasRan: Boolean) = sharedPrefsAccess.putBoolean(UPDATE_HOME_WORK_DAYS_SYNC, hasRan)
-    fun getUpdateHomeWorkDaysSync(): Boolean = sharedPrefsAccess.getBoolean(UPDATE_HOME_WORK_DAYS_SYNC, false)
-
-    fun setUseA2dpHeadphones(enable: Boolean) = sharedPrefsAccess.putBoolean(USE_A2DP_HEADPHONES, enable)
-    fun getUseA2dpHeadphones(): Boolean = sharedPrefsAccess.getBoolean(USE_A2DP_HEADPHONES, false)
 
     fun setUsePriorityMode(enable: Boolean) = sharedPrefsAccess.putBoolean(USE_PRIORITY_MODE, enable)
     fun getUsePriorityMode(): Boolean = sharedPrefsAccess.getBoolean(USE_PRIORITY_MODE, false)
