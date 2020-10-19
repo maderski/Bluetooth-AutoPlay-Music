@@ -73,6 +73,7 @@ class PermissionsActivity : AppCompatActivity() {
             }
         }
 
+        // Firebase
         val hasFirebasePermission = preferences.getUseFirebaseAnalytics()
         sw_analytics_permissions_toggle.isChecked = hasFirebasePermission
         sw_analytics_permissions_toggle.setOnCheckedChangeListener { _, isChecked ->

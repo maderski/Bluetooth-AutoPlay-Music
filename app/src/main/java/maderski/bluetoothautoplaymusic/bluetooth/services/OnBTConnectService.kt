@@ -25,7 +25,7 @@ class OnBTConnectService : Service(), KoinComponent {
 
     private val binder = OnBTConnectBinder()
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         registerBTOnStateChangedReceiver()
 
         // Updating the service Notification will cause it to compact

@@ -15,7 +15,6 @@ class PlayerControlsFactory(
                 SPOTIFY.packageName -> Spotify(context, systemServicesWrapper)
                 BEYOND_POD.packageName -> BeyondPod(context, systemServicesWrapper)
                 FM_INDIA.packageName -> FMIndia(context, systemServicesWrapper, selectedPlayerPkgName)
-                GOOGLE_PLAY_MUSIC.packageName -> GooglePlayMusic(context, systemServicesWrapper)
                 PANDORA.packageName -> Pandora(context, systemServicesWrapper)
                 else -> {
                     Log.d(TAG, "APP does not have player controls setup")

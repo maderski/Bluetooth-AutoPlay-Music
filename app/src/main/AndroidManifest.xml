@@ -74,5 +74,27 @@
             </intent-filter>
         </service>
     </application>
-
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+        <package android:name="com.waze" />
+        <package android:name="com.spotify.music" />
+        <package android:name="com.pandora.android" />
+        <package android:name="mobi.beyondpod" />
+        <package android:name="com.apple.android.music" />
+        <package android:name="com.fmindia.activities" />
+        <package android:name="com.maxmpz.audioplayer" />
+        <package android:name="com.doubleTwist.androidPlayer" />
+        <package android:name="com.acmeandroid.listen" />
+        <package android:name="com.google.android.apps.podcasts" />
+        <package android:name="deezer.android.app" />
+        <package android:name="au.com.shiftyjelly.pocketcasts" />
+        <package android:name="com.earthflare.android.radioparadisewidget.gpv2" />
+        <package android:name="radiotime.player" />
+        <package android:name="com.foobar2000.foobar2000" />
+        <package android:name="ch.blinkenlights.android.vanilla" />
+        <package android:name="com.jio.media.jiobeats" />
+        <package android:name="com.google.android.apps.youtube.music" />
+        <package android:name="com.google.android.youtube" />
+        <package android:name="com.audible.application" />
+    </queries>
 </manifest>

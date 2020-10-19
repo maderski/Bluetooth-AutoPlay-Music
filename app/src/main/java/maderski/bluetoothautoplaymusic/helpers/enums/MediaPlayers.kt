@@ -1,7 +1,6 @@
 package maderski.bluetoothautoplaymusic.helpers.enums
 
 enum class MediaPlayers(val packageName: String) {
-    GOOGLE_PLAY_MUSIC("com.google.android.music"),
     SPOTIFY("com.spotify.music"),
     PANDORA("com.pandora.android"),
     BEYOND_POD("mobi.beyondpod"),

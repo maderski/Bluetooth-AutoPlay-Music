@@ -98,13 +98,13 @@
     <string name="unable_to_launch_maps">Impossible de lancer MAPS</string>
     <string name="unable_to_launch_media_player">Impossible de lancer le lecteur multimédia</string>
     <string name="continue_btn_text">Continuer</string>
-    <string name="brief_permission_explain">Malheureusement, les autorisations suivantes sont désormais requises pour que cette application fonctionne correctement</string>
     <string name="required_permissions">Autorisations requises</string>
     <string name="app_usage_stats">" Statistiques d'utilisation des applications"</string>
     <string name="notification_access">Accès aux notifications</string>
     <string name="new_permissions_required">Nouvelles autorisations requises. Appuyez pour lancer</string>
-    <string name="notification_perm_explain">Les autorisations de notification sont pour la lecture de musique</string>
+    <string name="notification_perm_explain">Les PERMISSIONS DE NOTIFICATION sont nécessaires pour que cette application obtienne le jeton multimédia pour la lecture de musique d\'autres applications.</string>
     <string name="notification_listener">" Écouteur de notification"</string>
     <string name="optional_permissions">" Autorisations facultatives"</string>
     <string name="allow_use_of_firebase_analytics">" Autoriser l'utilisation de Firebase Analytics"</string>
+    <string name="brief_permission_explain">Les autorisations suivantes sont désormais requises pour que cette application fonctionne correctement</string>
 </resources>

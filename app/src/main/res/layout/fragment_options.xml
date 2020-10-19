@@ -256,6 +256,16 @@
                             android:textColor="@color/white" />
                     </LinearLayout>
                 </LinearLayout>
+                <Switch
+                    android:id="@+id/sw_options_use_firebase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="20dp"
+                    android:text="@string/allow_use_of_firebase_analytics"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
