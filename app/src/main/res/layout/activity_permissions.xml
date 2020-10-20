@@ -7,165 +7,177 @@
     android:layout_margin="16dp"
     tools:context=".ui.activities.PermissionsActivity">
 
-    <TextView
-        android:id="@+id/tv_permissions_title"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="12dp"
-        android:text="@string/required_permissions"
-        android:textSize="30sp"
-        android:textAlignment="center"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv_brief_explanation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/brief_permission_explain"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/tv_permissions_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_brief_notification_perm_explanation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/notification_perm_explain"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/tv_brief_explanation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_notification_access_perm_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="0dp"
-        android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/tv_brief_notification_perm_explanation"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/tv_notification_access_perm_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/notification_access"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/iv_notification_access_perm_status"
-        app:layout_constraintTop_toTopOf="@id/iv_notification_access_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_notification_access_perm_status"/>
-
-    <Switch
-        android:id="@+id/sw_notification_access_perm_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_notification_access_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_notification_access_perm_status"/>
+        app:layout_constraintBottom_toTopOf="@id/bn_perm_continue">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:id="@+id/tv_permissions_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:text="@string/required_permissions"
+                android:textSize="30sp"
+                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
-        android:id="@+id/iv_overlay_perm_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="0dp"
-        android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/iv_notification_access_perm_status"
-        app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/tv_brief_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/brief_permission_explain"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@id/tv_permissions_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_overlay_perm_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Overlay"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/iv_overlay_perm_status"
-        app:layout_constraintTop_toTopOf="@id/iv_overlay_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_overlay_perm_status"/>
+            <TextView
+                android:id="@+id/tv_brief_notification_perm_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/notification_perm_explain"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@id/tv_brief_explanation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    <Switch
-        android:id="@+id/sw_overlay_perm_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_overlay_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_overlay_perm_status"/>
+            <ImageView
+                android:id="@+id/iv_notification_access_perm_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="0dp"
+                android:src="@drawable/ic_no_permission"
+                app:layout_constraintTop_toBottomOf="@id/tv_brief_notification_perm_explanation"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    <ImageView
-        android:id="@+id/iv_notification_listener_perm_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="0dp"
-        android:src="@drawable/ic_no_permission"
-        app:layout_constraintTop_toBottomOf="@id/iv_overlay_perm_status"
-        app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/tv_notification_access_perm_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_access"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@id/iv_notification_access_perm_status"
+                app:layout_constraintTop_toTopOf="@id/iv_notification_access_perm_status"
+                app:layout_constraintBottom_toBottomOf="@id/iv_notification_access_perm_status"/>
 
-    <TextView
-        android:id="@+id/tv_notification_listener_perm_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/notification_listener"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/iv_notification_listener_perm_status"
-        app:layout_constraintTop_toTopOf="@id/iv_notification_listener_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_notification_listener_perm_status"/>
+            <Switch
+                android:id="@+id/sw_notification_access_perm_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_notification_access_perm_status"
+                app:layout_constraintBottom_toBottomOf="@id/iv_notification_access_perm_status"/>
 
-    <Switch
-        android:id="@+id/sw_notification_listener_perm_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_notification_listener_perm_status"
-        app:layout_constraintBottom_toBottomOf="@id/iv_notification_listener_perm_status"/>
+            <ImageView
+                android:id="@+id/iv_overlay_perm_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="0dp"
+                android:src="@drawable/ic_no_permission"
+                app:layout_constraintTop_toBottomOf="@id/iv_notification_access_perm_status"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        android:id="@+id/tv_optional_permissions_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:text="@string/optional_permissions"
-        android:textSize="20sp"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/iv_notification_listener_perm_status"
-        app:layout_constraintBottom_toTopOf="@id/bn_perm_continue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias=".4"/>
+            <TextView
+                android:id="@+id/tv_overlay_perm_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overlay"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@id/iv_overlay_perm_status"
+                app:layout_constraintTop_toTopOf="@id/iv_overlay_perm_status"
+                app:layout_constraintBottom_toBottomOf="@id/iv_overlay_perm_status"/>
 
-    <TextView
-        android:id="@+id/tv_analytics_permissions_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="12dp"
-        android:paddingEnd="0dp"
-        android:text="@string/allow_use_of_firebase_analytics"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_optional_permissions_title" />
+            <Switch
+                android:id="@+id/sw_overlay_perm_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_overlay_perm_status"
+                app:layout_constraintBottom_toBottomOf="@id/iv_overlay_perm_status"/>
 
-    <Switch
-        android:id="@+id/sw_analytics_permissions_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_analytics_permissions_text"
-        app:layout_constraintBottom_toBottomOf="@id/tv_analytics_permissions_text"/>
+            <ImageView
+                android:id="@+id/iv_notification_listener_perm_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="0dp"
+                android:src="@drawable/ic_no_permission"
+                app:layout_constraintTop_toBottomOf="@id/iv_overlay_perm_status"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_notification_listener_perm_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_listener"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@id/iv_notification_listener_perm_status"
+                app:layout_constraintTop_toTopOf="@id/iv_notification_listener_perm_status"
+                app:layout_constraintBottom_toBottomOf="@id/iv_notification_listener_perm_status"/>
+
+            <Switch
+                android:id="@+id/sw_notification_listener_perm_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_notification_listener_perm_status"
+                app:layout_constraintBottom_toBottomOf="@id/iv_notification_listener_perm_status"/>
+
+            <TextView
+                android:id="@+id/tv_optional_permissions_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:text="@string/optional_permissions"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@id/iv_notification_listener_perm_status"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias=".4"/>
+
+            <TextView
+                android:id="@+id/tv_analytics_permissions_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="0dp"
+                android:text="@string/allow_use_of_firebase_analytics"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_optional_permissions_title" />
+
+            <Switch
+                android:id="@+id/sw_analytics_permissions_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_analytics_permissions_text"
+                app:layout_constraintBottom_toBottomOf="@id/tv_analytics_permissions_text"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/bn_perm_continue"
