@@ -11,6 +11,7 @@ import maderski.bluetoothautoplaymusic.helpers.MediaControllerHelper
 import maderski.bluetoothautoplaymusic.helpers.MediaSessionTokenHelper
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.wrappers.SystemServicesWrapper
+import java.lang.Exception
 
 class MediaPlayerControlManager(
         private val context: Context,
@@ -24,7 +25,11 @@ class MediaPlayerControlManager(
 ) {
     private val audioManager get() = systemServicesWrapper.audioManager
     private val selectedMusicPlayerPackageName get() = preferencesHelper.musicPlayerPkgName
-    private val token get() = mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
+    private val token get() = try {
+        mediaSessionTokenHelper.getMediaSessionToken(selectedMusicPlayerPackageName)
+    } catch (e: Exception) {
+        null
+    }
     private val mediaControllerHelper get() = token?.let { MediaControllerHelper(context, it) }
     private val playerControls get() = playerControlsFactory.getPlayerControl(selectedMusicPlayerPackageName)
 
