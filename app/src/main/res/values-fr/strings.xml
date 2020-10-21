@@ -107,4 +107,5 @@
     <string name="optional_permissions">" Autorisations facultatives"</string>
     <string name="allow_use_of_firebase_analytics">" Autoriser l'utilisation de Firebase Analytics"</string>
     <string name="brief_permission_explain">Les autorisations suivantes sont désormais requises pour que cette application fonctionne correctement</string>
+    <string name="missing_required_permissions_msg">Autorisations requises manquantes! Musique en lecture automatique Bluetooth</string>
 </resources>

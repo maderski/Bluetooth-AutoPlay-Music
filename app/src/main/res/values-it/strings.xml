@@ -107,4 +107,5 @@
     <string name="allow_use_of_firebase_analytics">Consenti l\'utilizzo di Firebase Analytics</string>
     <string name="brief_permission_explain">"Ora sono necessarie le seguenti autorizzazioni per il corretto funzionamento di questa app"</string>
     <string name="notification_perm_explain">I PERMESSI DI NOTIFICA sono necessari per questa app per ottenere il token multimediale per la riproduzione di musica di altre app.</string>
+    <string name="missing_required_permissions_msg">Mancano i permessi richiesti! Musica con riproduzione automatica Bluetooth</string>
 </resources>

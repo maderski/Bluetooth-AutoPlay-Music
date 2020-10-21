@@ -27,8 +27,14 @@ class PermissionManager(
 
     fun hasOverlayPermission(): Boolean = Settings.canDrawOverlays(context)
 
-    fun hasNotificationListenerAccessPermission(): Boolean =
-            Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").contains(context.packageName)
+    fun hasNotificationListenerAccessPermission(): Boolean {
+        return try {
+            val enabledNotificationListeners: String? = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
+            enabledNotificationListeners?.contains(context.packageName) ?: false
+        } catch (e: Exception) {
+            false
+        }
+    }
     //endRegion
 
     //region Check Permission and if not granted launch
