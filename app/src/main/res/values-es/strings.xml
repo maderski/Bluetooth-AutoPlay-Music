@@ -107,4 +107,5 @@
     <string name="notification_listener">Oyente de notificaciones</string>
     <string name="optional_permissions">Permisos opcionales</string>
     <string name="allow_use_of_firebase_analytics">Permitir el uso de Firebase Analytics</string>
+    <string name="missing_required_permissions_msg">" ¡Faltan los permisos requeridos! Música de reproducción automática de Bluetooth"</string>
 </resources>

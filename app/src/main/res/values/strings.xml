@@ -107,4 +107,5 @@
     <string name="notification_listener">Notification Listener</string>
     <string name="optional_permissions">Optional Permissions</string>
     <string name="allow_use_of_firebase_analytics">Allow use of Firebase Analytics</string>
+    <string name="missing_required_permissions_msg">Missing required permissions! Bluetooth Autoplay Music</string>
 </resources>
