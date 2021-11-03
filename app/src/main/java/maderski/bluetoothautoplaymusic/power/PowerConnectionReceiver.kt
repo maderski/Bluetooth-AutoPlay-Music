@@ -3,8 +3,8 @@ package maderski.bluetoothautoplaymusic.power
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class PowerConnectionReceiver : BroadcastReceiver(), KoinComponent {
     private val onPowerConnectedAction: OnPowerConnectedAction by inject()

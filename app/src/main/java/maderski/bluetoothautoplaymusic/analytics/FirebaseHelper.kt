@@ -7,8 +7,8 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import maderski.bluetoothautoplaymusic.analytics.constants.SelectionConstants
 import maderski.bluetoothautoplaymusic.sharedprefs.BAPMPreferences
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 /**
  * Created by Jason on 1/28/17.

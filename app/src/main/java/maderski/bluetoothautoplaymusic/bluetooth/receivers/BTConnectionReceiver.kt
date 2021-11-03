@@ -14,9 +14,8 @@ import maderski.bluetoothautoplaymusic.controls.VolumeControl
 import maderski.bluetoothautoplaymusic.bluetooth.BTConnectionManager
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.permission.PermissionManager
-import maderski.bluetoothautoplaymusic.ui.activities.SplashActivity
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 /**
  * Created by Jason on 1/5/16.

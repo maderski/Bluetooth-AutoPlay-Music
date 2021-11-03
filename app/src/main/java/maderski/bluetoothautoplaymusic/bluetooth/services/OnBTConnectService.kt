@@ -11,8 +11,8 @@ import maderski.bluetoothautoplaymusic.bluetooth.receivers.BTStateChangedReceive
 import maderski.bluetoothautoplaymusic.constants.ActionConstants.BT_STATE_CHANGED
 import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 /**
  * Created by Jason on 6/6/17.

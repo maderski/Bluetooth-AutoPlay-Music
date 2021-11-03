@@ -6,10 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
-import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
 import maderski.bluetoothautoplaymusic.ui.activities.DisconnectActivity
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * Created by Jason on 1/28/17.

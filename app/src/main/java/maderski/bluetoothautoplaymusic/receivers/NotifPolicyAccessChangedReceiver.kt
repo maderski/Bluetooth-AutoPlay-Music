@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import maderski.bluetoothautoplaymusic.controls.RingerControl
-import maderski.bluetoothautoplaymusic.helpers.PreferencesHelper
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 /**
  * Created by Jason on 2/12/17.

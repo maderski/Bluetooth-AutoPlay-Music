@@ -10,8 +10,8 @@ import maderski.bluetoothautoplaymusic.BuildConfig
 import maderski.bluetoothautoplaymusic.controls.wakelockcontrol.ScreenONLock
 import maderski.bluetoothautoplaymusic.R
 import maderski.bluetoothautoplaymusic.services.manager.ServiceManager
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 /**
  * Created by Jason on 7/4/17.
